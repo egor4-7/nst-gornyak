@@ -427,7 +427,7 @@
 
     <div class="nav-right">
       <button class="btn-login" onclick="openAuthModal()">Войти</button>
-      <button class="btn-search" title="Поиск">🔍</button>
+      <button class="btn-search" onclick="openSearchModal()" title="Поиск">🔍</button>
     </div>
   </header>
 
@@ -558,6 +558,7 @@
     </section>
   </main>
 
+  <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ -->
   <div id="auth-modal" class="modal-backdrop">
     <div class="modal-window">
       <button class="modal-close" onclick="closeAuthModal()">&times;</button>
@@ -602,6 +603,19 @@
     </div>
   </div>
 
+  <!-- МОДАЛЬНОЕ ОКНО ПОИСКА -->
+  <div id="search-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeSearchModal()">&times;</button>
+      <h3>Поиск по сайту</h3>
+      <p class="sub-text">Введите запрос для поиска информации</p>
+      <div class="form-group">
+        <input type="text" id="search-input" placeholder="Например: тарифы, автобус, документы..." oninput="handleSearch(event)">
+      </div>
+      <div id="search-results" style="margin-top: 12px; font-size: 14px; max-height: 150px; overflow-y: auto;"></div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       renderProfile();
@@ -615,6 +629,42 @@
 
     function closeAuthModal() {
       document.getElementById("auth-modal").style.display = "none";
+    }
+
+    function openSearchModal() {
+      document.getElementById("search-modal").style.display = "flex";
+      setTimeout(() => document.getElementById("search-input").focus(), 100);
+    }
+
+    function closeSearchModal() {
+      document.getElementById("search-modal").style.display = "none";
+      document.getElementById("search-input").value = "";
+      document.getElementById("search-results").innerHTML = "";
+    }
+
+    function handleSearch(e) {
+      const query = e.target.value.toLowerCase().trim();
+      const resultsEl = document.getElementById("search-results");
+      
+      if (!query) {
+        resultsEl.innerHTML = "";
+        return;
+      }
+
+      const items = [
+        { title: "🚌 Расписание автобусов (№ 474, 1к, 26)", link: "#articles" },
+        { title: "⚡️ Актуальные тарифы Мосэнергосбыт", link: "#tariffs" },
+        { title: "📄 Официальные документы и бланки", link: "#documents" },
+        { title: "✉️ Контакты и форма обратной связи", link: "#contact" }
+      ];
+
+      const filtered = items.filter(i => i.title.toLowerCase().includes(query));
+
+      if (filtered.length > 0) {
+        resultsEl.innerHTML = filtered.map(i => `<div style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="${i.link}" onclick="closeSearchModal()" style="color: var(--primary); text-decoration: none; font-weight: 600;">${i.title}</a></div>`).join('');
+      } else {
+        resultsEl.innerHTML = `<p style="color: #777;">Ничего не найдено по запросу «${query}»</p>`;
+      }
     }
 
     function renderProfile() {
