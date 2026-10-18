@@ -3,967 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>НСТ «Горняк» — Официальный портал</title>
-  <meta name="description" content="Официальный информационный портал садоводческого товарищества НСТ Горняк. Протоколы, сметы, тарифы, контакты правления и карта.">
-  <meta name="google-site-verification" content="googlecb66a1ec774e21a5">
-
+  
   <style>
-    :root {
-      --primary-green: #1b4332;
-      --accent-green: #2d6a4f;
-      --light-green-bg: rgba(232, 245, 233, 0.6);
-      --text-main: #1d2d24;
-      --text-muted: #4a5d50;
-
-      /* Глубокий объемный блюр (VisionOS / Apple Glass) */
-      --deep-glass-bg: rgba(255, 255, 255, 0.42);
-      --deep-glass-border: rgba(255, 255, 255, 0.7);
-      --deep-glass-blur: blur(35px) saturate(190%);
-      --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(255, 255, 255, 0.5) inset;
-
-      --radius-lg: 24px;
-      --radius-pill: 50px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(circle at 10% 20%, #e2efe2 0%, #d5e5d7 40%, #f4f7f4 90%);
-      background-attachment: fixed;
-      color: var(--text-main);
-      line-height: 1.5;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    .navbar .brand {
-      gap: 0.5rem;
-      padding-left: 0;
-    }
-
-    /* Анимация падающей/плавающей растительности */
-    .leaves-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .leaf {
-      position: absolute;
-      top: -50px;
-      font-size: 1.4rem;
-      opacity: 0.5;
-      user-select: none;
-      animation: fall 12s linear infinite, sway 4s ease-in-out infinite alternate;
-    }
-
-    .leaf:nth-child(1) { left: 10%; animation-delay: 0s, 0s; font-size: 1.8rem; }
-    .leaf:nth-child(2) { left: 28%; animation-delay: 3s, 1s; font-size: 1.2rem; }
-    .leaf:nth-child(3) { left: 52%; animation-delay: 1s, 2s; font-size: 1.5rem; }
-    .leaf:nth-child(4) { left: 74%; animation-delay: 5s, 0.5s; font-size: 1.3rem; }
-    .leaf:nth-child(5) { left: 88%; animation-delay: 2s, 1.5s; font-size: 1.7rem; }
-
-    @keyframes fall {
-      0% { top: -50px; transform: rotate(0deg); opacity: 0; }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.6; }
-      100% { top: 105vh; transform: rotate(360deg); opacity: 0; }
-    }
-
-    @keyframes sway {
-      0% { margin-left: 0px; }
-      100% { margin-left: 50px; }
-    }
-
-    /* Адаптивная стеклянная навигация */
-    header {
-      position: sticky;
-      top: 0.75rem;
-      z-index: 1000;
-      max-width: 960px;
-      margin: 0 auto 2rem auto;
-      padding: 0 0.5rem;
-    }
-
-    .navbar {
-      box-sizing: border-box;
-      max-width: 100%;
-      gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-      border-radius: var(--radius-pill);
-      padding: 0.4rem 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-    }
-
-    .navbar .brand {
-      flex-shrink: 0;
-      gap: 0.5rem;
-      padding-left: 0.25rem;
-    }
-
-    .navbar .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: #064e3b;
-      font-size: 1.1rem;
-      box-shadow: 0 2px 8px rgba(6, 78, 59, 0.25);
-    }
-
-    .navbar .brand-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-
-    .navbar .brand-text h1 {
-      color: #0f172a;
-    }
-
-    .navbar .brand-text span {
-      color: #64748b;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: normal;
-      text-transform: none;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-      color: var(--text-main);
-      padding-left: 0.5rem;
-    }
-
-    .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--primary-green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
-    }
-
-    .brand-text h1 {
-      font-size: 1rem;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .brand-text span {
-      font-size: 0.65rem;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      flex: 0 1 auto;
-      align-items: center;
-      min-width: 0;
-      gap: 0.2rem;
-      overflow-x: auto;
-      padding: 0.2rem 0;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      white-space: nowrap;
-    }
-
-    .nav-links::-webkit-scrollbar {
-      display: none;
-    }
-
-    .nav-links a {
-      display: inline-flex;
-      flex-shrink: 0;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.45rem 0.85rem;
-      border-radius: var(--radius-pill);
-      color: #334155;
-      font-size: 0.88rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.4);
-    }
-
-    .nav-links a.active-nav {
-      background: rgba(255, 255, 255, 0.85);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-      color: #0f172a;
-    }
-
-    .nav-actions {
-      display: flex;
-      flex-shrink: 0;
-      align-items: center;
-      gap: 0.4rem;
-      padding-right: 0.25rem;
-    }
-
-    .btn-login,
-    .btn-search {
-      border: 0;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      font: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .btn-login {
-      background: #16a34a;
-      color: #fff;
-      padding: 0.45rem 1.1rem;
-      font-size: 0.88rem;
-      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
-      transition: transform 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-login:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-search {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
-      height: 34px;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      color: var(--text-main);
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
-
-    .search-panel {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      padding: 0.65rem;
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      border-radius: 18px;
-      box-shadow: var(--glass-shadow);
-    }
-
-    .search-panel input,
-    .auth-form input {
-      width: 100%;
-      min-width: 0;
-      padding: 0.75rem 1rem;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 12px;
-      background: #fff;
-      color: var(--text-main);
-      font: inherit;
-    }
-
-    .search-panel button,
-    .auth-submit {
-      border: 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      color: #fff;
-      font: inherit;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .search-panel button {
-      padding: 0 1rem;
-      white-space: nowrap;
-    }
-
-    .search-result,
-    .auth-status {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .search-result {
-      margin: 0.5rem 0 0;
-      padding: 0 0.5rem;
-    }
-
-    .auth-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .auth-dialog {
-      position: relative;
-      width: min(100%, 400px);
-      padding: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      border-radius: var(--radius-lg);
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      text-align: center;
-    }
-
-    .auth-close {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.9rem;
-      padding: 0.25rem;
-      border: 0;
-      background: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .auth-dialog h2 {
-      margin: 0 1rem 0.5rem;
-      font-size: 1.4rem;
-    }
-
-    .auth-description {
-      margin-bottom: 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .auth-tabs {
-      display: flex;
-      margin-bottom: 1.2rem;
-      padding: 0.25rem;
-      border-radius: 12px;
-      background: #f1f5f9;
-    }
-
-    .auth-tabs button {
-      flex: 1;
-      padding: 0.5rem;
-      border: 0;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text-muted);
-      font: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .auth-tabs button[aria-selected="true"] {
-      background: #fff;
-      color: #0f172a;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .auth-tabs[hidden] {
-      display: none;
-    }
-
-    .auth-form input {
-      margin-bottom: 0.8rem;
-    }
-
-    .auth-link {
-      display: inline-block;
-      margin: 0.25rem 0 1.1rem;
-      padding: 0;
-      border: 0;
-      background: none;
-      color: var(--accent-green);
-      font: inherit;
-      font-size: 0.85rem;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .auth-submit {
-      width: 100%;
-      padding: 0.8rem;
-      font-size: 1rem;
-    }
-
-    .auth-logout {
-      width: 100%;
-      margin-top: 0.8rem;
-      padding: 0.8rem;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 12px;
-      background: #fff;
-      color: var(--text-muted);
-      font: inherit;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .auth-status {
-      margin: 1rem 0 0;
-    }
-
-    .auth-back {
-      margin-top: 1rem;
-      color: var(--text-muted);
-    }
-
-    .auth-back button {
-      border: 0;
-      background: none;
-      color: inherit;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .search-panel[hidden],
-    .auth-modal[hidden],
-    .auth-view[hidden] {
-      display: none;
-    }
-
-    /* Главный контейнер */
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .hero {
-      margin-bottom: 3.5rem;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(45, 106, 79, 0.12);
-      backdrop-filter: blur(10px);
-      color: var(--accent-green);
-      padding: 0.4rem 1rem;
-      border-radius: var(--radius-pill);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      margin-bottom: 1.2rem;
-      text-transform: uppercase;
-      border: 1px solid rgba(45, 106, 79, 0.15);
-    }
-
-    .hero h2 {
-      font-size: 3.2rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-bottom: 1rem;
-      line-height: 1.15;
-      letter-spacing: -0.5px;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      color: var(--text-muted);
-      max-width: 680px;
-      margin-bottom: 2.2rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .btn-primary {
-      background: var(--primary-green);
-      color: #fff;
-      padding: 0.9rem 1.8rem;
-      border-radius: var(--radius-pill);
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: 0 6px 20px rgba(27, 67, 50, 0.25);
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-green);
-      transform: translateY(-2px);
-    }
-
-    .btn-glass {
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      box-shadow: var(--glass-shadow);
-      color: var(--text-main);
-      padding: 0.9rem 1.8rem;
-      border-radius: var(--radius-pill);
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    /* Карточки быстрой навигации */
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.3rem;
-      margin-bottom: 4rem;
-    }
-
-    .glass-card {
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: var(--radius-lg);
-      padding: 1.6rem;
-      text-decoration: none;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 125px;
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-
-    .glass-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--light-green-bg);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-green);
-      font-size: 1.1rem;
-    }
-
-    .arrow-icon {
-      color: #8fa394;
-      font-size: 1.2rem;
-      font-weight: 700;
-      transition: transform 0.2s;
-    }
-
-    .glass-card:hover .arrow-icon {
-      transform: translate(3px, -3px);
-    }
-
-    .card-title {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-top: 1.2rem;
-    }
-
-    /* Заголовки секций */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 1.2rem;
-    }
-
-    .section-subtitle {
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      color: var(--accent-green);
-      text-transform: uppercase;
-      font-weight: 800;
-    }
-
-    .section-title {
-      font-size: 1.9rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    /* Секция тарифов */
-    .tariffs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 4rem;
-    }
-
-    .tariff-card {
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: var(--radius-lg);
-      padding: 1.8rem;
-    }
-
-    .tariff-card h4 {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      color: var(--primary-green);
-    }
-
-    .tariff-card p {
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-muted);
-    }
-
-    /* Список документов с PDF */
-    .docs-container {
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin-bottom: 4rem;
-    }
-
-    .docs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.625rem;
-    }
-
-    .doc-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 0.5rem;
-      text-decoration: none;
-      color: var(--text-main);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      transition: background 0.2s;
-    }
-
-    .doc-item:last-of-type {
-      border-bottom: none;
-    }
-
-    .doc-item:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-    }
-
-    .doc-actions {
-      display: flex;
-      flex: 0 0 auto;
-      gap: 0.5rem;
-    }
-
-    .btn-icon {
-      min-width: 44px;
-      min-height: 44px;
-      border: 0;
-      border-radius: 6px;
-      background: var(--bg-light);
-      font: inherit;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .btn-icon:hover {
-      background: #e8f5e9;
-    }
-
-    .btn-icon:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
-
-    .document-status {
-      margin-top: 0.75rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .article-card,
-    .contact-card {
-      padding: 1.5rem;
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--glass-shadow);
-    }
-
-    .article-card {
-      margin-bottom: 4rem;
-    }
-
-    .article-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .article-header h4 {
-      color: var(--text-main);
-      font-size: 1.2rem;
-    }
-
-    .article-date {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    .schedule-box {
-      margin-top: 1.25rem;
-      padding: 1.25rem;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.55);
-    }
-
-    .schedule-box h5 {
-      margin-bottom: 0.5rem;
-      color: var(--primary-green);
-      font-size: 1rem;
-    }
-
-    .schedule-box p,
-    .schedule-box ul {
-      margin-bottom: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .schedule-box ul {
-      padding-left: 1.25rem;
-    }
-
-    .link-external {
-      color: var(--accent-green);
-      font-weight: 600;
-    }
-
-    .schedule-divider {
-      margin: 1rem 0;
-      border: 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .contact-card > p {
-      margin-bottom: 1.25rem;
-      color: var(--text-muted);
-    }
-
-    .contact-form {
-      display: grid;
-      gap: 1rem;
-      max-width: 680px;
-    }
-
-    .contact-form label {
-      display: block;
-      margin-bottom: 0.35rem;
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    .contact-form input,
-    .contact-form textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--text-main);
-      font: inherit;
-    }
-
-    .contact-form textarea {
-      resize: vertical;
-    }
-
-    .contact-submit {
-      justify-self: start;
-      padding: 0.8rem 1.25rem;
-      border: 0;
-      border-radius: var(--radius-pill);
-      background: var(--primary-green);
-      color: #fff;
-      font: inherit;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .contact-submit:hover {
-      background: var(--accent-green);
-    }
-
-    .contact-status {
-      min-height: 1.5em;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .tg-direct-box {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      color: var(--text-muted);
-    }
-
-    .btn-tg {
-      display: inline-flex;
-      align-items: center;
-      min-height: 44px;
-      padding: 0.65rem 1rem;
-      border-radius: var(--radius-pill);
-      background: #168acd;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    /* Подвал */
-    footer {
-      position: relative;
-      z-index: 1;
-      background: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-top: 1px solid var(--deep-glass-border);
-      padding: 3.5rem 1rem;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1.5fr;
-      gap: 2rem;
-    }
-
-    .footer-col h4 {
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      color: var(--accent-green);
-      text-transform: uppercase;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
-
-    .footer-col ul {
-      list-style: none;
-    }
-
-    .footer-col ul li {
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-col ul li a {
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .footer-col ul li a:hover {
-      color: var(--accent-green);
-    }
-
-    .map-viewport {
-      position: relative;
-      width: 100%;
-      height: 420px;
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .map-viewport iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .map-official-address {
-      margin-bottom: 0.85rem;
-      padding: 0.8rem 1rem;
-      border-left: 4px solid var(--accent-green);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.78);
-      color: var(--text-main);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    @media (max-width: 768px) {
-      .hero h2 { font-size: 2.3rem; }
-      .footer-inner { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 480px) {
-      .auth-dialog { padding: 1.5rem; }
-    }
-
-    /* Стили страницы адаптированы к текущей разметке портала. */
     :root {
       --primary: #1b5e20;
       --primary-hover: #2e7d32;
@@ -972,442 +14,428 @@
       --border-color: #e0e0e0;
       --danger: #d32f2f;
       --danger-hover: #b71c1c;
-      --primary-green: var(--primary);
-      --accent-green: var(--primary-hover);
-      --text-main: var(--text-dark);
-      --text-muted: #555;
-      --light-green-bg: #e8f5e9;
-      --deep-glass-bg: #fff;
-      --deep-glass-border: var(--border-color);
-      --deep-glass-blur: none;
-      --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      --radius-lg: 12px;
-      --radius-pill: 20px;
     }
 
     body {
-      background: var(--bg-light);
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-top: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .floating-nav {
+      max-width: 860px;
+      margin: 0 auto 30px auto;
+      background: #ffffff;
+      padding: 10px 20px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0,0,0,0.04);
+      position: sticky;
+      top: 15px;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
       color: var(--text-dark);
     }
 
-    header {
-      top: 0;
-      max-width: none;
-      margin: 0;
-      padding: 0;
+    .logo-icon {
+      font-size: 28px;
+      background: #e8f5e9;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
 
-    .navbar {
-      gap: 1rem;
-      padding: 0.75rem 1.5rem;
-      border: 0;
-      border-bottom: 1px solid var(--border-color);
-      border-radius: 0;
-      background: #fff;
-      box-shadow: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .nav-links {
-      gap: 1rem;
+    .nav-item {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
     }
 
-    .nav-links a {
-      padding: 0.35rem 0;
-      color: #555;
-      font-size: 0.875rem;
+    .nav-item:hover {
+      background: #e9ecef;
     }
 
-    .nav-links a:hover,
-    .nav-links a.active-nav {
-      background: none;
-      box-shadow: none;
-      color: var(--primary);
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .btn-login,
+    .btn-login {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-login:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-search {
+      background: #f8f9fa;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
     .btn-primary {
-      border-radius: var(--radius-pill);
-      background: var(--primary);
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
     }
 
-    .btn-login:hover,
-    .btn-primary:hover {
-      background: var(--primary-hover);
+    .btn-outline {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 10px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
     }
 
     .hero {
-      margin-bottom: 2rem;
-      padding: 2rem 1.5rem;
-      border-radius: 16px;
       background: #e8f5e9;
+      padding: 32px 24px;
+      border-radius: 16px;
+      margin-bottom: 32px;
     }
 
     .badge {
-      padding: 0.375rem 0.75rem;
-      border: 0;
-      border-radius: 12px;
+      display: inline-block;
       background: #c8e6c9;
       color: var(--primary);
-      font-size: 0.75rem;
-      letter-spacing: normal;
-    }
-
-    .hero h2 {
-      margin-bottom: 0.75rem;
-      font-size: 1.75rem;
-      letter-spacing: normal;
-    }
-
-    .hero p {
-      margin-bottom: 1.25rem;
-      font-size: 1rem;
-    }
-
-    .hero-actions {
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .hero-actions .btn-primary,
-    .hero-actions .btn-glass {
-      padding: 0.625rem 1.125rem;
-      border-radius: var(--radius-pill);
-      font-size: 0.9rem;
-    }
-
-    .hero-actions .btn-glass {
-      border: 1px solid var(--primary);
-      background: transparent;
-      box-shadow: none;
-      color: var(--primary);
-    }
-
-    .quick-grid {
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .glass-card,
-    .tariff-card,
-    .docs-container,
-    .article-card,
-    .contact-card {
-      border: 1px solid var(--border-color);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
       border-radius: 12px;
-      background: #fff;
-      box-shadow: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      margin-bottom: 12px;
     }
 
-    .glass-card {
-      min-height: 110px;
-      padding: 1.25rem;
+    .hero h1 {
+      margin: 0 0 12px 0;
+      font-size: 28px;
     }
 
-    .glass-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
     }
 
-    .section-title {
-      font-size: 1.5rem;
+    .section-block {
+      margin-bottom: 32px;
     }
 
-    .section-subtitle,
-    .card-icon {
+    .sub-heading {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
       color: var(--primary);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
     }
 
-    .tariffs-grid {
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
     }
 
-    .tariff-card {
-      padding: 1.25rem;
+    .schedule-box ul {
+      padding-left: 20px;
     }
 
-    .docs-container {
-      padding: 1rem;
+    .divider {
+      border: none;
+      border-top: 1px dashed var(--border-color);
+      margin: 16px 0;
+    }
+
+    .link-external {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .text-muted {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .docs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .doc-item {
-      gap: 0.75rem;
-      padding: 0.875rem 0.5rem;
-    }
-
-    .doc-item:hover {
+      background: white;
+      padding: 14px 18px;
       border-radius: 10px;
-      background: var(--bg-light);
-    }
-
-    .pdf-badge {
-      flex: 0 0 auto;
-    }
-
-    .article-card,
-    .contact-card {
-      padding: 1.25rem;
-    }
-
-    .schedule-box {
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      background: var(--bg-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .contact-form input,
-    .contact-form textarea,
-    .auth-form input {
-      border-color: var(--border-color);
-      border-radius: 8px;
+    .doc-item small {
+      display: block;
+      color: #777;
     }
 
-    .contact-submit {
-      background: var(--primary);
+    .doc-actions {
+      display: flex;
+      gap: 8px;
     }
 
-    .contact-submit:hover {
-      background: var(--primary-hover);
+    .btn-icon {
+      background: #f0f0f0;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
     }
 
-    .btn-tg {
-      border-radius: 8px;
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
 
-    .auth-dialog {
-      border-color: var(--border-color);
+    .modal-window {
+      background: white;
+      padding: 24px;
       border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    footer {
-      border-top-color: var(--border-color);
-      background: #fff;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      border: none; background: none;
+      font-size: 24px; cursor: pointer;
     }
 
-    @media (max-width: 768px) {
-      header {
-        position: relative;
-      }
-
-      .navbar {
-        flex-wrap: wrap;
-        padding: 0.75rem 1rem;
-      }
-
-      .nav-links {
-        order: 3;
-        flex: 1 0 100%;
-        justify-content: flex-start;
-        gap: 1rem;
-      }
-
-      .hero h2 {
-        font-size: 1.75rem;
-      }
-
-      .section-header {
-        align-items: flex-start;
-      }
+    .sub-text {
+      color: #666; font-size: 13px; margin-top: -8px; margin-bottom: 16px;
     }
 
-    @media (max-width: 480px) {
-      .hero {
-        padding: 1.5rem 1rem;
-      }
+    .btn-full {
+      width: 100%; border-radius: 8px;
+    }
 
-      .hero-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .hero-actions a {
-        text-align: center;
-      }
-
-      .article-header h4 {
-        font-size: 1.05rem;
-      }
-
-      .footer-inner {
-        grid-template-columns: 1fr;
-      }
+    .profile-buttons {
+      display: flex; gap: 12px; margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Анимированная растительность на фоне -->
-  <div class="leaves-container">
-    <div class="leaf">🍃</div>
-    <div class="leaf">🌿</div>
-    <div class="leaf">🍃</div>
-    <div class="leaf">🌱</div>
-    <div class="leaf">🍃</div>
-  </div>
-
-  <!-- Шапка с плавающей капсулой -->
-  <header>
-    <nav class="navbar" aria-label="Основная навигация">
-      <a href="#main" class="brand">
-        <div class="brand-icon">🍃</div>
-        <div class="brand-text">
-          <h1>Горняк</h1>
-          <span>НСТ</span>
-        </div>
-      </a>
-
-      <div class="nav-links">
-        <a href="#articles">🚌 Транспорт</a>
-        <a href="#tariffs" class="active-nav" aria-current="location">👛 Тарифы</a>
-        <a href="#documents">📄 Документы</a>
-        <a href="#documents">📦 Архив</a>
-        <a href="#contacts">✉️ Контакты</a>
+  <header class="floating-nav">
+    <a href="#" class="logo">
+      <span class="logo-icon">🌿</span>
+      <div>
+        <strong>Горняк</strong><br>
+        <small style="color: #666; font-size: 11px;">НСТ</small>
       </div>
-
-      <div class="nav-actions">
-        <button type="button" class="btn-login" onclick="openAuthModal('login')">Войти</button>
-        <button type="button" class="btn-search" id="searchToggle" aria-label="Поиск по сайту" aria-expanded="false" aria-controls="searchPanel" onclick="toggleSearch()">🔍</button>
-      </div>
+    </a>
+    
+    <nav class="nav-items">
+      <a href="#articles" class="nav-item">🚌 Транспорт</a>
+      <a href="#tariffs" class="nav-item">🍧 Тарифы</a>
+      <a href="#documents" class="nav-item">📄 Документы</a>
+      <a href="#contact" class="nav-item">✉️ Контакты</a>
     </nav>
-    <form class="search-panel" id="searchPanel" role="search" hidden>
-      <label for="siteSearch" class="visually-hidden">Поиск по сайту</label>
-      <input id="siteSearch" type="search" placeholder="Введите поисковый запрос" required>
-      <button type="submit">Найти</button>
-    </form>
-    <p class="search-result" id="searchResult" role="status" aria-live="polite" hidden></p>
+
+    <div class="nav-right">
+      <button class="btn-login" onclick="openAuthModal()">Войти</button>
+      <button class="btn-search" title="Поиск">🔍</button>
+    </div>
   </header>
 
-  <main id="main">
-
-    <!-- Главный баннер -->
+  <main class="container">
     <section class="hero">
-      <div class="badge">🍃 Садовое товарищество • с 1982</div>
-      <h2>Всё важное для жителей<br>НСТ «Горняк»</h2>
+      <div class="badge">🍃 САДОВОЕ ТОВАРИЩЕСТВО • С 1982</div>
+      <h1>Всё важное для жителей НСТ «Горняк»</h1>
       <p>Актуальные тарифы, протоколы, сметы, расписание транспорта и обратная связь — в одном месте.</p>
-
-      <div class="hero-actions">
-        <a href="#documents" class="btn-primary">Перейти к документам →</a>
-        <a href="#tariffs" class="btn-glass">Посмотреть тарифы</a>
+      
+      <div class="hero-buttons">
+        <a href="#documents" class="btn-primary">Перейти к документам &rarr;</a>
+        <a href="#tariffs" class="btn-outline">Посмотреть тарифы</a>
       </div>
     </section>
 
-    <!-- Быстрые карточки -->
-    <section class="quick-grid">
-      <a href="#tariffs" class="glass-card">
-        <div class="card-top">
-          <div class="card-icon">👛</div>
-          <span class="arrow-icon">↗</span>
-        </div>
-        <div class="card-title">Тарифы на коммунальные услуги</div>
-      </a>
+    <section id="articles" class="section-block">
+      <span class="sub-heading">ПОЛЕЗНАЯ ИНФОРМАЦИЯ</span>
+      <h2>Расписание автобусов</h2>
 
-      <a href="#documents" class="glass-card">
-        <div class="card-top">
-          <div class="card-icon">📄</div>
-          <span class="arrow-icon">↗</span>
-        </div>
-        <div class="card-title">Протоколы и отчетность</div>
-      </a>
-
-      <a href="#contacts" class="glass-card">
-        <div class="card-top">
-          <div class="card-icon">📞</div>
-          <span class="arrow-icon">↗</span>
-        </div>
-        <div class="card-title">Связаться с правлением</div>
-      </a>
-    </section>
-
-    <!-- Раздел: расписание автобусов -->
-    <section id="articles" style="margin-bottom: 4rem;">
-      <div class="section-header">
-        <div>
-          <div class="section-subtitle">Полезная информация</div>
-          <h3 class="section-title">Расписание автобусов</h3>
-        </div>
-      </div>
-
-      <article class="article-card">
+      <div class="card article-card">
         <div class="article-header">
-          <h4>🚌 Маршруты № 474, № 1к и № 26</h4>
-          <span class="article-date">Проверьте актуальность рейсов перед поездкой</span>
+          <h3>🚌 Маршруты № 474, № 1к и № 26</h3>
+          <span class="text-muted">Проверьте актуальность рейсов перед поездкой</span>
         </div>
         <p>Общественный транспорт до НСТ «Горняк» (остановки «Карьер» и «Силикат»).</p>
 
         <div class="schedule-box">
-          <h5>Маршрут № 474: м. Котельники — Карьер / Силикат</h5>
+          <h4>Маршрут № 474: м. Котельники — Карьер / Силикат</h4>
           <p>Время в пути от м. Котельники — около 20 минут.</p>
           <ul>
             <li><strong>От м. Котельники до Карьера:</strong> 06:15, 07:01, 07:05, 07:50, 07:56</li>
             <li><strong>От Карьера до м. Котельники:</strong> 06:18, 07:01, 07:05, 07:50, 07:56</li>
           </ul>
-          <a href="https://rasp.yandex.ru/thread/T_474_11_f9848002t9739165_44?departure_from=2026-10-24+07%3A07%3A00&amp;station_from=9848002&amp;station_to=9739165" target="_blank" rel="noopener noreferrer" class="link-external">Проверить расписание № 474 на Яндексе ↗</a>
+          <a href="https://rasp.yandex.ru/thread/T_474_11_f9848002t9739165_44?departure_from=2026-10-24+07%3A07%3A00&station_from=9848002&station_to=9739165" target="_blank" rel="noopener" class="link-external">
+            Проверить расписание № 474 на Яндексе ↗
+          </a>
 
-          <hr class="schedule-divider">
+          <hr class="divider">
 
-          <h5>Маршрут № 1к: м. Котельники — Карьер</h5>
-          <a href="https://rasp.yandex.ru/thread/T_1k_0_f9848002t9848002_r5475_1?departure_from=2026-10-19+05%3A54%3A00&amp;station_from=9848002&amp;station_to=9739165" target="_blank" rel="noopener noreferrer" class="link-external">Проверить расписание № 1к на Яндексе ↗</a>
+          <h4>Маршрут № 1к: м. Котельники — Карьер</h4>
+          <a href="https://rasp.yandex.ru/thread/T_1k_0_f9848002t9848002_r5475_1?departure_from=2026-10-19+05%3A54%3A00&station_from=9848002&station_to=9739165" target="_blank" rel="noopener" class="link-external">
+            Проверить расписание № 1к на Яндексе ↗
+          </a>
 
-          <hr class="schedule-divider">
+          <hr class="divider">
 
-          <h5>Маршрут № 26: Карьер — станция Люберцы-1 (Южная)</h5>
+          <h4>Маршрут № 26: Карьер — станция Люберцы-1 (Южная)</h4>
           <p>Интервал движения — от 22 до 32 минут. Время в пути — около 32 минут.</p>
-          <a href="https://rasp.yandex.ru/thread/T_26_0_f9743574t9743574_44?departure_from=2026-10-19+06%3A00%3A00&amp;station_from=9743574&amp;station_to=9739171&amp;to_city=1" target="_blank" rel="noopener noreferrer" class="link-external">Проверить расписание № 26 на Яндексе ↗</a>
-        </div>
-      </article>
-    </section>
-
-    <!-- Раздел 01: Тарифы -->
-    <section id="tariffs" style="margin-bottom: 4rem;">
-      <div class="section-header">
-        <div>
-          <div class="section-subtitle">Коммунальные услуги</div>
-          <h3 class="section-title">Актуальные тарифы</h3>
-        </div>
-      </div>
-
-      <div class="tariffs-grid">
-        <div class="tariff-card">
-          <h4>АО «Мосэнергосбыт» • электроэнергия</h4>
-          <p><strong>Т1, день (07:00-23:00):</strong> 10 руб. 14 коп. / кВт·ч</p>
-          <p><strong>Т2, ночь (23:00-07:00):</strong> 4 руб. 36 коп. / кВт·ч</p>
-        </div>
-        <div class="tariff-card">
-          <h4>МУЖКП «Котельники» • водоснабжение</h4>
-          <p><strong>Городская вода:</strong> 59 руб. 17 коп. / куб. м</p>
+          <a href="https://rasp.yandex.ru/thread/T_26_0_f9743574t9743574_44?departure_from=2026-10-19+06%3A00%3A00&station_from=9743574&station_to=9739171&to_city=1" target="_blank" rel="noopener" class="link-external">
+            Проверить расписание № 26 на Яндексе ↗
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Раздел 02: Документы и отчётность (PDF) -->
-    <section id="documents" style="margin-bottom: 4rem;">
-      <div class="section-header">
-        <div>
-          <div class="section-subtitle">Официальные материалы</div>
-          <h3 class="section-title">Официальные документы</h3>
-        </div>
+    <section id="tariffs" class="section-block">
+      <span class="sub-heading">КОММУНАЛЬНЫЕ УСЛУГИ</span>
+      <h2>Актуальные тарифы</h2>
+      <div class="card">
+        <p><strong>АО «Мосэнергосбыт» • электроэнергия</strong></p>
+        <p>Т1, день (07:00-23:00): 10 руб. 14 коп. / кВт·ч<br>
+           Т2, ночь (23:00-07:00): 4 руб. 36 коп. / кВт·ч</p>
       </div>
+    </section>
 
-      <p style="margin-bottom: 1rem;">Скачивайте бланки и документы на телефон или планшет.</p>
+    <section id="documents" class="section-block">
+      <h2>Официальные документы</h2>
+      <p>Скачивайте бланки и документы на телефон или планшет.</p>
 
-      <div class="docs-container docs-list" id="archive">
+      <div class="docs-list">
         <div class="doc-item">
           <div>
             <strong>Согласие на обработку персональных данных</strong>
             <small>PDF • Временно недоступен</small>
           </div>
           <div class="doc-actions">
-            <button type="button" class="btn-icon" onclick="handleMissingDoc('Согласие на обработку персональных данных')" title="Просмотреть" aria-label="Просмотреть: согласие на обработку персональных данных">👁️</button>
-            <button type="button" class="btn-icon" onclick="handleMissingDoc('Согласие на обработку персональных данных')" title="Скачать" aria-label="Скачать: согласие на обработку персональных данных">📥</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Согласие на обработку персональных данных')" title="Просмотреть">👁️</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Согласие на обработку персональных данных')" title="Скачать">📥</button>
           </div>
         </div>
 
@@ -1417,8 +445,8 @@
             <small>PDF • Временно недоступен</small>
           </div>
           <div class="doc-actions">
-            <button type="button" class="btn-icon" onclick="handleMissingDoc('Заявление на оформление лицевого счета')" title="Просмотреть" aria-label="Просмотреть: заявление на оформление лицевого счета">👁️</button>
-            <button type="button" class="btn-icon" onclick="handleMissingDoc('Заявление на оформление лицевого счета')" title="Скачать" aria-label="Скачать: заявление на оформление лицевого счета">📥</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на оформление лицевого счета')" title="Просмотреть">👁️</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на оформление лицевого счета')" title="Скачать">📥</button>
           </div>
         </div>
 
@@ -1428,467 +456,151 @@
             <small>PDF • Временно недоступен</small>
           </div>
           <div class="doc-actions">
-            <button type="button" class="btn-icon" onclick="handleMissingDoc('Заявление на договор')" title="Просмотреть" aria-label="Просмотреть: заявление на договор">👁️</button>
-            <button type="button" class="btn-icon" onclick="handleMissingDoc('Заявление на договор')" title="Скачать" aria-label="Скачать: заявление на договор">📥</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на договор')" title="Просмотреть">👁️</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на договор')" title="Скачать">📥</button>
           </div>
         </div>
-        <p class="document-status" id="documentStatus" role="status" aria-live="polite"></p>
       </div>
     </section>
 
-    <!-- Раздел 03: Контакты и таблица правления -->
-    <section id="contacts" style="margin-bottom: 4rem;">
-      <div class="section-header">
-        <div>
-          <div class="section-subtitle">Остались вопросы?</div>
-          <h3 class="section-title">Контакты</h3>
-        </div>
-      </div>
-
-      <div class="contact-card" style="margin-bottom: 2rem;">
-        <p>Заполните форму, чтобы подготовить текст обращения в Telegram. Сообщение будет отправлено только после вашего подтверждения в чате.</p>
-        <form class="contact-form" id="contactForm">
-          <div>
-            <label for="contactName">Ваше имя</label>
-            <input type="text" id="contactName" name="name" autocomplete="name" placeholder="Иван Иванов" required>
+    <section id="contact" class="section-block">
+      <h2>Написать нам</h2>
+      <div class="card contact-card">
+        <p>Если у вас есть вопросы или предложения, отправьте обращение в правление.</p>
+        
+        <form id="contact-form" onsubmit="handleContactSubmit(event)">
+          <div class="form-group">
+            <label for="c-name">Ваше имя</label>
+            <input type="text" id="c-name" required placeholder="Иван Иванов">
           </div>
-          <div>
-            <label for="contactPlot">Номер участка</label>
-            <input type="text" id="contactPlot" name="plot" placeholder="Например: 253" required>
+          <div class="form-group">
+            <label for="c-plot">Номер участка</label>
+            <input type="text" id="c-plot" required placeholder="Например: 253">
           </div>
-          <div>
-            <label for="contactMessage">Текст сообщения</label>
-            <textarea id="contactMessage" name="message" rows="4" placeholder="Введите ваше сообщение..." required></textarea>
+          <div class="form-group">
+            <label for="c-msg">Текст сообщения</label>
+            <textarea id="c-msg" rows="4" required placeholder="Введите ваше сообщение..."></textarea>
           </div>
-          <button type="submit" class="contact-submit">Отправить сообщение</button>
-          <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+          <button type="submit" class="btn-primary">Отправить сообщение</button>
         </form>
-        <div class="tg-direct-box">
-          <span>Напишите администратору напрямую:</span>
-          <a href="https://t.me/egor23u" id="contactTelegramLink" target="_blank" rel="noopener noreferrer" class="btn-tg">💬 Telegram (@egor23u)</a>
-        </div>
-      </div>
-
-      <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
-          <thead>
-            <tr style="border-bottom: 2px solid rgba(45, 106, 79, 0.2); color: var(--accent-green);">
-              <th style="padding: 10px;">ФИО</th>
-              <th style="padding: 10px;">Должность</th>
-              <th style="padding: 10px;">Телефон</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Макарова Ольга Михайловна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Председатель правления</td>
-              <td style="padding: 10px;"><a href="tel:89167107418" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (916) 710-74-18</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Сафонова Ирина Викторовна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Главный бухгалтер</td>
-              <td style="padding: 10px;"><a href="tel:89162220638" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (916) 222-06-38</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">КраСенькова Наталья Борисовна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Бухгалтер</td>
-              <td style="padding: 10px;"><a href="tel:89161040185" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (916) 104-01-85</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Вахрушев Константин Михайлович</td>
-              <td style="padding: 10px; color: var(--text-muted);">Главный энергетик</td>
-              <td style="padding: 10px;"><a href="tel:89269585251" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (926) 958-52-51</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Тимошилов Антон Андреевич</td>
-              <td style="padding: 10px; color: var(--text-muted);">Электрик</td>
-              <td style="padding: 10px;"><a href="tel:89250004711" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (925) 000-47-11</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Горицкая Нина Александровна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Дворник</td>
-              <td style="padding: 10px;"><a href="tel:89096570631" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (909) 657-06-31</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Муминов Омонуло Абдулхалимович</td>
-              <td style="padding: 10px; color: var(--text-muted);">Хозяйственный работник</td>
-              <td style="padding: 10px;"><a href="tel:89036678481" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (903) 667-84-81</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Асланов Телман Магомед Оглы</td>
-              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
-              <td style="padding: 10px;"><a href="tel:89296645806" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (929) 664-58-06</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Зеновкина Александра Владимировна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
-              <td style="padding: 10px;"><a href="tel:89774882663" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (977) 488-26-63</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Князева Ирина Вениаминовна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
-              <td style="padding: 10px;"><a href="tel:89250082122" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (925) 008-21-22</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Личманова Евгения Александровна</td>
-              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
-              <td style="padding: 10px;"><a href="tel:89175323912" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (917) 532-39-12</a></td>
-            </tr>
-            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
-              <td style="padding: 10px; font-weight: 600;">Мичкасов Валентин Васильевич</td>
-              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
-              <td style="padding: 10px;"><a href="tel:89031567525" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (903) 156-75-25</a></td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; font-weight: 600;">Черкесс Игорь Викторович</td>
-              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
-              <td style="padding: 10px;"><a href="tel:89263615061" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (926) 361-50-61</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 3rem;">
-        <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); border-radius: var(--radius-lg); padding: 1.5rem;">
-          <h4 style="color: var(--accent-green); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.5rem;">Участковый по НСТ «Горняк»</h4>
-          <p style="font-weight: 700; margin-bottom: 0.5rem;">Сырчин Кирилл Владимирович</p>
-          <p>Тел: <a href="tel:89851311484" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (985) 131-14-84</a></p>
-        </div>
-
-        <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); border-radius: var(--radius-lg); padding: 1.5rem;">
-          <h4 style="color: var(--accent-green); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.5rem;">Полиция г. Котельники</h4>
-          <p style="font-weight: 700; margin-bottom: 0.5rem;">Дежурная часть</p>
-          <p>Тел: <a href="tel:89267775784" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (926) 777-57-84</a></p>
-        </div>
+        <div id="contact-status"></div>
       </div>
     </section>
-
-    <!-- Яндекс Карта в стеклянном контейнере -->
-    <section id="map-section" style="margin-bottom: 4rem;">
-      <div class="section-header">
-        <div>
-          <div class="section-subtitle">Расположение</div>
-          <h3 class="section-title">Как нас найти</h3>
-        </div>
-      </div>
-
-      <div class="map-official-address" role="note">
-        Администрация НСТ «Горняк»: Московская область, г. Котельники, Центральная улица, 247
-      </div>
-
-      <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); -webkit-backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); box-shadow: var(--glass-shadow); border-radius: 28px; padding: 12px; overflow: hidden;">
-        <div class="map-viewport">
-          <iframe src="https://yandex.ru/map-widget/v1/?ll=37.881546%2C55.644501&amp;z=17&amp;pt=37.881546%2C55.644501%2Cpm2rdm" title="Администрация НСТ «Горняк»: Московская область, г. Котельники, Центральная улица, 247" allowfullscreen="true"></iframe>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <!-- Подвал -->
-  <footer>
-    <div class="footer-inner">
-      <div>
-        <div class="brand" style="margin-bottom: 1rem;">
-          <div class="brand-icon">🍃</div>
-          <div class="brand-text">
-            <h2>НСТ «Горняк»</h2>
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+
+      <div id="auth-form-box">
+        <h3>Вход в личный кабинет</h3>
+        <p class="sub-text">НСТ «Горняк»</p>
+
+        <form onsubmit="handleAuthSubmit(event)">
+          <div class="form-group">
+            <label for="auth-plot">Номер участка *</label>
+            <input type="text" id="auth-plot" placeholder="Например: 253" required>
           </div>
-        </div>
-        <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 320px;">
-          Официальный информационный портал садоводческого товарищества. Прозрачность, экологичность и современная инфраструктура для наших жителей.
-        </p>
+          <div class="form-group">
+            <label for="auth-email">Электронная почта *</label>
+            <input type="email" id="auth-email" placeholder="name@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-fio">ФИО (необязательно)</label>
+            <input type="text" id="auth-fio" placeholder="Иванов Иван Иванович">
+          </div>
+          <button type="submit" class="btn-primary btn-full">Сохранить и войти</button>
+        </form>
       </div>
 
-      <div class="footer-col">
-        <h4>Разделы</h4>
-        <ul>
-          <li><a href="#tariffs">Тарифы</a></li>
-          <li><a href="#documents">Документы</a></li>
-          <li><a href="#contacts">Контакты</a></li>
-          <li><a href="#map-section">Карта</a></li>
-        </ul>
-      </div>
+      <div id="user-profile-box" style="display: none;">
+        <h3>Личный кабинет</h3>
+        <p class="sub-text">НСТ «Горняк»</p>
 
-      <div class="footer-col">
-        <h4>Экстренная связь</h4>
-        <p style="font-size: 0.95rem; margin-bottom: 0.4rem;">Единая служба: <strong>112</strong></p>
-        <p style="font-size: 0.95rem; margin-bottom: 0.4rem;">Правление: <a href="tel:89167107418" style="color: inherit; text-decoration: none;"><strong>+7 (916) 710-74-18</strong></a></p>
-      </div>
-    </div>
-  </footer>
-
-  <div class="auth-modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" hidden>
-    <div class="auth-dialog">
-      <button type="button" class="auth-close" aria-label="Закрыть" onclick="closeAuthModal()">✕</button>
-      <div class="auth-tabs" id="authTabs" role="tablist" aria-label="Личный кабинет">
-        <button type="button" id="tabLoginBtn" role="tab" aria-selected="true" aria-controls="loginView" onclick="switchAuthView('login')">Вход</button>
-        <button type="button" id="tabRegisterBtn" role="tab" aria-selected="false" aria-controls="registerView" onclick="switchAuthView('register')">Профиль</button>
-      </div>
-      <div class="auth-view" id="loginView">
-        <h2 id="authTitle">Вход в личный кабинет</h2>
-        <p class="auth-description">НСТ «Горняк»</p>
-        <form class="auth-form" id="loginForm">
-          <input type="text" name="username" autocomplete="username" placeholder="Логин или № участка" aria-label="Логин или номер участка" required>
-          <input type="password" name="password" autocomplete="current-password" placeholder="Пароль" aria-label="Пароль" required>
-          <button type="button" class="auth-link" onclick="switchAuthView('forgot')">Восстановить пароль</button>
-          <button type="submit" class="auth-submit">Войти</button>
-        </form>
-        <p class="auth-status" id="loginStatus" role="status" aria-live="polite">Серверная авторизация не подключена. Создайте локальный профиль во вкладке «Профиль»; он сохранится только в этом браузере.</p>
-      </div>
-      <div class="auth-view" id="registerView" hidden>
-        <h2 id="registerTitle">Профиль жителя</h2>
-        <p class="auth-description">Данные сохраняются только в этом браузере и не создают серверную учетную запись.</p>
-        <form class="auth-form" id="registerForm">
-          <input type="text" id="profilePlot" name="plot" autocomplete="off" placeholder="Номер участка" aria-label="Номер участка" required>
-          <input type="email" id="profileEmail" name="email" autocomplete="email" placeholder="Электронная почта" aria-label="Электронная почта" required>
-          <input type="text" id="profileFio" name="fio" autocomplete="name" placeholder="ФИО (необязательно)" aria-label="ФИО, необязательно">
-          <button type="submit" class="auth-submit">Сохранить профиль</button>
-        </form>
-        <p class="auth-status" id="registerStatus" role="status" aria-live="polite"></p>
-      </div>
-      <div class="auth-view" id="forgotView" hidden>
-        <h2 id="forgotTitle">Восстановление пароля</h2>
-        <p class="auth-description">Введите вашу электронную почту</p>
-        <form class="auth-form" id="resetForm">
-          <input type="email" name="email" autocomplete="email" placeholder="example@mail.ru" aria-label="Электронная почта" required>
-          <button type="submit" class="auth-submit">Отправить ссылку</button>
-        </form>
-        <p class="auth-status" id="resetStatus" role="status" aria-live="polite">Восстановление пароля пока не подключено.</p>
-        <p class="auth-back"><button type="button" onclick="switchAuthView('login')">← Вернуться ко входу</button></p>
-      </div>
-      <div class="auth-view" id="accountView" hidden>
-        <h2 id="accountTitle">Профиль жителя</h2>
-        <div class="auth-description">
+        <div class="profile-details">
           <p><strong>Номер участка:</strong> <span id="p-plot"></span></p>
-          <p><strong>Электронная почта:</strong> <span id="p-email"></span></p>
+          <p><strong>Email:</strong> <span id="p-email"></span></p>
           <p><strong>ФИО:</strong> <span id="p-fio"></span></p>
         </div>
-        <p class="auth-status" id="accountStatus" role="status" aria-live="polite">Профиль хранится только в этом браузере; серверная учетная запись не создана.</p>
-        <button type="button" class="auth-logout" onclick="closeAuthModal()">Закрыть профиль</button>
-        <button type="button" class="auth-logout" onclick="handleDeleteAccount()">Удалить профиль с этого устройства</button>
+
+        <div class="profile-buttons">
+          <button onclick="handleLogout()" class="btn-secondary">Выйти</button>
+          <button onclick="handleDeleteAccount()" class="btn-danger">Удалить аккаунт</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const profileStorageKey = 'snt_gornak_user';
-    const authModal = document.getElementById('authModal');
-    const loginView = document.getElementById('loginView');
-    const registerView = document.getElementById('registerView');
-    const forgotView = document.getElementById('forgotView');
-    const accountView = document.getElementById('accountView');
-    const authTabs = document.getElementById('authTabs');
-    const tabLoginBtn = document.getElementById('tabLoginBtn');
-    const tabRegisterBtn = document.getElementById('tabRegisterBtn');
-    let authTrigger;
-
-    const navLinks = document.querySelector('.nav-links');
-
-    function setActiveNav(link) {
-      navLinks.querySelectorAll('a').forEach(item => {
-        item.classList.toggle('active-nav', item === link);
-        if (item === link) item.setAttribute('aria-current', 'location');
-        else item.removeAttribute('aria-current');
-      });
-    }
-
-    navLinks.addEventListener('click', event => {
-      const link = event.target.closest('a[href^="#"]');
-      if (link && navLinks.contains(link)) setActiveNav(link);
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProfile();
     });
 
-    function updateActiveNav() {
-      const link = [...navLinks.querySelectorAll('a[href^="#"]')]
-        .find(item => item.hash === window.location.hash) || navLinks.querySelector('a');
-      setActiveNav(link);
-    }
-
-    updateActiveNav();
-    window.addEventListener('hashchange', updateActiveNav);
-
-    function openAuthModal(view = 'login') {
-      authTrigger = document.activeElement;
-      authModal.hidden = false;
-      renderProfile(view);
+    function openAuthModal() {
+      document.getElementById("auth-modal").style.display = "flex";
+      renderProfile();
     }
 
     function closeAuthModal() {
-      authModal.hidden = true;
-      if (authTrigger) authTrigger.focus();
+      document.getElementById("auth-modal").style.display = "none";
     }
 
-    function switchAuthView(view) {
-      const showForgot = view === 'forgot';
-      const showRegister = view === 'register';
-      const showAccount = view === 'account';
-      const activeView = showAccount ? accountView : showForgot ? forgotView : showRegister ? registerView : loginView;
-      loginView.hidden = activeView !== loginView;
-      registerView.hidden = activeView !== registerView;
-      forgotView.hidden = activeView !== forgotView;
-      accountView.hidden = activeView !== accountView;
-      authTabs.hidden = showForgot || showAccount;
-      tabLoginBtn.setAttribute('aria-selected', String(!showRegister && !showForgot && !showAccount));
-      tabRegisterBtn.setAttribute('aria-selected', String(showRegister));
-      tabLoginBtn.tabIndex = !showRegister && !showForgot && !showAccount ? 0 : -1;
-      tabRegisterBtn.tabIndex = showRegister ? 0 : -1;
-      authModal.setAttribute('aria-labelledby', showAccount ? 'accountTitle' : showForgot ? 'forgotTitle' : showRegister ? 'registerTitle' : 'authTitle');
-      (activeView.querySelector('input') || activeView.querySelector('button')).focus();
-    }
-
-    function renderProfile(initialView = 'login') {
-      let storedProfile;
-      try {
-        storedProfile = window.localStorage.getItem(profileStorageKey);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'SecurityError') {
-          document.getElementById('registerStatus').textContent = 'Браузер запретил доступ к локальному хранилищу. Профиль не сохранен.';
-          document.getElementById('accountStatus').textContent = 'Браузер запретил доступ к локальному хранилищу.';
-          if (!authModal.hidden) switchAuthView('register');
-          return;
-        }
-        throw error;
-      }
-
-      let user = null;
-      if (storedProfile) {
-        try {
-          user = JSON.parse(storedProfile);
-        } catch (error) {
-          if (!(error instanceof SyntaxError)) throw error;
-          document.getElementById('registerStatus').textContent = 'Не удалось прочитать сохраненный профиль. Создайте его заново.';
-        }
-      }
-
-      if (user && (typeof user.plot !== 'string' || typeof user.email !== 'string' || typeof user.fio !== 'string')) {
-        user = null;
-        document.getElementById('registerStatus').textContent = 'Сохраненный профиль поврежден. Создайте его заново.';
-      }
+    function renderProfile() {
+      const user = JSON.parse(localStorage.getItem("snt_gornak_user"));
+      const authFormBox = document.getElementById("auth-form-box");
+      const userProfileBox = document.getElementById("user-profile-box");
 
       if (user) {
-        document.getElementById('p-plot').textContent = user.plot;
-        document.getElementById('p-email').textContent = user.email;
-        document.getElementById('p-fio').textContent = user.fio || 'Не указано';
-      }
+        authFormBox.style.display = "none";
+        userProfileBox.style.display = "block";
 
-      if (!authModal.hidden) {
-        switchAuthView(user ? 'account' : initialView === 'login' ? 'register' : initialView);
+        document.getElementById("p-plot").textContent = user.plot;
+        document.getElementById("p-email").textContent = user.email;
+        document.getElementById("p-fio").textContent = user.fio || "Не указано";
+      } else {
+        authFormBox.style.display = "block";
+        userProfileBox.style.display = "none";
       }
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const plot = document.getElementById("auth-plot").value;
+      const email = document.getElementById("auth-email").value;
+      const fio = document.getElementById("auth-fio").value;
+
+      const userData = { plot, email, fio };
+      localStorage.setItem("snt_gornak_user", JSON.stringify(userData));
+
+      renderProfile();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem("snt_gornak_user");
+      renderProfile();
     }
 
     function handleDeleteAccount() {
-      if (!window.confirm('Удалить сохраненный профиль из этого браузера? Серверная учетная запись не создавалась.')) return;
-
-      try {
-        window.localStorage.removeItem(profileStorageKey);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'SecurityError') {
-          document.getElementById('accountStatus').textContent = 'Браузер запретил удаление данных профиля.';
-          return;
-        }
-        throw error;
+      if (confirm("Вы уверены, что хотите полностью удалить свой аккаунт?")) {
+        localStorage.removeItem("snt_gornak_user");
+        renderProfile();
+        alert("Аккаунт успешно удален.");
       }
-
-      document.getElementById('registerStatus').textContent = 'Локальный профиль удален.';
-      renderProfile('register');
     }
 
     function handleMissingDoc(docName) {
-      window.alert(`Документ "${docName}" временно недоступен: ссылка отсутствует или документ недействителен.`);
+      alert(`Документ "${docName}" временно недоступен: ссылка отсутствует или документ недействителен.`);
     }
 
-    function toggleSearch() {
-      const panel = document.getElementById('searchPanel');
-      const button = document.getElementById('searchToggle');
-      panel.hidden = !panel.hidden;
-      button.setAttribute('aria-expanded', String(!panel.hidden));
-      document.getElementById('searchResult').hidden = true;
-      if (!panel.hidden) document.getElementById('siteSearch').focus();
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const statusEl = document.getElementById("contact-status");
+      statusEl.style.color = "#1b5e20";
+      statusEl.style.marginTop = "12px";
+      statusEl.style.fontWeight = "600";
+      statusEl.textContent = "Ваше сообщение принято! Форма работает в тестовом режиме, отправка сообщений пока ограничена.";
+      document.getElementById("contact-form").reset();
     }
-
-    document.getElementById('searchPanel').addEventListener('submit', event => {
-      event.preventDefault();
-      const query = document.getElementById('siteSearch').value.trim().toLocaleLowerCase('ru');
-      const result = document.getElementById('searchResult');
-      if (!query) {
-        result.hidden = false;
-        result.textContent = 'Введите поисковый запрос.';
-        return;
-      }
-
-      const match = [...document.querySelectorAll('main section')].find(section =>
-        section.textContent.toLocaleLowerCase('ru').includes(query)
-      );
-
-      result.hidden = false;
-      if (!match) {
-        result.textContent = `По запросу «${query}» ничего не найдено.`;
-        return;
-      }
-
-      const heading = match.querySelector('h2, h3, .card-title');
-      result.textContent = `Найден раздел: ${heading ? heading.textContent : 'главная страница'}.`;
-      match.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    document.getElementById('loginForm').addEventListener('submit', event => {
-      event.preventDefault();
-      document.getElementById('loginStatus').textContent = 'Личный кабинет пока не подключен. Авторизация недоступна.';
-    });
-
-    document.addEventListener('DOMContentLoaded', () => renderProfile());
-
-    document.getElementById('registerForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const userData = {
-        plot: document.getElementById('profilePlot').value.trim(),
-        email: document.getElementById('profileEmail').value.trim(),
-        fio: document.getElementById('profileFio').value.trim()
-      };
-
-      try {
-        window.localStorage.setItem(profileStorageKey, JSON.stringify(userData));
-      } catch (error) {
-        if (error instanceof DOMException && (error.name === 'SecurityError' || error.name === 'QuotaExceededError')) {
-          document.getElementById('registerStatus').textContent = 'Не удалось сохранить профиль в браузере. Проверьте настройки хранения данных.';
-          return;
-        }
-        throw error;
-      }
-
-      document.getElementById('registerStatus').textContent = 'Профиль сохранен только в этом браузере.';
-      renderProfile('account');
-    });
-
-    document.getElementById('resetForm').addEventListener('submit', event => {
-      event.preventDefault();
-      document.getElementById('resetStatus').textContent = 'Восстановление пароля пока не подключено.';
-    });
-
-    document.getElementById('contactForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const name = document.getElementById('contactName').value.trim();
-      const plot = document.getElementById('contactPlot').value.trim();
-      const message = document.getElementById('contactMessage').value.trim();
-      const text = `Здравствуйте! Заявка с сайта НСТ «Горняк»:\nИмя: ${name}\nУчасток: ${plot}\nСообщение: ${message}`;
-      const telegramUrl = `https://t.me/egor23u?text=${encodeURIComponent(text)}`;
-      document.getElementById('contactTelegramLink').href = telegramUrl;
-      window.open(telegramUrl, '_blank', 'noopener,noreferrer');
-      document.getElementById('contactStatus').textContent = 'Текст подготовлен для Telegram. Если окно не открылось, нажмите кнопку Telegram и отправьте сообщение в чате.';
-    });
-
-    authModal.addEventListener('click', event => {
-      if (event.target === authModal) closeAuthModal();
-    });
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
-        if (!authModal.hidden) closeAuthModal();
-        else if (!document.getElementById('searchPanel').hidden) toggleSearch();
-      }
-    });
-
   </script>
-
 </body>
 </html>
