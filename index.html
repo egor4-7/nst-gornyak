@@ -12,14 +12,15 @@
     :root {
       --primary-green: #1b4332;
       --accent-green: #2d6a4f;
-      --light-green-bg: #e8f5e9;
+      --light-green-bg: rgba(232, 245, 233, 0.6);
       --bg-color: #f4f6f4;
       --text-main: #1d2d24;
-      --text-muted: #526358;
-      --glass-bg: rgba(255, 255, 255, 0.65);
-      --glass-border: rgba(255, 255, 255, 0.5);
-      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-      --radius-lg: 20px;
+      --text-muted: #4a5d50;
+      --deep-glass-bg: rgba(255, 255, 255, 0.38);
+      --deep-glass-border: rgba(255, 255, 255, 0.65);
+      --deep-glass-blur: blur(35px) saturate(190%);
+      --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(255, 255, 255, 0.4) inset;
+      --radius-lg: 24px;
       --radius-md: 12px;
       --radius-pill: 50px;
     }
@@ -32,10 +33,47 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(135deg, #f4f6f4 0%, #e9efe9 100%);
+      background: radial-gradient(circle at 10% 20%, #e2efe2 0%, #d5e5d7 40%, #f4f7f4 90%);
+      background-attachment: fixed;
       color: var(--text-main);
       line-height: 1.5;
       min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .leaves-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .leaf {
+      position: absolute;
+      top: -50px;
+      opacity: 0.5;
+      font-size: 1.4rem;
+      user-select: none;
+      animation: fall 12s linear infinite, sway 4s ease-in-out infinite alternate;
+    }
+
+    .leaf:nth-child(1) { left: 10%; animation-delay: 0s, 0s; font-size: 1.8rem; }
+    .leaf:nth-child(2) { left: 28%; animation-delay: 3s, 1s; font-size: 1.2rem; }
+    .leaf:nth-child(3) { left: 52%; animation-delay: 1s, 2s; font-size: 1.5rem; }
+    .leaf:nth-child(4) { left: 74%; animation-delay: 5s, 0.5s; font-size: 1.3rem; }
+    .leaf:nth-child(5) { left: 88%; animation-delay: 2s, 1.5s; font-size: 1.7rem; }
+
+    @keyframes fall {
+      0% { top: -50px; transform: rotate(0deg); opacity: 0; }
+      10%, 90% { opacity: 0.6; }
+      100% { top: 105vh; transform: rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes sway {
+      from { margin-left: 0; }
+      to { margin-left: 50px; }
     }
 
     /* Навигация с эффектом «жидкого стекла» */
@@ -49,10 +87,12 @@
     }
 
     .navbar {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       box-shadow: var(--glass-shadow);
       border-radius: var(--radius-pill);
       padding: 0.75rem 1.5rem;
@@ -61,23 +101,43 @@
       justify-content: space-between;
     }
 
+    .navbar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: skewX(-25deg);
+      animation: glass-shine 8s infinite;
+    }
+
+    @keyframes glass-shine {
+      0%, 70% { left: -100%; }
+      100% { left: 200%; }
+    }
+
     .brand {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
       color: var(--text-main);
+      z-index: 1;
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      background-color: var(--primary-green);
+      width: 38px;
+      height: 38px;
+      background: var(--primary-green);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
     }
 
     .brand-text h1 {
@@ -97,13 +157,14 @@
       display: flex;
       gap: 1.5rem;
       list-style: none;
+      z-index: 1;
     }
 
     .nav-links a {
       text-decoration: none;
       color: var(--text-main);
       font-size: 0.95rem;
-      font-weight: 500;
+      font-weight: 600;
       transition: color 0.2s;
     }
 
@@ -114,23 +175,28 @@
     .btn-header {
       background: var(--primary-green);
       color: #fff;
-      padding: 0.6rem 1.2rem;
+      padding: 0.65rem 1.3rem;
       border-radius: var(--radius-pill);
       text-decoration: none;
       font-size: 0.9rem;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: background 0.2s;
+      z-index: 1;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2);
     }
 
     .btn-header:hover {
       background: var(--accent-green);
+      transform: translateY(-1px);
     }
 
     /* Главный контейнер */
     main {
+      position: relative;
+      z-index: 1;
       max-width: 1100px;
       margin: 3rem auto;
       padding: 0 1rem;
@@ -145,7 +211,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(45, 106, 79, 0.1);
+      background: rgba(45, 106, 79, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       color: var(--accent-green);
       padding: 0.35rem 0.9rem;
       border-radius: var(--radius-pill);
@@ -154,21 +222,23 @@
       letter-spacing: 0.5px;
       margin-bottom: 1.2rem;
       text-transform: uppercase;
+      border: 1px solid rgba(45, 106, 79, 0.15);
     }
 
     .hero h2 {
-      font-size: 3rem;
-      font-weight: 700;
+      font-size: 3.2rem;
+      font-weight: 800;
       color: var(--text-main);
       margin-bottom: 1rem;
       line-height: 1.15;
+      letter-spacing: -0.5px;
     }
 
     .hero p {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: var(--text-muted);
-      max-width: 650px;
-      margin-bottom: 2rem;
+      max-width: 680px;
+      margin-bottom: 2.2rem;
     }
 
     .hero-actions {
@@ -179,10 +249,11 @@
     .btn-primary {
       background: var(--primary-green);
       color: #fff;
-      padding: 0.85rem 1.6rem;
+      padding: 0.9rem 1.8rem;
       border-radius: var(--radius-pill);
       text-decoration: none;
       font-weight: 600;
+      box-shadow: 0 6px 20px rgba(27, 67, 50, 0.25);
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
@@ -195,10 +266,10 @@
     }
 
     .btn-glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       color: var(--text-main);
       padding: 0.85rem 1.6rem;
       border-radius: var(--radius-pill);
@@ -221,10 +292,10 @@
     }
 
     .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       box-shadow: var(--glass-shadow);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
@@ -300,10 +371,10 @@
     }
 
     .announcements {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
       margin-bottom: 3.5rem;
@@ -382,10 +453,10 @@
     }
 
     .tariff-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
     }
@@ -402,10 +473,10 @@
 
     .documents-list {
       list-style: none;
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       border-radius: var(--radius-lg);
       padding: 0.5rem 1.5rem;
     }
@@ -442,16 +513,18 @@
     }
 
     .contact-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
       color: var(--text-muted);
     }
 
     footer {
+      position: relative;
+      z-index: 1;
       padding: 1.5rem 1rem 2rem;
       border-top: 1px solid rgba(27, 67, 50, 0.1);
       color: var(--text-muted);
@@ -540,14 +613,20 @@
       *::before,
       *::after {
         scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
+        transition: none !important;
+        animation: none !important;
       }
     }
   </style>
 </head>
 <body>
+  <div class="leaves-container" aria-hidden="true">
+    <span class="leaf">🍃</span>
+    <span class="leaf">🍃</span>
+    <span class="leaf">🍃</span>
+    <span class="leaf">🍃</span>
+    <span class="leaf">🍃</span>
+  </div>
   <header>
     <nav class="navbar" aria-label="Основная навигация">
       <a class="brand" href="#top">
