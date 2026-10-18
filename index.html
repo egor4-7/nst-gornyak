@@ -92,7 +92,7 @@
       position: sticky;
       top: 0.75rem;
       z-index: 1000;
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto 2rem auto;
       padding: 0 0.5rem;
     }
@@ -101,11 +101,11 @@
       box-sizing: border-box;
       max-width: 100%;
       gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.5);
       backdrop-filter: var(--deep-glass-blur);
       -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
       border-radius: var(--radius-pill);
       padding: 0.4rem 0.8rem;
       display: flex;
@@ -212,10 +212,14 @@
       transition: background 0.2s, color 0.2s;
     }
 
-    .nav-links a:hover,
-    .nav-links a[href="#tariffs"] {
-      background: rgba(255, 255, 255, 0.8);
-      color: var(--primary-green);
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .nav-links a.active-nav {
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      color: #0f172a;
     }
 
     .nav-actions {
@@ -768,7 +772,7 @@
       </a>
 
       <div class="nav-links">
-        <a href="#tariffs">👛 Тарифы</a>
+        <a href="#tariffs" class="active-nav" aria-current="location">👛 Тарифы</a>
         <a href="#docs">📄 Документы</a>
         <a href="#archive">📦 Архив</a>
         <a href="#contacts">📞 Контакты</a>
@@ -1089,6 +1093,30 @@
     const tabLoginBtn = document.getElementById('tabLoginBtn');
     const tabRegisterBtn = document.getElementById('tabRegisterBtn');
     let authTrigger;
+
+    const navLinks = document.querySelector('.nav-links');
+
+    function setActiveNav(link) {
+      navLinks.querySelectorAll('a').forEach(item => {
+        item.classList.toggle('active-nav', item === link);
+        if (item === link) item.setAttribute('aria-current', 'location');
+        else item.removeAttribute('aria-current');
+      });
+    }
+
+    navLinks.addEventListener('click', event => {
+      const link = event.target.closest('a[href^="#"]');
+      if (link && navLinks.contains(link)) setActiveNav(link);
+    });
+
+    function updateActiveNav() {
+      const link = [...navLinks.querySelectorAll('a[href^="#"]')]
+        .find(item => item.hash === window.location.hash) || navLinks.querySelector('a');
+      setActiveNav(link);
+    }
+
+    updateActiveNav();
+    window.addEventListener('hashchange', updateActiveNav);
 
     function openAuthModal(view = 'login') {
       authTrigger = document.activeElement;
