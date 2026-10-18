@@ -432,6 +432,19 @@
       font-size: 1rem;
     }
 
+    .auth-logout {
+      width: 100%;
+      margin-top: 0.8rem;
+      padding: 0.8rem;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text-muted);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     .auth-status {
       margin: 1rem 0 0;
     }
@@ -1082,6 +1095,12 @@
         <p class="auth-status" id="resetStatus" role="status" aria-live="polite">Восстановление пароля пока не подключено.</p>
         <p class="auth-back"><button type="button" onclick="switchAuthView('login')">← Вернуться ко входу</button></p>
       </div>
+      <div class="auth-view" id="accountView" hidden>
+        <h2 id="accountTitle">Личный кабинет</h2>
+        <p class="auth-description">Участок / Логин: <strong id="accountUsername"></strong></p>
+        <p class="auth-status" id="accountStatus" role="status" aria-live="polite">Кабинет ожидает подключения серверной авторизации.</p>
+        <button type="button" class="auth-logout" onclick="handleLogout()">Выйти из аккаунта</button>
+      </div>
     </div>
   </div>
 
@@ -1090,6 +1109,7 @@
     const loginView = document.getElementById('loginView');
     const registerView = document.getElementById('registerView');
     const forgotView = document.getElementById('forgotView');
+    const accountView = document.getElementById('accountView');
     const authTabs = document.getElementById('authTabs');
     const tabLoginBtn = document.getElementById('tabLoginBtn');
     const tabRegisterBtn = document.getElementById('tabRegisterBtn');
@@ -1133,17 +1153,28 @@
     function switchAuthView(view) {
       const showForgot = view === 'forgot';
       const showRegister = view === 'register';
-      const activeView = showForgot ? forgotView : showRegister ? registerView : loginView;
+      const showAccount = view === 'account';
+      const activeView = showAccount ? accountView : showForgot ? forgotView : showRegister ? registerView : loginView;
       loginView.hidden = activeView !== loginView;
       registerView.hidden = activeView !== registerView;
       forgotView.hidden = activeView !== forgotView;
-      authTabs.hidden = showForgot;
-      tabLoginBtn.setAttribute('aria-selected', String(!showRegister && !showForgot));
+      accountView.hidden = activeView !== accountView;
+      authTabs.hidden = showForgot || showAccount;
+      tabLoginBtn.setAttribute('aria-selected', String(!showRegister && !showForgot && !showAccount));
       tabRegisterBtn.setAttribute('aria-selected', String(showRegister));
-      tabLoginBtn.tabIndex = !showRegister && !showForgot ? 0 : -1;
+      tabLoginBtn.tabIndex = !showRegister && !showForgot && !showAccount ? 0 : -1;
       tabRegisterBtn.tabIndex = showRegister ? 0 : -1;
-      authModal.setAttribute('aria-labelledby', showForgot ? 'forgotTitle' : showRegister ? 'registerTitle' : 'authTitle');
-      activeView.querySelector('input').focus();
+      authModal.setAttribute('aria-labelledby', showAccount ? 'accountTitle' : showForgot ? 'forgotTitle' : showRegister ? 'registerTitle' : 'authTitle');
+      (activeView.querySelector('input') || activeView.querySelector('button')).focus();
+    }
+
+    function showAccountView(username) {
+      document.getElementById('accountUsername').textContent = username;
+      switchAuthView('account');
+    }
+
+    function handleLogout() {
+      document.getElementById('accountStatus').textContent = 'Выход недоступен: серверная авторизация пока не подключена.';
     }
 
     function toggleSearch() {
