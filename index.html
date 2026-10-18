@@ -79,25 +79,26 @@
     /* Премиальный стеклянный бар навигации */
     header {
       position: sticky;
-      top: 12px;
-      z-index: 999;
+      top: 15px;
+      z-index: 1000;
       max-width: 900px;
-      margin: 0 auto;
+      margin: 0 auto 2rem;
       padding: 0 1rem;
     }
 
     .navbar {
       position: relative;
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(255, 255, 255, 0.5) inset;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
       border-radius: var(--radius-pill);
       padding: 0.5rem 0.8rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
     }
 
     .brand {
@@ -135,34 +136,55 @@
       text-transform: uppercase;
     }
 
-    .nav-pills {
+    .nav-pills-container {
+      position: relative;
       display: flex;
+      flex: 0 0 auto;
       background: rgba(0, 0, 0, 0.04);
       border-radius: 40px;
-      padding: 3px;
-      gap: 2px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
-    .nav-pills a {
+    .pill-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: 100px;
+      border-radius: 30px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+
+    .nav-pill {
+      position: relative;
+      z-index: 2;
       text-decoration: none;
       color: var(--text-main);
       font-size: 0.85rem;
       font-weight: 600;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1.1rem;
       border-radius: 30px;
-      transition: all 0.25s ease;
+      transition: color 0.25s ease;
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      white-space: nowrap;
     }
 
-    .nav-pills a:hover,
-    .nav-pills a.active {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
+    .nav-pill:hover,
+    .nav-pill.active {
       color: var(--primary-green);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+    }
+
+    .nav-pill:focus-visible {
+      outline: 3px solid var(--accent-green);
+      outline-offset: 1px;
+      z-index: 2;
     }
 
     .btn-header {
@@ -542,13 +564,13 @@
         border-radius: var(--radius-lg);
       }
 
-      .nav-pills {
+      .nav-pills-container {
         order: 3;
         flex: 1 0 100%;
         justify-content: center;
       }
 
-      .nav-pills a {
+      .nav-pill {
         font-size: 0.85rem;
       }
 
@@ -628,10 +650,11 @@
           <span>НСТ</span>
         </div>
       </a>
-      <div class="nav-pills">
-        <a href="#tariffs" class="active"><span aria-hidden="true">👛</span> Тарифы</a>
-        <a href="#documents"><span aria-hidden="true">📄</span> Документы</a>
-        <a href="#contacts"><span aria-hidden="true">📞</span> Контакты</a>
+      <div class="nav-pills-container">
+        <span class="pill-indicator" id="pillIndicator" aria-hidden="true"></span>
+        <a href="#tariffs" class="nav-pill active" aria-current="page"><span aria-hidden="true">👛</span> Тарифы</a>
+        <a href="#documents" class="nav-pill"><span aria-hidden="true">📄</span> Документы</a>
+        <a href="#contacts" class="nav-pill"><span aria-hidden="true">📞</span> Контакты</a>
       </div>
       <a class="btn-header" href="#documents">Архив <span aria-hidden="true">↗</span></a>
     </nav>
@@ -760,5 +783,32 @@
   <footer>
     <p>© НСТ «Горняк» — информационный портал для садоводов</p>
   </footer>
+  <script>
+    const navPills = document.querySelector(".nav-pills-container");
+    const pillIndicator = navPills.querySelector(".pill-indicator");
+    const navLinks = [...navPills.querySelectorAll(".nav-pill")];
+
+    function moveIndicator(activeLink) {
+      const activeLinkRect = activeLink.getBoundingClientRect();
+      const navPillsRect = navPills.getBoundingClientRect();
+      pillIndicator.style.width = `${activeLinkRect.width}px`;
+      pillIndicator.style.left = `${activeLinkRect.left - navPillsRect.left - navPills.clientLeft}px`;
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.forEach((navLink) => {
+          navLink.classList.toggle("active", navLink === link);
+          navLink.toggleAttribute("aria-current", navLink === link);
+        });
+        moveIndicator(link);
+      });
+    });
+
+    moveIndicator(navPills.querySelector(".nav-pill.active"));
+    window.addEventListener("resize", () => {
+      moveIndicator(navPills.querySelector(".nav-pill.active"));
+    });
+  </script>
 </body>
 </html>
