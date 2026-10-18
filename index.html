@@ -43,6 +43,25 @@
       position: relative;
     }
 
+    .navbar .brand {
+      gap: 0.5rem;
+      padding-left: 0;
+    }
+
+    .brand-name {
+      color: #1e293b;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .brand-tag {
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(0, 0, 0, 0.05);
+      color: #64748b;
+      font-size: 0.75rem;
+    }
+
     /* Анимация падающей/плавающей растительности */
     .leaves-container {
       position: fixed;
@@ -93,10 +112,10 @@
     }
 
     .navbar {
-      background: var(--deep-glass-bg);
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: var(--deep-glass-blur);
       -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       box-shadow: var(--glass-shadow);
       border-radius: var(--radius-pill);
       padding: 0.5rem 0.8rem;
@@ -142,61 +161,29 @@
       text-transform: uppercase;
     }
 
-    /* Интерактивный капсульный переключатель */
-    .nav-pills-container {
-      position: relative;
+    .nav-links {
       display: flex;
-      background: rgba(0, 0, 0, 0.04);
-      border-radius: 40px;
-      padding: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-    }
-
-    .pill-indicator {
-      position: absolute;
-      top: 4px;
-      bottom: 4px;
-      left: 4px;
-      width: 90px;
-      background: #ffffff;
-      border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1;
-    }
-
-    .nav-pill {
-      position: relative;
-      z-index: 2;
-      text-decoration: none;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 30px;
-      transition: color 0.25s ease;
-      white-space: nowrap;
-    }
-
-    .nav-pill.active {
-      color: var(--primary-green);
-    }
-
-    .btn-header {
-      background: var(--primary-green);
-      color: #fff;
-      padding: 0.6rem 1.2rem;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem;
       border-radius: var(--radius-pill);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: transform 0.2s, background 0.2s;
-      box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2);
+      background: rgba(255, 255, 255, 0.5);
     }
 
-    .btn-header:hover {
-      background: var(--accent-green);
-      transform: translateY(-1px);
+    .nav-links a {
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-pill);
+      color: #334155;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--primary-green);
     }
 
     .nav-actions {
@@ -216,22 +203,28 @@
     }
 
     .btn-login {
-      background: linear-gradient(135deg, #16a34a, #15803d);
+      background: #16a34a;
       color: #fff;
-      padding: 0.6rem 1rem;
+      padding: 0.5rem 1.3rem;
+      font-size: 0.9rem;
       box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+      transition: transform 0.2s;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-1px);
     }
 
     .btn-search {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.8);
+      width: 38px;
+      height: 38px;
+      background: #fff;
       border: 1px solid rgba(0, 0, 0, 0.1);
       color: var(--text-main);
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     .search-panel {
@@ -343,6 +336,37 @@
       margin-bottom: 1.5rem;
       color: var(--text-muted);
       font-size: 0.9rem;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 1.2rem;
+      padding: 0.25rem;
+      border-radius: 12px;
+      background: #f1f5f9;
+    }
+
+    .auth-tabs button {
+      flex: 1;
+      padding: 0.5rem;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .auth-tabs button[aria-selected="true"] {
+      background: #fff;
+      color: #0f172a;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .auth-tabs[hidden] {
+      display: none;
     }
 
     .auth-form input {
@@ -677,7 +701,7 @@
     }
 
     @media (max-width: 768px) {
-      .nav-pills-container { display: none; }
+      .nav-links { display: none; }
       .hero h2 { font-size: 2.3rem; }
       .footer-inner { grid-template-columns: 1fr; }
     }
@@ -686,11 +710,9 @@
       header { padding: 0 0.25rem; }
       .navbar { gap: 0.4rem; padding: 0.45rem; }
       .brand { gap: 0.35rem; padding-left: 0.2rem; }
-      .brand-icon { width: 32px; height: 32px; }
-      .btn-header { padding: 0.55rem 0.7rem; font-size: 0.78rem; }
       .btn-login { padding: 0.55rem 0.7rem; font-size: 0.78rem; }
       .nav-actions { gap: 0.3rem; }
-      .btn-search { width: 34px; height: 34px; }
+      .btn-search { width: 38px; height: 38px; }
       .auth-dialog { padding: 1.5rem; }
     }
   </style>
@@ -708,28 +730,22 @@
 
   <!-- Шапка с плавающей капсулой -->
   <header>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Основная навигация">
       <a href="#main" class="brand">
-        <div class="brand-icon">🍃</div>
-        <div class="brand-text">
-          <h1>Горняк</h1>
-          <span>НСТ</span>
-        </div>
+        <span class="brand-name">Горняк</span>
+        <span class="brand-tag">НСТ</span>
       </a>
 
-      <!-- Скользящая плашка переключения -->
-      <div class="nav-pills-container">
-        <div class="pill-indicator" id="pillIndicator"></div>
-        <a href="#tariffs" class="nav-pill active" onclick="moveIndicator(this)">👛 Тарифы</a>
-        <a href="#docs" class="nav-pill" onclick="moveIndicator(this)">📄 Документы</a>
-        <a href="#archive" class="nav-pill" onclick="moveIndicator(this)">🗂 Архив</a>
-        <a href="#contacts" class="nav-pill" onclick="moveIndicator(this)">📞 Контакты</a>
+      <div class="nav-links">
+        <a href="#tariffs">🌸 Тарифы</a>
+        <a href="#docs">📄 Документы</a>
+        <a href="#archive">📦 Архив</a>
+        <a href="#contacts">📞 Контакты</a>
       </div>
 
       <div class="nav-actions">
-        <a href="#archive" class="btn-header">Архив ↗</a>
-        <button type="button" class="btn-login" onclick="openAuthModal()">Войти</button>
-        <button type="button" class="btn-search" id="searchToggle" aria-label="Поиск по сайту" aria-expanded="false" aria-controls="searchPanel" onclick="toggleSearch()">🔎</button>
+        <button type="button" class="btn-login" onclick="openAuthModal('login')">Войти</button>
+        <button type="button" class="btn-search" id="searchToggle" aria-label="Поиск по сайту" aria-expanded="false" aria-controls="searchPanel" onclick="toggleSearch()">🔍</button>
       </div>
     </nav>
     <form class="search-panel" id="searchPanel" role="search" hidden>
@@ -994,6 +1010,10 @@
   <div class="auth-modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle" hidden>
     <div class="auth-dialog">
       <button type="button" class="auth-close" aria-label="Закрыть" onclick="closeAuthModal()">✕</button>
+      <div class="auth-tabs" id="authTabs" role="tablist" aria-label="Авторизация">
+        <button type="button" id="tabLoginBtn" role="tab" aria-selected="true" aria-controls="loginView" onclick="switchAuthView('login')">Вход</button>
+        <button type="button" id="tabRegisterBtn" role="tab" aria-selected="false" aria-controls="registerView" onclick="switchAuthView('register')">Регистрация</button>
+      </div>
       <div class="auth-view" id="loginView">
         <h2 id="authTitle">Вход в личный кабинет</h2>
         <p class="auth-description">НСТ «Горняк»</p>
@@ -1004,6 +1024,17 @@
           <button type="submit" class="auth-submit">Войти</button>
         </form>
         <p class="auth-status" id="loginStatus" role="status" aria-live="polite">Личный кабинет пока не подключен.</p>
+      </div>
+      <div class="auth-view" id="registerView" hidden>
+        <h2 id="registerTitle">Регистрация</h2>
+        <p class="auth-description">Создание личного кабинета НСТ «Горняк»</p>
+        <form class="auth-form" id="registerForm">
+          <input type="text" name="username" autocomplete="username" placeholder="Логин или № участка" aria-label="Логин или номер участка" required>
+          <input type="email" name="email" autocomplete="email" placeholder="Email (для восстановления)" aria-label="Электронная почта для восстановления" required>
+          <input type="password" name="password" autocomplete="new-password" placeholder="Придумайте пароль" aria-label="Придумайте пароль" required>
+          <button type="submit" class="auth-submit">Зарегистрироваться</button>
+        </form>
+        <p class="auth-status" id="registerStatus" role="status" aria-live="polite">Регистрация пока не подключена. Данные не сохраняются.</p>
       </div>
       <div class="auth-view" id="forgotView" hidden>
         <h2 id="forgotTitle">Восстановление пароля</h2>
@@ -1018,32 +1049,20 @@
     </div>
   </div>
 
-  <!-- Скрипт скользящей капсулы в шапке -->
   <script>
-    function moveIndicator(element) {
-      const indicator = document.getElementById('pillIndicator');
-      const container = document.querySelector('.nav-pills-container');
-
-      document.querySelectorAll('.nav-pill').forEach(pill => pill.classList.remove('active'));
-      element.classList.add('active');
-
-      const elementRect = element.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-
-      indicator.style.width = `${elementRect.width}px`;
-      indicator.style.left = `${elementRect.left - containerRect.left}px`;
-    }
-
     const authModal = document.getElementById('authModal');
     const loginView = document.getElementById('loginView');
+    const registerView = document.getElementById('registerView');
     const forgotView = document.getElementById('forgotView');
+    const authTabs = document.getElementById('authTabs');
+    const tabLoginBtn = document.getElementById('tabLoginBtn');
+    const tabRegisterBtn = document.getElementById('tabRegisterBtn');
     let authTrigger;
 
-    function openAuthModal() {
+    function openAuthModal(view = 'login') {
       authTrigger = document.activeElement;
       authModal.hidden = false;
-      switchAuthView('login');
-      loginView.querySelector('input').focus();
+      switchAuthView(view);
     }
 
     function closeAuthModal() {
@@ -1053,10 +1072,18 @@
 
     function switchAuthView(view) {
       const showForgot = view === 'forgot';
-      loginView.hidden = showForgot;
-      forgotView.hidden = !showForgot;
-      authModal.setAttribute('aria-labelledby', showForgot ? 'forgotTitle' : 'authTitle');
-      (showForgot ? forgotView : loginView).querySelector('input').focus();
+      const showRegister = view === 'register';
+      const activeView = showForgot ? forgotView : showRegister ? registerView : loginView;
+      loginView.hidden = activeView !== loginView;
+      registerView.hidden = activeView !== registerView;
+      forgotView.hidden = activeView !== forgotView;
+      authTabs.hidden = showForgot;
+      tabLoginBtn.setAttribute('aria-selected', String(!showRegister && !showForgot));
+      tabRegisterBtn.setAttribute('aria-selected', String(showRegister));
+      tabLoginBtn.tabIndex = !showRegister && !showForgot ? 0 : -1;
+      tabRegisterBtn.tabIndex = showRegister ? 0 : -1;
+      authModal.setAttribute('aria-labelledby', showForgot ? 'forgotTitle' : showRegister ? 'registerTitle' : 'authTitle');
+      activeView.querySelector('input').focus();
     }
 
     function toggleSearch() {
@@ -1098,6 +1125,11 @@
       document.getElementById('loginStatus').textContent = 'Личный кабинет пока не подключен. Авторизация недоступна.';
     });
 
+    document.getElementById('registerForm').addEventListener('submit', event => {
+      event.preventDefault();
+      document.getElementById('registerStatus').textContent = 'Регистрация пока не подключена. Данные не сохранены.';
+    });
+
     document.getElementById('resetForm').addEventListener('submit', event => {
       event.preventDefault();
       document.getElementById('resetStatus').textContent = 'Восстановление пароля пока не подключено.';
@@ -1114,10 +1146,6 @@
       }
     });
 
-    window.addEventListener('load', () => {
-      const activePill = document.querySelector('.nav-pill.active');
-      if (activePill) moveIndicator(activePill);
-    });
   </script>
 
 </body>
