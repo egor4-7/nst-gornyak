@@ -5,23 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>НСТ «Горняк» — Официальный портал</title>
-  <meta name="description" content="Официальный информационный портал садоводческого товарищества НСТ Горняк. Протоколы, сметы, тарифы и контакты.">
+  <meta name="description" content="Официальный информационный портал садоводческого товарищества НСТ Горняк. Протоколы, сметы, тарифы, контакты правления и карта.">
 
-  <!-- Стеклянный дизайн (Glassmorphism) и стилизация -->
   <style>
     :root {
       --primary-green: #1b4332;
       --accent-green: #2d6a4f;
       --light-green-bg: rgba(232, 245, 233, 0.6);
-      --bg-color: #f4f6f4;
       --text-main: #1d2d24;
       --text-muted: #4a5d50;
-      --deep-glass-bg: rgba(255, 255, 255, 0.38);
-      --deep-glass-border: rgba(255, 255, 255, 0.65);
+
+      /* Глубокий объемный блюр (VisionOS / Apple Glass) */
+      --deep-glass-bg: rgba(255, 255, 255, 0.42);
+      --deep-glass-border: rgba(255, 255, 255, 0.7);
       --deep-glass-blur: blur(35px) saturate(190%);
-      --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(255, 255, 255, 0.4) inset;
+      --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(255, 255, 255, 0.5) inset;
+
       --radius-lg: 24px;
-      --radius-md: 12px;
       --radius-pill: 50px;
     }
 
@@ -42,9 +42,13 @@
       position: relative;
     }
 
+    /* Анимация падающей/плавающей растительности */
     .leaves-container {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
@@ -53,8 +57,8 @@
     .leaf {
       position: absolute;
       top: -50px;
-      opacity: 0.5;
       font-size: 1.4rem;
+      opacity: 0.5;
       user-select: none;
       animation: fall 12s linear infinite, sway 4s ease-in-out infinite alternate;
     }
@@ -67,38 +71,39 @@
 
     @keyframes fall {
       0% { top: -50px; transform: rotate(0deg); opacity: 0; }
-      10%, 90% { opacity: 0.6; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
       100% { top: 105vh; transform: rotate(360deg); opacity: 0; }
     }
 
     @keyframes sway {
-      from { margin-left: 0; }
-      to { margin-left: 50px; }
+      0% { margin-left: 0px; }
+      100% { margin-left: 50px; }
     }
 
-    /* Премиальный стеклянный бар навигации */
+    /* Шапка с плавающей капсулой-переключателем */
     header {
       position: sticky;
       top: 15px;
       z-index: 1000;
       max-width: 900px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 2rem auto;
       padding: 0 1rem;
     }
 
     .navbar {
-      position: relative;
-      background: rgba(255, 255, 255, 0.55);
-      backdrop-filter: blur(30px) saturate(180%);
-      -webkit-backdrop-filter: blur(30px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
+      box-shadow: var(--glass-shadow);
       border-radius: var(--radius-pill);
       padding: 0.5rem 0.8rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      position: relative;
     }
 
     .brand {
@@ -136,10 +141,10 @@
       text-transform: uppercase;
     }
 
+    /* Интерактивный капсульный переключатель */
     .nav-pills-container {
       position: relative;
       display: flex;
-      flex: 0 0 auto;
       background: rgba(0, 0, 0, 0.04);
       border-radius: 40px;
       padding: 4px;
@@ -151,11 +156,10 @@
       top: 4px;
       bottom: 4px;
       left: 4px;
-      width: 100px;
+      width: 90px;
+      background: #ffffff;
       border-radius: 30px;
-      background: #fff;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
-      pointer-events: none;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 1;
     }
@@ -167,24 +171,14 @@
       color: var(--text-main);
       font-size: 0.85rem;
       font-weight: 600;
-      padding: 0.5rem 1.1rem;
+      padding: 0.5rem 1rem;
       border-radius: 30px;
       transition: color 0.25s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
       white-space: nowrap;
     }
 
-    .nav-pill:hover,
     .nav-pill.active {
       color: var(--primary-green);
-    }
-
-    .nav-pill:focus-visible {
-      outline: 3px solid var(--accent-green);
-      outline-offset: 1px;
-      z-index: 2;
     }
 
     .btn-header {
@@ -195,9 +189,6 @@
       text-decoration: none;
       font-size: 0.85rem;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
       transition: transform 0.2s, background 0.2s;
       box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2);
     }
@@ -212,14 +203,12 @@
       position: relative;
       z-index: 1;
       max-width: 1100px;
-      margin: 3rem auto;
-      margin-top: 2rem;
+      margin: 2rem auto;
       padding: 0 1rem;
     }
 
-    /* Блок Hero */
     .hero {
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
     }
 
     .badge {
@@ -228,12 +217,11 @@
       gap: 0.4rem;
       background: rgba(45, 106, 79, 0.12);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       color: var(--accent-green);
-      padding: 0.35rem 0.9rem;
+      padding: 0.4rem 1rem;
       border-radius: var(--radius-pill);
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.5px;
       margin-bottom: 1.2rem;
       text-transform: uppercase;
@@ -269,9 +257,6 @@
       text-decoration: none;
       font-weight: 600;
       box-shadow: 0 6px 20px rgba(27, 67, 50, 0.25);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
       transition: transform 0.2s, background 0.2s;
     }
 
@@ -285,25 +270,21 @@
       backdrop-filter: var(--deep-glass-blur);
       -webkit-backdrop-filter: var(--deep-glass-blur);
       border: 1px solid var(--deep-glass-border);
+      box-shadow: var(--glass-shadow);
       color: var(--text-main);
-      padding: 0.85rem 1.6rem;
+      padding: 0.9rem 1.8rem;
       border-radius: var(--radius-pill);
       text-decoration: none;
       font-weight: 600;
       transition: background 0.2s, transform 0.2s;
     }
 
-    .btn-glass:hover {
-      background: rgba(255, 255, 255, 0.85);
-      transform: translateY(-2px);
-    }
-
-    /* Быстрые карточки навигации (Жидкое стекло) */
+    /* Карточки быстрой навигации */
     .quick-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
-      margin-bottom: 3.5rem;
+      gap: 1.3rem;
+      margin-bottom: 4rem;
     }
 
     .glass-card {
@@ -313,20 +294,19 @@
       border: 1px solid var(--deep-glass-border);
       box-shadow: var(--glass-shadow);
       border-radius: var(--radius-lg);
-      padding: 1.5rem;
+      padding: 1.6rem;
       text-decoration: none;
       color: var(--text-main);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 120px;
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      min-height: 125px;
+      transition: transform 0.25s, box-shadow 0.25s;
     }
 
     .glass-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
-      border-color: rgba(45, 106, 79, 0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
     }
 
     .card-top {
@@ -336,39 +316,40 @@
     }
 
     .card-icon {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       background: var(--light-green-bg);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--accent-green);
+      font-size: 1.1rem;
     }
 
     .arrow-icon {
-      color: #aaa;
-      font-size: 1.1rem;
-      transition: color 0.2s, transform 0.2s;
+      color: #8fa394;
+      font-size: 1.2rem;
+      font-weight: 700;
+      transition: transform 0.2s;
     }
 
     .glass-card:hover .arrow-icon {
-      color: var(--accent-green);
-      transform: translate(2px, -2px);
+      transform: translate(3px, -3px);
     }
 
     .card-title {
-      font-weight: 600;
-      font-size: 1.05rem;
-      margin-top: 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-top: 1.2rem;
     }
 
-    /* Блок объявлений */
+    /* Заголовки секций */
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .section-subtitle {
@@ -376,95 +357,21 @@
       letter-spacing: 1px;
       color: var(--accent-green);
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .section-title {
-      font-size: 1.8rem;
-      font-weight: 700;
+      font-size: 1.9rem;
+      font-weight: 800;
       color: var(--text-main);
     }
 
-    .announcements {
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin-bottom: 3.5rem;
-      color: var(--text-muted);
-    }
-
-    /* Банер подготовки к сезону */
-    .banner-season {
-      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
-      color: #fff;
-      border-radius: 24px;
-      padding: 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 2rem;
-      margin-bottom: 4rem;
-      box-shadow: 0 10px 30px rgba(27, 67, 50, 0.2);
-    }
-
-    .banner-content h3 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
-
-    .banner-content p {
-      opacity: 0.9;
-      max-width: 550px;
-      font-size: 1rem;
-    }
-
-    .banner-buttons {
-      display: flex;
-      gap: 0.8rem;
-    }
-
-    .btn-light {
-      background: #fff;
-      color: var(--primary-green);
-      padding: 0.75rem 1.4rem;
-      border-radius: var(--radius-pill);
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .btn-light:hover {
-      background: #f0f0f0;
-    }
-
-    .btn-outline {
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      color: #fff;
-      padding: 0.75rem 1.4rem;
-      border-radius: var(--radius-pill);
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.75);
-    }
-
-    .section {
-      margin-bottom: 3.5rem;
-      scroll-margin-top: 7rem;
-    }
-
-    .tariff-grid {
+    /* Секция тарифов */
+    .tariffs-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
     }
 
     .tariff-card {
@@ -472,343 +379,423 @@
       backdrop-filter: var(--deep-glass-blur);
       -webkit-backdrop-filter: var(--deep-glass-blur);
       border: 1px solid var(--deep-glass-border);
+      box-shadow: var(--glass-shadow);
       border-radius: var(--radius-lg);
-      padding: 1.5rem;
+      padding: 1.8rem;
     }
 
-    .tariff-card h3 {
-      margin-bottom: 0.75rem;
+    .tariff-card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
       color: var(--primary-green);
-      font-size: 1.05rem;
     }
 
-    .tariff-card p + p {
-      margin-top: 0.35rem;
-    }
-
-    .documents-list {
-      list-style: none;
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      border-radius: var(--radius-lg);
-      padding: 0.5rem 1.5rem;
-    }
-
-    .documents-list li + li {
-      border-top: 1px solid rgba(27, 67, 50, 0.1);
-    }
-
-    .documents-list a {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      min-height: 3.75rem;
-      padding: 0.65rem 0;
-      color: var(--text-main);
-      text-decoration: none;
-    }
-
-    .documents-list a:hover {
-      color: var(--accent-green);
-    }
-
-    .file-mark {
-      display: inline-grid;
-      flex: 0 0 2.5rem;
-      width: 2.5rem;
-      height: 2.5rem;
-      place-items: center;
-      border-radius: 0.6rem;
-      background: var(--light-green-bg);
-      color: var(--accent-green);
-      font-size: 0.65rem;
-      font-weight: 800;
-    }
-
-    .contact-card {
-      background: var(--deep-glass-bg);
-      backdrop-filter: var(--deep-glass-blur);
-      -webkit-backdrop-filter: var(--deep-glass-blur);
-      border: 1px solid var(--deep-glass-border);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
+    .tariff-card p {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
       color: var(--text-muted);
     }
 
+    /* Список документов с PDF */
+    .docs-container {
+      background: var(--deep-glass-bg);
+      backdrop-filter: var(--deep-glass-blur);
+      -webkit-backdrop-filter: var(--deep-glass-blur);
+      border: 1px solid var(--deep-glass-border);
+      box-shadow: var(--glass-shadow);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0.5rem;
+      text-decoration: none;
+      color: var(--text-main);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background 0.2s;
+    }
+
+    .doc-item:last-child {
+      border-bottom: none;
+    }
+
+    .doc-item:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+    }
+
+    .pdf-badge {
+      background: rgba(220, 53, 69, 0.1);
+      color: #b02a37;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    /* Подвал */
     footer {
       position: relative;
       z-index: 1;
-      padding: 1.5rem 1rem 2rem;
-      border-top: 1px solid rgba(27, 67, 50, 0.1);
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-top: 1px solid var(--deep-glass-border);
+      padding: 3.5rem 1rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr;
+      gap: 2rem;
+    }
+
+    .footer-col h4 {
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      color: var(--accent-green);
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-col ul li a {
+      text-decoration: none;
       color: var(--text-muted);
-      text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
-    a:focus-visible {
-      outline: 3px solid var(--accent-green);
-      outline-offset: 4px;
+    .footer-col ul li a:hover {
+      color: var(--accent-green);
     }
 
-    @media (max-width: 700px) {
-      header {
-        top: 8px;
-      }
-
-      .navbar {
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        padding: 0.7rem 1rem;
-        border-radius: var(--radius-lg);
-      }
-
-      .nav-pills-container {
-        order: 3;
-        flex: 1 0 100%;
-        justify-content: center;
-      }
-
-      .nav-pill {
-        font-size: 0.85rem;
-      }
-
-      main {
-        margin-top: 2rem;
-      }
-
-      .hero h2 {
-        font-size: clamp(2.1rem, 8vw, 3rem);
-      }
-
-      .banner-season {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 2rem;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .quick-grid,
-      .tariff-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section-header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 0.25rem;
-      }
-
-      .section-title {
-        font-size: 1.55rem;
-      }
-
-      .hero-actions,
-      .banner-buttons {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .hero-actions a,
-      .banner-buttons a {
-        justify-content: center;
-        text-align: center;
-      }
-
-      .documents-list {
-        padding-inline: 1rem;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-      }
+    @media (max-width: 768px) {
+      .nav-pills-container { display: none; }
+      .hero h2 { font-size: 2.3rem; }
+      .footer-inner { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="leaves-container" aria-hidden="true">
-    <span class="leaf">🍃</span>
-    <span class="leaf">🍃</span>
-    <span class="leaf">🍃</span>
-    <span class="leaf">🍃</span>
-    <span class="leaf">🍃</span>
+
+  <!-- Анимированная растительность на фоне -->
+  <div class="leaves-container">
+    <div class="leaf">🍃</div>
+    <div class="leaf">🌿</div>
+    <div class="leaf">🍃</div>
+    <div class="leaf">🌱</div>
+    <div class="leaf">🍃</div>
   </div>
+
+  <!-- Шапка с плавающей капсулой -->
   <header>
-    <nav class="navbar" aria-label="Основная навигация">
-      <a class="brand" href="#top">
-        <span class="brand-icon" aria-hidden="true">🍃</span>
+    <nav class="navbar">
+      <a href="#main" class="brand">
+        <div class="brand-icon">🍃</div>
         <div class="brand-text">
           <h1>Горняк</h1>
           <span>НСТ</span>
         </div>
       </a>
+
+      <!-- Скользящая плашка переключения -->
       <div class="nav-pills-container">
-        <span class="pill-indicator" id="pillIndicator" aria-hidden="true"></span>
-        <a href="#tariffs" class="nav-pill active" aria-current="page"><span aria-hidden="true">👛</span> Тарифы</a>
-        <a href="#documents" class="nav-pill"><span aria-hidden="true">📄</span> Документы</a>
-        <a href="#contacts" class="nav-pill"><span aria-hidden="true">📞</span> Контакты</a>
+        <div class="pill-indicator" id="pillIndicator"></div>
+        <a href="#tariffs" class="nav-pill active" onclick="moveIndicator(this)">👛 Тарифы</a>
+        <a href="#docs" class="nav-pill" onclick="moveIndicator(this)">📄 Документы</a>
+        <a href="#contacts" class="nav-pill" onclick="moveIndicator(this)">📞 Контакты</a>
       </div>
-      <a class="btn-header" href="#documents">Архив <span aria-hidden="true">↗</span></a>
+
+      <a href="#docs" class="btn-header">Архив ↗</a>
     </nav>
   </header>
 
-  <main id="top">
-    <section class="hero" aria-labelledby="hero-heading">
-      <span class="badge">Официальный портал товарищества</span>
-      <h2 id="hero-heading">Всё важное для жителей НСТ «Горняк»</h2>
-      <p>Актуальные тарифы, протоколы, сметы и отчетность — собрали основную информацию в одном месте.</p>
+  <main id="main">
+
+    <!-- Главный баннер -->
+    <section class="hero">
+      <div class="badge">🍃 Садовое товарищество • с 1982</div>
+      <h2>Всё важное для жителей<br>НСТ «Горняк»</h2>
+      <p>Актуальные тарифы, протоколы, сметы и отчетность — собрали всю основную информацию в одном месте.</p>
+
       <div class="hero-actions">
-        <a class="btn-primary" href="#documents">Перейти к документам <span aria-hidden="true">→</span></a>
-        <a class="btn-glass" href="#tariffs">Посмотреть тарифы</a>
+        <a href="#docs" class="btn-primary">Перейти к документам →</a>
+        <a href="#tariffs" class="btn-glass">Посмотреть тарифы</a>
       </div>
     </section>
 
-    <nav class="quick-grid" aria-label="Быстрый переход по разделам">
-      <a class="glass-card" href="#tariffs">
-        <span class="card-top">
-          <span class="card-icon" aria-hidden="true">₽</span>
-          <span class="arrow-icon" aria-hidden="true">↗</span>
-        </span>
-        <span class="card-title">Тарифы на коммунальные услуги</span>
+    <!-- Быстрые карточки -->
+    <section class="quick-grid">
+      <a href="#tariffs" class="glass-card">
+        <div class="card-top">
+          <div class="card-icon">👛</div>
+          <span class="arrow-icon">↗</span>
+        </div>
+        <div class="card-title">Тарифы на коммунальные услуги</div>
       </a>
-      <a class="glass-card" href="#documents">
-        <span class="card-top">
-          <span class="card-icon" aria-hidden="true">PDF</span>
-          <span class="arrow-icon" aria-hidden="true">↗</span>
-        </span>
-        <span class="card-title">Протоколы и отчетность</span>
-      </a>
-      <a class="glass-card" href="#contacts">
-        <span class="card-top">
-          <span class="card-icon" aria-hidden="true">@</span>
-          <span class="arrow-icon" aria-hidden="true">↗</span>
-        </span>
-        <span class="card-title">Связаться с правлением</span>
-      </a>
-    </nav>
 
-    <section id="tariffs" class="section" aria-labelledby="tariffs-heading">
+      <a href="#docs" class="glass-card">
+        <div class="card-top">
+          <div class="card-icon">📄</div>
+          <span class="arrow-icon">↗</span>
+        </div>
+        <div class="card-title">Протоколы и отчетность</div>
+      </a>
+
+      <a href="#contacts" class="glass-card">
+        <div class="card-top">
+          <div class="card-icon">📞</div>
+          <span class="arrow-icon">↗</span>
+        </div>
+        <div class="card-title">Связаться с правлением</div>
+      </a>
+    </section>
+
+    <!-- Раздел 01: Тарифы -->
+    <section id="tariffs" style="margin-bottom: 4rem;">
       <div class="section-header">
         <div>
-          <p class="section-subtitle">Коммунальные услуги</p>
-          <h2 id="tariffs-heading" class="section-title">Актуальные тарифы</h2>
+          <div class="section-subtitle">Коммунальные услуги</div>
+          <h3 class="section-title">Актуальные тарифы</h3>
         </div>
       </div>
-      <div class="tariff-grid">
-        <article class="tariff-card">
-          <h3>АО «Мосэнергосбыт» · электроэнергия</h3>
-          <p><strong>Т1, день (07:00–23:00):</strong> 10 руб. 14 коп. / кВт·ч</p>
-          <p><strong>Т2, ночь (23:00–07:00):</strong> 4 руб. 36 коп. / кВт·ч</p>
-        </article>
-        <article class="tariff-card">
-          <h3>МУЖКП «Котельники» · водоснабжение</h3>
+
+      <div class="tariffs-grid">
+        <div class="tariff-card">
+          <h4>АО «Мосэнергосбыт» • электроэнергия</h4>
+          <p><strong>Т1, день (07:00-23:00):</strong> 10 руб. 14 коп. / кВт·ч</p>
+          <p><strong>Т2, ночь (23:00-07:00):</strong> 4 руб. 36 коп. / кВт·ч</p>
+        </div>
+        <div class="tariff-card">
+          <h4>МУЖКП «Котельники» • водоснабжение</h4>
           <p><strong>Городская вода:</strong> 59 руб. 17 коп. / куб. м</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="documents" class="section" aria-labelledby="documents-heading">
-      <div class="section-header">
-        <div>
-          <p class="section-subtitle">Официальные материалы</p>
-          <h2 id="documents-heading" class="section-title">Документы и отчетность · 2025–2026</h2>
         </div>
       </div>
-      <ul class="documents-list">
-        <li>
-          <a href="docs/protocol_2025_12_25.pdf" target="_blank" rel="noopener">
-            <span class="file-mark" aria-hidden="true">PDF</span>
-            <span>Протокол Общего собрания № 1-25/12/25 от 25.12.2025</span>
-          </a>
-        </li>
-        <li>
-          <a href="docs/feo_smeta_2026.pdf" target="_blank" rel="noopener">
-            <span class="file-mark" aria-hidden="true">PDF</span>
-            <span>Финансово-экономическое обоснование к смете 2026 г.</span>
-          </a>
-        </li>
-        <li>
-          <a href="docs/report_board_2025.pdf" target="_blank" rel="noopener">
-            <span class="file-mark" aria-hidden="true">PDF</span>
-            <span>Отчет Правления НСТ «Горняк» за 2025 г.</span>
-          </a>
-        </li>
-        <li>
-          <a href="docs/audit_act_2024.pdf" target="_blank" rel="noopener">
-            <span class="file-mark" aria-hidden="true">PDF</span>
-            <span>Акт ревизионной комиссии за 2024 г. (с подписью)</span>
-          </a>
-        </li>
-        <li>
-          <a href="docs/bulletin_2025.pdf" target="_blank" rel="noopener">
-            <span class="file-mark" aria-hidden="true">PDF</span>
-            <span>Бюллетень члена НСТ / садовода (2025 г.)</span>
-          </a>
-        </li>
-      </ul>
     </section>
 
-    <section id="contacts" class="section" aria-labelledby="contacts-heading">
+    <!-- Раздел 02: Документы и отчётность (PDF) -->
+    <section id="docs" style="margin-bottom: 4rem;">
       <div class="section-header">
         <div>
-          <p class="section-subtitle">Остались вопросы?</p>
-          <h2 id="contacts-heading" class="section-title">Контакты</h2>
+          <div class="section-subtitle">Официальные материалы</div>
+          <h3 class="section-title">Документы и отчетность • 2025–2026</h3>
         </div>
       </div>
-      <div class="contact-card">
-        <p>По вопросам работы товарищества и передачи показаний обращайтесь в Правление НСТ «Горняк».</p>
+
+      <div class="docs-container">
+        <a href="docs/protocol-2025.pdf" target="_blank" class="doc-item">
+          <span class="pdf-badge">PDF</span>
+          <span>Протокол Общего собрания № 1-25/12/25 от 25.12.2025</span>
+        </a>
+        <a href="docs/smeta-2026.pdf" target="_blank" class="doc-item">
+          <span class="pdf-badge">PDF</span>
+          <span>Финансово-экономическое обоснование к смете 2026 г.</span>
+        </a>
+        <a href="docs/report-2025.pdf" target="_blank" class="doc-item">
+          <span class="pdf-badge">PDF</span>
+          <span>Отчет Правления НСТ «Горняк» за 2025 г.</span>
+        </a>
+        <a href="docs/akt-2024.pdf" target="_blank" class="doc-item">
+          <span class="pdf-badge">PDF</span>
+          <span>Акт ревизионной комиссии за 2024 г. (с подписью)</span>
+        </a>
+        <a href="docs/bulletin-2025.pdf" target="_blank" class="doc-item">
+          <span class="pdf-badge">PDF</span>
+          <span>Бюллетень члена НСТ / садовода (2025 г.)</span>
+        </a>
       </div>
     </section>
 
-    <aside class="banner-season" aria-labelledby="banner-heading">
-      <div class="banner-content">
-        <h3 id="banner-heading">Документы товарищества — в открытом доступе</h3>
-        <p>Протоколы, сметы и отчетность собраны в архиве. Ознакомьтесь с материалами и актуальными тарифами.</p>
+    <!-- Раздел 03: Контакты и таблица правления -->
+    <section id="contacts" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <div>
+          <div class="section-subtitle">Остались вопросы?</div>
+          <h3 class="section-title">Контакты</h3>
+        </div>
       </div>
-      <div class="banner-buttons">
-        <a class="btn-light" href="#documents">Открыть архив</a>
-        <a class="btn-outline" href="#tariffs">Смотреть тарифы</a>
+
+      <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid rgba(45, 106, 79, 0.2); color: var(--accent-green);">
+              <th style="padding: 10px;">ФИО</th>
+              <th style="padding: 10px;">Должность</th>
+              <th style="padding: 10px;">Телефон</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Макарова Ольга Михайловна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Председатель правления</td>
+              <td style="padding: 10px;"><a href="tel:89167107418" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (916) 710-74-18</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Сафонова Ирина Викторовна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Главный бухгалтер</td>
+              <td style="padding: 10px;"><a href="tel:89162220638" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (916) 222-06-38</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">КраСенькова Наталья Борисовна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Бухгалтер</td>
+              <td style="padding: 10px;"><a href="tel:89161040185" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (916) 104-01-85</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Вахрушев Константин Михайлович</td>
+              <td style="padding: 10px; color: var(--text-muted);">Главный энергетик</td>
+              <td style="padding: 10px;"><a href="tel:89269585251" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (926) 958-52-51</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Тимошилов Антон Андреевич</td>
+              <td style="padding: 10px; color: var(--text-muted);">Электрик</td>
+              <td style="padding: 10px;"><a href="tel:89250004711" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (925) 000-47-11</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Горицкая Нина Александровна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Дворник</td>
+              <td style="padding: 10px;"><a href="tel:89096570631" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (909) 657-06-31</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Муминов Омонуло Абдулхалимович</td>
+              <td style="padding: 10px; color: var(--text-muted);">Хозяйственный работник</td>
+              <td style="padding: 10px;"><a href="tel:89036678481" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (903) 667-84-81</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Асланов Телман Магомед Оглы</td>
+              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
+              <td style="padding: 10px;"><a href="tel:89296645806" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (929) 664-58-06</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Зеновкина Александра Владимировна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
+              <td style="padding: 10px;"><a href="tel:89774882663" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (977) 488-26-63</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Князева Ирина Вениаминовна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
+              <td style="padding: 10px;"><a href="tel:89250082122" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (925) 008-21-22</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Личманова Евгения Александровна</td>
+              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
+              <td style="padding: 10px;"><a href="tel:89175323912" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (917) 532-39-12</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+              <td style="padding: 10px; font-weight: 600;">Мичкасов Валентин Васильевич</td>
+              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
+              <td style="padding: 10px;"><a href="tel:89031567525" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (903) 156-75-25</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; font-weight: 600;">Черкесс Игорь Викторович</td>
+              <td style="padding: 10px; color: var(--text-muted);">Член правления</td>
+              <td style="padding: 10px;"><a href="tel:89263615061" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (926) 361-50-61</a></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </aside>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 3rem;">
+        <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); border-radius: var(--radius-lg); padding: 1.5rem;">
+          <h4 style="color: var(--accent-green); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.5rem;">Участковый по НСТ «Горняк»</h4>
+          <p style="font-weight: 700; margin-bottom: 0.5rem;">Сырчин Кирилл Владимирович</p>
+          <p>Тел: <a href="tel:89851311484" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (985) 131-14-84</a></p>
+        </div>
+
+        <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); border-radius: var(--radius-lg); padding: 1.5rem;">
+          <h4 style="color: var(--accent-green); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.5rem;">Полиция г. Котельники</h4>
+          <p style="font-weight: 700; margin-bottom: 0.5rem;">Дежурная часть</p>
+          <p>Тел: <a href="tel:89267775784" style="color: var(--accent-green); text-decoration: none; font-weight: 600;">8 (926) 777-57-84</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Яндекс Карта в стеклянном контейнере -->
+    <section id="map-section" style="margin-bottom: 4rem;">
+      <div class="section-header">
+        <div>
+          <div class="section-subtitle">Расположение</div>
+          <h3 class="section-title">Как нас найти</h3>
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Карьерная улица, 13</span>
+      </div>
+
+      <div style="background: var(--deep-glass-bg); backdrop-filter: var(--deep-glass-blur); -webkit-backdrop-filter: var(--deep-glass-blur); border: 1px solid var(--deep-glass-border); box-shadow: var(--glass-shadow); border-radius: 28px; padding: 12px; overflow: hidden;">
+        <div style="width: 100%; height: 420px; border-radius: 20px; overflow: hidden;">
+          <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A7a1b02888cf3c7f999912440f7b9f3032d8471c991e0a9d8212674e2d27419e1&amp;source=constructor" width="100%" height="100%" frameborder="0" style="border: 0;"></iframe>
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- Подвал -->
   <footer>
-    <p>© НСТ «Горняк» — информационный портал для садоводов</p>
-  </footer>
-  <script>
-    const navPills = document.querySelector(".nav-pills-container");
-    const pillIndicator = navPills.querySelector(".pill-indicator");
-    const navLinks = [...navPills.querySelectorAll(".nav-pill")];
+    <div class="footer-inner">
+      <div>
+        <div class="brand" style="margin-bottom: 1rem;">
+          <div class="brand-icon">🍃</div>
+          <div class="brand-text">
+            <h2>НСТ «Горняк»</h2>
+          </div>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 320px;">
+          Официальный информационный портал садоводческого товарищества. Прозрачность, экологичность и современная инфраструктура для наших жителей.
+        </p>
+      </div>
 
-    function moveIndicator(activeLink) {
-      const activeLinkRect = activeLink.getBoundingClientRect();
-      const navPillsRect = navPills.getBoundingClientRect();
-      pillIndicator.style.width = `${activeLinkRect.width}px`;
-      pillIndicator.style.left = `${activeLinkRect.left - navPillsRect.left - navPills.clientLeft}px`;
+      <div class="footer-col">
+        <h4>Разделы</h4>
+        <ul>
+          <li><a href="#tariffs">Тарифы</a></li>
+          <li><a href="#docs">Документы</a></li>
+          <li><a href="#contacts">Контакты</a></li>
+          <li><a href="#map-section">Карта</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Экстренная связь</h4>
+        <p style="font-size: 0.95rem; margin-bottom: 0.4rem;">Единая служба: <strong>112</strong></p>
+        <p style="font-size: 0.95rem; margin-bottom: 0.4rem;">Правление: <a href="tel:89167107418" style="color: inherit; text-decoration: none;"><strong>+7 (916) 710-74-18</strong></a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Скрипт скользящей капсулы в шапке -->
+  <script>
+    function moveIndicator(element) {
+      const indicator = document.getElementById('pillIndicator');
+      const container = document.querySelector('.nav-pills-container');
+
+      document.querySelectorAll('.nav-pill').forEach(pill => pill.classList.remove('active'));
+      element.classList.add('active');
+
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      indicator.style.width = `${elementRect.width}px`;
+      indicator.style.left = `${elementRect.left - containerRect.left}px`;
     }
 
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        navLinks.forEach((navLink) => {
-          navLink.classList.toggle("active", navLink === link);
-          navLink.toggleAttribute("aria-current", navLink === link);
-        });
-        moveIndicator(link);
-      });
-    });
-
-    moveIndicator(navPills.querySelector(".nav-pill.active"));
-    window.addEventListener("resize", () => {
-      moveIndicator(navPills.querySelector(".nav-pill.active"));
+    window.addEventListener('load', () => {
+      const activePill = document.querySelector('.nav-pill.active');
+      if (activePill) moveIndicator(activePill);
     });
   </script>
+
 </body>
 </html>
