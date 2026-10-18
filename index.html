@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>НСТ «Горняк» — информационный портал</title>
+  <meta name="description" content="Официальные документы, протоколы, отчетность и актуальные тарифы для жителей НСТ «Горняк».">
+  <meta name="theme-color" content="#234b3b">
+  <style>
+    :root {
+      color-scheme: light;
+      --forest: #234b3b;
+      --forest-deep: #18382c;
+      --leaf: #477b55;
+      --clay: #bd6848;
+      --paper: #f5f3eb;
+      --surface: #fffefa;
+      --ink: #202820;
+      --muted: #667066;
+      --line: #e4e5d9;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: 3.25rem 1.25rem 3rem;
+      color: #fffefa;
+      background-color: var(--forest);
+      background-image: repeating-linear-gradient(135deg, transparent 0 22px, rgb(255 255 255 / 3%) 22px 23px);
+    }
+
+    .masthead-inner, main, .footer-inner {
+      width: min(100% - 2.5rem, 860px);
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.45rem;
+      color: #c6d8b9;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.25rem, 7vw, 3.5rem);
+      font-weight: 500;
+      line-height: 1.1;
+    }
+
+    .masthead p:last-child {
+      max-width: 36rem;
+      margin: 0.8rem 0 0;
+      color: #e0e9dd;
+    }
+
+    main { padding-block: 2rem 1rem; }
+
+    .section { margin-bottom: 2.25rem; }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 0.85rem;
+      margin: 0 0 1rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--forest-deep);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .section-number {
+      color: var(--clay);
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .tariff-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .tariff-item {
+      min-width: 0;
+      padding: 1.15rem 1.25rem;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--leaf);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .tariff-item h3 {
+      margin: 0 0 0.8rem;
+      color: var(--forest-deep);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .tariff-item p { margin: 0.45rem 0 0; }
+
+    .docs-list { border-top: 1px solid var(--line); }
+
+    .doc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      min-height: 3.8rem;
+      padding: 0.7rem 0.25rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .doc-link:hover { color: var(--forest); }
+
+    .doc-link:focus-visible {
+      outline: 3px solid var(--clay);
+      outline-offset: 3px;
+    }
+
+    .file-mark {
+      display: grid;
+      flex: 0 0 2.4rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      place-items: center;
+      border-radius: 6px;
+      background: #e7eee4;
+      color: var(--forest);
+      font-size: 0.66rem;
+      font-weight: 800;
+    }
+
+    .contact-copy {
+      max-width: 42rem;
+      margin: 0;
+      color: #414a41;
+    }
+
+    footer {
+      margin-top: 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .footer-inner { padding-block: 1.25rem 1.75rem; }
+    .footer-inner p { margin: 0; }
+
+    @media (max-width: 600px) {
+      .masthead { padding-block: 2.5rem; }
+      .tariff-grid { grid-template-columns: 1fr; }
+      .section-heading { font-size: 1.35rem; }
+      main { padding-top: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="eyebrow">Справочник жителей</p>
+      <h1>НСТ «Горняк»</h1>
+      <p>Официальная информация, тарифы и архив документов товарищества</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="tariffs" class="section" aria-labelledby="tariffs-heading">
+      <h2 id="tariffs-heading" class="section-heading"><span class="section-number">01</span> Актуальные тарифы</h2>
+      <div class="tariff-grid">
+        <article class="tariff-item">
+          <h3>АО «Мосэнергосбыт» · электроэнергия</h3>
+          <p><strong>Т1, день (07:00–23:00):</strong> 10 руб. 14 коп. / кВт·ч</p>
+          <p><strong>Т2, ночь (23:00–07:00):</strong> 4 руб. 36 коп. / кВт·ч</p>
+        </article>
+        <article class="tariff-item">
+          <h3>МУЖКП «Котельники» · водоснабжение</h3>
+          <p><strong>Городская вода:</strong> 59 руб. 17 коп. / куб. м</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="documents" class="section" aria-labelledby="documents-heading">
+      <h2 id="documents-heading" class="section-heading"><span class="section-number">02</span> Документы и отчетность · 2025–2026</h2>
+      <div class="docs-list">
+        <a href="docs/protocol_2025_12_25.pdf" target="_blank" rel="noopener" class="doc-link">
+          <span class="file-mark" aria-hidden="true">PDF</span>
+          <span>Протокол Общего собрания № 1-25/12/25 от 25.12.2025</span>
+        </a>
+        <a href="docs/feo_smeta_2026.pdf" target="_blank" rel="noopener" class="doc-link">
+          <span class="file-mark" aria-hidden="true">PDF</span>
+          <span>Финансово-экономическое обоснование к смете 2026 г.</span>
+        </a>
+        <a href="docs/report_board_2025.pdf" target="_blank" rel="noopener" class="doc-link">
+          <span class="file-mark" aria-hidden="true">PDF</span>
+          <span>Отчет Правления НСТ «Горняк» за 2025 г.</span>
+        </a>
+        <a href="docs/audit_act_2024.pdf" target="_blank" rel="noopener" class="doc-link">
+          <span class="file-mark" aria-hidden="true">PDF</span>
+          <span>Акт ревизионной комиссии за 2024 г. (с подписью)</span>
+        </a>
+        <a href="docs/bulletin_2025.pdf" target="_blank" rel="noopener" class="doc-link">
+          <span class="file-mark" aria-hidden="true">PDF</span>
+          <span>Бюллетень члена НСТ / садовода (2025 г.)</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="contacts" class="section" aria-labelledby="contacts-heading">
+      <h2 id="contacts-heading" class="section-heading"><span class="section-number">03</span> Контакты</h2>
+      <p class="contact-copy">По вопросам работы товарищества и передачи показаний обращайтесь в Правление НСТ «Горняк».</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>© НСТ «Горняк» — информационный портал для садоводов</p>
+    </div>
+  </footer>
+</body>
+</html>
