@@ -26,12 +26,13 @@
       position: relative;
     }
 
+    /* АНИМАЦИЯ ПАДАЮЩИХ ЛИСТЬЕВ */
     .falling-leaves {
       position: fixed;
-      inset: 0;
-      overflow: hidden;
+      top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none;
-      z-index: 0;
+      z-index: 999;
+      overflow: hidden;
     }
 
     .leaf {
@@ -62,21 +63,18 @@
     .leaf:nth-child(4) { left: 75%; animation-duration: 11s; animation-delay: 1s; }
     .leaf:nth-child(5) { left: 90%; animation-duration: 10s; animation-delay: 3s; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .leaf { display: none; }
-    }
-
     .container {
       max-width: 900px;
       margin: 0 auto;
       padding: 20px 16px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
+    /* СУПЕР-БЛЮР И СТЕКЛО (GLASSMORPHISM 25px) */
     .floating-nav {
       max-width: 860px;
-      margin: 0 12px 30px;
+      margin: 0 12px 30px 12px;
       background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
@@ -96,23 +94,23 @@
 
     @media (min-width: 884px) {
       .floating-nav {
-        margin: 0 auto 30px;
+        margin: 0 auto 30px auto;
       }
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       text-decoration: none;
       color: var(--text-dark);
     }
 
     .logo-icon {
-      font-size: 26px;
-      background: #e8f5e9;
-      width: 40px;
-      height: 40px;
+      font-size: 24px;
+      background: rgba(232, 245, 233, 0.8);
+      width: 38px;
+      height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -130,34 +128,35 @@
       text-decoration: none;
       color: #333;
       font-weight: 500;
-      font-size: 14px;
-      padding: 8px 14px;
+      font-size: 13px;
+      padding: 6px 12px;
       border-radius: 20px;
-      background: rgba(248, 249, 250, 0.7);
+      background: rgba(255, 255, 255, 0.4);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       transition: background 0.2s;
     }
 
     .nav-item:hover {
-      background: rgba(233, 236, 239, 0.9);
+      background: rgba(255, 255, 255, 0.8);
     }
 
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn-login {
       background-color: var(--primary);
       color: #fff;
       border: none;
-      padding: 9px 20px;
+      padding: 8px 16px;
       border-radius: 20px;
       font-weight: 600;
       cursor: pointer;
+      font-size: 13px;
       text-decoration: none;
     }
 
@@ -166,7 +165,7 @@
     }
 
     .btn-search {
-      background: rgba(248, 249, 250, 0.7);
+      background: rgba(255, 255, 255, 0.4);
       border: none;
       width: 36px;
       height: 36px;
@@ -315,6 +314,14 @@
       font-size: 14px;
     }
 
+    .alert-error {
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 6px;
+      display: none;
+    }
+
     .docs-list {
       display: flex;
       flex-direction: column;
@@ -353,9 +360,9 @@
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -369,7 +376,7 @@
       width: 90%;
       max-width: 400px;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     }
 
     .modal-close {
@@ -394,7 +401,7 @@
 </head>
 <body>
 
-  <div class="falling-leaves" aria-hidden="true">
+  <div class="falling-leaves">
     <div class="leaf">🍃</div>
     <div class="leaf">🍂</div>
     <div class="leaf">🍃</div>
@@ -407,13 +414,13 @@
       <span class="logo-icon">🌿</span>
       <div>
         <strong>Горняк</strong><br>
-        <small style="color: #666; font-size: 11px;">НСТ</small>
+        <small style="color: #666; font-size: 10px;">НСТ</small>
       </div>
     </a>
     
     <nav class="nav-items">
       <a href="#articles" class="nav-item">🚌 Транспорт</a>
-      <a href="#tariffs" class="nav-item">🍧 Тарифы</a>
+      <a href="#tariffs" class="nav-item">⚡️ Тарифы</a>
       <a href="#documents" class="nav-item">📄 Документы</a>
       <a href="#contact" class="nav-item">✉️ Контакты</a>
     </nav>
@@ -478,7 +485,7 @@
 
     <section id="tariffs" class="section-block">
       <span class="sub-heading">КОММУНАЛЬНЫЕ УСЛУГИ</span>
-      <h2>Актуальные тарифы 🍃</h2>
+      <h2>Актуальные тарифы ⚡️</h2>
       <div class="card">
         <p><strong>АО «Мосэнергосбыт» • электроэнергия</strong></p>
         <p>Т1, день (07:00-23:00): 10 руб. 14 коп. / кВт·ч<br>
@@ -572,7 +579,8 @@
             <label for="auth-fio">ФИО (необязательно)</label>
             <input type="text" id="auth-fio" placeholder="Иванов Иван Иванович">
           </div>
-          <button type="submit" class="btn-primary btn-full">Сохранить и войти</button>
+          <div id="auth-error" class="alert-error">Участок с таким номером уже зарегистрирован!</div>
+          <button type="submit" class="btn-primary btn-full" style="margin-top: 10px;">Сохранить и войти</button>
         </form>
       </div>
 
@@ -601,6 +609,7 @@
 
     function openAuthModal() {
       document.getElementById("auth-modal").style.display = "flex";
+      document.getElementById("auth-error").style.display = "none";
       renderProfile();
     }
 
@@ -628,10 +637,24 @@
 
     function handleAuthSubmit(e) {
       e.preventDefault();
-      const plot = document.getElementById("auth-plot").value;
-      const email = document.getElementById("auth-email").value;
-      const fio = document.getElementById("auth-fio").value;
+      const plot = document.getElementById("auth-plot").value.trim();
+      const email = document.getElementById("auth-email").value.trim();
+      const fio = document.getElementById("auth-fio").value.trim();
 
+      const errorEl = document.getElementById("auth-error");
+
+      const existingUsers = {
+        "253": "egor4u@gmail.com",
+        "100": "ivanov@mail.ru"
+      };
+
+      if (existingUsers[plot] && existingUsers[plot] !== email) {
+        errorEl.textContent = `Участок №${plot} уже привязан к другой почте!`;
+        errorEl.style.display = "block";
+        return;
+      }
+
+      errorEl.style.display = "none";
       const userData = { plot, email, fio };
       localStorage.setItem("snt_gornak_user", JSON.stringify(userData));
 
