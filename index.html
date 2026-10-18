@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>НСТ «Горняк» — Официальный портал</title>
+  
+  <style>
+    :root {
+      --primary: #1b5e20;
+      --primary-hover: #2e7d32;
+      --bg-light: #f4f6f4;
+      --text-dark: #212529;
+      --border-color: #e0e0e0;
+      --danger: #d32f2f;
+      --danger-hover: #b71c1c;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-top: 15px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .floating-nav {
+      max-width: 860px;
+      margin: 0 auto 30px auto;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 10px 20px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .logo-icon {
+      font-size: 26px;
+      background: #e8f5e9;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: rgba(248, 249, 250, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover {
+      background: rgba(233, 236, 239, 0.9);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-login {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-login:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-search {
+      background: rgba(248, 249, 250, 0.7);
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 10px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+    }
+
+    .hero {
+      background: #e8f5e9;
+      padding: 32px 24px;
+      border-radius: 16px;
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #c8e6c9;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px 0;
+      font-size: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .section-block {
+      margin-bottom: 32px;
+    }
+
+    .sub-heading {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--primary);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .schedule-box ul {
+      padding-left: 20px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px dashed var(--border-color);
+      margin: 16px 0;
+    }
+
+    .link-external {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .text-muted {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .docs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .doc-item {
+      background: white;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .doc-item small {
+      display: block;
+      color: #777;
+    }
+
+    .doc-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: #f0f0f0;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-window {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      border: none; background: none;
+      font-size: 24px; cursor: pointer;
+    }
+
+    .sub-text {
+      color: #666; font-size: 13px; margin-top: -8px; margin-bottom: 16px;
+    }
+
+    .btn-full {
+      width: 100%; border-radius: 8px;
+    }
+
+    .profile-buttons {
+      display: flex; gap: 12px; margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="floating-nav">
+    <a href="#" class="logo">
+      <span class="logo-icon">🌿</span>
+      <div>
+        <strong>Горняк</strong><br>
+        <small style="color: #666; font-size: 11px;">НСТ</small>
+      </div>
+    </a>
+    
+    <nav class="nav-items">
+      <a href="#articles" class="nav-item">🚌 Транспорт</a>
+      <a href="#tariffs" class="nav-item">🍧 Тарифы</a>
+      <a href="#documents" class="nav-item">📄 Документы</a>
+      <a href="#contact" class="nav-item">✉️ Контакты</a>
+    </nav>
+
+    <div class="nav-right">
+      <button class="btn-login" onclick="openAuthModal()">Войти</button>
+      <button class="btn-search" title="Поиск">🔍</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="badge">🍃 САДОВОЕ ТОВАРИЩЕСТВО • С 1982</div>
+      <h1>Всё важное для жителей НСТ «Горняк»</h1>
+      <p>Актуальные тарифы, протоколы, сметы, расписание транспорта и обратная связь — в одном месте.</p>
+      
+      <div class="hero-buttons">
+        <a href="#documents" class="btn-primary">Перейти к документам &rarr;</a>
+        <a href="#tariffs" class="btn-outline">Посмотреть тарифы</a>
+      </div>
+    </section>
+
+    <section id="articles" class="section-block">
+      <span class="sub-heading">ПОЛЕЗНАЯ ИНФОРМАЦИЯ</span>
+      <h2>Расписание автобусов 🍃</h2>
+
+      <div class="card article-card">
+        <div class="article-header">
+          <h3>🚌 Маршруты № 474, № 1к и № 26</h3>
+          <span class="text-muted">Проверьте актуальность рейсов перед поездкой</span>
+        </div>
+        <p>Общественный транспорт до НСТ «Горняк» (остановки «Карьер» и «Силикат»).</p>
+
+        <div class="schedule-box">
+          <h4>Маршрут № 474: м. Котельники — Карьер / Силикат</h4>
+          <p>Время в пути от м. Котельники — около 20 минут.</p>
+          <ul>
+            <li><strong>От м. Котельники до Карьера:</strong> 06:15, 07:01, 07:05, 07:50, 07:56</li>
+            <li><strong>От Карьера до м. Котельники:</strong> 06:18, 07:01, 07:05, 07:50, 07:56</li>
+          </ul>
+          <a href="https://rasp.yandex.ru/thread/T_474_11_f9848002t9739165_44?departure_from=2026-10-24+07%3A07%3A00&station_from=9848002&station_to=9739165" target="_blank" rel="noopener" class="link-external">
+            Проверить расписание № 474 на Яндексе ↗
+          </a>
+
+          <hr class="divider">
+
+          <h4>Маршрут № 1к: м. Котельники — Карьер</h4>
+          <a href="https://rasp.yandex.ru/thread/T_1k_0_f9848002t9848002_r5475_1?departure_from=2026-10-19+05%3A54%3A00&station_from=9848002&station_to=9739165" target="_blank" rel="noopener" class="link-external">
+            Проверить расписание № 1к на Яндексе ↗
+          </a>
+
+          <hr class="divider">
+
+          <h4>Маршрут № 26: Карьер — станция Люберцы-1 (Южная)</h4>
+          <p>Интервал движения — от 22 до 32 минут. Время в пути — около 32 минут.</p>
+          <a href="https://rasp.yandex.ru/thread/T_26_0_f9743574t9743574_44?departure_from=2026-10-19+06%3A00%3A00&station_from=9743574&station_to=9739171&to_city=1" target="_blank" rel="noopener" class="link-external">
+            Проверить расписание № 26 на Яндексе ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="tariffs" class="section-block">
+      <span class="sub-heading">КОММУНАЛЬНЫЕ УСЛУГИ</span>
+      <h2>Актуальные тарифы 🍃</h2>
+      <div class="card">
+        <p><strong>АО «Мосэнергосбыт» • электроэнергия</strong></p>
+        <p>Т1, день (07:00-23:00): 10 руб. 14 коп. / кВт·ч<br>
+           Т2, ночь (23:00-07:00): 4 руб. 36 коп. / кВт·ч</p>
+      </div>
+    </section>
+
+    <section id="documents" class="section-block">
+      <h2>Официальные документы</h2>
+      <p>Скачивайте бланки и документы на телефон или планшет.</p>
+
+      <div class="docs-list">
+        <div class="doc-item">
+          <div>
+            <strong>Согласие на обработку персональных данных</strong>
+            <small>PDF • Временно недоступен</small>
+          </div>
+          <div class="doc-actions">
+            <button class="btn-icon" onclick="handleMissingDoc('Согласие на обработку персональных данных')" title="Просмотреть">👁️</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Согласие на обработку персональных данных')" title="Скачать">📥</button>
+          </div>
+        </div>
+
+        <div class="doc-item">
+          <div>
+            <strong>Заявление на оформление лицевого счета</strong>
+            <small>PDF • Временно недоступен</small>
+          </div>
+          <div class="doc-actions">
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на оформление лицевого счета')" title="Просмотреть">👁️</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на оформление лицевого счета')" title="Скачать">📥</button>
+          </div>
+        </div>
+
+        <div class="doc-item">
+          <div>
+            <strong>Заявление на договор</strong>
+            <small>PDF • Временно недоступен</small>
+          </div>
+          <div class="doc-actions">
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на договор')" title="Просмотреть">👁️</button>
+            <button class="btn-icon" onclick="handleMissingDoc('Заявление на договор')" title="Скачать">📥</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section-block">
+      <h2>Написать нам</h2>
+      <div class="card contact-card">
+        <p>Если у вас есть вопросы или предложения, отправьте обращение в правление.</p>
+        
+        <form id="contact-form" onsubmit="handleContactSubmit(event)">
+          <div class="form-group">
+            <label for="c-name">Ваше имя</label>
+            <input type="text" id="c-name" required placeholder="Иван Иванов">
+          </div>
+          <div class="form-group">
+            <label for="c-plot">Номер участка</label>
+            <input type="text" id="c-plot" required placeholder="Например: 253">
+          </div>
+          <div class="form-group">
+            <label for="c-msg">Текст сообщения</label>
+            <textarea id="c-msg" rows="4" required placeholder="Введите ваше сообщение..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Отправить сообщение</button>
+        </form>
+        <div id="contact-status"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+
+      <div id="auth-form-box">
+        <h3>Вход в личный кабинет</h3>
+        <p class="sub-text">НСТ «Горняк»</p>
+
+        <form onsubmit="handleAuthSubmit(event)">
+          <div class="form-group">
+            <label for="auth-plot">Номер участка *</label>
+            <input type="text" id="auth-plot" placeholder="Например: 253" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-email">Электронная почта *</label>
+            <input type="email" id="auth-email" placeholder="name@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-fio">ФИО (необязательно)</label>
+            <input type="text" id="auth-fio" placeholder="Иванов Иван Иванович">
+          </div>
+          <button type="submit" class="btn-primary btn-full">Сохранить и войти</button>
+        </form>
+      </div>
+
+      <div id="user-profile-box" style="display: none;">
+        <h3>Личный кабинет</h3>
+        <p class="sub-text">НСТ «Горняк»</p>
+
+        <div class="profile-details">
+          <p><strong>Номер участка:</strong> <span id="p-plot"></span></p>
+          <p><strong>Email:</strong> <span id="p-email"></span></p>
+          <p><strong>ФИО:</strong> <span id="p-fio"></span></p>
+        </div>
+
+        <div class="profile-buttons">
+          <button onclick="handleLogout()" class="btn-secondary">Выйти</button>
+          <button onclick="handleDeleteAccount()" class="btn-danger">Удалить аккаунт</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProfile();
+    });
+
+    function openAuthModal() {
+      document.getElementById("auth-modal").style.display = "flex";
+      renderProfile();
+    }
+
+    function closeAuthModal() {
+      document.getElementById("auth-modal").style.display = "none";
+    }
+
+    function renderProfile() {
+      const user = JSON.parse(localStorage.getItem("snt_gornak_user"));
+      const authFormBox = document.getElementById("auth-form-box");
+      const userProfileBox = document.getElementById("user-profile-box");
+
+      if (user) {
+        authFormBox.style.display = "none";
+        userProfileBox.style.display = "block";
+
+        document.getElementById("p-plot").textContent = user.plot;
+        document.getElementById("p-email").textContent = user.email;
+        document.getElementById("p-fio").textContent = user.fio || "Не указано";
+      } else {
+        authFormBox.style.display = "block";
+        userProfileBox.style.display = "none";
+      }
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const plot = document.getElementById("auth-plot").value;
+      const email = document.getElementById("auth-email").value;
+      const fio = document.getElementById("auth-fio").value;
+
+      const userData = { plot, email, fio };
+      localStorage.setItem("snt_gornak_user", JSON.stringify(userData));
+
+      renderProfile();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem("snt_gornak_user");
+      renderProfile();
+    }
+
+    function handleDeleteAccount() {
+      if (confirm("Вы уверены, что хотите полностью удалить свой аккаунт?")) {
+        localStorage.removeItem("snt_gornak_user");
+        renderProfile();
+        alert("Аккаунт успешно удален.");
+      }
+    }
+
+    function handleMissingDoc(docName) {
+      alert(`Документ "${docName}" временно недоступен: ссылка отсутствует или документ недействителен.`);
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const statusEl = document.getElementById("contact-status");
+      statusEl.style.color = "#1b5e20";
+      statusEl.style.marginTop = "12px";
+      statusEl.style.fontWeight = "600";
+      statusEl.textContent = "Ваше сообщение принято! Форма работает в тестовом режиме, отправка сообщений пока ограничена.";
+      document.getElementById("contact-form").reset();
+    }
+  </script>
+</body>
+</html>
