@@ -4,980 +4,455 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>НСТ «Горняк» — Официальный портал</title>
-
+  <meta name="description" content="Официальный информационный портал садоводческого товарищества НСТ «Горняк». Протоколы, сметы, тарифы, контакты правления и расписание транспорта.">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --primary: #1b5e20;
-      --primary-hover: #2e7d32;
-      --bg-light: #f4f6f4;
-      --text-dark: #2c3e50;
-      --card-bg: rgba(255, 255, 255, 0.88);
+      --primary: #2d6a4f;
+      --primary-hover: #1b4332;
+      --bg-color: #f4f6f4;
+      --card-bg: #ffffff;
+      --text-main: #2b2b2b;
+      --text-secondary: #555555;
     }
-
     * { box-sizing: border-box; }
-
     body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-dark);
-      padding-top: 95px;
-      overflow-x: hidden;
-      position: relative;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
     }
-
-    /* Анимированные листья */
-    .falling-leaves {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
-    }
-    .leaf {
-      position: absolute;
-      top: -10vh;
-      font-size: 1.2rem;
-      opacity: 0.6;
-      animation: fall linear infinite;
-    }
-    @keyframes fall {
-      0% { transform: translateY(-10vh) translateX(0) rotate(0deg); }
-      50% { transform: translateY(50vh) translateX(30px) rotate(180deg); }
-      100% { transform: translateY(110vh) translateX(-20px) rotate(360deg); }
-    }
-
-    .container, .navbar, .modal-overlay { position: relative; z-index: 10; }
-    section, div[id], h2 { scroll-margin-top: 105px; }
-
-    /* Шапка */
     .navbar {
       position: fixed;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      width: 95%;
-      max-width: 1150px;
-      background: rgba(255, 255, 255, 0.75) !important;
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      border-radius: 40px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      padding: 8px 20px;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      z-index: 1000;
     }
-
-    .nav-brand {
+    .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      font-size: 1.2rem;
+      font-weight: bold;
+      font-size: 1.1rem;
       color: var(--primary);
-      text-decoration: none;
     }
-
-    .brand-text-wrapper {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-    .brand-nst {
-      font-size: 0.75rem;
-      color: var(--primary);
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      margin-left: 1px;
-    }
-
-    .nav-links { display: flex; gap: 6px; align-items: center; }
-
-    .nav-link {
-      background: rgba(230, 235, 230, 0.75) !important;
-      color: var(--text-dark) !important;
-      font-weight: 600;
-      font-size: 0.85rem;
-      border-radius: 20px;
-      padding: 7px 13px;
-      text-decoration: none;
-      transition: all 0.25s ease;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(10px);
-    }
-    .nav-link:hover { background: rgba(200, 225, 205, 0.9) !important; color: var(--primary) !important; }
-    .nav-link.active {
-      background: rgba(165, 214, 167, 0.95) !important;
-      color: var(--primary) !important;
-      font-weight: 700;
-      border: 1px solid rgba(129, 199, 132, 1);
-      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.25);
-    }
-
-    .btn-login {
-      background: var(--primary);
-      color: #ffffff !important;
-      border-radius: 20px;
-      padding: 7px 18px;
-      font-weight: 600;
-      text-decoration: none;
-      border: none;
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .bell-icon {
+      position: relative;
       cursor: pointer;
+      font-size: 1.3rem;
+      padding: 6px;
+      background: rgba(0,0,0,0.04);
+      border: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.2s;
     }
-    .btn-login:hover { background: var(--primary-hover); }
-
-    .profile-wrapper { position: relative; }
-    .profile-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(165, 214, 167, 0.95);
-      border: 2px solid var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .profile-dropdown {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 50px;
-      width: 310px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.9);
-      z-index: 1100;
-    }
-    .profile-dropdown.show { display: block; }
-    .profile-field { margin-bottom: 8px; font-size: 0.88rem; }
-
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px 20px; }
-    .hero-section {
-      margin: 36px auto 24px;
-      padding-top: 32px;
-      padding-bottom: 32px;
-      text-align: center;
-    }
-    .hero-section h1 { margin: 14px 0 10px; font-size: clamp(2rem, 5vw, 3rem); }
-    .hero-section > p { max-width: 700px; margin: 0 auto; color: #5f6b60; line-height: 1.6; }
+    .bell-icon:hover { background: rgba(0,0,0,0.08); }
     .badge {
-      display: inline-block;
-      padding: 7px 14px;
-      border-radius: 20px;
-      background: #e8f5e9;
-      color: var(--primary);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .hero-buttons {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: #e76f51;
+      color: white;
+      font-size: 0.65rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 22px;
-    }
-    .hero-buttons .btn {
-      display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px;
-      padding: 10px 18px;
-      border: 1px solid var(--primary);
-      border-radius: 24px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
+      font-weight: bold;
     }
-    .hero-buttons .btn-primary { background: var(--primary); color: #fff; }
-    .hero-buttons .btn-primary:hover { background: var(--primary-hover); }
-    .hero-buttons .btn-outline { background: #fff; color: var(--primary); }
-    .hero-buttons .btn-outline:hover { background: #e8f5e9; }
+    .btn-login, .btn-add {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-login:hover, .btn-add:hover { background: var(--primary-hover); }
+    .warning-banner {
+      background-color: #fff3cd;
+      color: #856404;
+      text-align: center;
+      padding: 12px 15px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #ffeeba;
+      margin-top: 65px;
+    }
+    .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(15px);
       border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     }
-
-    h1, h2, h3, h4 { color: var(--text-dark); margin-top: 0; }
-
-    .btn-yandex, .btn-action {
-      display: inline-flex;
+    h2 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-top: 0;
+      display: flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      background-color: var(--primary) !important;
-      color: #ffffff !important;
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 10px 20px;
-      border-radius: 25px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(27, 94, 32, 0.25);
-      transition: all 0.25s ease;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      cursor: pointer;
     }
-    .btn-yandex:hover, .btn-action:hover {
-      background-color: var(--primary-hover) !important;
-      color: #ffffff !important;
-      transform: translateY(-2px);
-    }
-
-    .btn-green-blur {
-      background: rgba(46, 125, 50, 0.85);
-      color: #ffffff !important;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      padding: 8px 16px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-    .btn-green-blur:hover { background: rgba(27, 94, 32, 0.95); }
-
-    .btn-delete-blur {
-      background: rgba(229, 57, 53, 0.85);
-      color: #ffffff !important;
-      border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem; width: 100%;
-    }
-    .btn-logout-blur {
-      background: rgba(76, 175, 80, 0.9);
-      color: #ffffff !important;
-      border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem; width: 100%;
-    }
-
-    .admin-only { display: none !important; }
-    body.is-authenticated .admin-only { display: inline-flex !important; }
-    body.is-authenticated div.admin-only { display: block !important; }
-
-    .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .data-table th, .data-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
-    .data-table th { background-color: rgba(27, 94, 32, 0.08); color: var(--primary); }
-
-    .link-external { color: #1a0dab; text-decoration: underline; font-weight: 500; }
-
-    .admin-form {
-      display: none;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 16px;
-      border-radius: 14px;
-      margin-top: 15px;
-      border: 1px solid #ddd;
-    }
-    .admin-form input, .admin-form textarea {
-      width: 100%;
-      padding: 8px 12px;
+    .btn-add { float: right; border-radius: 10px; font-size: 0.85rem; }
+    .clear { clear: both; }
+    .item-list { margin-top: 15px; }
+    .item-card {
+      background: #fcfdfc;
+      border: 1px solid #e2e8e2;
+      border-radius: 10px;
+      padding: 12px;
       margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
     }
-
-    .modal-overlay {
+    .item-title { font-weight: bold; font-size: 1rem; }
+    .item-date { font-size: 0.75rem; color: #777; margin: 5px 0; }
+    .item-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .item-actions a { color: var(--primary); font-weight: 600; }
+    .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(8px);
+      inset: 0;
       z-index: 2000;
       align-items: center;
       justify-content: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
     }
-    .modal-card {
-      background: #fff;
-      padding: 24px;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 360px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .empty-state {
+    .modal-content {
+      width: 100%;
+      max-width: 420px;
       padding: 20px;
-      text-align: center;
-      color: #777;
-      font-size: 0.95rem;
-      background: rgba(0, 0, 0, 0.02);
-      border-radius: 12px;
-      margin-top: 15px;
-      border: 1px dashed #ccc;
-    }
-
-    /* Точное расписание по фотографиям со стендов */
-    .bus-schedule-card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 14px;
-      padding: 18px;
-      margin-top: 16px;
-      border: 1px solid #e0e0e0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-    }
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 15px;
-      margin-top: 12px;
-    }
-    .schedule-col {
-      background: rgba(244, 246, 244, 0.85);
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #e2e8e2;
-    }
-    .schedule-col h5 {
-      margin: 0 0 10px 0;
-      color: var(--primary);
-      font-size: 0.95rem;
-      border-bottom: 2px solid rgba(27, 94, 32, 0.2);
-      padding-bottom: 4px;
-    }
-    .time-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 0.85rem;
-    }
-    .time-badge {
+      border-radius: 16px;
       background: #fff;
-      padding: 4px 9px;
-      border-radius: 6px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    .modal-content label { display: block; margin-top: 12px; font-size: 0.9rem; font-weight: 600; }
+    .modal-content input, .modal-content textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
       border: 1px solid #ccc;
-      font-weight: 600;
-      color: #333;
+      border-radius: 8px;
+      font: inherit;
     }
-    .time-badge.direct-gornyak {
-      background: #e8f5e9;
-      border-color: var(--primary);
-      color: var(--primary);
+    .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+    .btn-cancel {
+      padding: 8px 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
     }
-    .schedule-note {
-      font-size: 0.8rem;
-      color: #666;
-      margin-top: 10px;
-      font-style: italic;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links { overflow-x: auto; padding-bottom: 4px; max-width: 50vw; }
-      .nav-link { white-space: nowrap; font-size: 0.75rem; padding: 5px 8px; }
+    @media (max-width: 480px) {
+      .navbar { padding: 10px 12px; }
+      .brand { font-size: 0.95rem; }
+      .nav-right { gap: 6px; }
+      .btn-login { padding: 8px 10px; font-size: 0.8rem; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Плавающая шапка в одну строчку -->
   <nav class="navbar">
-    <a href="#" class="nav-brand">
-      <span>🌿</span>
-      <span>НСТ Горняк</span>
-    </a>
-
-    <div class="nav-links">
-      <a href="#transport" class="nav-link active" onclick="setActive(this)">🚌 Транспорт</a>
-      <a href="#tariffs" class="nav-link" onclick="setActive(this)">⚡ Тарифы</a>
-      <a href="#news" class="nav-link" onclick="setActive(this)">📰 Новости</a>
-      <a href="#docs" class="nav-link" onclick="setActive(this)">📄 Документы</a>
-      <a href="#contacts" class="nav-link" onclick="setActive(this)">✉️ Контакты</a>
-    </div>
-
-    <div id="authContainer">
-      <button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>
+    <div class="brand"><span>🌿</span> НСТ «Горняк»</div>
+    <div class="nav-right">
+      <button class="bell-icon" type="button" onclick="showNotifications()" title="Уведомления" aria-label="Уведомления">
+        🔔<span class="badge" id="notifBadge">1</span>
+      </button>
+      <button class="btn-login" type="button" onclick="showLoginNotice()">Войти</button>
     </div>
   </nav>
 
-  <div class="container hero-section">
-    <div class="badge">🌿 Садовое товарищество • С 1982</div>
-    <h1>Всё важное для жителей НСТ «Горняк»</h1>
-    <p>Актуальные тарифы, протоколы, сметы, расписание транспорта и обратная связь — в одном месте.</p>
-    <div class="hero-buttons">
-      <a href="#docs" class="btn btn-primary">Перейти к документам →</a>
-      <a href="#tariffs" class="btn btn-outline">Посмотреть тарифы</a>
-    </div>
+  <div class="warning-banner" id="statusBanner" role="status" aria-live="polite">
+    Подключаем облачную базу данных Supabase для сохранения новостей...
   </div>
 
-  <!-- Падающие листья -->
-  <div class="falling-leaves">
-    <div class="leaf" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">🍃</div>
-    <div class="leaf" style="left: 30%; animation-duration: 15s; animation-delay: 3s;">🍂</div>
-    <div class="leaf" style="left: 60%; animation-duration: 10s; animation-delay: 1s;">🍃</div>
-    <div class="leaf" style="left: 80%; animation-duration: 18s; animation-delay: 5s;">🍁</div>
-    <div class="leaf" style="left: 95%; animation-duration: 14s; animation-delay: 2s;">🍃</div>
-  </div>
-
-  <div class="container">
-
-    <!-- Секция: Транспорт -->
-    <div id="transport" class="card">
-      <h2>🚌 Официальное расписание транспорта (Мострансавто)</h2>
-      <p style="color: #666; font-size: 0.9rem;">Точное расписание со стендов остановок СНТ «Горняк», «Карьер» и «м. Котельники»</p>
-
-      <!-- Автобус № 474 -->
-      <div class="bus-schedule-card">
-        <h3>Маршрут № 474: м. Котельники — СНТ «Горняк» / Силикат</h3>
-
-        <div class="schedule-grid">
-          <div class="schedule-col">
-            <h5>📍 Остановка СНТ «Горняк» → м. Котельники</h5>
-            
-            <p style="font-size:0.8rem; font-weight:700; color:#444; margin-bottom:6px;">Будни:</p>
-            <div class="time-list">
-              <span class="time-badge">06:21</span>
-              <span class="time-badge">06:52</span>
-              <span class="time-badge">07:32</span>
-              <span class="time-badge">08:12</span>
-              <span class="time-badge">08:54</span>
-              <span class="time-badge">09:43</span>
-              <span class="time-badge">14:48</span>
-              <span class="time-badge">15:28</span>
-              <span class="time-badge">16:08</span>
-              <span class="time-badge">16:48</span>
-              <span class="time-badge">17:28</span>
-              <span class="time-badge">18:08</span>
-              <span class="time-badge">18:48</span>
-            </div>
-
-            <p style="font-size:0.8rem; font-weight:700; color:#444; margin:10px 0 6px 0;">Выходные:</p>
-            <div class="time-list">
-              <span class="time-badge">05:55</span>
-              <span class="time-badge">06:27</span>
-              <span class="time-badge">06:59</span>
-              <span class="time-badge">07:31</span>
-              <span class="time-badge">07:59</span>
-              <span class="time-badge">08:03</span>
-              <span class="time-badge">08:35</span>
-              <span class="time-badge">08:41</span>
-              <span class="time-badge">09:07</span>
-              <span class="time-badge">09:13</span>
-              <span class="time-badge">09:47</span>
-              <span class="time-badge">09:55</span>
-              <span class="time-badge">10:21</span>
-              <span class="time-badge">10:47</span>
-              <span class="time-badge">11:13</span>
-              <span class="time-badge">11:29</span>
-              <span class="time-badge">12:01</span>
-              <span class="time-badge">12:55</span>
-              <span class="time-badge">13:29</span>
-              <span class="time-badge">14:01</span>
-              <span class="time-badge">15:17</span>
-              <span class="time-badge">15:41</span>
-              <span class="time-badge">15:51</span>
-              <span class="time-badge">15:59</span>
-              <span class="time-badge">16:49</span>
-              <span class="time-badge">16:57</span>
-              <span class="time-badge">17:23</span>
-              <span class="time-badge">17:57</span>
-              <span class="time-badge">18:29</span>
-              <span class="time-badge">19:39</span>
-            </div>
-          </div>
-
-          <div class="schedule-col">
-            <h5>📍 Метро Котельники → Силикат / СНТ «Горняк»</h5>
-            
-            <p style="font-size:0.8rem; font-weight:700; color:#444; margin-bottom:6px;">Будни (* — следует до СНТ «Горняк»):</p>
-            <div class="time-list">
-              <span class="time-badge">06:16</span><span class="time-badge">06:27</span><span class="time-badge direct-gornyak">06:37*</span><span class="time-badge">06:49</span>
-              <span class="time-badge">07:02</span><span class="time-badge direct-gornyak">07:12*</span><span class="time-badge">07:20</span><span class="time-badge">07:28</span><span class="time-badge">07:36</span><span class="time-badge">07:44</span><span class="time-badge direct-gornyak">07:52*</span><span class="time-badge">07:56</span>
-              <span class="time-badge">08:00</span><span class="time-badge direct-gornyak">08:08*</span><span class="time-badge">08:16</span><span class="time-badge">08:24</span><span class="time-badge">08:32*</span><span class="time-badge">08:40</span><span class="time-badge">08:48</span>
-              <span class="time-badge">09:04</span><span class="time-badge direct-gornyak">09:13*</span><span class="time-badge">09:29</span><span class="time-badge">09:45</span>
-              <span class="time-badge direct-gornyak">10:02*</span><span class="time-badge">10:19</span><span class="time-badge">10:38</span><span class="time-badge">10:57</span>
-              <span class="time-badge">11:16</span><span class="time-badge">11:35</span><span class="time-badge">11:54</span>
-              <span class="time-badge">12:14</span><span class="time-badge">12:33</span><span class="time-badge">12:52</span>
-              <span class="time-badge">13:11</span><span class="time-badge">13:30</span><span class="time-badge">13:49</span>
-              <span class="time-badge">14:09</span><span class="time-badge">14:28</span><span class="time-badge">14:48</span><span class="time-badge direct-gornyak">14:52*</span>
-              <span class="time-badge direct-gornyak">15:07*</span><span class="time-badge">15:21</span><span class="time-badge">15:34</span><span class="time-badge">15:47</span><span class="time-badge">15:54</span>
-              <span class="time-badge">16:01</span><span class="time-badge">16:14</span><span class="time-badge">16:27*</span><span class="time-badge">16:34</span><span class="time-badge">16:41</span>
-              <span class="time-badge">17:01</span><span class="time-badge">17:07*</span><span class="time-badge">17:15</span><span class="time-badge">17:23</span><span class="time-badge">17:31</span><span class="time-badge">17:39</span><span class="time-badge">17:47*</span><span class="time-badge">17:55</span>
-              <span class="time-badge">18:03</span><span class="time-badge">18:11</span><span class="time-badge">18:20</span><span class="time-badge">18:27*</span><span class="time-badge">18:39</span><span class="time-badge">18:47*</span><span class="time-badge">18:53</span><span class="time-badge">18:55</span>
-              <span class="time-badge">19:07*</span><span class="time-badge">19:18</span><span class="time-badge">19:38</span><span class="time-badge">19:56</span>
-              <span class="time-badge">20:17</span><span class="time-badge">20:36</span><span class="time-badge">20:59</span>
-              <span class="time-badge">21:40</span><span class="time-badge">21:53</span>
-            </div>
-
-            <p style="font-size:0.8rem; font-weight:700; color:#444; margin:10px 0 6px 0;">Выходные (* — до СНТ «Горняк»):</p>
-            <div class="time-list">
-              <span class="time-badge">05:17</span><span class="time-badge">05:49</span>
-              <span class="time-badge direct-gornyak">06:05*</span><span class="time-badge">06:21</span><span class="time-badge direct-gornyak">06:37*</span><span class="time-badge">06:53</span>
-              <span class="time-badge direct-gornyak">07:09*</span><span class="time-badge">07:25</span><span class="time-badge direct-gornyak">07:41*</span><span class="time-badge">07:57</span>
-              <span class="time-badge direct-gornyak">08:13*</span><span class="time-badge">08:29</span><span class="time-badge direct-gornyak">08:45*</span>
-              <span class="time-badge">09:17*</span><span class="time-badge">09:34</span><span class="time-badge">09:57*</span>
-              <span class="time-badge">10:06</span><span class="time-badge">10:23*</span><span class="time-badge">10:40</span><span class="time-badge">10:57*</span>
-              <span class="time-badge">11:14</span><span class="time-badge">11:31*</span><span class="time-badge">11:49</span>
-              <span class="time-badge">12:05*</span><span class="time-badge">12:22</span><span class="time-badge">12:39*</span><span class="time-badge">12:57</span>
-              <span class="time-badge">13:22</span><span class="time-badge">13:28</span><span class="time-badge">13:39*</span><span class="time-badge">13:55</span>
-              <span class="time-badge">14:00</span><span class="time-badge">14:17*</span><span class="time-badge">14:34</span><span class="time-badge">14:51*</span>
-              <span class="time-badge">15:00</span><span class="time-badge">15:08</span><span class="time-badge">15:17*</span><span class="time-badge">15:25*</span><span class="time-badge">15:34</span><span class="time-badge">15:42</span><span class="time-badge">15:51*</span><span class="time-badge">15:59*</span>
-              <span class="time-badge">16:16</span><span class="time-badge">16:25*</span><span class="time-badge">16:33*</span><span class="time-badge">16:50</span>
-              <span class="time-badge direct-gornyak">17:07*</span><span class="time-badge">17:28</span><span class="time-badge">17:33*</span><span class="time-badge">17:56</span>
-              <span class="time-badge">18:00</span><span class="time-badge">18:08</span><span class="time-badge">18:28</span><span class="time-badge">18:32</span><span class="time-badge direct-gornyak">18:39*</span><span class="time-badge">18:56</span>
-              <span class="time-badge">19:04</span><span class="time-badge">19:28</span><span class="time-badge">19:36</span>
-              <span class="time-badge">20:00</span><span class="time-badge">20:36</span>
-            </div>
-          </div>
-        </div>
-
-        <p class="schedule-note">Зеленым цветом `*` выделены рейсы, следующие непосредственно до остановки СНТ «Горняк».</p>
-        <p style="margin-top: 14px;">
-          <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Котельники+(Карьер)" target="_blank" rel="noopener" class="btn-yandex">
-            Отследить движение онлайн на Яндексе ↗
-          </a>
-        </p>
+  <main class="container">
+    <section class="card" aria-labelledby="newsHeading">
+      <button class="btn-add" type="button" onclick="openModal('news')">+ Добавить новость</button>
+      <h2 id="newsHeading">📰 Новости и объявления</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Важная информация для жителей</p>
+      <div class="item-list" id="newsContainer" aria-live="polite">
+        <div style="text-align: center; color: #888; padding: 20px;">Загрузка новостей...</div>
       </div>
+      <div class="clear"></div>
+    </section>
 
-      <!-- Автобус № 26 -->
-      <div class="bus-schedule-card">
-        <h3>Маршрут № 26: Карьер — станция Люберцы</h3>
-
-        <div class="schedule-grid">
-          <div class="schedule-col">
-            <h5>📍 Остановка Карьер → ст. Люберцы (Будни)</h5>
-            <div class="time-list">
-              <span class="time-badge">06:22</span><span class="time-badge">07:22</span><span class="time-badge">07:54</span><span class="time-badge">08:26</span>
-              <span class="time-badge">08:58</span><span class="time-badge">09:35</span><span class="time-badge">10:07</span><span class="time-badge">11:12</span>
-              <span class="time-badge">12:17</span><span class="time-badge">13:22</span><span class="time-badge">14:27</span><span class="time-badge">15:32</span>
-              <span class="time-badge">16:47</span><span class="time-badge">17:22</span><span class="time-badge">17:57</span><span class="time-badge">18:32</span>
-              <span class="time-badge">19:07</span><span class="time-badge">19:42</span><span class="time-badge">20:07</span><span class="time-badge">20:17</span>
-              <span class="time-badge">20:42</span><span class="time-badge">20:52</span>
-            </div>
-            <p class="schedule-note">С 06:24 до 15:23 (вкл.) следует через о/п «Силикат».</p>
-          </div>
-
-          <div class="schedule-col">
-            <h5>📍 Остановка Карьер → ст. Люберцы (Выходные)</h5>
-            <div class="time-list">
-              <span class="time-badge">07:33</span><span class="time-badge">08:33</span><span class="time-badge">09:33</span>
-              <span class="time-badge">11:43</span><span class="time-badge">12:43</span><span class="time-badge">13:43</span>
-              <span class="time-badge">16:31</span><span class="time-badge">17:31</span><span class="time-badge">18:31</span><span class="time-badge">19:31</span>
-            </div>
-            <p class="schedule-note">С 07:32 до 13:43 (вкл.) следует через о/п «Силикат».</p>
-          </div>
-        </div>
-
-        <p style="margin-top: 14px;">
-          <a href="https://t.rasp.yandex.ru/search/bus/?fromName=Карьер&toName=станция+Люберцы-1" target="_blank" rel="noopener" class="btn-yandex">
-            Отследить движение онлайн на Яндексе ↗
-          </a>
-        </p>
+    <section class="card" aria-labelledby="docsHeading">
+      <button class="btn-add" type="button" onclick="openModal('doc')">+ Добавить документ</button>
+      <h2 id="docsHeading">📁 Документы</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Протоколы, сметы и другие материалы</p>
+      <div class="item-list" id="docsContainer" aria-live="polite">
+        <div style="text-align: center; color: #888; padding: 20px;">Загрузка документов...</div>
       </div>
+      <div class="clear"></div>
+    </section>
+  </main>
 
-      <!-- Автобус / Маршрутка № 1к -->
-      <div class="bus-schedule-card">
-        <h3>Маршрут № 1к: Метро Котельники — Карьер — Метро Котельники (Кольцевой)</h3>
+  <div class="modal" id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <form class="modal-content" onsubmit="saveItem(event)">
+      <h2 id="modalTitle">Добавить</h2>
+      <label for="itemTitle">Заголовок / название</label>
+      <input id="itemTitle" type="text" maxlength="200" required>
 
-        <div style="font-size: 0.9rem; color: #444; margin-top: 8px; line-height: 1.5;">
-          <p><strong>Особенности движения и интервалы:</strong></p>
-          <ul>
-            <li>Движение осуществляется ежедневно.</li>
-            <li>Первый рейс от ст. м. Котельники — ориентировочно в 06:34, проходящие рейсы через промежуточные остановки (например, «3-й Покровский проезд») — с 05:56.</li>
-            <li><strong>Интервал движения:</strong> в течение дня в среднем каждые 11–18 минут. После 19:00 — 18–24 минуты, после 22:00 — 24–28 минут.</li>
-          </ul>
-        </div>
+      <label id="contentLabel" for="itemText">Текст новости</label>
+      <textarea id="itemText" rows="4" maxlength="10000"></textarea>
 
-        <p style="margin-top: 14px;">
-          <a href="https://yandex.ru/maps/10716/kotelniki/?text=маршрутка%201к%20Котельники" target="_blank" rel="noopener" class="btn-yandex">
-            Посмотреть маршрут и остановки на карте ↗
-          </a>
-        </p>
+      <div id="fileLinkContainer" hidden>
+        <label for="itemUrl">Ссылка на документ (http:// или https://)</label>
+        <input id="itemUrl" type="url" inputmode="url" placeholder="https://example.com/document.pdf">
       </div>
-    </div>
-
-    <!-- Секция: Тарифы -->
-    <div id="tariffs" class="card">
-      <span style="text-transform: uppercase; font-size: 0.75rem; color: var(--primary); font-weight: 700;">Коммунальные услуги</span>
-      <h2>Актуальные тарифы ⚡</h2>
-      <p><strong>АО «Мосэнергосбыт» • электроэнергия</strong></p>
-      <ul>
-        <li>Т1, день (07:00–23:00): 10 руб. 14 коп. / кВт·ч</li>
-        <li>Т2, ночь (23:00–07:00): 4 руб. 36 коп. / кВт·ч</li>
-      </ul>
-    </div>
-
-    <!-- Секция: Новости -->
-    <div id="news" class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>📰 Новости и объявления</h2>
-        <button class="btn-green-blur admin-only" onclick="toggleForm('newsForm')">+ Добавить новость</button>
+      <div class="modal-buttons">
+        <button class="btn-cancel" type="button" onclick="closeModal()">Отмена</button>
+        <button class="btn-add" type="submit">Сохранить</button>
       </div>
-      <p style="color: #666; font-size: 0.9rem;">Праздничные поздравления и важная информация</p>
-      
-      <div id="newsForm" class="admin-form">
-        <h4>Новая публикация</h4>
-        <input type="text" id="newsTitle" placeholder="Тема / Заголовок новости">
-        <textarea id="newsDesc" rows="3" placeholder="Описание новости..."></textarea>
-        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addNews()">Опубликовать</button>
-      </div>
-
-      <div id="newsList">
-        <div class="empty-state">Нет новостей</div>
-      </div>
-    </div>
-
-    <!-- Секция: Документы -->
-    <div id="docs" class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Официальные документы</h2>
-        <button class="btn-green-blur admin-only" onclick="toggleForm('docForm')">+ Добавить документ</button>
-      </div>
-      <p>Скачивайте бланки и документы на телефон или планшет.</p>
-
-      <div id="docForm" class="admin-form">
-        <h4>Добавление документа</h4>
-        <input type="text" id="docTitle" placeholder="Тема / Название документа">
-        <textarea id="docDesc" rows="2" placeholder="Описание документа..."></textarea>
-        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addDoc()">Опубликовать документ</button>
-      </div>
-      
-      <div id="docsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-        <div data-role="item" style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <strong class="doc-name">Согласие на обработку персональных данных (PDF)</strong>
-            <div style="font-size: 0.75rem; color: #777;">Опубликовано: Сегодня</div>
-          </div>
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
-            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
-            <button class="btn-green-blur admin-only" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
-            <button class="btn-delete-blur admin-only" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Секция: Контакты и правление -->
-    <div id="contacts" class="card">
-      <h2>Контакты и правление</h2>
-
-      <h3>📍 Адрес администрации</h3>
-      <p><strong>НСТ «Горняк»</strong> (основано в 1982 году)</p>
-      <p><strong>Адрес:</strong> Московская область, г.о. Котельники, территория НСТ «Горняк», Центральная улица</p>
-
-      <h3>👥 Руководство и правление</h3>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>ФИО</th>
-            <th>Должность</th>
-            <th>Телефон</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Макарова Ольга Михайловна</td>
-            <td>Председатель правления</td>
-            <td><a href="tel:+79167107418" class="link-external">8-916-710-74-18</a></td>
-          </tr>
-          <tr>
-            <td>Сафонова Ирина Викторовна</td>
-            <td>Главный бухгалтер</td>
-            <td><a href="tel:+79162220638" class="link-external">8-916-222-06-38</a></td>
-          </tr>
-          <tr>
-            <td>КраСенькова Наталья Борисовна</td>
-            <td>Бухгалтер</td>
-            <td><a href="tel:+79161040185" class="link-external">8-916-104-01-85</a></td>
-          </tr>
-          <tr>
-            <td>Вахрушев Константин Михайлович</td>
-            <td>Главный энергетик</td>
-            <td><a href="tel:+79269585251" class="link-external">8-926-958-52-51</a></td>
-          </tr>
-          <tr>
-            <td>Тимошилов Антон Андреевич</td>
-            <td>Электрик</td>
-            <td><a href="tel:+79250004711" class="link-external">8-925-000-47-11</a></td>
-          </tr>
-          <tr>
-            <td>Горицкая Нина Александровна</td>
-            <td>Дворник 🍃</td>
-            <td><a href="tel:+79096570631" class="link-external">8-909-657-06-31</a></td>
-          </tr>
-          <tr>
-            <td>Муминов Омонуло Абдулхалимович</td>
-            <td>Хозяйственный работник</td>
-            <td><a href="tel:+79036678481" class="link-external">8-903-667-84-81</a></td>
-          </tr>
-          <tr>
-            <td>Асланов Телман Магомед Оглы</td>
-            <td>Член правления</td>
-            <td><a href="tel:+79296645806" class="link-external">8-929-664-58-06</a></td>
-          </tr>
-          <tr>
-            <td>Зеневкина Александра Владимировна</td>
-            <td>Член правления</td>
-            <td><a href="tel:+79774882663" class="link-external">8-977-488-26-63</a></td>
-          </tr>
-          <tr>
-            <td>Князева Ирина Вениаминовна</td>
-            <td>Член правления</td>
-            <td><a href="tel:+79250082122" class="link-external">8-925-008-21-22</a></td>
-          </tr>
-          <tr>
-            <td>Личманова Евгения Александровна</td>
-            <td>Член правления</td>
-            <td><a href="tel:+79175323912" class="link-external">8-917-532-39-12</a></td>
-          </tr>
-          <tr>
-            <td>Мичкасов Валентин Васильевич</td>
-            <td>Член правления</td>
-            <td><a href="tel:+79031567525" class="link-external">8-903-156-75-25</a></td>
-          </tr>
-          <tr>
-            <td>Черкесс Игорь Викторович</td>
-            <td>Член правления</td>
-            <td><a href="tel:+79263615061" class="link-external">8-926-361-50-61</a></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3 style="margin-top: 25px;">👮 Экстренные службы и участковый</h3>
-      <p><strong>Участковый по НСТ «Горняк»:</strong> Сырчин Кирилл Владимирович<br>
-      Телефон: <a href="tel:+79851311484" class="link-external" style="color: var(--primary);">8-985-131-14-84</a></p>
-      
-      <p><strong>Полиция г. Котельники (дежурная часть):</strong><br>
-      Телефон: <a href="tel:+79267775784" class="link-external" style="color: var(--primary);">8-926-777-57-84</a></p>
-    </div>
-
-  </div>
-
-  <div style="text-align: center; margin: 40px 0 20px; padding: 20px; background-color: var(--card-bg, #f4f8f4); border-radius: 12px; color: var(--text-dark, #333);">
-    <p style="font-size: 1.1rem; margin-bottom: 8px;">🌿 <strong>Сайт создан для удобства всех жителей НСТ «Горняк»</strong></p>
-    <p style="font-size: 0.95rem; opacity: 0.85;">Большое спасибо всем, кто помогал в разработке и наполнении! У нас получился по-настоящему современный, полезный и уютный портал.</p>
-  </div>
-
-  <!-- Модальное окно входа / регистрации -->
-  <div id="authModal" class="modal-overlay">
-    <div class="modal-card">
-      <h3 style="margin-bottom: 12px;">Вход / Регистрация</h3>
-      <input type="text" id="loginPlot" placeholder="Номер участка (например: 253)" style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:1px solid #ccc;">
-      <input type="email" id="loginEmail" placeholder="Email" style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:1px solid #ccc;">
-      <input type="text" id="loginFio" placeholder="ФИО" style="width:100%; padding:8px; margin-bottom:12px; border-radius:8px; border:1px solid #ccc;">
-      <div style="display:flex; gap:8px;">
-        <button class="btn-green-blur" style="width:100%; border:none;" onclick="submitLogin()">Войти / Создать</button>
-        <button class="btn-action" style="background:#888 !important; border:none;" onclick="closeAuthModal()">Отмена</button>
-      </div>
-    </div>
+    </form>
   </div>
 
   <script>
-    window.SUPABASE_CONFIG = {
-      url: 'https://YOUR_PROJECT_ID.supabase.co',
-      anonKey: 'YOUR_SUPABASE_ANON_KEY'
-    };
-
-    function setActive(element) {
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-      element.classList.add('active');
-    }
+    const SUPABASE_URL = 'ВАШ_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'ВАШ_SUPABASE_ANON_KEY';
+    const isSupabaseConfigured = SUPABASE_URL !== 'ВАШ_SUPABASE_URL'
+      && SUPABASE_ANON_KEY !== 'ВАШ_SUPABASE_ANON_KEY';
+    const supabaseClient = isSupabaseConfigured && window.supabase
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+    let currentType = 'news';
 
     function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/\"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+      return String(value ?? '').replace(/[&<>'"]/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      })[character]);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const activeUser = localStorage.getItem('logged_user_email');
-      if (activeUser) {
-        document.body.classList.add('is-authenticated');
-        renderProfile();
-      }
-    });
-
-    function openAuthModal() {
-      document.getElementById('authModal').style.display = 'flex';
+    function showStatus(message, background, color) {
+      const banner = document.getElementById('statusBanner');
+      banner.textContent = message;
+      banner.style.background = background;
+      banner.style.color = color;
     }
 
-    function closeAuthModal() {
-      document.getElementById('authModal').style.display = 'none';
-    }
-
-    function submitLogin() {
-      const plot = document.getElementById('loginPlot').value;
-      const email = document.getElementById('loginEmail').value;
-      const fio = document.getElementById('loginFio').value;
-      if (!email) return alert("Пожалуйста, введите Email.");
-
-      localStorage.setItem('logged_user_plot', plot || '№ 253');
-      localStorage.setItem('logged_user_email', email);
-      localStorage.setItem('logged_user_fio', fio || 'Не указано');
-
-      document.body.classList.add('is-authenticated');
-      renderProfile();
-      closeAuthModal();
-    }
-
-    function renderProfile() {
-      const plot = localStorage.getItem('logged_user_plot') || '№ 253';
-      const email = localStorage.getItem('logged_user_email') || '';
-      const fio = localStorage.getItem('logged_user_fio') || 'Не указано';
-
-      const container = document.getElementById('authContainer');
-      if (!container) return;
-
-      container.innerHTML = `
-        <div class="profile-wrapper">
-          <div class="profile-btn" onclick="toggleProfileMenu(event)">👤</div>
-          <div id="profileDropdown" class="profile-dropdown">
-            <div id="profileDisplayView">
-              <div class="profile-field"><strong>Участок:</strong> <span id="valPlot">${escapeHtml(plot)}</span></div>
-              <div class="profile-field"><strong>Почта:</strong> <span id="valEmail">${escapeHtml(email)}</span></div>
-              <div class="profile-field"><strong>ФИО:</strong> <span id="valFio">${escapeHtml(fio)}</span></div>
-              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-                <button class="btn-delete-blur" onclick="triggerProfileDelete()">Удалить профиль</button>
-                <button class="btn-logout-blur" onclick="logoutUser()">Выйти из профиля</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function toggleProfileMenu(e) {
-      e.stopPropagation();
-      const menu = document.getElementById('profileDropdown');
-      if (menu) menu.classList.toggle('show');
-    }
-
-    window.onclick = function() {
-      const menu = document.getElementById('profileDropdown');
-      if (menu && menu.classList.contains('show')) {
-        menu.classList.remove('show');
+    function getLocalNews() {
+      try {
+        const news = JSON.parse(localStorage.getItem('gornyak_news') || '[]');
+        if (!Array.isArray(news)) throw new Error('Локальные новости имеют неверный формат.');
+        return news;
+      } catch (error) {
+        console.error('Не удалось прочитать локальные новости:', error);
+        showStatus('Не удалось прочитать локальные новости в этом браузере.', '#fee2e2', '#991b1b');
+        return [];
       }
     }
 
-    function triggerProfileDelete() {
-      const valPlot = document.getElementById('valPlot');
-      const valEmail = document.getElementById('valEmail');
-      const valFio = document.getElementById('valFio');
-      if (valPlot) valPlot.innerText = 'Очищено...';
-      if (valEmail) valEmail.innerText = 'Очищено...';
-      if (valFio) valFio.innerText = 'Очищено...';
+    function getLocalDocuments() {
+      try {
+        const documents = JSON.parse(localStorage.getItem('gornyak_docs') || '[]');
+        if (!Array.isArray(documents)) throw new Error('Локальные документы имеют неверный формат.');
+        return documents;
+      } catch (error) {
+        console.error('Не удалось прочитать локальные документы:', error);
+        showStatus('Не удалось прочитать локальные документы в этом браузере.', '#fee2e2', '#991b1b');
+        return [];
+      }
+    }
 
-      setTimeout(() => {
-        const pin = prompt("Введите 4-значный PIN-код для уничтожения профиля и данных:");
-        if (pin && pin.length === 4) {
-          localStorage.clear();
-          alert("Профиль и локальные данные успешно уничтожены.");
-          logoutUser();
-        } else {
-          alert("Отменено. Данные восстановлены.");
-          renderProfile();
+    function renderNewsList(list) {
+      const container = document.getElementById('newsContainer');
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align: center; color: #888; padding: 15px;">Нет актуальных новостей</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(item => {
+        const dateValue = item.published_at || item.created_at;
+        const parsedDate = dateValue ? new Date(dateValue) : null;
+        const date = parsedDate && !Number.isNaN(parsedDate.getTime())
+          ? parsedDate.toLocaleDateString('ru-RU')
+          : 'Сегодня';
+        return `
+          <article class="item-card">
+            <div class="item-title">${escapeHtml(item.title)}</div>
+            <div class="item-date">${date}</div>
+            <div>${escapeHtml(item.body ?? item.content ?? item.text)}</div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderDocuments(list) {
+      const container = document.getElementById('docsContainer');
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align: center; color: #888; padding: 15px;">Нет документов</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(item => {
+        const url = getSafeDocumentUrl(item.file_url ?? item.url);
+        const dateValue = item.created_at || item.date;
+        const parsedDate = dateValue ? new Date(dateValue) : null;
+        const date = parsedDate && !Number.isNaN(parsedDate.getTime())
+          ? parsedDate.toLocaleDateString('ru-RU')
+          : 'Дата не указана';
+        return `
+          <article class="item-card">
+            <div class="item-title">📄 ${escapeHtml(item.title)}</div>
+            <div class="item-date">${date}</div>
+            <div>${escapeHtml(item.description ?? item.text)}</div>
+            ${url ? `<div class="item-actions"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Открыть документ ↗</a></div>` : ''}
+          </article>
+        `;
+      }).join('');
+    }
+
+    function getSafeDocumentUrl(value) {
+      try {
+        const url = new URL(String(value ?? ''));
+        return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+      } catch {
+        return '';
+      }
+    }
+
+    async function loadNews() {
+      if (!supabaseClient) {
+        renderNewsList(getLocalNews());
+        renderDocuments(getLocalDocuments());
+        return;
+      }
+
+      try {
+        const [{ data: news, error: newsError }, { data: documents, error: documentsError }] = await Promise.all([
+          supabaseClient
+          .from('news')
+          .select('title, body, published_at')
+          .order('published_at', { ascending: false }),
+          supabaseClient
+            .from('documents')
+            .select('title, description, file_url, created_at')
+            .order('created_at', { ascending: false })
+        ]);
+        if (newsError) throw newsError;
+        if (documentsError) throw documentsError;
+        renderNewsList(news || []);
+        renderDocuments(documents || []);
+      } catch (error) {
+        console.error('Не удалось загрузить данные из Supabase:', error);
+        showStatus('Не удалось загрузить новости или документы из облачной базы. Попробуйте обновить страницу.', '#fee2e2', '#991b1b');
+        document.getElementById('newsContainer').innerHTML =
+          '<div style="text-align: center; color: #991b1b; padding: 15px;">Ошибка загрузки новостей</div>';
+        document.getElementById('docsContainer').innerHTML =
+          '<div style="text-align: center; color: #991b1b; padding: 15px;">Ошибка загрузки документов</div>';
+      }
+    }
+
+    function openModal(type) {
+      currentType = type;
+      const isDocument = type === 'doc';
+      document.getElementById('modalTitle').textContent = isDocument ? 'Добавить документ' : 'Добавить новость';
+      document.getElementById('contentLabel').textContent = isDocument ? 'Описание документа' : 'Текст новости';
+      document.getElementById('itemText').placeholder = isDocument ? 'Краткое описание (необязательно)' : 'Введите текст новости';
+      document.getElementById('itemText').required = !isDocument;
+      document.getElementById('fileLinkContainer').hidden = !isDocument;
+      document.getElementById('itemUrl').required = isDocument;
+      document.getElementById('itemTitle').value = '';
+      document.getElementById('itemText').value = '';
+      document.getElementById('itemUrl').value = '';
+      document.getElementById('addModal').style.display = 'flex';
+      document.getElementById('itemTitle').focus();
+    }
+
+    function closeModal() {
+      document.getElementById('addModal').style.display = 'none';
+    }
+
+    async function saveItem(event) {
+      event.preventDefault();
+      const title = document.getElementById('itemTitle').value.trim();
+      const text = document.getElementById('itemText').value.trim();
+      const isDocument = currentType === 'doc';
+      const url = getSafeDocumentUrl(document.getElementById('itemUrl').value.trim());
+      if (!title || (!isDocument && !text) || (isDocument && !url)) {
+        alert(isDocument
+          ? 'Укажите название и корректную ссылку на документ (http:// или https://).'
+          : 'Укажите заголовок и текст новости.');
+        return;
+      }
+
+      if (supabaseClient) {
+        const table = isDocument ? 'documents' : 'news';
+        const item = isDocument
+          ? { title, description: text, file_url: url }
+          : { title, body: text };
+        try {
+          const { error } = await supabaseClient.from(table).insert([item]);
+          if (error) throw error;
+        } catch (error) {
+          console.error('Не удалось сохранить запись в Supabase:', error);
+          const detail = error instanceof Error ? error.message : String(error);
+          alert('Не удалось сохранить запись в облачную базу. Для добавления требуется вход администратора. ' + detail);
+          return;
         }
-      }, 200);
-    }
-
-    function logoutUser() {
-      localStorage.clear();
-      document.body.classList.remove('is-authenticated');
-      const container = document.getElementById('authContainer');
-      if (container) {
-        container.innerHTML = `<button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>`;
+      } else {
+        const storageKey = isDocument ? 'gornyak_docs' : 'gornyak_news';
+        const records = isDocument ? getLocalDocuments() : getLocalNews();
+        records.unshift(isDocument
+          ? { title, text, url, date: new Date().toISOString() }
+          : { title, body: text, created_at: new Date().toISOString() });
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(records));
+        } catch (error) {
+          console.error('Не удалось сохранить запись в этом браузере:', error);
+          alert('Не удалось сохранить запись в этом браузере.');
+          return;
+        }
       }
+
+      closeModal();
+      await loadNews();
+      alert(isDocument ? 'Документ успешно добавлен.' : 'Новость успешно добавлена.');
     }
 
-    function toggleForm(id) {
-      const f = document.getElementById(id);
-      if (!f) return;
-      f.style.display = f.style.display === 'block' ? 'none' : 'block';
+    function showNotifications() {
+      alert('📬 Центр уведомлений НСТ «Горняк»:\n\n• Подключена система уведомлений.\n• Обновлено расписание транспорта.\n• Ведется настройка облачной базы данных.');
+      document.getElementById('notifBadge').style.display = 'none';
     }
 
-    function addDoc() {
-      const title = document.getElementById('docTitle').value.trim();
-      if (!title) return alert('Введите название документа');
-      const list = document.getElementById('docsList');
-      if (!list) return;
-
-      const item = document.createElement('div');
-      item.dataset.role = 'item';
-      item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;';
-      item.innerHTML = `
-        <div>
-          <strong class="doc-name">${escapeHtml(title)}</strong>
-          <div style="font-size: 0.75rem; color: #777;">Опубликовано: Только что</div>
-        </div>
-        <div style="display: flex; gap: 6px; align-items: center;">
-          <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
-          <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
-          <button class="btn-green-blur admin-only" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
-          <button class="btn-delete-blur admin-only" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
-        </div>
-      `;
-      list.prepend(item);
-      document.getElementById('docTitle').value = '';
-      toggleForm('docForm');
+    function showLoginNotice() {
+      alert('Вход для правления пока не настроен.');
     }
 
-    function addNews() {
-      const title = document.getElementById('newsTitle').value.trim();
-      const desc = document.getElementById('newsDesc').value.trim();
-      if (!title) return alert('Введите заголовок новости');
-      const list = document.getElementById('newsList');
-      if (!list) return;
-
-      const empty = list.querySelector('.empty-state');
-      if (empty) empty.remove();
-
-      const item = document.createElement('div');
-      item.dataset.role = 'item';
-      item.style.cssText = 'background: rgba(27, 94, 32, 0.05); padding: 16px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--primary);';
-      item.innerHTML = `
-        <h3 style="margin-bottom: 5px;">${escapeHtml(title)}</h3>
-        <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">Опубликовано: Только что</p>
-        <p>${escapeHtml(desc)}</p>
-        <div class="admin-only" style="margin-top: 10px; display: flex; gap: 8px;">
-          <button class="btn-green-blur" style="padding: 4px 10px; font-size: 0.75rem;" onclick="editItem(this)">Изменить</button>
-          <button class="btn-delete-blur" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
-        </div>
-      `;
-      list.prepend(item);
-      document.getElementById('newsTitle').value = '';
-      document.getElementById('newsDesc').value = '';
-      toggleForm('newsForm');
-    }
-
-    function editDoc(btn) {
-      const nameElem = btn.closest('div').parentElement.querySelector('.doc-name');
-      const newName = prompt('Введите новое название документа:', nameElem.innerText);
-      if (newName) nameElem.innerText = newName;
-    }
-
-    function editItem(btn) {
-      const titleElem = btn.parentElement.parentElement.querySelector('h3');
-      const newTitle = prompt('Введите новое название:', titleElem.innerText);
-      if (newTitle) titleElem.innerText = newTitle;
-    }
-
-    function deleteItem(btn) {
-      if (!confirm('Удалить эту запись?')) return;
-
-      const item = btn.closest('[data-role="item"]') || btn.closest('div').parentElement;
-      if (!item) return;
-
-      item.remove();
-
-      const newsList = document.getElementById('newsList');
-      if (newsList && newsList.children.length === 0) {
-        newsList.innerHTML = '<div class="empty-state">Нет новостей</div>';
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!supabaseClient) {
+        const message = isSupabaseConfigured
+          ? 'Не удалось загрузить Supabase SDK. Сайт работает в локальном режиме.'
+          : 'Сайт работает в локальном режиме. Настройте ключи Supabase для сохранения в облако.';
+        showStatus(message, '#e2e8f0', '#334155');
+      } else {
+        showStatus('Облачная база данных Supabase активна.', '#d1fae5', '#065f46');
       }
-    }
+      loadNews();
+    });
   </script>
 </body>
 </html>
