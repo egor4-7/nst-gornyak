@@ -163,6 +163,46 @@
     .profile-field { margin-bottom: 8px; font-size: 0.88rem; }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px 20px; }
+    .hero-section {
+      margin: 36px auto 24px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+      text-align: center;
+    }
+    .hero-section h1 { margin: 14px 0 10px; font-size: clamp(2rem, 5vw, 3rem); }
+    .hero-section > p { max-width: 700px; margin: 0 auto; color: #5f6b60; line-height: 1.6; }
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 20px;
+      background: #e8f5e9;
+      color: var(--primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .hero-buttons .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 18px;
+      border: 1px solid var(--primary);
+      border-radius: 24px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .hero-buttons .btn-primary { background: var(--primary); color: #fff; }
+    .hero-buttons .btn-primary:hover { background: var(--primary-hover); }
+    .hero-buttons .btn-outline { background: #fff; color: var(--primary); }
+    .hero-buttons .btn-outline:hover { background: #e8f5e9; }
     .card {
       background: var(--card-bg);
       backdrop-filter: blur(15px);
@@ -359,6 +399,16 @@
       <button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>
     </div>
   </nav>
+
+  <div class="container hero-section">
+    <div class="badge">🌿 Садовое товарищество • С 1982</div>
+    <h1>Всё важное для жителей НСТ «Горняк»</h1>
+    <p>Актуальные тарифы, протоколы, сметы, расписание транспорта и обратная связь — в одном месте.</p>
+    <div class="hero-buttons">
+      <a href="#docs" class="btn btn-primary">Перейти к документам →</a>
+      <a href="#tariffs" class="btn btn-outline">Посмотреть тарифы</a>
+    </div>
+  </div>
 
   <!-- Падающие листья -->
   <div class="falling-leaves">
