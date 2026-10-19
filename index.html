@@ -11,14 +11,14 @@
       --primary-hover: #1b4332;
       --bg-color: #f4f6f4;
       --card-bg: #ffffff;
-      --text-main: #2b2b2b;
-      --text-secondary: #555555;
+      --text-main: #1c1c1e;
+      --text-secondary: #8e8e93;
     }
     html {
       scroll-behavior: smooth;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
       margin: 0;
@@ -39,16 +39,16 @@
     }
     .navbar {
       pointer-events: auto;
-      background: rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(20px) saturate(200%);
-      -webkit-backdrop-filter: blur(20px) saturate(200%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 100%);
+      backdrop-filter: blur(24px) saturate(220%);
+      -webkit-backdrop-filter: blur(24px) saturate(220%);
       padding: 8px 14px;
       display: flex;
       align-items: center;
       gap: 8px;
       border-radius: 35px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       max-width: 100%;
       overflow-x: auto;
     }
@@ -56,7 +56,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-weight: bold;
+      font-weight: 700;
       font-size: 0.95rem;
       color: var(--primary);
       white-space: nowrap;
@@ -74,17 +74,17 @@
       font-weight: 500;
       padding: 6px 12px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.25);
       white-space: nowrap;
       transition: all 0.2s ease;
       border: 1px solid transparent;
     }
     .nav-links a.active {
-      background: #e8f5e9;
+      background: rgba(232, 245, 233, 0.85);
       color: #1b4332;
       font-weight: 700;
       border: 1.5px solid #2d6a4f;
-      box-shadow: 0 2px 8px rgba(45, 106, 79, 0.25);
+      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
     }
     .nav-links a:hover {
       background: rgba(232, 245, 233, 0.6);
@@ -95,8 +95,8 @@
 
     /* Круглая кнопка профиля / входа справа */
     .btn-profile {
-      background: rgba(255, 255, 255, 0.5);
-      border: 1px solid rgba(194, 231, 208, 0.8);
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(194, 231, 208, 0.9);
       color: var(--primary);
       width: 34px; height: 34px;
       border-radius: 50%;
@@ -106,12 +106,11 @@
       cursor: pointer;
       font-size: 0.95rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: transform 0.15s ease, background 0.15s ease;
+      transition: transform 0.15s ease;
       flex-shrink: 0;
     }
     .btn-profile:active {
       transform: scale(0.92);
-      background: rgba(232, 245, 233, 0.8);
     }
 
     /* Анимация падающих листьев */
@@ -142,7 +141,7 @@
     }
     .card {
       background: var(--card-bg);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 20px;
       margin-bottom: 20px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.03);
@@ -173,7 +172,7 @@
     .item-card {
       background: #fcfdfc;
       border: 1px solid #e2e8e2;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 14px;
       margin-bottom: 10px;
       display: flex;
@@ -193,6 +192,139 @@
     }
     .btn-action:active {
       transform: scale(0.95);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(30px) saturate(210%);
+      -webkit-backdrop-filter: blur(30px) saturate(210%);
+      width: min(88%, 360px);
+      border-radius: 28px;
+      padding: 22px 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transform: scale(0.92) translateY(10px);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-header h3 {
+      margin: 0;
+      color: #1c1c1e;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .modal-close {
+      background: rgba(118, 118, 128, 0.12);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8e8e93;
+      transition: background 0.15s;
+    }
+    .modal-close:active {
+      background: rgba(118, 118, 128, 0.25);
+    }
+    .apple-field {
+      background: rgba(118, 118, 128, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+    .apple-field .label {
+      color: #8e8e93;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .apple-field .value {
+      color: #1c1c1e;
+      font-weight: 600;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+    .apple-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-top: 18px;
+    }
+    .apple-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 16px;
+      border: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .apple-btn-blue {
+      background: rgba(10, 132, 255, 0.3);
+      color: #0051c6;
+      border: 1px solid rgba(10, 132, 255, 0.25);
+    }
+    .apple-btn-blue:hover {
+      background: rgba(10, 132, 255, 0.45);
+    }
+    .apple-btn-green {
+      background: rgba(52, 199, 89, 0.3);
+      color: #156d2a;
+      border: 1px solid rgba(52, 199, 89, 0.25);
+    }
+    .apple-btn-green:hover {
+      background: rgba(52, 199, 89, 0.45);
+    }
+    .apple-btn-red {
+      background: rgba(255, 69, 58, 0.3);
+      color: #c91a0e;
+      border: 1px solid rgba(255, 69, 58, 0.25);
+    }
+    .apple-btn-red:hover {
+      background: rgba(255, 69, 58, 0.45);
+    }
+    .apple-btn:active {
+      transform: scale(0.96);
+      opacity: 0.8;
     }
 
     .footer {
@@ -222,8 +354,34 @@
         <a href="#documents">📁 Документы</a>
         <a href="#contacts">📞 Контакты</a>
       </div>
-      <button class="btn-profile" onclick="alert('Вход в панель правления')" title="Вход">👤</button>
+      <button class="btn-profile" type="button" onclick="openModal()" title="Профиль" aria-label="Открыть личный кабинет">👤</button>
     </nav>
+  </div>
+
+  <div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)" aria-hidden="true" inert>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" tabindex="-1">
+      <div class="modal-header">
+        <h3 id="authModalTitle">Личный кабинет</h3>
+        <button class="modal-close" type="button" onclick="closeModal()" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="apple-field">
+        <span class="label">Номер участка:</span>
+        <span class="value">№ 253</span>
+      </div>
+      <div class="apple-field">
+        <span class="label">Email:</span>
+        <span class="value">egor4u@gmail.com</span>
+      </div>
+      <div class="apple-field">
+        <span class="label">ФИО:</span>
+        <span class="value" style="color: #8e8e93;">Не указано</span>
+      </div>
+      <div class="apple-btn-group">
+        <button class="apple-btn apple-btn-blue" type="button" onclick="alert('Редактирование профиля')">Изменить</button>
+        <button class="apple-btn apple-btn-green" type="button" onclick="closeModal()">Выйти из профиля</button>
+        <button class="apple-btn apple-btn-red" type="button" onclick="alert('Удаление профиля')">Удалить профиль</button>
+      </div>
+    </section>
   </div>
 
   <div class="container">
@@ -290,6 +448,35 @@
   <script>
     const sections = document.querySelectorAll('.card');
     const navLinks = document.querySelectorAll('.nav-links a');
+    const modal = document.getElementById('authModal');
+    const profileButton = document.querySelector('.btn-profile');
+    const modalCard = modal.querySelector('.modal-card');
+
+    function openModal() {
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.removeAttribute('inert');
+      modalCard.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('inert', '');
+      profileButton.focus();
+    }
+
+    function handleOverlayClick(event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && modal.classList.contains('open')) {
+        closeModal();
+      }
+    });
 
     function updateActiveNavLink() {
       let currentSectionId = '';
