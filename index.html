@@ -44,63 +44,83 @@
       padding: 0;
       -webkit-font-smoothing: antialiased;
     }
-    .navbar {
+    .navbar-container {
       position: fixed;
-      top: 0;
+      top: 15px;
       left: 0;
       right: 0;
+      display: flex;
+      justify-content: center;
+      padding: 0 12px;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .navbar {
+      pointer-events: auto;
       background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      padding: 10px 16px;
+      padding: 8px 14px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      gap: 8px;
+      border-radius: 35px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      max-width: 100%;
+      overflow-x: auto;
     }
     .brand {
       display: flex;
       align-items: center;
       gap: 6px;
       font-weight: bold;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       color: var(--primary);
+      white-space: nowrap;
+      padding-left: 4px;
     }
     .nav-links {
       display: flex;
       gap: 6px;
       align-items: center;
-      overflow-x: auto;
     }
     .nav-links a {
-      color: var(--text-main);
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 6px 10px;
-      border-radius: 20px;
       text-decoration: none;
-      white-space: nowrap;
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 20px;
       background: rgba(0, 0, 0, 0.03);
+      white-space: nowrap;
       transition: all 0.2s ease;
     }
-    .nav-links a:hover { background: rgba(0, 0, 0, 0.08); }
-    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-links a.active, .nav-links a:hover {
+      background: #c8e6c9;
+      color: var(--primary-hover);
+      font-weight: 600;
+    }
+    .nav-links a:active { transform: scale(0.95); }
+    .nav-actions { display: flex; align-items: center; gap: 6px; }
     .bell-icon {
       position: relative;
       cursor: pointer;
-      font-size: 1.3rem;
-      padding: 6px;
-      background: rgba(0,0,0,0.04);
-      border: 0;
+      font-size: 0.95rem;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      background: #ffffff;
+      border: 1px solid #c2e7d0;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.15s ease, background 0.15s ease;
     }
-    .bell-icon:hover { background: rgba(0,0,0,0.08); }
+    .bell-icon:hover { background: #e8f5e9; }
+    .bell-icon:active { transform: scale(0.92); }
     .badge {
       position: absolute;
       top: -2px;
@@ -127,6 +147,24 @@
       font-size: 0.9rem;
     }
     .btn-login:hover, .btn-add:hover { background: var(--primary-hover); }
+    .btn-profile {
+      background: #ffffff;
+      border: 1px solid #c2e7d0;
+      color: var(--primary);
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .btn-profile:hover { background: #e8f5e9; }
+    .btn-profile:active { transform: scale(0.92); }
     .warning-banner {
       background-color: #fff3cd;
       color: #856404;
@@ -134,7 +172,7 @@
       padding: 12px 15px;
       font-size: 0.9rem;
       border-bottom: 1px solid #ffeeba;
-      margin-top: 65px;
+      margin-top: 82px;
     }
     .container { max-width: 900px; margin: 20px auto 30px; padding: 0 15px; }
     @media (min-width: 1024px) {
@@ -195,7 +233,7 @@
     }
     .muted-note { color: var(--text-secondary); font-size: 0.85rem; }
     .footer { padding: 20px; color: #666; text-align: center; font-size: 0.85rem; }
-    section[id] { scroll-margin-top: 80px; }
+    section[id] { scroll-margin-top: 95px; }
     .modal {
       display: none;
       position: fixed;
@@ -232,39 +270,38 @@
       cursor: pointer;
     }
     @media (max-width: 900px) {
-      .navbar { align-items: flex-start; padding: 10px 12px; }
-      .brand { padding-top: 7px; font-size: 0.95rem; white-space: nowrap; }
-      .nav-right { gap: 6px; }
-      .nav-links { max-width: 62vw; overflow-x: auto; }
-      .nav-links a { padding: 7px 8px; font-size: 0.78rem; }
-      .btn-login { padding: 8px 10px; font-size: 0.8rem; white-space: nowrap; }
+      .navbar { gap: 6px; padding: 8px 10px; }
+      .nav-links { gap: 4px; }
+      .nav-links a { padding: 6px 9px; font-size: 0.78rem; }
     }
     @media (max-width: 560px) {
-      .navbar { flex-wrap: wrap; }
-      .nav-right { width: 100%; justify-content: space-between; }
-      .nav-links { max-width: calc(100% - 95px); }
-      .warning-banner { margin-top: 100px; }
+      .navbar { gap: 5px; padding: 7px 9px; }
+      .brand { font-size: 0.88rem; }
+      .nav-links { gap: 3px; }
+      .nav-links a { padding: 6px 8px; font-size: 0.75rem; }
       .document-row { align-items: flex-start; }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand"><span>🌿</span> НСТ «Горняк»</div>
-    <div class="nav-right">
+  <div class="navbar-container">
+    <nav class="navbar" aria-label="Главная навигация">
+      <div class="brand"><span>🌿</span> Горняк</div>
       <div class="nav-links" aria-label="Разделы сайта">
-        <a href="#transport">🚌 Транспорт</a>
+        <a href="#transport" class="active">🚌 Транспорт</a>
         <a href="#tariffs">⚡ Тарифы</a>
         <a href="#news">📰 Новости</a>
         <a href="#documents">📁 Документы</a>
         <a href="#contacts">📞 Контакты</a>
       </div>
-      <button class="bell-icon" type="button" onclick="showNotifications()" title="Уведомления" aria-label="Уведомления">
-        🔔<span class="badge" id="notifBadge">1</span>
-      </button>
-      <button class="btn-login" type="button" onclick="showLoginNotice()">Войти</button>
-    </div>
-  </nav>
+      <div class="nav-actions">
+        <button class="bell-icon" type="button" onclick="showNotifications()" title="Уведомления" aria-label="Уведомления">
+          🔔<span class="badge" id="notifBadge">1</span>
+        </button>
+        <button class="btn-profile" type="button" onclick="showLoginNotice()" title="Вход для правления" aria-label="Вход для правления">👤</button>
+      </div>
+    </nav>
+  </div>
 
   <div class="falling-leaves" aria-hidden="true">
     <div class="leaf" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">🍃</div>
