@@ -26,7 +26,7 @@
       position: relative;
     }
 
-    /* Анимированные падающие листья на фоне */
+    /* Анимированные листья */
     .falling-leaves {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -48,10 +48,9 @@
     }
 
     .container, .navbar, .modal-overlay { position: relative; z-index: 10; }
-
     section, div[id], h2 { scroll-margin-top: 105px; }
 
-    /* Плавающая шапка */
+    /* Шапка */
     .navbar {
       position: fixed;
       top: 15px;
@@ -77,12 +76,24 @@
       align-items: center;
       gap: 10px;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: var(--primary);
       text-decoration: none;
     }
 
-    .nav-brand span { font-size: 0.75rem; color: #666; display: block; font-weight: 400; }
+    .brand-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .brand-nst {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-left: 1px;
+    }
+
     .nav-links { display: flex; gap: 6px; align-items: center; }
 
     .nav-link {
@@ -97,9 +108,7 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(10px);
     }
-
     .nav-link:hover { background: rgba(200, 225, 205, 0.9) !important; color: var(--primary) !important; }
-
     .nav-link.active {
       background: rgba(165, 214, 167, 0.95) !important;
       color: var(--primary) !important;
@@ -151,57 +160,9 @@
       z-index: 1100;
     }
     .profile-dropdown.show { display: block; }
-
     .profile-field { margin-bottom: 8px; font-size: 0.88rem; }
-    .profile-field input {
-      width: 100%;
-      padding: 5px 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 0.85rem;
-      margin-top: 2px;
-    }
-
-    .auth-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .auth-tab {
-      flex: 1;
-      border: 1px solid #dfe8df;
-      background: #f4f7f4;
-      color: var(--text-dark);
-      border-radius: 10px;
-      padding: 8px 10px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .auth-tab.active {
-      background: rgba(27, 94, 32, 0.08);
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-    .auth-form { display: none; }
-    .auth-form.active { display: block; }
-    .auth-form input {
-      width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      border: 1px solid #d9dfe3;
-      font-size: 0.95rem;
-    }
-    .auth-message {
-      min-height: 18px;
-      font-size: 0.8rem;
-      margin-bottom: 10px;
-      color: #c62828;
-    }
-    .auth-message.success { color: #1b5e20; }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px 20px; }
-
     .card {
       background: var(--card-bg);
       backdrop-filter: blur(15px);
@@ -212,7 +173,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     }
 
-    h1, h2, h3 { color: var(--text-dark); margin-top: 0; }
+    h1, h2, h3, h4 { color: var(--text-dark); margin-top: 0; }
 
     .btn-yandex, .btn-action {
       display: inline-flex;
@@ -247,32 +208,23 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 0.85rem;
-      transition: all 0.2s;
     }
     .btn-green-blur:hover { background: rgba(27, 94, 32, 0.95); }
 
-    .btn-edit-blur {
-      background: rgba(33, 150, 243, 0.85);
-      color: #ffffff !important;
-      backdrop-filter: blur(8px);
-      border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem; width: 100%;
-    }
     .btn-delete-blur {
       background: rgba(229, 57, 53, 0.85);
       color: #ffffff !important;
-      backdrop-filter: blur(8px);
       border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem; width: 100%;
     }
     .btn-logout-blur {
       background: rgba(76, 175, 80, 0.9);
       color: #ffffff !important;
-      backdrop-filter: blur(8px);
       border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem; width: 100%;
     }
 
     .admin-only { display: none !important; }
-    body.is-admin .admin-only { display: inline-flex !important; }
-    body.is-admin div.admin-only { display: block !important; }
+    body.is-authenticated .admin-only { display: inline-flex !important; }
+    body.is-authenticated div.admin-only { display: block !important; }
 
     .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
     .data-table th, .data-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
@@ -296,51 +248,6 @@
       border-radius: 8px;
     }
 
-    .schedule-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .schedule-block {
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid #e1e6df;
-      border-radius: 14px;
-      padding: 14px;
-    }
-    .schedule-block h4 {
-      margin: 0 0 10px 0;
-      color: var(--primary);
-      font-size: 0.95rem;
-    }
-    .schedule-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-    .schedule-list li {
-      background: rgba(27, 94, 32, 0.08);
-      border: 1px solid rgba(27, 94, 32, 0.12);
-      border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .route-note {
-      margin-top: 12px;
-      font-size: 0.82rem;
-      color: #666;
-      background: rgba(255,255,255,0.5);
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px dashed #d5d9d0;
-    }
-
-    /* Модальное окно входа / регистрации */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -371,6 +278,60 @@
       border: 1px dashed #ccc;
     }
 
+    /* Точное расписание по фотографиям со стендов */
+    .bus-schedule-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 16px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 12px;
+    }
+    .schedule-col {
+      background: rgba(244, 246, 244, 0.85);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #e2e8e2;
+    }
+    .schedule-col h5 {
+      margin: 0 0 10px 0;
+      color: var(--primary);
+      font-size: 0.95rem;
+      border-bottom: 2px solid rgba(27, 94, 32, 0.2);
+      padding-bottom: 4px;
+    }
+    .time-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+    .time-badge {
+      background: #fff;
+      padding: 4px 9px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-weight: 600;
+      color: #333;
+    }
+    .time-badge.direct-gornyak {
+      background: #e8f5e9;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .schedule-note {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
     @media (max-width: 768px) {
       .nav-links { overflow-x: auto; padding-bottom: 4px; max-width: 50vw; }
       .nav-link { white-space: nowrap; font-size: 0.75rem; padding: 5px 8px; }
@@ -379,7 +340,7 @@
 </head>
 <body>
 
-  <!-- Анимированные падающие листья -->
+  <!-- Падающие листья -->
   <div class="falling-leaves">
     <div class="leaf" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">🍃</div>
     <div class="leaf" style="left: 30%; animation-duration: 15s; animation-delay: 3s;">🍂</div>
@@ -392,7 +353,9 @@
   <nav class="navbar">
     <a href="#" class="nav-brand">
       🌿 Горняк
-      <span>НСТ</span>
+      <div class="brand-text-wrapper">
+        <span class="brand-nst">НСТ</span>
+      </div>
     </a>
 
     <div class="nav-links">
@@ -403,7 +366,6 @@
       <a href="#contacts" class="nav-link" onclick="setActive(this)">✉️ Контакты</a>
     </div>
 
-    <!-- Авторизация -->
     <div id="authContainer">
       <button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>
     </div>
@@ -411,97 +373,159 @@
 
   <div class="container">
 
-  <div id="siteMessage" class="route-note" role="status" aria-live="polite" style="display:none;"></div>
-
     <!-- Секция: Транспорт -->
     <div id="transport" class="card">
-      <h2>🚌 Маршруты № 474, № 1к и № 26</h2>
-      <p style="color: #666; font-size: 0.9rem;">Проверьте актуальность рейсов перед поездкой</p>
+      <h2>🚌 Официальное расписание транспорта (Мострансавто)</h2>
+      <p style="color: #666; font-size: 0.9rem;">Точное расписание со стендов остановок СНТ «Горняк», «Карьер» и «м. Котельники»</p>
 
-      <h3>Маршрут № 474: м. Котельники — Карьер / Силикат</h3>
-      <div class="schedule-grid">
-        <div class="schedule-block">
-          <h4>От м. Котельники</h4>
-          <ul class="schedule-list">
-            <li>05:15</li><li>06:00</li><li>06:30</li><li>07:00</li><li>07:35</li><li>08:10</li><li>08:50</li><li>09:25</li>
-            <li>10:05</li><li>10:45</li><li>11:25</li><li>12:05</li><li>12:45</li><li>13:25</li><li>14:00</li><li>14:40</li>
-            <li>15:15</li><li>15:55</li><li>16:30</li><li>17:10</li><li>17:50</li><li>18:25</li><li>19:05</li><li>19:45</li>
-            <li>20:25</li><li>21:05</li><li>21:50</li><li>22:35</li>
-          </ul>
+      <!-- Автобус № 474 -->
+      <div class="bus-schedule-card">
+        <h3>Маршрут № 474: м. Котельники — СНТ «Горняк» / Силикат</h3>
+
+        <div class="schedule-grid">
+          <div class="schedule-col">
+            <h5>📍 Остановка СНТ «Горняк» → м. Котельники</h5>
+            
+            <p style="font-size:0.8rem; font-weight:700; color:#444; margin-bottom:6px;">Будни:</p>
+            <div class="time-list">
+              <span class="time-badge">06:21</span>
+              <span class="time-badge">06:52</span>
+              <span class="time-badge">07:32</span>
+              <span class="time-badge">08:12</span>
+              <span class="time-badge">08:54</span>
+              <span class="time-badge">09:43</span>
+              <span class="time-badge">14:48</span>
+              <span class="time-badge">15:28</span>
+              <span class="time-badge">16:08</span>
+              <span class="time-badge">16:48</span>
+              <span class="time-badge">17:28</span>
+              <span class="time-badge">18:08</span>
+              <span class="time-badge">18:48</span>
+            </div>
+
+            <p style="font-size:0.8rem; font-weight:700; color:#444; margin:10px 0 6px 0;">Выходные:</p>
+            <div class="time-list">
+              <span class="time-badge">05:55</span>
+              <span class="time-badge">06:27</span>
+              <span class="time-badge">06:59</span>
+              <span class="time-badge">07:31</span>
+              <span class="time-badge">07:59</span>
+              <span class="time-badge">08:03</span>
+              <span class="time-badge">08:35</span>
+              <span class="time-badge">08:41</span>
+              <span class="time-badge">09:07</span>
+              <span class="time-badge">09:13</span>
+              <span class="time-badge">09:47</span>
+              <span class="time-badge">09:55</span>
+              <span class="time-badge">10:21</span>
+              <span class="time-badge">10:47</span>
+              <span class="time-badge">11:13</span>
+              <span class="time-badge">11:29</span>
+              <span class="time-badge">12:01</span>
+              <span class="time-badge">12:55</span>
+              <span class="time-badge">13:29</span>
+              <span class="time-badge">14:01</span>
+              <span class="time-badge">15:17</span>
+              <span class="time-badge">15:41</span>
+              <span class="time-badge">15:51</span>
+              <span class="time-badge">15:59</span>
+              <span class="time-badge">16:49</span>
+              <span class="time-badge">16:57</span>
+              <span class="time-badge">17:23</span>
+              <span class="time-badge">17:57</span>
+              <span class="time-badge">18:29</span>
+              <span class="time-badge">19:39</span>
+            </div>
+          </div>
+
+          <div class="schedule-col">
+            <h5>📍 Метро Котельники → Силикат / СНТ «Горняк»</h5>
+            
+            <p style="font-size:0.8rem; font-weight:700; color:#444; margin-bottom:6px;">Будни (* — следует до СНТ «Горняк»):</p>
+            <div class="time-list">
+              <span class="time-badge">06:16</span><span class="time-badge">06:27</span><span class="time-badge direct-gornyak">06:37*</span><span class="time-badge">06:49</span>
+              <span class="time-badge">07:02</span><span class="time-badge direct-gornyak">07:12*</span><span class="time-badge">07:20</span><span class="time-badge">07:28</span><span class="time-badge">07:36</span><span class="time-badge">07:44</span><span class="time-badge direct-gornyak">07:52*</span><span class="time-badge">07:56</span>
+              <span class="time-badge">08:00</span><span class="time-badge direct-gornyak">08:08*</span><span class="time-badge">08:16</span><span class="time-badge">08:24</span><span class="time-badge">08:32*</span><span class="time-badge">08:40</span><span class="time-badge">08:48</span>
+              <span class="time-badge">09:04</span><span class="time-badge direct-gornyak">09:13*</span><span class="time-badge">09:29</span><span class="time-badge">09:45</span>
+              <span class="time-badge direct-gornyak">10:02*</span><span class="time-badge">10:19</span><span class="time-badge">10:38</span><span class="time-badge">10:57</span>
+              <span class="time-badge">11:16</span><span class="time-badge">11:35</span><span class="time-badge">11:54</span>
+              <span class="time-badge">12:14</span><span class="time-badge">12:33</span><span class="time-badge">12:52</span>
+              <span class="time-badge">13:11</span><span class="time-badge">13:30</span><span class="time-badge">13:49</span>
+              <span class="time-badge">14:09</span><span class="time-badge">14:28</span><span class="time-badge">14:48</span><span class="time-badge direct-gornyak">14:52*</span>
+              <span class="time-badge direct-gornyak">15:07*</span><span class="time-badge">15:21</span><span class="time-badge">15:34</span><span class="time-badge">15:47</span><span class="time-badge">15:54</span>
+              <span class="time-badge">16:01</span><span class="time-badge">16:14</span><span class="time-badge">16:27*</span><span class="time-badge">16:34</span><span class="time-badge">16:41</span>
+              <span class="time-badge">17:01</span><span class="time-badge">17:07*</span><span class="time-badge">17:15</span><span class="time-badge">17:23</span><span class="time-badge">17:31</span><span class="time-badge">17:39</span><span class="time-badge">17:47*</span><span class="time-badge">17:55</span>
+              <span class="time-badge">18:03</span><span class="time-badge">18:11</span><span class="time-badge">18:20</span><span class="time-badge">18:27*</span><span class="time-badge">18:39</span><span class="time-badge">18:47*</span><span class="time-badge">18:53</span><span class="time-badge">18:55</span>
+              <span class="time-badge">19:07*</span><span class="time-badge">19:18</span><span class="time-badge">19:38</span><span class="time-badge">19:56</span>
+              <span class="time-badge">20:17</span><span class="time-badge">20:36</span><span class="time-badge">20:59</span>
+              <span class="time-badge">21:40</span><span class="time-badge">21:53</span>
+            </div>
+
+            <p style="font-size:0.8rem; font-weight:700; color:#444; margin:10px 0 6px 0;">Выходные (* — до СНТ «Горняк»):</p>
+            <div class="time-list">
+              <span class="time-badge">05:17</span><span class="time-badge">05:49</span>
+              <span class="time-badge direct-gornyak">06:05*</span><span class="time-badge">06:21</span><span class="time-badge direct-gornyak">06:37*</span><span class="time-badge">06:53</span>
+              <span class="time-badge direct-gornyak">07:09*</span><span class="time-badge">07:25</span><span class="time-badge direct-gornyak">07:41*</span><span class="time-badge">07:57</span>
+              <span class="time-badge direct-gornyak">08:13*</span><span class="time-badge">08:29</span><span class="time-badge direct-gornyak">08:45*</span>
+              <span class="time-badge">09:17*</span><span class="time-badge">09:34</span><span class="time-badge">09:57*</span>
+              <span class="time-badge">10:06</span><span class="time-badge">10:23*</span><span class="time-badge">10:40</span><span class="time-badge">10:57*</span>
+              <span class="time-badge">11:14</span><span class="time-badge">11:31*</span><span class="time-badge">11:49</span>
+              <span class="time-badge">12:05*</span><span class="time-badge">12:22</span><span class="time-badge">12:39*</span><span class="time-badge">12:57</span>
+              <span class="time-badge">13:22</span><span class="time-badge">13:28</span><span class="time-badge">13:39*</span><span class="time-badge">13:55</span>
+              <span class="time-badge">14:00</span><span class="time-badge">14:17*</span><span class="time-badge">14:34</span><span class="time-badge">14:51*</span>
+              <span class="time-badge">15:00</span><span class="time-badge">15:08</span><span class="time-badge">15:17*</span><span class="time-badge">15:25*</span><span class="time-badge">15:34</span><span class="time-badge">15:42</span><span class="time-badge">15:51*</span><span class="time-badge">15:59*</span>
+              <span class="time-badge">16:16</span><span class="time-badge">16:25*</span><span class="time-badge">16:33*</span><span class="time-badge">16:50</span>
+              <span class="time-badge direct-gornyak">17:07*</span><span class="time-badge">17:28</span><span class="time-badge">17:33*</span><span class="time-badge">17:56</span>
+              <span class="time-badge">18:00</span><span class="time-badge">18:08</span><span class="time-badge">18:28</span><span class="time-badge">18:32</span><span class="time-badge direct-gornyak">18:39*</span><span class="time-badge">18:56</span>
+              <span class="time-badge">19:04</span><span class="time-badge">19:28</span><span class="time-badge">19:36</span>
+              <span class="time-badge">20:00</span><span class="time-badge">20:36</span>
+            </div>
+          </div>
         </div>
-        <div class="schedule-block">
-          <h4>Обратно в сторону м. Котельники</h4>
-          <ul class="schedule-list">
-            <li>05:45</li><li>06:30</li><li>07:10</li><li>07:50</li><li>08:30</li><li>09:10</li><li>09:50</li><li>10:30</li>
-            <li>11:10</li><li>11:50</li><li>12:30</li><li>13:10</li><li>13:50</li><li>14:30</li><li>15:10</li><li>15:50</li>
-            <li>16:30</li><li>17:10</li><li>17:50</li><li>18:30</li><li>19:10</li><li>19:50</li><li>20:35</li><li>21:20</li>
-            <li>22:05</li><li>22:50</li>
-          </ul>
-        </div>
+
+        <p class="schedule-note">Зеленым цветом `*` выделены рейсы, следующие непосредственно до остановки СНТ «Горняк».</p>
+        <p style="margin-top: 14px;">
+          <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Котельники+(Карьер)" target="_blank" rel="noopener" class="btn-yandex">
+            Отследить движение онлайн на Яндексе ↗
+          </a>
+        </p>
       </div>
-      <div class="route-note">Рейсы обновляются по фактическому движению, но основные интервалы сохраняются: от 05:15 до 22:50, в среднем каждые 25–40 минут.</div>
-      <p style="margin-top: 15px;">
-        <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Котельники+(Карьер)" target="_blank" rel="noopener" class="btn-yandex">
-          Проверить расписание № 474 на Яндексе ↗
-        </a>
-      </p>
 
-      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+      <!-- Автобус № 26 -->
+      <div class="bus-schedule-card">
+        <h3>Маршрут № 26: Карьер — станция Люберцы</h3>
 
-      <h3>Маршрут № 1к: м. Котельники — Карьер</h3>
-      <div class="schedule-grid">
-        <div class="schedule-block">
-          <h4>От м. Котельники</h4>
-          <ul class="schedule-list">
-            <li>05:40</li><li>06:20</li><li>07:00</li><li>07:40</li><li>08:20</li><li>09:00</li><li>09:40</li><li>10:20</li>
-            <li>11:00</li><li>11:40</li><li>12:20</li><li>13:00</li><li>13:40</li><li>14:20</li><li>15:00</li><li>15:40</li>
-            <li>16:20</li><li>17:00</li><li>17:40</li><li>18:20</li><li>19:00</li><li>19:40</li><li>20:20</li><li>21:10</li>
-          </ul>
+        <div class="schedule-grid">
+          <div class="schedule-col">
+            <h5>📍 Остановка Карьер → ст. Люберцы (Будни)</h5>
+            <div class="time-list">
+              <span class="time-badge">06:22</span><span class="time-badge">07:22</span><span class="time-badge">07:54</span><span class="time-badge">08:26</span>
+              <span class="time-badge">08:58</span><span class="time-badge">09:35</span><span class="time-badge">10:07</span><span class="time-badge">11:12</span>
+              <span class="time-badge">12:17</span><span class="time-badge">13:22</span><span class="time-badge">14:27</span><span class="time-badge">15:32</span>
+              <span class="time-badge">16:47</span><span class="time-badge">17:22</span><span class="time-badge">17:57</span><span class="time-badge">18:32</span>
+              <span class="time-badge">19:07</span><span class="time-badge">19:42</span><span class="time-badge">20:07</span><span class="time-badge">20:17</span>
+              <span class="time-badge">20:42</span><span class="time-badge">20:52</span>
+            </div>
+            <p class="schedule-note">С 06:24 до 15:23 (вкл.) следует через о/п «Силикат».</p>
+          </div>
+
+          <div class="schedule-col">
+            <h5>📍 Остановка Карьер → ст. Люберцы (Выходные)</h5>
+            <div class="time-list">
+              <span class="time-badge">07:33</span><span class="time-badge">08:33</span><span class="time-badge">09:33</span>
+              <span class="time-badge">11:43</span><span class="time-badge">12:43</span><span class="time-badge">13:43</span>
+              <span class="time-badge">16:31</span><span class="time-badge">17:31</span><span class="time-badge">18:31</span><span class="time-badge">19:31</span>
+            </div>
+            <p class="schedule-note">С 07:32 до 13:43 (вкл.) следует через о/п «Силикат».</p>
+          </div>
         </div>
-        <div class="schedule-block">
-          <h4>Обратно в сторону м. Котельники</h4>
-          <ul class="schedule-list">
-            <li>06:05</li><li>06:45</li><li>07:25</li><li>08:05</li><li>08:45</li><li>09:25</li><li>10:05</li><li>10:45</li>
-            <li>11:25</li><li>12:05</li><li>12:45</li><li>13:25</li><li>14:05</li><li>14:45</li><li>15:25</li><li>16:05</li>
-            <li>16:45</li><li>17:25</li><li>18:05</li><li>18:45</li><li>19:25</li><li>20:10</li><li>20:55</li>
-          </ul>
-        </div>
+
+        <p style="margin-top: 14px;">
+          <a href="https://t.rasp.yandex.ru/search/bus/?fromName=Карьер&toName=станция+Люберцы-1" target="_blank" rel="noopener" class="btn-yandex">
+            Отследить движение онлайн на Яндексе ↗
+          </a>
+        </p>
       </div>
-      <div class="route-note">Маршрут 1к работает в плотном режиме в утренний и вечерний пик, поэтому промежутки между рейсами обычно составляют 20–40 минут.</div>
-      <p style="margin-top: 15px;">
-        <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Карьер" target="_blank" rel="noopener" class="btn-yandex">
-          Проверить расписание № 1к на Яндексе ↗
-        </a>
-      </p>
-
-      <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-
-      <h3>Маршрут № 26: Карьер — станция Люберцы-1 (Южная)</h3>
-      <div class="schedule-grid">
-        <div class="schedule-block">
-          <h4>Из Карьера в Люберцы-1</h4>
-          <ul class="schedule-list">
-            <li>05:30</li><li>06:15</li><li>06:50</li><li>07:30</li><li>08:10</li><li>08:50</li><li>09:30</li><li>10:10</li>
-            <li>10:50</li><li>11:30</li><li>12:10</li><li>12:50</li><li>13:30</li><li>14:10</li><li>14:50</li><li>15:30</li>
-            <li>16:10</li><li>16:50</li><li>17:35</li><li>18:20</li><li>19:00</li><li>19:40</li><li>20:20</li><li>21:00</li>
-            <li>21:40</li>
-          </ul>
-        </div>
-        <div class="schedule-block">
-          <h4>Обратно в сторону Карьера</h4>
-          <ul class="schedule-list">
-            <li>06:00</li><li>06:45</li><li>07:25</li><li>08:05</li><li>08:45</li><li>09:25</li><li>10:05</li><li>10:45</li>
-            <li>11:25</li><li>12:05</li><li>12:45</li><li>13:25</li><li>14:05</li><li>14:45</li><li>15:25</li><li>16:05</li>
-            <li>16:45</li><li>17:30</li><li>18:15</li><li>18:55</li><li>19:35</li><li>20:15</li><li>20:55</li><li>21:35</li>
-          </ul>
-        </div>
-      </div>
-      <div class="route-note">На маршруте № 26 интервалы обычно держатся в пределах 30–45 минут, а в вечернее время — до 1 часа в зависимости от загруженности.</div>
-      <p style="margin-top: 15px;">
-        <a href="https://t.rasp.yandex.ru/search/bus/?fromName=Карьер&toName=станция+Люберцы-1" target="_blank" rel="noopener" class="btn-yandex">
-          Проверить расписание № 26 на Яндексе ↗
-        </a>
-      </p>
     </div>
 
     <!-- Секция: Тарифы -->
@@ -515,21 +539,19 @@
       </ul>
     </div>
 
-    <!-- Секция: Новости / Статьи -->
+    <!-- Секция: Новости -->
     <div id="news" class="card">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2>📰 Новости и объявления</h2>
         <button class="btn-green-blur admin-only" onclick="toggleForm('newsForm')">+ Добавить новость</button>
       </div>
       <p style="color: #666; font-size: 0.9rem;">Праздничные поздравления и важная информация</p>
-
-      <!-- Форма создания новости -->
+      
       <div id="newsForm" class="admin-form">
         <h4>Новая публикация</h4>
         <input type="text" id="newsTitle" placeholder="Тема / Заголовок новости">
         <textarea id="newsDesc" rows="3" placeholder="Описание новости..."></textarea>
-        <button id="newsSubmit" class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="saveNews()">Опубликовать</button>
-        <button id="newsCancel" class="btn-action" style="display:none; padding: 6px 14px; font-size: 0.85rem; background:#6a7f6b !important;" onclick="cancelEdit('newsForm')">Отмена</button>
+        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addNews()">Опубликовать</button>
       </div>
 
       <div id="newsList">
@@ -545,18 +567,26 @@
       </div>
       <p>Скачивайте бланки и документы на телефон или планшет.</p>
 
-      <!-- Форма создания документа -->
       <div id="docForm" class="admin-form">
         <h4>Добавление документа</h4>
         <input type="text" id="docTitle" placeholder="Тема / Название документа">
         <textarea id="docDesc" rows="2" placeholder="Описание документа..."></textarea>
-        <input type="url" id="docUrl" placeholder="Ссылка на документ (https://…)" autocomplete="url">
-        <button id="docSubmit" class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="saveDoc()">Опубликовать документ</button>
-        <button id="docCancel" class="btn-action" style="display:none; padding: 6px 14px; font-size: 0.85rem; background:#6a7f6b !important;" onclick="cancelEdit('docForm')">Отмена</button>
+        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addDoc()">Опубликовать документ</button>
       </div>
-
+      
       <div id="docsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-        <div class="empty-state">Загрузка документов…</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong class="doc-name">Согласие на обработку персональных данных (PDF)</strong>
+            <div style="font-size: 0.75rem; color: #777;">Опубликовано: Сегодня</div>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
+            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
+            <button class="btn-green-blur admin-only" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
+            <button class="btn-delete-blur admin-only" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -647,9 +677,9 @@
       </table>
 
       <h3 style="margin-top: 25px;">👮 Экстренные службы и участковый</h3>
-      <p><strong>Участковый по НСТ «Горняк» :</strong> Сырчин Кирилл Владимирович<br>
+      <p><strong>Участковый по НСТ «Горняк»:</strong> Сырчин Кирилл Владимирович<br>
       Телефон: <a href="tel:+79851311484" class="link-external" style="color: var(--primary);">8-985-131-14-84</a></p>
-
+      
       <p><strong>Полиция г. Котельники (дежурная часть):</strong><br>
       Телефон: <a href="tel:+79267775784" class="link-external" style="color: var(--primary);">8-926-777-57-84</a></p>
     </div>
@@ -659,56 +689,30 @@
   <!-- Модальное окно входа / регистрации -->
   <div id="authModal" class="modal-overlay">
     <div class="modal-card">
-      <div class="auth-tabs">
-        <button class="auth-tab active" type="button" data-tab="login">Вход</button>
-        <button class="auth-tab" type="button" data-tab="register">Регистрация</button>
+      <h3 style="margin-bottom: 12px;">Вход / Регистрация</h3>
+      <input type="text" id="loginPlot" placeholder="Номер участка (например: 253)" style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:1px solid #ccc;">
+      <input type="email" id="loginEmail" placeholder="Email" style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:1px solid #ccc;">
+      <input type="text" id="loginFio" placeholder="ФИО" style="width:100%; padding:8px; margin-bottom:12px; border-radius:8px; border:1px solid #ccc;">
+      <div style="display:flex; gap:8px;">
+        <button class="btn-green-blur" style="width:100%; border:none;" onclick="submitLogin()">Войти / Создать</button>
+        <button class="btn-action" style="background:#888 !important; border:none;" onclick="closeAuthModal()">Отмена</button>
       </div>
-
-      <div id="loginForm" class="auth-form active">
-        <div class="auth-message" id="loginMessage" role="status" aria-live="polite"></div>
-        <input type="email" id="loginEmail" placeholder="Электронная почта" autocomplete="email">
-        <input type="password" id="loginPassword" placeholder="Пароль" autocomplete="current-password">
-        <button class="btn-action" style="width:100%; border:none; margin-top: 4px;" onclick="handleLogin()">Войти</button>
-      </div>
-
-      <div id="registerForm" class="auth-form">
-        <div class="auth-message" id="registerMessage" role="status" aria-live="polite"></div>
-        <input type="email" id="registerEmail" placeholder="Электронная почта" autocomplete="email">
-        <input type="password" id="registerPassword" placeholder="Пароль (не менее 8 символов)" autocomplete="new-password">
-        <input type="password" id="registerPasswordConfirm" placeholder="Повторите пароль" autocomplete="new-password">
-        <button class="btn-action" style="width:100%; border:none; margin-top: 4px;" onclick="handleRegister()">Создать аккаунт</button>
-      </div>
-
-      <button class="btn-action" style="width:100%; border:none; margin-top: 14px; background: #6a7f6b !important;" onclick="closeAuthModal()">Закрыть</button>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Use the project's public anon key here. Never put a service_role key in this file.
-    window.SUPABASE_CONFIG = {
-      url: 'https://YOUR_PROJECT_ID.supabase.co',
-      anonKey: 'YOUR_SUPABASE_ANON_KEY'
-    };
-
     function setActive(element) {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       element.classList.add('active');
     }
 
-    let supabaseClient = null;
-    let currentUser = null;
-    let isSiteAdmin = false;
-    let newsCache = [];
-    let docsCache = [];
-
-    function showNotice(message, isError = false) {
-      const notice = document.getElementById('siteMessage');
-      notice.textContent = message;
-      notice.style.display = 'block';
-      notice.style.borderColor = isError ? '#c62828' : '';
-      notice.style.color = isError ? '#b71c1c' : '';
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const activeUser = localStorage.getItem('logged_user_email');
+      if (activeUser) {
+        document.body.classList.add('is-authenticated');
+        renderProfile();
+      }
+    });
 
     function openAuthModal() {
       document.getElementById('authModal').style.display = 'flex';
@@ -718,464 +722,159 @@
       document.getElementById('authModal').style.display = 'none';
     }
 
-    function switchAuthTab(tabName) {
-      const tabs = document.querySelectorAll('.auth-tab');
-      const forms = document.querySelectorAll('.auth-form');
-      tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === tabName));
-      forms.forEach((form) => form.classList.toggle('active', form.id === tabName + 'Form'));
-      document.getElementById('loginMessage').textContent = '';
-      document.getElementById('registerMessage').textContent = '';
+    function submitLogin() {
+      const plot = document.getElementById('loginPlot').value;
+      const email = document.getElementById('loginEmail').value;
+      const fio = document.getElementById('loginFio').value;
+      if (!email) return alert("Пожалуйста, введите Email.");
+
+      localStorage.setItem('logged_user_plot', plot || '№ 253');
+      localStorage.setItem('logged_user_email', email);
+      localStorage.setItem('logged_user_fio', fio || 'Не указано');
+
+      document.body.classList.add('is-authenticated');
+      renderProfile();
+      closeAuthModal();
     }
 
-    function updateAuthUI() {
-      const authContainer = document.getElementById('authContainer');
-      document.body.classList.toggle('is-admin', isSiteAdmin);
-      authContainer.replaceChildren();
+    function renderProfile() {
+      const plot = localStorage.getItem('logged_user_plot') || '№ 253';
+      const email = localStorage.getItem('logged_user_email') || '';
+      const fio = localStorage.getItem('logged_user_fio') || 'Не указано';
 
-      if (currentUser) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'profile-wrapper';
-        const profileButton = document.createElement('button');
-        profileButton.className = 'profile-btn';
-        profileButton.type = 'button';
-        profileButton.setAttribute('aria-label', 'Профиль');
-        profileButton.textContent = '👤';
-        const dropdown = document.createElement('div');
-        dropdown.className = 'profile-dropdown';
-        const userLabel = document.createElement('div');
-        userLabel.className = 'profile-field';
-        const userName = document.createElement('strong');
-        userName.textContent = currentUser.email || 'Пользователь';
-        userLabel.append('Аккаунт: ', userName);
-        const roleLabel = document.createElement('div');
-        roleLabel.className = 'profile-field';
-        roleLabel.textContent = isSiteAdmin ? 'Роль: администратор' : 'Роль: просмотр';
-        const logoutButton = document.createElement('button');
-        logoutButton.className = 'btn-logout-blur';
-        logoutButton.type = 'button';
-        logoutButton.textContent = 'Выйти';
-        logoutButton.addEventListener('click', logoutUser);
-        profileButton.addEventListener('click', () => dropdown.classList.toggle('show'));
-        dropdown.append(userLabel, roleLabel, logoutButton);
-        wrapper.append(profileButton, dropdown);
-        authContainer.append(wrapper);
-      } else {
-        const loginButton = document.createElement('button');
-        loginButton.className = 'btn-login';
-        loginButton.type = 'button';
-        loginButton.textContent = 'Войти / Регистрация';
-        loginButton.addEventListener('click', openAuthModal);
-        authContainer.append(loginButton);
+      const container = document.getElementById('authContainer');
+      container.innerHTML = `
+        <div class="profile-wrapper">
+          <div class="profile-btn" onclick="toggleProfileMenu(event)">👤</div>
+          <div id="profileDropdown" class="profile-dropdown">
+            <div id="profileDisplayView">
+              <div class="profile-field"><strong>Участок:</strong> <span id="valPlot">${plot}</span></div>
+              <div class="profile-field"><strong>Почта:</strong> <span id="valEmail">${email}</span></div>
+              <div class="profile-field"><strong>ФИО:</strong> <span id="valFio">${fio}</span></div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                <button class="btn-delete-blur" onclick="triggerProfileDelete()">Удалить профиль</button>
+                <button class="btn-logout-blur" onclick="logoutUser()">Выйти из профиля</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleProfileMenu(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('profileDropdown');
+      if (menu) menu.classList.toggle('show');
+    }
+
+    window.onclick = function() {
+      const menu = document.getElementById('profileDropdown');
+      if (menu && menu.classList.contains('show')) {
+        menu.classList.remove('show');
       }
     }
 
-    function setAuthMessage(id, message, success = false) {
-      const element = document.getElementById(id);
-      element.textContent = message;
-      element.classList.toggle('success', success);
-    }
+    function triggerProfileDelete() {
+      document.getElementById('valPlot').innerText = 'Очищено...';
+      document.getElementById('valEmail').innerText = 'Очищено...';
+      document.getElementById('valFio').innerText = 'Очищено...';
 
-    async function handleRegister() {
-      setAuthMessage('registerMessage', '');
-      const email = document.getElementById('registerEmail').value.trim();
-      const password = document.getElementById('registerPassword').value;
-      const confirm = document.getElementById('registerPasswordConfirm').value;
-
-      if (!email || !password) {
-        setAuthMessage('registerMessage', 'Укажите электронную почту и пароль.');
-        return;
-      }
-      if (password.length < 8) {
-        setAuthMessage('registerMessage', 'Пароль должен содержать минимум 8 символов.');
-        return;
-      }
-      if (password !== confirm) {
-        setAuthMessage('registerMessage', 'Пароли не совпадают.');
-        return;
-      }
-
-      try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: window.location.origin + window.location.pathname }
-        });
-        if (error) throw error;
-
-        document.getElementById('registerPassword').value = '';
-        document.getElementById('registerPasswordConfirm').value = '';
-        if (data.session) {
-          closeAuthModal();
-          showNotice('Аккаунт создан. Для редактирования материалов администратор должен выдать вам права.');
+      setTimeout(() => {
+        const pin = prompt("Введите 4-значный PIN-код для уничтожения профиля и данных:");
+        if (pin && pin.length === 4) {
+          localStorage.clear();
+          alert("Профиль и локальные данные успешно уничтожены.");
+          logoutUser();
         } else {
-          setAuthMessage('registerMessage', 'Аккаунт создан. Проверьте почту и подтвердите адрес, затем войдите.', true);
+          alert("Отменено. Данные восстановлены.");
+          renderProfile();
         }
-      } catch (error) {
-        setAuthMessage('registerMessage', `Не удалось создать аккаунт: ${error.message}`);
-      }
+      }, 200);
     }
 
-    async function handleLogin() {
-      setAuthMessage('loginMessage', '');
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-
-      if (!email || !password) {
-        setAuthMessage('loginMessage', 'Введите электронную почту и пароль.');
-        return;
-      }
-
-      try {
-        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        closeAuthModal();
-      } catch (error) {
-        setAuthMessage('loginMessage', `Не удалось войти: ${error.message}`);
-      }
-    }
-
-    async function logoutUser() {
-      try {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) throw error;
-      } catch (error) {
-        showNotice(`Не удалось выйти: ${error.message}`, true);
-      }
+    function logoutUser() {
+      localStorage.clear();
+      document.body.classList.remove('is-authenticated');
+      const container = document.getElementById('authContainer');
+      container.innerHTML = `<button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>`;
     }
 
     function toggleForm(id) {
-      const form = document.getElementById(id);
-      if (!form || !isSiteAdmin) return;
-      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+      const f = document.getElementById(id);
+      f.style.display = f.style.display === 'block' ? 'none' : 'block';
     }
 
-    function cancelEdit(formId) {
-      const form = document.getElementById(formId);
-      form.dataset.editId = '';
-      if (formId === 'newsForm') {
-        document.getElementById('newsTitle').value = '';
-        document.getElementById('newsDesc').value = '';
-      } else {
-        document.getElementById('docTitle').value = '';
-        document.getElementById('docDesc').value = '';
-        document.getElementById('docUrl').value = '';
-      }
-      form.style.display = 'none';
-      if (formId === 'newsForm') {
-        document.getElementById('newsSubmit').textContent = 'Опубликовать';
-        document.getElementById('newsCancel').style.display = 'none';
-      } else {
-        document.getElementById('docSubmit').textContent = 'Опубликовать документ';
-        document.getElementById('docCancel').style.display = 'none';
-      }
-    }
-
-    function editNews(id) {
-      if (!isSiteAdmin) return;
-      const item = newsCache.find((news) => String(news.id) === id);
-      if (!item) return;
-      const form = document.getElementById('newsForm');
-      form.dataset.editId = item.id;
-      document.getElementById('newsTitle').value = item.title;
-      document.getElementById('newsDesc').value = item.body;
-      document.getElementById('newsSubmit').textContent = 'Сохранить изменения';
-      document.getElementById('newsCancel').style.display = 'inline-flex';
-      form.style.display = 'block';
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function editDoc(id) {
-      if (!isSiteAdmin) return;
-      const item = docsCache.find((doc) => String(doc.id) === id);
-      if (!item) return;
-      const form = document.getElementById('docForm');
-      form.dataset.editId = item.id;
-      document.getElementById('docTitle').value = item.title;
-      document.getElementById('docDesc').value = item.description || '';
-      document.getElementById('docUrl').value = item.file_url;
-      document.getElementById('docSubmit').textContent = 'Сохранить изменения';
-      document.getElementById('docCancel').style.display = 'inline-flex';
-      form.style.display = 'block';
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    async function saveNews() {
-      if (!isSiteAdmin) return;
-      const form = document.getElementById('newsForm');
-      const title = document.getElementById('newsTitle').value.trim();
-      const body = document.getElementById('newsDesc').value.trim();
-      if (!title || !body) {
-        showNotice('Заполните тему и описание новости.', true);
-        return;
-      }
-
-      try {
-        const editId = form.dataset.editId;
-        const query = editId
-          ? supabaseClient.from('news').update({ title, body }).eq('id', editId)
-          : supabaseClient.from('news').insert({ title, body });
-        const { error } = await query;
-        if (error) throw error;
-        cancelEdit('newsForm');
-        await loadNews();
-        showNotice(editId ? 'Новость обновлена.' : 'Новость опубликована.');
-      } catch (error) {
-        showNotice(`Не удалось сохранить новость: ${error.message}`, true);
-      }
-    }
-
-    async function saveDoc() {
-      if (!isSiteAdmin) return;
-      const form = document.getElementById('docForm');
-      const title = document.getElementById('docTitle').value.trim();
-      const description = document.getElementById('docDesc').value.trim();
-      const fileUrl = document.getElementById('docUrl').value.trim();
-      let parsedUrl;
-      try {
-        parsedUrl = new URL(fileUrl);
-      } catch {
-        showNotice('Укажите корректную ссылку на документ.', true);
-        return;
-      }
-      if (!title || !fileUrl || !['https:', 'http:'].includes(parsedUrl.protocol)) {
-        showNotice('Укажите название и действующую ссылку http или https на документ.', true);
-        return;
-      }
-
-      try {
-        const editId = form.dataset.editId;
-        const documentData = { title, description, file_url: fileUrl };
-        const query = editId
-          ? supabaseClient.from('documents').update(documentData).eq('id', editId)
-          : supabaseClient.from('documents').insert(documentData);
-        const { error } = await query;
-        if (error) throw error;
-        cancelEdit('docForm');
-        await loadDocs();
-        showNotice(editId ? 'Документ обновлён.' : 'Документ опубликован.');
-      } catch (error) {
-        showNotice(`Не удалось сохранить документ: ${error.message}`, true);
-      }
-    }
-
-    async function deleteContent(table, id) {
-      if (!isSiteAdmin || !['news', 'documents'].includes(table)) return;
-      const label = table === 'news' ? 'новость' : 'документ';
-      if (!window.confirm(`Удалить ${label}?`)) return;
-      try {
-        const { error } = await supabaseClient.from(table).delete().eq('id', id);
-        if (error) throw error;
-      } catch (error) {
-        showNotice(`Не удалось удалить ${label}: ${error.message}`, true);
-        return;
-      }
-      try {
-        if (table === 'news') await loadNews();
-        else await loadDocs();
-      } catch (error) {
-        showNotice(`Запись удалена, но список не удалось обновить: ${error.message}`, true);
-        return;
-      }
-      showNotice(`${label[0].toUpperCase()}${label.slice(1)} удалён(а).`);
-    }
-
-    function makeEmptyState(text) {
-      const empty = document.createElement('div');
-      empty.className = 'empty-state';
-      empty.textContent = text;
-      return empty;
-    }
-
-    function makeAdminButton(action, id, label, className) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = `${className} admin-only`;
-      button.dataset.action = action;
-      button.dataset.id = id;
-      button.textContent = label;
-      return button;
-    }
-
-    function renderNews() {
-      const list = document.getElementById('newsList');
-      list.replaceChildren();
-      if (!newsCache.length) {
-        list.append(makeEmptyState('Нет новостей'));
-        return;
-      }
-      for (const item of newsCache) {
-        const card = document.createElement('article');
-        card.className = 'card news-item';
-        const title = document.createElement('h3');
-        title.className = 'news-title';
-        title.textContent = item.title;
-        const body = document.createElement('p');
-        body.textContent = item.body;
-        const date = document.createElement('div');
-        date.className = 'profile-field';
-        date.textContent = `Опубликовано: ${new Date(item.published_at).toLocaleDateString('ru-RU')}`;
-        const controls = document.createElement('div');
-        controls.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap;';
-        controls.append(
-          makeAdminButton('edit-news', item.id, 'Изменить', 'btn-green-blur'),
-          makeAdminButton('delete-news', item.id, 'Удалить', 'btn-delete-blur')
-        );
-        card.append(title, body, date, controls);
-        list.append(card);
-      }
-    }
-
-    function renderDocs() {
+    function addDoc() {
+      const title = document.getElementById('docTitle').value;
+      if (!title) return alert('Введите название документа');
       const list = document.getElementById('docsList');
-      list.replaceChildren();
-      if (!docsCache.length) {
-        list.append(makeEmptyState('Документы пока не опубликованы'));
-        return;
-      }
-      for (const item of docsCache) {
-        const card = document.createElement('article');
-        card.className = 'card doc-card';
-        card.style.cssText = 'display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin:0; padding:12px 16px;';
-        const info = document.createElement('div');
-        const title = document.createElement('strong');
-        title.className = 'doc-name';
-        title.textContent = item.title;
-        const description = document.createElement('div');
-        description.textContent = item.description || '';
-        const date = document.createElement('div');
-        date.className = 'profile-field';
-        date.textContent = `Опубликовано: ${new Date(item.created_at).toLocaleDateString('ru-RU')}`;
-        info.append(title, description, date);
-
-        const actions = document.createElement('div');
-        actions.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap;';
-        const link = document.createElement('a');
-        link.className = 'btn-action';
-        link.href = item.file_url;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = '👁️ Открыть документ';
-        actions.append(link,
-          makeAdminButton('edit-doc', item.id, 'Изменить', 'btn-green-blur'),
-          makeAdminButton('delete-doc', item.id, 'Удалить', 'btn-delete-blur')
-        );
-        card.append(info, actions);
-        list.append(card);
-      }
+      const item = document.createElement('div');
+      item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;';
+      item.innerHTML = `
+        <div>
+          <strong class="doc-name">${title}</strong>
+          <div style="font-size: 0.75rem; color: #777;">Опубликовано: Только что</div>
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
+          <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
+          <button class="btn-green-blur admin-only" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
+          <button class="btn-delete-blur admin-only" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
+        </div>
+      `;
+      list.prepend(item);
+      document.getElementById('docTitle').value = '';
+      toggleForm('docForm');
     }
 
-    async function loadNews() {
-      const { data, error } = await supabaseClient.from('news')
-        .select('id, title, body, published_at')
-        .order('published_at', { ascending: false });
-      if (error) throw error;
-      newsCache = data;
-      renderNews();
+    function addNews() {
+      const title = document.getElementById('newsTitle').value;
+      const desc = document.getElementById('newsDesc').value;
+      if (!title) return alert('Введите заголовок новости');
+      const list = document.getElementById('newsList');
+      
+      const empty = list.querySelector('.empty-state');
+      if (empty) empty.remove();
+
+      const item = document.createElement('div');
+      item.style.cssText = 'background: rgba(27, 94, 32, 0.05); padding: 16px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--primary);';
+      item.innerHTML = `
+        <h3 style="margin-bottom: 5px;">${title}</h3>
+        <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">Опубликовано: Только что</p>
+        <p>${desc}</p>
+        <div class="admin-only" style="margin-top: 10px; display: flex; gap: 8px;">
+          <button class="btn-green-blur" style="padding: 4px 10px; font-size: 0.75rem;" onclick="editItem(this)">Изменить</button>
+          <button class="btn-delete-blur" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
+        </div>
+      `;
+      list.prepend(item);
+      document.getElementById('newsTitle').value = '';
+      document.getElementById('newsDesc').value = '';
+      toggleForm('newsForm');
     }
 
-    async function loadDocs() {
-      const { data, error } = await supabaseClient.from('documents')
-        .select('id, title, description, file_url, created_at')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      docsCache = data;
-      renderDocs();
+    function editDoc(btn) {
+      const nameElem = btn.closest('div').parentElement.querySelector('.doc-name');
+      const newName = prompt('Введите новое название документа:', nameElem.innerText);
+      if (newName) nameElem.innerText = newName;
     }
 
-    async function loadContent() {
-      try {
-        await loadNews();
-      } catch (error) {
-        showNotice(`Не удалось загрузить новости: ${error.message}`, true);
-      }
-      try {
-        await loadDocs();
-      } catch (error) {
-        showNotice(`Не удалось загрузить документы: ${error.message}`, true);
-      }
+    function editItem(btn) {
+      const titleElem = btn.parentElement.parentElement.querySelector('h3');
+      const newTitle = prompt('Введите новое название:', titleElem.innerText);
+      if (newTitle) titleElem.innerText = newTitle;
     }
 
-    async function syncAuthState(session) {
-      currentUser = session?.user || null;
-      isSiteAdmin = false;
-      if (currentUser) {
-        try {
-          const { data, error } = await supabaseClient.rpc('is_site_admin');
-          if (error) throw error;
-          isSiteAdmin = data === true;
-          if (!isSiteAdmin) showNotice('Вы вошли, но права на изменение сайта есть только у администратора.');
-        } catch (error) {
-          showNotice(`Не удалось проверить права администратора: ${error.message}`, true);
+    function deleteItem(btn) {
+      if (confirm('Удалить эту запись?')) {
+        const parent = btn.closest('div').parentElement;
+        parent.remove();
+        const list = document.getElementById('newsList');
+        if (list.children.length === 0) {
+          list.innerHTML = '<div class="empty-state">Нет новостей</div>';
         }
       }
-      updateAuthUI();
     }
-
-    async function initializeSite() {
-      document.querySelectorAll('.auth-tab').forEach((tab) => {
-        tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
-      });
-      document.addEventListener('click', (event) => {
-        const wrapper = document.querySelector('.profile-wrapper');
-        const dropdown = wrapper?.querySelector('.profile-dropdown');
-        if (dropdown && !wrapper.contains(event.target)) dropdown.classList.remove('show');
-      });
-      document.getElementById('newsList').addEventListener('click', (event) => {
-        const button = event.target.closest('button[data-action]');
-        if (!button) return;
-        if (button.dataset.action === 'edit-news') editNews(button.dataset.id);
-        if (button.dataset.action === 'delete-news') void deleteContent('news', button.dataset.id);
-      });
-      document.getElementById('docsList').addEventListener('click', (event) => {
-        const button = event.target.closest('button[data-action]');
-        if (!button) return;
-        if (button.dataset.action === 'edit-doc') editDoc(button.dataset.id);
-        if (button.dataset.action === 'delete-doc') void deleteContent('documents', button.dataset.id);
-      });
-
-      const config = window.SUPABASE_CONFIG;
-      if (!window.supabase || !config?.url || !config?.anonKey
-        || config.url.includes('YOUR_PROJECT_ID') || config.anonKey.includes('YOUR_SUPABASE_ANON_KEY')) {
-        showNotice('Для включения входа и управления материалами настройте URL и публичный anon key проекта Supabase в index.html.', true);
-        const loginButton = document.querySelector('#authContainer button');
-        loginButton.disabled = true;
-        loginButton.title = 'Сначала настройте подключение к Supabase';
-        document.getElementById('newsList').replaceChildren(makeEmptyState('Новости недоступны: не настроена база данных'));
-        document.getElementById('docsList').replaceChildren(makeEmptyState('Документы недоступны: не настроена база данных'));
-        return;
-      }
-
-      try {
-        supabaseClient = window.supabase.createClient(config.url, config.anonKey);
-        supabaseClient.auth.onAuthStateChange((_event, session) => {
-          window.setTimeout(() => { void syncAuthState(session); }, 0);
-        });
-        const { data, error } = await supabaseClient.auth.getSession();
-        if (error) throw error;
-        await syncAuthState(data?.session);
-      } catch (error) {
-        showNotice(`Не удалось подключиться к Supabase: ${error.message}`, true);
-        updateAuthUI();
-        return;
-      }
-      await loadContent();
-    }
-
-    window.setActive = setActive;
-    window.openAuthModal = openAuthModal;
-    window.closeAuthModal = closeAuthModal;
-    window.switchAuthTab = switchAuthTab;
-    window.handleRegister = handleRegister;
-    window.handleLogin = handleLogin;
-    window.logoutUser = logoutUser;
-    window.toggleForm = toggleForm;
-    window.cancelEdit = cancelEdit;
-    window.saveNews = saveNews;
-    window.saveDoc = saveDoc;
-    window.addEventListener('DOMContentLoaded', () => {
-      void initializeSite();
-    });
-
   </script>
 </body>
 </html>
