@@ -796,8 +796,28 @@
   </div>
 
   <script>
+    function readStoredUser() {
+      try {
+        const stored = window.localStorage && window.localStorage.getItem("snt_gornak_user");
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        return parsed && typeof parsed === "object" ? parsed : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setActive(link) {
+      document.querySelectorAll(".nav-item, .nav-link").forEach((item) => {
+        item.classList.toggle("active", item === link);
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       renderProfile();
+      document.querySelectorAll(".nav-item, .nav-link").forEach((item) => {
+        item.addEventListener("click", () => setActive(item));
+      });
     });
 
     function openAuthModal() {
@@ -847,7 +867,7 @@
     }
 
     function renderProfile() {
-      const user = JSON.parse(localStorage.getItem("snt_gornak_user"));
+      const user = readStoredUser();
       const authFormBox = document.getElementById("auth-form-box");
       const userProfileBox = document.getElementById("user-profile-box");
 
@@ -855,8 +875,8 @@
         authFormBox.style.display = "none";
         userProfileBox.style.display = "block";
 
-        document.getElementById("p-plot").textContent = user.plot;
-        document.getElementById("p-email").textContent = user.email;
+        document.getElementById("p-plot").textContent = user.plot || "Не указано";
+        document.getElementById("p-email").textContent = user.email || "Не указано";
         document.getElementById("p-fio").textContent = user.fio || "Не указано";
       } else {
         authFormBox.style.display = "block";
@@ -871,6 +891,12 @@
       const fio = document.getElementById("auth-fio").value.trim();
 
       const errorEl = document.getElementById("auth-error");
+
+      if (!plot || !email) {
+        errorEl.textContent = "Укажите номер участка и электронную почту.";
+        errorEl.style.display = "block";
+        return;
+      }
 
       const existingUsers = {
         "253": "egor4u@gmail.com",
