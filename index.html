@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>НСТ «Горняк» — Официальный портал</title>
   
   <style>
@@ -75,21 +78,23 @@
     .floating-nav {
       max-width: 860px;
       margin: 0 12px 30px 12px;
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+      background: rgba(255, 255, 255, 0.45) !important;
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
       padding: 10px 16px;
       border-radius: 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.6);
       position: sticky;
-      top: 12px;
+      top: 15px;
       z-index: 1000;
       box-sizing: border-box;
       flex-wrap: wrap;
       gap: 10px;
+      transition: all 0.3s ease;
     }
 
     @media (min-width: 884px) {
@@ -124,22 +129,41 @@
       flex-wrap: wrap;
     }
 
-    .nav-item {
+    .nav-item,
+    .nav-link {
       text-decoration: none;
-      color: #333;
+      color: #2c3e50 !important;
       font-weight: 500;
       font-size: 13px;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(240, 242, 245, 0.35) !important;
       display: flex;
       align-items: center;
       gap: 4px;
-      transition: background 0.2s;
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    .nav-item:hover {
-      background: rgba(255, 255, 255, 0.8);
+    .nav-item:hover,
+    .nav-link:hover {
+      background: rgba(220, 235, 225, 0.5) !important;
+      color: #1b5e20 !important;
+    }
+
+    .nav-item.active,
+    .nav-item[aria-current="page"],
+    .nav-item.router-link-exact-active,
+    .nav-link.active,
+    .nav-link[aria-current="page"],
+    .nav-link.router-link-exact-active {
+      background: rgba(200, 230, 201, 0.55) !important;
+      color: #1b5e20 !important;
+      font-weight: 600;
+      border: 1px solid rgba(129, 199, 132, 0.6);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
     }
 
     .nav-right {
@@ -277,6 +301,47 @@
       padding-left: 20px;
     }
 
+    .recommended {
+      display: inline-block;
+      background: #e8f5e9;
+      color: var(--primary);
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin: 0 2px;
+      box-shadow: inset 0 0 0 1px rgba(27, 94, 32, 0.12);
+    }
+
+    .helper-note {
+      margin: 0 0 14px;
+      color: #5f6f5d;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .mini-label {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: #edf7ee;
+      border-radius: 999px;
+      padding: 4px 8px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .date-tip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
     .divider {
       border: none;
       border-top: 1px dashed var(--border-color);
@@ -288,6 +353,34 @@
       font-weight: 600;
       text-decoration: none;
       font-size: 14px;
+    }
+
+    .btn-yandex {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--primary) !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(27, 94, 32, 0.25);
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-yandex:hover {
+      background-color: var(--primary-hover) !important;
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(27, 94, 32, 0.35);
+      text-decoration: none;
+    }
+
+    .btn-yandex:active {
+      transform: translateY(0);
     }
 
     .text-muted {
@@ -420,6 +513,15 @@
   </style>
 </head>
 <body>
+  <script>
+    (() => {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('v')) {
+        url.searchParams.set('v', String(Date.now()));
+        window.location.replace(url.toString());
+      }
+    })();
+  </script>
 
   <div class="falling-leaves">
     <div class="leaf">🍃</div>
@@ -473,32 +575,46 @@
           <span class="text-muted">Проверьте актуальность рейсов перед поездкой</span>
         </div>
         <p>Общественный транспорт до НСТ «Горняк» (остановки «Карьер» и «Силикат»).</p>
+        <p class="helper-note">Ориентировочные утренние рейсы для предварительной проверки; актуальное расписание уточняйте на Яндексе и выбирайте дату в календаре.</p>
 
         <div class="schedule-box">
           <h4>Маршрут № 474: м. Котельники — Карьер / Силикат</h4>
+          <span class="mini-label">Ориентир на утро</span>
           <p>Время в пути от м. Котельники — около 20 минут.</p>
+          <p><strong>Примерные утренние рейсы:</strong> <span class="recommended">07:01</span> и <span class="recommended">07:05</span>.</p>
           <ul>
-            <li><strong>От м. Котельники до Карьера:</strong> 06:15, 07:01, 07:05, 07:50, 07:56</li>
-            <li><strong>От Карьера до м. Котельники:</strong> 06:18, 07:01, 07:05, 07:50, 07:56</li>
+            <li><strong>От м. Котельники до Карьера:</strong> 06:15, <span class="recommended">07:01</span>, <span class="recommended">07:05</span>, 07:50, 07:56</li>
+            <li><strong>От Карьера до м. Котельники:</strong> 06:18, <span class="recommended">07:01</span>, <span class="recommended">07:05</span>, 07:50, 07:56</li>
           </ul>
-          <a href="https://rasp.yandex.ru/thread/T_474_11_f9848002t9739165_44?departure_from=2026-10-24+07%3A07%3A00&station_from=9848002&station_to=9739165" target="_blank" rel="noopener" class="link-external">
-            Проверить расписание № 474 на Яндексе ↗
-          </a>
+          <p style="margin-top: 15px;">
+            <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Котельники+(Карьер)" target="_blank" rel="noopener" class="btn-yandex">
+              Проверить расписание № 474 на Яндексе ↗
+            </a>
+          </p>
+          <div class="date-tip">📅 Выбирайте дату в календаре Яндекса</div>
 
           <hr class="divider">
 
           <h4>Маршрут № 1к: м. Котельники — Карьер</h4>
-          <a href="https://rasp.yandex.ru/thread/T_1k_0_f9848002t9848002_r5475_1?departure_from=2026-10-19+05%3A54%3A00&station_from=9848002&station_to=9739165" target="_blank" rel="noopener" class="link-external">
-            Проверить расписание № 1к на Яндексе ↗
-          </a>
+          <p style="margin-top: 15px;">
+            <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Карьер" target="_blank" rel="noopener" class="btn-yandex">
+              Проверить расписание № 1к на Яндексе ↗
+            </a>
+          </p>
+          <div class="date-tip">📅 Выбирайте дату в календаре Яндекса</div>
 
           <hr class="divider">
 
           <h4>Маршрут № 26: Карьер — станция Люберцы-1 (Южная)</h4>
+          <span class="mini-label">Ориентир на утро</span>
           <p>Интервал движения — от 22 до 32 минут. Время в пути — около 32 минут.</p>
-          <a href="https://rasp.yandex.ru/thread/T_26_0_f9743574t9743574_44?departure_from=2026-10-19+06%3A00%3A00&station_from=9743574&station_to=9739171&to_city=1" target="_blank" rel="noopener" class="link-external">
-            Проверить расписание № 26 на Яндексе ↗
-          </a>
+          <p><strong>Примерные утренние рейсы:</strong> <span class="recommended">06:20</span>, <span class="recommended">06:50</span>, <span class="recommended">07:20</span>.</p>
+          <p style="margin-top: 15px;">
+            <a href="https://t.rasp.yandex.ru/search/bus/?fromName=Карьер&toName=станция+Люберцы-1" target="_blank" rel="noopener" class="btn-yandex">
+              Проверить расписание № 26 на Яндексе ↗
+            </a>
+          </p>
+          <div class="date-tip">📅 Выбирайте дату в календаре Яндекса</div>
         </div>
       </div>
     </section>
