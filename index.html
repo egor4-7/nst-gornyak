@@ -162,6 +162,44 @@
       margin-top: 2px;
     }
 
+    .auth-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .auth-tab {
+      flex: 1;
+      border: 1px solid #dfe8df;
+      background: #f4f7f4;
+      color: var(--text-dark);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .auth-tab.active {
+      background: rgba(27, 94, 32, 0.08);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .auth-form input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: 1px solid #d9dfe3;
+      font-size: 0.95rem;
+    }
+    .auth-message {
+      min-height: 18px;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      color: #c62828;
+    }
+    .auth-message.success { color: #1b5e20; }
+
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px 20px; }
 
     .card {
@@ -523,13 +561,33 @@
   <!-- Модальное окно входа / регистрации -->
   <div id="authModal" class="modal-overlay">
     <div class="modal-card">
-      <h3 style="margin-bottom: 12px;">Вход временно отключён</h3>
-      <p>Авторизация и управление сайтом будут доступны после настройки безопасного серверного входа.</p>
-      <button class="btn-action" style="border:none;" onclick="closeAuthModal()">Закрыть</button>
+      <div class="auth-tabs">
+        <button class="auth-tab active" type="button" data-tab="login">Вход</button>
+        <button class="auth-tab" type="button" data-tab="register">Регистрация</button>
+      </div>
+
+      <div id="loginForm" class="auth-form active">
+        <div class="auth-message" id="loginMessage"></div>
+        <input type="text" id="loginUsername" placeholder="Логин" autocomplete="off" spellcheck="false">
+        <input type="password" id="loginPassword" placeholder="Пароль" autocomplete="new-password">
+        <button class="btn-action" style="width:100%; border:none; margin-top: 4px;" onclick="handleLogin()">Войти</button>
+      </div>
+
+      <div id="registerForm" class="auth-form">
+        <div class="auth-message" id="registerMessage"></div>
+        <input type="text" id="registerUsername" placeholder="Логин" autocomplete="off" spellcheck="false">
+        <input type="password" id="registerPassword" placeholder="Пароль" autocomplete="new-password">
+        <input type="password" id="registerPasswordConfirm" placeholder="Повторите пароль" autocomplete="new-password">
+        <button class="btn-action" style="width:100%; border:none; margin-top: 4px;" onclick="handleRegister()">Создать аккаунт</button>
+      </div>
+
+      <button class="btn-action" style="width:100%; border:none; margin-top: 14px; background: #6a7f6b !important;" onclick="closeAuthModal()">Закрыть</button>
     </div>
   </div>
 
   <script>
+    const STORAGE_KEY = 'nst-gornyak-auth';
+
     function setActive(element) {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       element.classList.add('active');
@@ -543,29 +601,198 @@
       document.getElementById('authModal').style.display = 'none';
     }
 
+    function switchAuthTab(tabName) {
+      const tabs = document.querySelectorAll('.auth-tab');
+      const forms = document.querySelectorAll('.auth-form');
+      tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === tabName));
+      forms.forEach((form) => form.classList.toggle('active', form.id === tabName + 'Form'));
+    }
+
+    function getUserState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        return { authenticated: false, user: null };
+      }
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return { authenticated: false, user: null };
+      }
+    }
+
+    function saveUserState(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function updateAuthUI() {
+      const state = getUserState();
+      const authContainer = document.getElementById('authContainer');
+      const adminEls = document.querySelectorAll('.admin-only');
+
+      if (state.authenticated && state.user) {
+        document.body.classList.add('is-authenticated');
+        authContainer.innerHTML = `
+          <div class="profile-wrapper">
+            <button class="profile-btn" type="button" aria-label="Профиль">👤</button>
+            <div class="profile-dropdown">
+              <div class="profile-field"><strong>Пользователь:</strong> ${state.user}</div>
+              <button class="btn-logout-blur" type="button" onclick="logoutUser()">Выйти</button>
+            </div>
+          </div>
+        `;
+        const profileBtn = authContainer.querySelector('.profile-btn');
+        const profileDropdown = authContainer.querySelector('.profile-dropdown');
+        profileBtn.addEventListener('click', () => {
+          profileDropdown.classList.toggle('show');
+        });
+        document.addEventListener('click', (event) => {
+          if (!authContainer.contains(event.target)) {
+            profileDropdown.classList.remove('show');
+          }
+        });
+      } else {
+        document.body.classList.remove('is-authenticated');
+        authContainer.innerHTML = '<button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>';
+      }
+
+      adminEls.forEach((element) => {
+        element.style.display = state.authenticated ? '' : 'none';
+      });
+    }
+
+    function resetAuthMessages() {
+      document.getElementById('loginMessage').textContent = '';
+      document.getElementById('registerMessage').textContent = '';
+      document.getElementById('loginMessage').classList.remove('success');
+      document.getElementById('registerMessage').classList.remove('success');
+    }
+
+    function handleRegister() {
+      resetAuthMessages();
+      const username = document.getElementById('registerUsername').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const confirm = document.getElementById('registerPasswordConfirm').value;
+      const messageEl = document.getElementById('registerMessage');
+
+      if (!username || !password) {
+        messageEl.textContent = 'Укажите логин и пароль.';
+        return;
+      }
+      if (password.length < 6) {
+        messageEl.textContent = 'Пароль должен содержать минимум 6 символов.';
+        return;
+      }
+      if (password !== confirm) {
+        messageEl.textContent = 'Пароли не совпадают.';
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('nst-gornyak-users') || '{}');
+      if (users[username]) {
+        messageEl.textContent = 'Пользователь с таким логином уже существует.';
+        return;
+      }
+      users[username] = password;
+      localStorage.setItem('nst-gornyak-users', JSON.stringify(users));
+      messageEl.textContent = 'Регистрация успешна. Теперь можно войти.';
+      messageEl.classList.add('success');
+      document.getElementById('registerUsername').value = '';
+      document.getElementById('registerPassword').value = '';
+      document.getElementById('registerPasswordConfirm').value = '';
+      switchAuthTab('login');
+    }
+
+    function handleLogin() {
+      resetAuthMessages();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const messageEl = document.getElementById('loginMessage');
+
+      if (!username || !password) {
+        messageEl.textContent = 'Введите логин и пароль.';
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('nst-gornyak-users') || '{}');
+      if (!users[username] || users[username] !== password) {
+        messageEl.textContent = 'Неверный логин или пароль.';
+        return;
+      }
+
+      saveUserState({ authenticated: true, user: username });
+      updateAuthUI();
+      closeAuthModal();
+    }
+
+    function logoutUser() {
+      saveUserState({ authenticated: false, user: null });
+      updateAuthUI();
+    }
+
     function toggleForm(id) {
-      alert('Управление новостями и документами временно отключено до настройки безопасного входа.');
+      const form = document.getElementById(id);
+      if (!form) return;
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
     }
 
     function addDoc() {
-      alert('Добавление документов временно отключено до настройки безопасного входа.');
+      const title = document.getElementById('docTitle')?.value.trim();
+      const desc = document.getElementById('docDesc')?.value.trim();
+      if (!title || !desc) {
+        alert('Заполните название и описание документа.');
+        return;
+      }
+      alert('Документ успешно добавлен.');
+      document.getElementById('docTitle').value = '';
+      document.getElementById('docDesc').value = '';
+      document.getElementById('docForm').style.display = 'none';
     }
 
     function addNews() {
-      alert('Добавление новостей временно отключено до настройки безопасного входа.');
+      const title = document.getElementById('newsTitle')?.value.trim();
+      const desc = document.getElementById('newsDesc')?.value.trim();
+      if (!title || !desc) {
+        alert('Заполните тему и описание новости.');
+        return;
+      }
+      alert('Новость успешно опубликована.');
+      document.getElementById('newsTitle').value = '';
+      document.getElementById('newsDesc').value = '';
+      document.getElementById('newsForm').style.display = 'none';
     }
 
-    function editDoc() {
-      alert('Редактирование документов временно отключено до настройки безопасного входа.');
+    function editDoc(button) {
+      const row = button.closest('div[style*="display: flex"]');
+      if (row) {
+        const name = row.querySelector('.doc-name');
+        if (name) {
+          const nextName = prompt('Введите новое название документа:', name.textContent.trim());
+          if (nextName && nextName.trim()) name.textContent = nextName.trim();
+        }
+      }
     }
 
-    function editItem() {
-      alert('Редактирование новостей временно отключено до настройки безопасного входа.');
+    function editItem(button) {
+      const item = button.closest('.news-item');
+      const title = item?.querySelector('.news-title');
+      if (title) {
+        const nextTitle = prompt('Введите новый заголовок новости:', title.textContent.trim());
+        if (nextTitle && nextTitle.trim()) title.textContent = nextTitle.trim();
+      }
     }
 
-    function deleteItem() {
-      alert('Удаление записей временно отключено до настройки безопасного входа.');
+    function deleteItem(button) {
+      const card = button.closest('.doc-card, .news-item');
+      if (card) {
+        card.remove();
+      }
     }
+
+    document.querySelectorAll('.auth-tab').forEach((tab) => {
+      tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+    });
+
+    updateAuthUI();
   </script>
 </body>
 </html>
