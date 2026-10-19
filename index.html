@@ -12,7 +12,7 @@
       --bg-color: #f4f6f4;
       --card-bg: rgba(255, 255, 255, 0.85);
       --text-main: #1c1c1e;
-      --text-secondary: #8e8e93;
+      --text-secondary: #545458;
     }
     html {
       scroll-behavior: smooth;
@@ -182,11 +182,27 @@
       border: 1px solid #e2e8e2;
       border-radius: 14px;
       padding: 14px;
+      margin-bottom: 15px;
     }
     .sub-card h4 {
-      margin: 0 0 10px;
-      font-size: 0.95rem;
+      margin: 0 0 6px;
+      font-size: 1rem;
       color: var(--primary);
+      font-weight: 700;
+    }
+    .bus-status-note {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(255, 149, 0, 0.12);
+      color: #9a4b00;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .bus-status-note.active-bus {
+      background: rgba(52, 199, 89, 0.12);
+      color: #156d2a;
     }
 
     .schedule-grid {
@@ -496,38 +512,40 @@
     <!-- Транспорт -->
     <div class="card" id="transport">
       <h2>🚌 Официальное расписание транспорта (Мострансавто)</h2>
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">
-        Маршрут № 474: м. Котельники — СНТ «Горняк» / Силикат. Ближайший рейс подсвечен.
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 15px;">
+        Маршруты № 474, № 26 и № К1. Ближайший рейс подсвечен.
       </p>
-      <div class="schedule-columns">
-        <div class="sub-card">
-          <h4>📍 Остановка СНТ «Горняк» ➔ м. Котельники</h4>
-          <p style="font-size: 0.8rem; font-weight: 600; margin: 6px 0;">Будни:</p>
-          <div class="schedule-grid" id="sched-g-weekdays">
-            <span class="time-badge">06:21</span><span class="time-badge">06:52</span><span class="time-badge">07:32</span>
-            <span class="time-badge">08:12</span><span class="time-badge">08:54</span><span class="time-badge">09:43</span>
-            <span class="time-badge">14:48</span><span class="time-badge">15:28</span><span class="time-badge">16:08</span>
-            <span class="time-badge">16:48</span><span class="time-badge">17:28</span><span class="time-badge">18:08</span>
-            <span class="time-badge">18:48</span>
+      <div class="sub-card">
+        <h4>🚌 Маршрут № 474: м. Котельники — СНТ «Горняк»</h4>
+        <div id="status-474" class="bus-status-note" aria-live="polite">Проверка статуса рейсов...</div>
+        <div class="schedule-columns">
+          <div>
+            <p style="font-size: 0.82rem; font-weight: 700; margin: 6px 0;">Остановка СНТ «Горняк» ➔ м. Котельники (Будни):</p>
+            <div class="schedule-grid" id="sched-474-g-weekdays">
+              <span class="time-badge">06:21</span><span class="time-badge">06:52</span><span class="time-badge">07:32</span>
+              <span class="time-badge">08:12</span><span class="time-badge">08:54</span><span class="time-badge">09:43</span>
+              <span class="time-badge">14:48</span><span class="time-badge">15:28</span><span class="time-badge">16:08</span>
+              <span class="time-badge">16:48</span><span class="time-badge">17:28</span><span class="time-badge">18:08</span>
+              <span class="time-badge">18:48</span>
+            </div>
+            <p style="font-size: 0.82rem; font-weight: 700; margin: 10px 0 6px;">Выходные:</p>
+            <div class="schedule-grid" id="sched-474-g-weekends">
+              <span class="time-badge">05:55</span><span class="time-badge">06:27</span><span class="time-badge">06:59</span>
+              <span class="time-badge">07:31</span><span class="time-badge">07:59</span><span class="time-badge">08:03</span>
+              <span class="time-badge">08:35</span><span class="time-badge">08:41</span><span class="time-badge">09:07</span>
+              <span class="time-badge">09:13</span><span class="time-badge">09:47</span><span class="time-badge">09:55</span>
+              <span class="time-badge">10:21</span><span class="time-badge">10:47</span><span class="time-badge">11:13</span>
+              <span class="time-badge">11:29</span><span class="time-badge">12:01</span><span class="time-badge">12:55</span>
+              <span class="time-badge">13:29</span><span class="time-badge">14:01</span><span class="time-badge">15:17</span>
+              <span class="time-badge">15:41</span><span class="time-badge">15:51</span><span class="time-badge">15:59</span>
+              <span class="time-badge">16:49</span><span class="time-badge">16:57</span><span class="time-badge">17:23</span>
+              <span class="time-badge">17:57</span><span class="time-badge">18:29</span><span class="time-badge">19:39</span>
+            </div>
           </div>
-          <p style="font-size: 0.8rem; font-weight: 600; margin: 12px 0 6px;">Выходные:</p>
-          <div class="schedule-grid" id="sched-g-weekends">
-            <span class="time-badge">05:55</span><span class="time-badge">06:27</span><span class="time-badge">06:59</span>
-            <span class="time-badge">07:31</span><span class="time-badge">07:59</span><span class="time-badge">08:03</span>
-            <span class="time-badge">08:35</span><span class="time-badge">08:41</span><span class="time-badge">09:07</span>
-            <span class="time-badge">09:13</span><span class="time-badge">09:47</span><span class="time-badge">09:55</span>
-            <span class="time-badge">10:21</span><span class="time-badge">10:47</span><span class="time-badge">11:13</span>
-            <span class="time-badge">11:29</span><span class="time-badge">12:01</span><span class="time-badge">12:55</span>
-            <span class="time-badge">13:29</span><span class="time-badge">14:01</span><span class="time-badge">15:17</span>
-            <span class="time-badge">15:41</span><span class="time-badge">15:51</span><span class="time-badge">15:59</span>
-            <span class="time-badge">16:49</span><span class="time-badge">16:57</span><span class="time-badge">17:23</span>
-            <span class="time-badge">17:57</span><span class="time-badge">18:29</span><span class="time-badge">19:39</span>
-          </div>
-        </div>
-        <div class="sub-card">
-          <h4>📍 Метро Котельники ➔ СНТ «Горняк» (* до СНТ)</h4>
-          <p style="font-size: 0.8rem; font-weight: 600; margin: 6px 0;">Будни:</p>
-          <div class="schedule-grid" id="sched-m-weekdays">
+          <div>
+            <p style="font-size: 0.82rem; font-weight: 700; margin: 6px 0;">м. Котельники ➔ СНТ «Горняк» (Будни):</p>
+            <div id="status-474-m" class="bus-status-note" aria-live="polite">Проверка статуса рейсов...</div>
+            <div class="schedule-grid" id="sched-474-m-weekdays">
             <span class="time-badge">06:16</span><span class="time-badge">06:27</span><span class="time-badge">06:37*</span><span class="time-badge">06:49</span><span class="time-badge">07:02</span>
             <span class="time-badge">07:12*</span><span class="time-badge">07:20</span><span class="time-badge">07:28</span><span class="time-badge">07:36</span><span class="time-badge">07:44</span>
             <span class="time-badge">07:52*</span><span class="time-badge">07:56</span><span class="time-badge">08:00</span><span class="time-badge">08:08*</span><span class="time-badge">08:16</span>
@@ -541,6 +559,22 @@
             <span class="time-badge">17:01</span><span class="time-badge">17:07*</span><span class="time-badge">17:15</span><span class="time-badge">17:23</span><span class="time-badge">17:31</span>
             <span class="time-badge">17:39</span><span class="time-badge">17:47*</span><span class="time-badge">17:55</span><span class="time-badge">18:03</span><span class="time-badge">18:11</span>
           </div>
+        </div>
+      </div>
+      <div class="sub-card">
+        <h4>🚌 Маршрут № 26: Автовокзал — СНТ «Горняк»</h4>
+        <div id="status-26" class="bus-status-note" aria-live="polite">Проверка статуса рейсов...</div>
+        <p style="font-size: 0.82rem; font-weight: 700; margin: 6px 0;">Ежедневные рейсы:</p>
+        <div class="schedule-grid" id="sched-26-daily">
+          <span class="time-badge">07:15</span><span class="time-badge">09:30</span><span class="time-badge">12:40</span><span class="time-badge">15:20</span><span class="time-badge">18:10</span>
+        </div>
+      </div>
+      <div class="sub-card">
+        <h4>🚌 Маршрут № К1: Станция — СНТ «Горняк»</h4>
+        <div id="status-k1" class="bus-status-note" aria-live="polite">Проверка статуса рейсов...</div>
+        <p style="font-size: 0.82rem; font-weight: 700; margin: 6px 0;">Ежедневные рейсы:</p>
+        <div class="schedule-grid" id="sched-k1-daily">
+          <span class="time-badge">06:50</span><span class="time-badge">08:20</span><span class="time-badge">11:00</span><span class="time-badge">14:15</span><span class="time-badge">17:30</span><span class="time-badge">20:00</span>
         </div>
       </div>
     </div>
@@ -673,59 +707,91 @@
       });
     });
 
-    function updateLiveBuses() {
+    function processBusRoute(containerId, statusNoteId, currentMinutes) {
+      const container = document.getElementById(containerId);
+      const statusNote = document.getElementById(statusNoteId);
+      if (!container || !statusNote) return;
+
+      const badges = [...container.querySelectorAll('.time-badge')];
+      badges.forEach(badge => {
+        badge.classList.remove('live');
+        badge.querySelector('.live-timer')?.remove();
+      });
+
+      let closestBadge = null;
+      let minDiff = Infinity;
+      let lastBadge = null;
+      let lastTime = -1;
+
+      badges.forEach(badge => {
+        const timeText = badge.textContent.replace('*', '').trim();
+        const [hours, minutes] = timeText.split(':').map(Number);
+        const departureMinutes = hours * 60 + minutes;
+        if (departureMinutes > lastTime) {
+          lastTime = departureMinutes;
+          lastBadge = badge;
+        }
+
+        const diff = departureMinutes - currentMinutes;
+        if (diff >= 0 && diff < minDiff) {
+          minDiff = diff;
+          closestBadge = badge;
+        }
+      });
+
+      statusNote.className = 'bus-status-note';
+      if (!closestBadge) {
+        const lastDeparture = lastBadge?.textContent.replace('*', '').trim();
+        statusNote.textContent = lastDeparture
+          ? `Все рейсы на сегодня прошли. Последний рейс: ${lastDeparture}`
+          : 'Расписание рейсов недоступно.';
+        return;
+      }
+
+      closestBadge.classList.add('live');
+      const timer = document.createElement('span');
+      timer.className = 'live-timer';
+      if (minDiff === 0) {
+        timer.textContent = 'на остановке';
+      } else if (minDiff < 60) {
+        timer.textContent = `через ${minDiff} мин`;
+      } else {
+        const hours = Math.floor(minDiff / 60);
+        const minutes = minDiff % 60;
+        timer.textContent = `через ${hours}ч ${minutes}м`;
+      }
+      closestBadge.appendChild(timer);
+
+      statusNote.className = 'bus-status-note active-bus';
+      statusNote.textContent = '🟢 Рейсы выполняются по расписанию';
+    }
+
+    function updateAllBuses() {
       const now = new Date();
       const dayOfWeek = now.getDay();
       const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const outboundScheduleId = isWeekend ? 'sched-474-g-weekends' : 'sched-474-g-weekdays';
 
       document.querySelectorAll('.time-badge').forEach(badge => {
         badge.classList.remove('live');
         badge.querySelector('.live-timer')?.remove();
       });
 
-      const activeContainers = [
-        document.getElementById(isWeekend ? 'sched-g-weekends' : 'sched-g-weekdays'),
-        document.getElementById('sched-m-weekdays')
-      ];
-
-      activeContainers.forEach(container => {
-        if (!container) return;
-        const badges = container.querySelectorAll('.time-badge');
-        let closestBadge = null;
-        let minDiff = Infinity;
-
-        badges.forEach(badge => {
-          const timeText = badge.textContent.replace('*', '').trim();
-          const [hours, minutes] = timeText.split(':').map(Number);
-          const departureMinutes = hours * 60 + minutes;
-          const diff = departureMinutes - currentMinutes;
-          if (diff >= 0 && diff < minDiff) {
-            minDiff = diff;
-            closestBadge = badge;
-          }
-        });
-
-        if (!closestBadge) return;
-
-        closestBadge.classList.add('live');
-        const timer = document.createElement('span');
-        timer.className = 'live-timer';
-        if (minDiff === 0) {
-          timer.textContent = 'на остановке';
-        } else if (minDiff < 60) {
-          timer.textContent = `через ${minDiff} мин`;
-        } else {
-          const hours = Math.floor(minDiff / 60);
-          const minutes = minDiff % 60;
-          timer.textContent = `через ${hours}ч ${minutes}м`;
-        }
-        closestBadge.appendChild(timer);
-      });
+      processBusRoute(outboundScheduleId, 'status-474', currentMinutes);
+      if (isWeekend) {
+        const weekdayStatus = document.getElementById('status-474-m');
+        weekdayStatus.className = 'bus-status-note';
+        weekdayStatus.textContent = 'Расписание действует по будням.';
+      } else {
+        processBusRoute('sched-474-m-weekdays', 'status-474-m', currentMinutes);
+      }
+      processBusRoute('sched-26-daily', 'status-26', currentMinutes);
+      processBusRoute('sched-k1-daily', 'status-k1', currentMinutes);
     }
 
-    updateLiveBuses();
-    window.setInterval(updateLiveBuses, 30000);
+    updateAllBuses();
+    window.setInterval(updateAllBuses, 30000);
   </script>
 
 </body>
