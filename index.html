@@ -675,40 +675,36 @@
 
     function updateLiveBuses() {
       const now = new Date();
+      const dayOfWeek = now.getDay();
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      const scheduleIds = ['sched-g-weekdays', 'sched-g-weekends', 'sched-m-weekdays'];
 
-      scheduleIds.forEach(scheduleId => {
-        const schedule = document.getElementById(scheduleId);
-        if (!schedule) return;
+      document.querySelectorAll('.time-badge').forEach(badge => {
+        badge.classList.remove('live');
+        badge.querySelector('.live-timer')?.remove();
+      });
 
-        const isWeekendSchedule = scheduleId.endsWith('weekends');
-        const serviceDays = isWeekendSchedule ? [0, 6] : [1, 2, 3, 4, 5];
-        const badges = [...schedule.querySelectorAll('.time-badge')];
-        badges.forEach(badge => {
-          badge.classList.remove('live');
-          badge.querySelector('.live-timer')?.remove();
-        });
+      const activeContainers = [
+        document.getElementById(isWeekend ? 'sched-g-weekends' : 'sched-g-weekdays'),
+        document.getElementById('sched-m-weekdays')
+      ];
 
+      activeContainers.forEach(container => {
+        if (!container) return;
+        const badges = container.querySelectorAll('.time-badge');
         let closestBadge = null;
         let minDiff = Infinity;
 
-        for (let dayOffset = 0; dayOffset < 7 && !closestBadge; dayOffset += 1) {
-          const serviceDate = new Date(now);
-          serviceDate.setDate(now.getDate() + dayOffset);
-          if (!serviceDays.includes(serviceDate.getDay())) continue;
-
-          badges.forEach(badge => {
-            const timeText = badge.textContent.replace('*', '').trim();
-            const [hours, minutes] = timeText.split(':').map(Number);
-            const departureMinutes = hours * 60 + minutes;
-            const diff = dayOffset * 24 * 60 + departureMinutes - currentMinutes;
-            if (diff >= 0 && diff < minDiff) {
-              minDiff = diff;
-              closestBadge = badge;
-            }
-          });
-        }
+        badges.forEach(badge => {
+          const timeText = badge.textContent.replace('*', '').trim();
+          const [hours, minutes] = timeText.split(':').map(Number);
+          const departureMinutes = hours * 60 + minutes;
+          const diff = departureMinutes - currentMinutes;
+          if (diff >= 0 && diff < minDiff) {
+            minDiff = diff;
+            closestBadge = badge;
+          }
+        });
 
         if (!closestBadge) return;
 
@@ -716,24 +712,20 @@
         const timer = document.createElement('span');
         timer.className = 'live-timer';
         if (minDiff === 0) {
-          timer.textContent = 'отправление сейчас';
+          timer.textContent = 'на остановке';
         } else if (minDiff < 60) {
           timer.textContent = `через ${minDiff} мин`;
-        } else if (minDiff < 24 * 60) {
+        } else {
           const hours = Math.floor(minDiff / 60);
           const minutes = minDiff % 60;
-          timer.textContent = `через ${hours} ч ${minutes} мин`;
-        } else {
-          const days = Math.floor(minDiff / (24 * 60));
-          const hours = Math.floor((minDiff % (24 * 60)) / 60);
-          timer.textContent = `через ${days} дн. ${hours} ч`;
+          timer.textContent = `через ${hours}ч ${minutes}м`;
         }
         closestBadge.appendChild(timer);
       });
     }
 
     updateLiveBuses();
-    window.setInterval(updateLiveBuses, 30_000);
+    window.setInterval(updateLiveBuses, 30000);
   </script>
 
 </body>
