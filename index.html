@@ -66,6 +66,18 @@
       font-size: 1.1rem;
       color: var(--primary);
     }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a {
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 8px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .nav-links a:hover { background: #e2e8f0; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .bell-icon {
       position: relative;
@@ -116,7 +128,7 @@
       border-bottom: 1px solid #ffeeba;
       margin-top: 65px;
     }
-    .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+    .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
     .card {
       background: var(--card-bg);
       border-radius: 16px;
@@ -142,10 +154,36 @@
       padding: 12px;
       margin-bottom: 10px;
     }
+    .document-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
     .item-title { font-weight: bold; font-size: 1rem; }
     .item-date { font-size: 0.75rem; color: #777; margin: 5px 0; }
     .item-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .item-actions a { color: var(--primary); font-weight: 600; }
+    .item-actions a, .document-link { color: var(--primary); font-weight: 600; }
+    .document-link {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .document-link:hover { background: var(--primary-hover); }
+    .info-panel {
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .muted-note { color: var(--text-secondary); font-size: 0.85rem; }
+    .footer { padding: 20px; color: #666; text-align: center; font-size: 0.85rem; }
+    section[id] { scroll-margin-top: 80px; }
     .modal {
       display: none;
       position: fixed;
@@ -181,11 +219,20 @@
       background: #fff;
       cursor: pointer;
     }
-    @media (max-width: 480px) {
-      .navbar { padding: 10px 12px; }
-      .brand { font-size: 0.95rem; }
+    @media (max-width: 900px) {
+      .navbar { align-items: flex-start; padding: 10px 12px; }
+      .brand { padding-top: 7px; font-size: 0.95rem; white-space: nowrap; }
       .nav-right { gap: 6px; }
-      .btn-login { padding: 8px 10px; font-size: 0.8rem; }
+      .nav-links { max-width: 62vw; overflow-x: auto; }
+      .nav-links a { padding: 7px 6px; font-size: 0.78rem; }
+      .btn-login { padding: 8px 10px; font-size: 0.8rem; white-space: nowrap; }
+    }
+    @media (max-width: 560px) {
+      .navbar { flex-wrap: wrap; }
+      .nav-right { width: 100%; justify-content: space-between; }
+      .nav-links { max-width: calc(100% - 95px); }
+      .warning-banner { margin-top: 100px; }
+      .document-row { align-items: flex-start; }
     }
   </style>
 </head>
@@ -193,6 +240,13 @@
   <nav class="navbar">
     <div class="brand"><span>🌿</span> НСТ «Горняк»</div>
     <div class="nav-right">
+      <div class="nav-links" aria-label="Разделы сайта">
+        <a href="#transport">🚌 Транспорт</a>
+        <a href="#tariffs">⚡ Тарифы</a>
+        <a href="#news">📰 Новости</a>
+        <a href="#documents">📁 Документы</a>
+        <a href="#contacts">📞 Контакты</a>
+      </div>
       <button class="bell-icon" type="button" onclick="showNotifications()" title="Уведомления" aria-label="Уведомления">
         🔔<span class="badge" id="notifBadge">1</span>
       </button>
@@ -200,12 +254,38 @@
     </div>
   </nav>
 
+  <div class="falling-leaves" aria-hidden="true">
+    <div class="leaf" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">🍃</div>
+    <div class="leaf" style="left: 35%; animation-duration: 16s; animation-delay: 2s;">🍂</div>
+    <div class="leaf" style="left: 65%; animation-duration: 11s; animation-delay: 1s;">🍃</div>
+    <div class="leaf" style="left: 85%; animation-duration: 19s; animation-delay: 4s;">🍁</div>
+  </div>
+
   <div class="warning-banner" id="statusBanner" role="status" aria-live="polite">
     Подключаем облачную базу данных Supabase для сохранения новостей...
   </div>
 
   <main class="container">
-    <section class="card" aria-labelledby="newsHeading">
+    <section class="card" id="transport" aria-labelledby="transportHeading">
+      <h2 id="transportHeading">🚌 Расписание транспорта (Мострансавто)</h2>
+      <p class="muted-note">Маршруты № 474, № 1к и № 26 (остановки «Карьер» и «Силикат»).</p>
+      <div class="info-panel">
+        <strong>Маршрут № 474: м. Котельники — СНТ «Горняк» / Силикат</strong><br>
+        Первый рейс указан в 06:21. Уточняйте актуальное расписание у перевозчика перед поездкой.
+      </div>
+    </section>
+
+    <section class="card" id="tariffs" aria-labelledby="tariffsHeading">
+      <h2 id="tariffsHeading">⚡ Актуальные тарифы</h2>
+      <p style="font-size: 0.9rem; line-height: 1.6;">
+        <strong>АО «Мосэнергосбыт» • Электроэнергия:</strong><br>
+        • Т1 (день, 07:00–23:00): 10 руб. 14 коп. / кВт·ч<br>
+        • Т2 (ночь, 23:00–07:00): 4 руб. 36 коп. / кВт·ч
+      </p>
+      <p class="muted-note">Проверьте действующие тарифы на официальном сайте поставщика электроэнергии перед оплатой.</p>
+    </section>
+
+    <section class="card" id="news" aria-labelledby="newsHeading">
       <button class="btn-add" type="button" onclick="openModal('news')">+ Добавить новость</button>
       <h2 id="newsHeading">📰 Новости и объявления</h2>
       <p style="color: var(--text-secondary); font-size: 0.9rem;">Важная информация для жителей</p>
@@ -215,7 +295,7 @@
       <div class="clear"></div>
     </section>
 
-    <section class="card" aria-labelledby="docsHeading">
+    <section class="card" id="documents" aria-labelledby="docsHeading">
       <button class="btn-add" type="button" onclick="openModal('doc')">+ Добавить документ</button>
       <h2 id="docsHeading">📁 Документы</h2>
       <p style="color: var(--text-secondary); font-size: 0.9rem;">Протоколы, сметы и другие материалы</p>
@@ -224,7 +304,21 @@
       </div>
       <div class="clear"></div>
     </section>
+
+    <section class="card" id="contacts" aria-labelledby="contactsHeading">
+      <h2 id="contactsHeading">📞 Контакты правления</h2>
+      <p style="font-size: 0.9rem; line-height: 1.6;">
+        <strong>Председатель правления:</strong> Макарова Ольга Михайловна —
+        <a href="tel:+79167107418">8-916-710-74-18</a><br>
+        <strong>Главный бухгалтер:</strong> Сафонова Ирина Викторовна —
+        <a href="tel:+79162220638">8-916-222-06-38</a><br>
+        <strong>Электрик:</strong> Тимошилов Антон Андреевич —
+        <a href="tel:+79250004711">8-925-000-47-11</a>
+      </p>
+    </section>
   </main>
+
+  <footer class="footer">Сайт создан для удобства всех жителей НСТ «Горняк»</footer>
 
   <div class="modal" id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <form class="modal-content" onsubmit="saveItem(event)">
@@ -335,11 +429,13 @@
           ? parsedDate.toLocaleDateString('ru-RU')
           : 'Дата не указана';
         return `
-          <article class="item-card">
-            <div class="item-title">📄 ${escapeHtml(item.title)}</div>
-            <div class="item-date">${date}</div>
-            <div>${escapeHtml(item.description ?? item.text)}</div>
-            ${url ? `<div class="item-actions"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Открыть документ ↗</a></div>` : ''}
+          <article class="item-card document-row">
+            <div>
+              <div class="item-title">📄 ${escapeHtml(item.title)}</div>
+              <div class="item-date">${date}</div>
+              <div>${escapeHtml(item.description ?? item.text)}</div>
+            </div>
+            ${url ? `<a class="document-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Открыть документ ↗</a>` : ''}
           </article>
         `;
       }).join('');
