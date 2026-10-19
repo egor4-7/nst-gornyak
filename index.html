@@ -10,7 +10,7 @@
       --primary: #2d6a4f;
       --primary-hover: #1b4332;
       --bg-color: #f4f6f4;
-      --card-bg: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.85);
       --text-main: #1c1c1e;
       --text-secondary: #8e8e93;
     }
@@ -135,38 +135,126 @@
 
     /* Контейнер */
     .container {
-      max-width: 850px;
+      max-width: 900px;
       margin: 90px auto 30px;
       padding: 0 15px;
     }
     .card {
       background: var(--card-bg);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
     h2 {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: var(--primary);
       margin-top: 0;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(45, 106, 79, 0.12);
+      color: var(--primary);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .schedule-columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    @media (min-width: 650px) {
+      .schedule-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .sub-card {
+      background: rgba(252, 253, 252, 0.8);
+      border: 1px solid #e2e8e2;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .sub-card h4 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      color: var(--primary);
     }
 
     .schedule-grid {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-top: 10px;
     }
     .time-badge {
-      background: #e8f5e9;
+      background: #ffffff;
       color: #1b4332;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 0.82rem;
       font-weight: 600;
       border: 1px solid #c8e6c9;
+      position: relative;
+    }
+    .time-badge.live {
+      background: #e8f5e9;
+      border-color: var(--primary);
+      animation: pulse-live 1.8s infinite;
+    }
+    @keyframes pulse-live {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 106, 79, 0.5); }
+      70% { transform: scale(1.04); box-shadow: 0 0 0 8px rgba(45, 106, 79, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 106, 79, 0); }
+    }
+    .live-timer {
+      display: block;
+      margin-top: 2px;
+      color: var(--primary);
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .contact-table th, .contact-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      font-size: 0.88rem;
+    }
+    .contact-table th {
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .contact-table td a, .contact-link {
+      color: #0051c6;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .contact-table td a:hover, .contact-link:hover {
+      text-decoration: underline;
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .item-card {
@@ -331,7 +419,13 @@
       text-align: center;
       color: var(--text-secondary);
       font-size: 0.85rem;
-      padding: 20px;
+      padding: 25px;
+    }
+    @media (max-width: 520px) {
+      .contact-table th, .contact-table td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -348,6 +442,7 @@
     <nav class="navbar">
       <div class="brand">🌿 Горняк</div>
       <div class="nav-links" id="navLinks">
+        <a href="#welcome">🏠 Главная</a>
         <a href="#transport">🚌 Транспорт</a>
         <a href="#tariffs">⚡ Тарифы</a>
         <a href="#news">📰 Новости</a>
@@ -386,20 +481,67 @@
 
   <div class="container">
 
+    <div class="card" id="welcome">
+      <div class="hero-badge">🌿 САДОВОЕ ТОВАРИЩЕСТВО • С 1982</div>
+      <h2>Всё важное для жителей НСТ «Горняк»</h2>
+      <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+        Актуальные тарифы, протоколы, сметы, расписание транспорта и обратная связь — в одном месте.
+      </p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="#documents" class="btn-action">Перейти к документам →</a>
+        <a href="#tariffs" class="btn-outline">Посмотреть тарифы</a>
+      </div>
+    </div>
+
     <!-- Транспорт -->
     <div class="card" id="transport">
-      <h2>🚌 Расписание транспорта (Автобус № 474)</h2>
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">
-        Остановка «НСТ Горняк» ➔ метро «Котельники»
+      <h2>🚌 Официальное расписание транспорта (Мострансавто)</h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">
+        Маршрут № 474: м. Котельники — СНТ «Горняк» / Силикат. Ближайший рейс подсвечен.
       </p>
-      <div class="schedule-grid">
-        <span class="time-badge">06:21</span>
-        <span class="time-badge">06:52</span>
-        <span class="time-badge">07:32</span>
-        <span class="time-badge">08:12</span>
-        <span class="time-badge">08:54</span>
-        <span class="time-badge">09:40</span>
-        <span class="time-badge">18:20</span>
+      <div class="schedule-columns">
+        <div class="sub-card">
+          <h4>📍 Остановка СНТ «Горняк» ➔ м. Котельники</h4>
+          <p style="font-size: 0.8rem; font-weight: 600; margin: 6px 0;">Будни:</p>
+          <div class="schedule-grid" id="sched-g-weekdays">
+            <span class="time-badge">06:21</span><span class="time-badge">06:52</span><span class="time-badge">07:32</span>
+            <span class="time-badge">08:12</span><span class="time-badge">08:54</span><span class="time-badge">09:43</span>
+            <span class="time-badge">14:48</span><span class="time-badge">15:28</span><span class="time-badge">16:08</span>
+            <span class="time-badge">16:48</span><span class="time-badge">17:28</span><span class="time-badge">18:08</span>
+            <span class="time-badge">18:48</span>
+          </div>
+          <p style="font-size: 0.8rem; font-weight: 600; margin: 12px 0 6px;">Выходные:</p>
+          <div class="schedule-grid" id="sched-g-weekends">
+            <span class="time-badge">05:55</span><span class="time-badge">06:27</span><span class="time-badge">06:59</span>
+            <span class="time-badge">07:31</span><span class="time-badge">07:59</span><span class="time-badge">08:03</span>
+            <span class="time-badge">08:35</span><span class="time-badge">08:41</span><span class="time-badge">09:07</span>
+            <span class="time-badge">09:13</span><span class="time-badge">09:47</span><span class="time-badge">09:55</span>
+            <span class="time-badge">10:21</span><span class="time-badge">10:47</span><span class="time-badge">11:13</span>
+            <span class="time-badge">11:29</span><span class="time-badge">12:01</span><span class="time-badge">12:55</span>
+            <span class="time-badge">13:29</span><span class="time-badge">14:01</span><span class="time-badge">15:17</span>
+            <span class="time-badge">15:41</span><span class="time-badge">15:51</span><span class="time-badge">15:59</span>
+            <span class="time-badge">16:49</span><span class="time-badge">16:57</span><span class="time-badge">17:23</span>
+            <span class="time-badge">17:57</span><span class="time-badge">18:29</span><span class="time-badge">19:39</span>
+          </div>
+        </div>
+        <div class="sub-card">
+          <h4>📍 Метро Котельники ➔ СНТ «Горняк» (* до СНТ)</h4>
+          <p style="font-size: 0.8rem; font-weight: 600; margin: 6px 0;">Будни:</p>
+          <div class="schedule-grid" id="sched-m-weekdays">
+            <span class="time-badge">06:16</span><span class="time-badge">06:27</span><span class="time-badge">06:37*</span><span class="time-badge">06:49</span><span class="time-badge">07:02</span>
+            <span class="time-badge">07:12*</span><span class="time-badge">07:20</span><span class="time-badge">07:28</span><span class="time-badge">07:36</span><span class="time-badge">07:44</span>
+            <span class="time-badge">07:52*</span><span class="time-badge">07:56</span><span class="time-badge">08:00</span><span class="time-badge">08:08*</span><span class="time-badge">08:16</span>
+            <span class="time-badge">08:24</span><span class="time-badge">08:32*</span><span class="time-badge">08:40</span><span class="time-badge">08:48</span><span class="time-badge">09:04</span>
+            <span class="time-badge">09:13*</span><span class="time-badge">09:29</span><span class="time-badge">09:45</span><span class="time-badge">10:02*</span><span class="time-badge">10:19</span>
+            <span class="time-badge">10:38</span><span class="time-badge">10:57</span><span class="time-badge">11:16</span><span class="time-badge">11:35</span><span class="time-badge">11:54</span>
+            <span class="time-badge">12:14</span><span class="time-badge">12:33</span><span class="time-badge">12:52</span><span class="time-badge">13:11</span><span class="time-badge">13:30</span>
+            <span class="time-badge">13:49</span><span class="time-badge">14:09</span><span class="time-badge">14:28</span><span class="time-badge">14:48</span><span class="time-badge">14:52*</span>
+            <span class="time-badge">15:07*</span><span class="time-badge">15:21</span><span class="time-badge">15:34</span><span class="time-badge">15:47</span><span class="time-badge">15:54</span>
+            <span class="time-badge">16:01</span><span class="time-badge">16:14</span><span class="time-badge">16:27*</span><span class="time-badge">16:34</span><span class="time-badge">16:41</span>
+            <span class="time-badge">17:01</span><span class="time-badge">17:07*</span><span class="time-badge">17:15</span><span class="time-badge">17:23</span><span class="time-badge">17:31</span>
+            <span class="time-badge">17:39</span><span class="time-badge">17:47*</span><span class="time-badge">17:55</span><span class="time-badge">18:03</span><span class="time-badge">18:11</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -412,37 +554,56 @@
     <!-- Новости -->
     <div class="card" id="news">
       <h2>📰 Новости и объявления</h2>
-      <div class="item-card">
+      <div class="sub-card" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <b>Подготовка к летнему сезону</b><br>
-          <span style="font-size: 0.8rem; color: #666;">Плановая проверка электросетей и водопровода.</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary);">Плановая проверка электросетей и водопровода.</span>
         </div>
-        <button class="btn-action" onclick="alert('Открыть')">Читать</button>
+        <button class="btn-action" onclick="alert('Открыть новость')">Читать</button>
       </div>
     </div>
 
     <!-- Документы -->
     <div class="card" id="documents">
       <h2>📁 Документы</h2>
-      <div class="item-card">
+      <div class="sub-card" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <b>Смета доходов и расходов</b><br>
-          <span style="font-size: 0.8rem; color: #666;">PDF • Утвержденный финансовый документ</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary);">PDF • Утвержденный финансовый документ</span>
         </div>
-        <button class="btn-action" onclick="alert('Скачать')">Скачать</button>
+        <button class="btn-action" onclick="alert('Скачать смету')">Скачать</button>
       </div>
     </div>
 
     <!-- Контакты -->
     <div class="card" id="contacts">
-      <h2>📞 Контакты правления</h2>
-      <p style="font-size: 0.9rem; margin: 0;">Часы приема: Сб 10:00 – 14:00 в здании Правления.</p>
+      <h2>📞 Контакты правления и экстренные службы</h2>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 10px;">
+        Адрес правления: Московская область, г. Котельники, территория НСТ «Горняк», здание Правления. Часы приема: Сб 10:00 – 14:00.
+      </p>
+      <table class="contact-table">
+        <thead>
+          <tr><th>ФИО / Должность</th><th>Телефон</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Торицкая Нина Александровна (Дворник 🌿)</td><td><a href="tel:89096570631">8-909-657-06-31</a></td></tr>
+          <tr><td>Асланов Телман Магомед Оглы (Член правления)</td><td><a href="tel:89296645806">8-929-664-58-06</a></td></tr>
+          <tr><td>Зеневкина Александра Владимировна (Член правления)</td><td><a href="tel:89774882663">8-977-488-26-63</a></td></tr>
+          <tr><td>Князева Ирина Вениаминовна (Член правления)</td><td><a href="tel:89250082122">8-925-008-21-22</a></td></tr>
+          <tr><td>Личманова Евгения Александровна (Член правления)</td><td><a href="tel:89175323912">8-917-532-39-12</a></td></tr>
+          <tr><td>Мичкасов Валентин Васильевич (Член правления)</td><td><a href="tel:89031567525">8-903-156-75-25</a></td></tr>
+          <tr><td>Черкесс Игорь Викторович (Член правления)</td><td><a href="tel:89263615061">8-926-361-50-61</a></td></tr>
+        </tbody>
+      </table>
+      <h3 style="font-size: 1rem; color: var(--primary); margin-top: 20px; margin-bottom: 8px;">👮‍♂️ Экстренные службы и участковый</h3>
+      <p style="font-size: 0.88rem; margin: 4px 0;"><b>Участковый по НСТ «Горняк»:</b> Сырчин Кирилл Владимирович<br>Телефон: <a class="contact-link" href="tel:89851311484">8-985-131-14-84</a></p>
+      <p style="font-size: 0.88rem; margin: 8px 0 0;"><b>Полиция г. Котельники (дежурная часть):</b><br>Телефон: <a class="contact-link" href="tel:89267775784">8-926-777-57-84</a></p>
     </div>
 
   </div>
 
   <div class="footer">
-    🌿 НСТ «Горняк» — Официальный портал
+    🌿 НСТ «Горняк» — Официальный портал • Создан для удобства всех жителей
   </div>
 
   <script>
@@ -511,6 +672,68 @@
         link.setAttribute('aria-current', 'location');
       });
     });
+
+    function updateLiveBuses() {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const scheduleIds = ['sched-g-weekdays', 'sched-g-weekends', 'sched-m-weekdays'];
+
+      scheduleIds.forEach(scheduleId => {
+        const schedule = document.getElementById(scheduleId);
+        if (!schedule) return;
+
+        const isWeekendSchedule = scheduleId.endsWith('weekends');
+        const serviceDays = isWeekendSchedule ? [0, 6] : [1, 2, 3, 4, 5];
+        const badges = [...schedule.querySelectorAll('.time-badge')];
+        badges.forEach(badge => {
+          badge.classList.remove('live');
+          badge.querySelector('.live-timer')?.remove();
+        });
+
+        let closestBadge = null;
+        let minDiff = Infinity;
+
+        for (let dayOffset = 0; dayOffset < 7 && !closestBadge; dayOffset += 1) {
+          const serviceDate = new Date(now);
+          serviceDate.setDate(now.getDate() + dayOffset);
+          if (!serviceDays.includes(serviceDate.getDay())) continue;
+
+          badges.forEach(badge => {
+            const timeText = badge.textContent.replace('*', '').trim();
+            const [hours, minutes] = timeText.split(':').map(Number);
+            const departureMinutes = hours * 60 + minutes;
+            const diff = dayOffset * 24 * 60 + departureMinutes - currentMinutes;
+            if (diff >= 0 && diff < minDiff) {
+              minDiff = diff;
+              closestBadge = badge;
+            }
+          });
+        }
+
+        if (!closestBadge) return;
+
+        closestBadge.classList.add('live');
+        const timer = document.createElement('span');
+        timer.className = 'live-timer';
+        if (minDiff === 0) {
+          timer.textContent = 'отправление сейчас';
+        } else if (minDiff < 60) {
+          timer.textContent = `через ${minDiff} мин`;
+        } else if (minDiff < 24 * 60) {
+          const hours = Math.floor(minDiff / 60);
+          const minutes = minDiff % 60;
+          timer.textContent = `через ${hours} ч ${minutes} мин`;
+        } else {
+          const days = Math.floor(minDiff / (24 * 60));
+          const hours = Math.floor((minDiff % (24 * 60)) / 60);
+          timer.textContent = `через ${days} дн. ${hours} ч`;
+        }
+        closestBadge.appendChild(timer);
+      });
+    }
+
+    updateLiveBuses();
+    window.setInterval(updateLiveBuses, 30_000);
   </script>
 
 </body>
