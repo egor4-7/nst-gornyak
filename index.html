@@ -7,6 +7,26 @@
   <meta name="description" content="Официальный информационный портал садоводческого товарищества НСТ «Горняк». Протоколы, сметы, тарифы, контакты правления и расписание транспорта.">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    /* Падающие листья */
+    .falling-leaves {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
+    }
+    .leaf {
+      position: absolute;
+      top: -20px;
+      font-size: 1.2rem;
+      opacity: 0.6;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); }
+      100% { transform: translateY(105vh) rotate(360deg); }
+    }
+
     :root {
       --primary: #2d6a4f;
       --primary-hover: #1b4332;
