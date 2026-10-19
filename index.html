@@ -4,29 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>НСТ «Горняк» — Официальный портал</title>
-  <meta name="description" content="Официальный информационный портал садоводческого товарищества НСТ «Горняк». Протоколы, сметы, тарифы, контакты правления и расписание транспорта.">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Падающие листья */
-    .falling-leaves {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 999;
-    }
-    .leaf {
-      position: absolute;
-      top: -20px;
-      font-size: 1.2rem;
-      opacity: 0.6;
-      animation: fall linear infinite;
-    }
-    @keyframes fall {
-      0% { transform: translateY(-20px) rotate(0deg); }
-      100% { transform: translateY(105vh) rotate(360deg); }
-    }
-
     :root {
       --primary: #2d6a4f;
       --primary-hover: #1b4332;
@@ -35,25 +14,25 @@
       --text-main: #2b2b2b;
       --text-secondary: #555555;
     }
-    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
       margin: 0;
       padding: 0;
-      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    /* Плавающий закругленный бар-остров с фоном 40% (сквозная прозрачность) */
     .navbar-container {
       position: fixed;
       top: 15px;
-      left: 0;
-      right: 0;
+      left: 0; right: 0;
       display: flex;
       justify-content: center;
-      padding: 0 12px;
       z-index: 1000;
       pointer-events: none;
+      padding: 0 12px;
     }
     .navbar {
       pointer-events: auto;
@@ -66,7 +45,7 @@
       gap: 8px;
       border-radius: 35px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       max-width: 100%;
       overflow-x: auto;
     }
@@ -98,88 +77,59 @@
     }
     .nav-links a.active, .nav-links a:hover {
       background: rgba(200, 230, 201, 0.7);
-      color: var(--primary-hover);
+      color: #1b4332;
       font-weight: 600;
     }
-    .nav-links a:active { transform: scale(0.95); }
-    .nav-actions { display: flex; align-items: center; gap: 6px; }
-    .bell-icon {
-      position: relative;
-      cursor: pointer;
-      font-size: 0.95rem;
-      width: 34px;
-      height: 34px;
-      padding: 0;
-      background: #ffffff;
-      border: 1px solid #c2e7d0;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: transform 0.15s ease, background 0.15s ease;
+    .nav-links a:active {
+      transform: scale(0.95);
     }
-    .bell-icon:hover { background: #e8f5e9; }
-    .bell-icon:active { transform: scale(0.92); }
-    .badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: #e76f51;
-      color: white;
-      font-size: 0.65rem;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    .btn-login, .btn-add {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .btn-login:hover, .btn-add:hover { background: var(--primary-hover); }
+
+    /* Круглая кнопка профиля / входа справа */
     .btn-profile {
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.5);
       border: 1px solid rgba(194, 231, 208, 0.8);
       color: var(--primary);
-      width: 34px;
-      height: 34px;
-      padding: 0;
+      width: 34px; height: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      cursor: pointer;
       font-size: 0.95rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       transition: transform 0.15s ease, background 0.15s ease;
+      flex-shrink: 0;
     }
-    .btn-profile:hover { background: rgba(232, 245, 233, 0.8); }
     .btn-profile:active {
       transform: scale(0.92);
       background: rgba(232, 245, 233, 0.8);
     }
-    .warning-banner {
-      background-color: #fff3cd;
-      color: #856404;
-      text-align: center;
-      padding: 12px 15px;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #ffeeba;
-      margin-top: 82px;
+
+    /* Анимация падающих листьев */
+    .falling-leaves {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
     }
-    .container { max-width: 900px; margin: 20px auto 30px; padding: 0 15px; }
-    @media (min-width: 1024px) {
-      .container { max-width: 1000px; }
+    .leaf {
+      position: absolute;
+      top: -20px;
+      font-size: 1.1rem;
+      opacity: 0.4;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); }
+      100% { transform: translateY(105vh) rotate(360deg); }
+    }
+
+    /* Контейнер */
+    .container {
+      max-width: 850px;
+      margin: 90px auto 30px;
+      padding: 0 15px;
     }
     .card {
       background: var(--card-bg);
@@ -193,434 +143,140 @@
       color: var(--primary);
       margin-top: 0;
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-    .btn-add { float: right; border-radius: 10px; font-size: 0.85rem; }
-    .clear { clear: both; }
-    .item-list { margin-top: 15px; }
+
+    .schedule-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .time-badge {
+      background: #e8f5e9;
+      color: #1b4332;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid #c8e6c9;
+    }
+
     .item-card {
       background: #fcfdfc;
       border: 1px solid #e2e8e2;
       border-radius: 10px;
-      padding: 12px;
+      padding: 14px;
       margin-bottom: 10px;
-    }
-    .document-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
     }
-    .item-title { font-weight: bold; font-size: 1rem; }
-    .item-date { font-size: 0.75rem; color: #777; margin: 5px 0; }
-    .item-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .item-actions a, .document-link { color: var(--primary); font-weight: 600; }
-    .document-link {
-      display: inline-block;
-      padding: 7px 12px;
-      border-radius: 8px;
+    .btn-action {
       background: var(--primary);
       color: white;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .document-link:hover { background: var(--primary-hover); }
-    .info-panel {
-      padding: 12px;
-      border-radius: 8px;
-      background: #f8fafc;
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-    .muted-note { color: var(--text-secondary); font-size: 0.85rem; }
-    .footer { padding: 20px; color: #666; text-align: center; font-size: 0.85rem; }
-    section[id] { scroll-margin-top: 95px; }
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      background: rgba(0, 0, 0, 0.5);
-    }
-    .modal-content {
-      width: 100%;
-      max-width: 420px;
-      padding: 20px;
-      border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-    .modal-content label { display: block; margin-top: 12px; font-size: 0.9rem; font-weight: 600; }
-    .modal-content input, .modal-content textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font: inherit;
-    }
-    .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
-    .btn-cancel {
-      padding: 8px 14px;
-      border: 1px solid #ccc;
+      border: none;
+      padding: 7px 14px;
       border-radius: 10px;
-      background: #fff;
       cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: transform 0.15s ease;
     }
-    @media (max-width: 900px) {
-      .navbar { gap: 6px; padding: 8px 10px; }
-      .nav-links { gap: 4px; }
-      .nav-links a { padding: 6px 9px; font-size: 0.78rem; }
+    .btn-action:active {
+      transform: scale(0.95);
     }
-    @media (max-width: 560px) {
-      .navbar { gap: 5px; padding: 7px 9px; }
-      .brand { font-size: 0.88rem; }
-      .nav-links { gap: 3px; }
-      .nav-links a { padding: 6px 8px; font-size: 0.75rem; }
-      .document-row { align-items: flex-start; }
+
+    .footer {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
+
+  <!-- Падающие листочки -->
+  <div class="falling-leaves">
+    <div class="leaf" style="left: 15%; animation-duration: 14s; animation-delay: 0s;">🍃</div>
+    <div class="leaf" style="left: 75%; animation-duration: 18s; animation-delay: 2s;">🍂</div>
+  </div>
+
+  <!-- Плавающий остров-бар с прозрачностью 40% -->
   <div class="navbar-container">
-    <nav class="navbar" aria-label="Главная навигация">
-      <div class="brand"><span>🌿</span> Горняк</div>
-      <div class="nav-links" aria-label="Разделы сайта">
+    <nav class="navbar">
+      <div class="brand">🌿 Горняк</div>
+      <div class="nav-links">
         <a href="#transport" class="active">🚌 Транспорт</a>
         <a href="#tariffs">⚡ Тарифы</a>
         <a href="#news">📰 Новости</a>
         <a href="#documents">📁 Документы</a>
         <a href="#contacts">📞 Контакты</a>
       </div>
-      <div class="nav-actions">
-        <button class="bell-icon" type="button" onclick="showNotifications()" title="Уведомления" aria-label="Уведомления">
-          🔔<span class="badge" id="notifBadge">1</span>
-        </button>
-        <button class="btn-profile" type="button" onclick="showLoginNotice()" title="Вход для правления" aria-label="Вход для правления">👤</button>
-      </div>
+      <button class="btn-profile" onclick="alert('Вход в панель правления')" title="Вход">👤</button>
     </nav>
   </div>
 
-  <div class="falling-leaves" aria-hidden="true">
-    <div class="leaf" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">🍃</div>
-    <div class="leaf" style="left: 35%; animation-duration: 16s; animation-delay: 2s;">🍂</div>
-    <div class="leaf" style="left: 65%; animation-duration: 11s; animation-delay: 1s;">🍃</div>
-    <div class="leaf" style="left: 85%; animation-duration: 19s; animation-delay: 4s;">🍁</div>
-  </div>
+  <div class="container">
 
-  <div class="warning-banner" id="statusBanner" role="status" aria-live="polite">
-    Подключаем облачную базу данных Supabase для сохранения новостей...
-  </div>
-
-  <main class="container">
-    <section class="card" id="transport" aria-labelledby="transportHeading">
-      <h2 id="transportHeading">🚌 Расписание транспорта (Мострансавто)</h2>
-      <p class="muted-note">Маршруты № 474, № 1к и № 26 (остановки «Карьер» и «Силикат»).</p>
-      <div class="info-panel">
-        <strong>Маршрут № 474: м. Котельники — СНТ «Горняк» / Силикат</strong><br>
-        Первый рейс указан в 06:21. Уточняйте актуальное расписание у перевозчика перед поездкой.
-      </div>
-    </section>
-
-    <section class="card" id="tariffs" aria-labelledby="tariffsHeading">
-      <h2 id="tariffsHeading">⚡ Актуальные тарифы</h2>
-      <p style="font-size: 0.9rem; line-height: 1.6;">
-        <strong>АО «Мосэнергосбыт» • Электроэнергия:</strong><br>
-        • Т1 (день, 07:00–23:00): 10 руб. 14 коп. / кВт·ч<br>
-        • Т2 (ночь, 23:00–07:00): 4 руб. 36 коп. / кВт·ч
+    <!-- Транспорт -->
+    <div class="card" id="transport">
+      <h2>🚌 Расписание транспорта (Автобус № 474)</h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">
+        Остановка «НСТ Горняк» ➔ метро «Котельники»
       </p>
-      <p class="muted-note">Проверьте действующие тарифы на официальном сайте поставщика электроэнергии перед оплатой.</p>
-    </section>
-
-    <section class="card" id="news" aria-labelledby="newsHeading">
-      <button class="btn-add" type="button" onclick="openModal('news')">+ Добавить новость</button>
-      <h2 id="newsHeading">📰 Новости и объявления</h2>
-      <p style="color: var(--text-secondary); font-size: 0.9rem;">Важная информация для жителей</p>
-      <div class="item-list" id="newsContainer" aria-live="polite">
-        <div style="text-align: center; color: #888; padding: 20px;">Загрузка новостей...</div>
+      <div class="schedule-grid">
+        <span class="time-badge">06:21</span>
+        <span class="time-badge">06:52</span>
+        <span class="time-badge">07:32</span>
+        <span class="time-badge">08:12</span>
+        <span class="time-badge">08:54</span>
+        <span class="time-badge">09:40</span>
+        <span class="time-badge">18:20</span>
       </div>
-      <div class="clear"></div>
-    </section>
+    </div>
 
-    <section class="card" id="documents" aria-labelledby="docsHeading">
-      <button class="btn-add" type="button" onclick="openModal('doc')">+ Добавить документ</button>
-      <h2 id="docsHeading">📁 Документы</h2>
-      <p style="color: var(--text-secondary); font-size: 0.9rem;">Протоколы, сметы и другие материалы</p>
-      <div class="item-list" id="docsContainer" aria-live="polite">
-        <div style="text-align: center; color: #888; padding: 20px;">Загрузка документов...</div>
+    <!-- Тарифы -->
+    <div class="card" id="tariffs">
+      <h2>⚡ Актуальные тарифы</h2>
+      <p style="font-size: 0.9rem; margin: 0;">Электроэнергия (День / Ночь): <b>10.14 руб</b> / <b>4.36 руб</b> за кВт·ч.</p>
+    </div>
+
+    <!-- Новости -->
+    <div class="card" id="news">
+      <h2>📰 Новости и объявления</h2>
+      <div class="item-card">
+        <div>
+          <b>Подготовка к летнему сезону</b><br>
+          <span style="font-size: 0.8rem; color: #666;">Плановая проверка электросетей и водопровода.</span>
+        </div>
+        <button class="btn-action" onclick="alert('Открыть')">Читать</button>
       </div>
-      <div class="clear"></div>
-    </section>
+    </div>
 
-    <section class="card" id="contacts" aria-labelledby="contactsHeading">
-      <h2 id="contactsHeading">📞 Контакты правления</h2>
-      <p style="font-size: 0.9rem; line-height: 1.6;">
-        <strong>Председатель правления:</strong> Макарова Ольга Михайловна —
-        <a href="tel:+79167107418">8-916-710-74-18</a><br>
-        <strong>Главный бухгалтер:</strong> Сафонова Ирина Викторовна —
-        <a href="tel:+79162220638">8-916-222-06-38</a><br>
-        <strong>Электрик:</strong> Тимошилов Антон Андреевич —
-        <a href="tel:+79250004711">8-925-000-47-11</a>
-      </p>
-    </section>
-  </main>
-
-  <footer class="footer">Сайт создан для удобства всех жителей НСТ «Горняк»</footer>
-
-  <div class="modal" id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <form class="modal-content" onsubmit="saveItem(event)">
-      <h2 id="modalTitle">Добавить</h2>
-      <label for="itemTitle">Заголовок / название</label>
-      <input id="itemTitle" type="text" maxlength="200" required>
-
-      <label id="contentLabel" for="itemText">Текст новости</label>
-      <textarea id="itemText" rows="4" maxlength="10000"></textarea>
-
-      <div id="fileLinkContainer" hidden>
-        <label for="itemUrl">Ссылка на документ (http:// или https://)</label>
-        <input id="itemUrl" type="url" inputmode="url" placeholder="https://example.com/document.pdf">
+    <!-- Документы -->
+    <div class="card" id="documents">
+      <h2>📁 Документы</h2>
+      <div class="item-card">
+        <div>
+          <b>Смета доходов и расходов</b><br>
+          <span style="font-size: 0.8rem; color: #666;">PDF • Утвержденный финансовый документ</span>
+        </div>
+        <button class="btn-action" onclick="alert('Скачать')">Скачать</button>
       </div>
-      <div class="modal-buttons">
-        <button class="btn-cancel" type="button" onclick="closeModal()">Отмена</button>
-        <button class="btn-add" type="submit">Сохранить</button>
-      </div>
-    </form>
+    </div>
+
+    <!-- Контакты -->
+    <div class="card" id="contacts">
+      <h2>📞 Контакты правления</h2>
+      <p style="font-size: 0.9rem; margin: 0;">Часы приема: Сб 10:00 – 14:00 в здании Правления.</p>
+    </div>
+
   </div>
 
-  <script>
-    const SUPABASE_URL = 'ВАШ_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'ВАШ_SUPABASE_ANON_KEY';
-    const isSupabaseConfigured = SUPABASE_URL !== 'ВАШ_SUPABASE_URL'
-      && SUPABASE_ANON_KEY !== 'ВАШ_SUPABASE_ANON_KEY';
-    const supabaseClient = isSupabaseConfigured && window.supabase
-      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-      : null;
-    let currentType = 'news';
+  <div class="footer">
+    🌿 НСТ «Горняк» — Официальный портал
+  </div>
 
-    function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>'"]/g, character => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
-      })[character]);
-    }
-
-    function showStatus(message, background, color) {
-      const banner = document.getElementById('statusBanner');
-      banner.textContent = message;
-      banner.style.background = background;
-      banner.style.color = color;
-    }
-
-    function getLocalNews() {
-      try {
-        const news = JSON.parse(localStorage.getItem('gornyak_news') || '[]');
-        if (!Array.isArray(news)) throw new Error('Локальные новости имеют неверный формат.');
-        return news;
-      } catch (error) {
-        console.error('Не удалось прочитать локальные новости:', error);
-        showStatus('Не удалось прочитать локальные новости в этом браузере.', '#fee2e2', '#991b1b');
-        return [];
-      }
-    }
-
-    function getLocalDocuments() {
-      try {
-        const documents = JSON.parse(localStorage.getItem('gornyak_docs') || '[]');
-        if (!Array.isArray(documents)) throw new Error('Локальные документы имеют неверный формат.');
-        return documents;
-      } catch (error) {
-        console.error('Не удалось прочитать локальные документы:', error);
-        showStatus('Не удалось прочитать локальные документы в этом браузере.', '#fee2e2', '#991b1b');
-        return [];
-      }
-    }
-
-    function renderNewsList(list) {
-      const container = document.getElementById('newsContainer');
-      if (!list.length) {
-        container.innerHTML = '<div style="text-align: center; color: #888; padding: 15px;">Нет актуальных новостей</div>';
-        return;
-      }
-
-      container.innerHTML = list.map(item => {
-        const dateValue = item.published_at || item.created_at;
-        const parsedDate = dateValue ? new Date(dateValue) : null;
-        const date = parsedDate && !Number.isNaN(parsedDate.getTime())
-          ? parsedDate.toLocaleDateString('ru-RU')
-          : 'Сегодня';
-        return `
-          <article class="item-card">
-            <div class="item-title">${escapeHtml(item.title)}</div>
-            <div class="item-date">${date}</div>
-            <div>${escapeHtml(item.body ?? item.content ?? item.text)}</div>
-          </article>
-        `;
-      }).join('');
-    }
-
-    function renderDocuments(list) {
-      const container = document.getElementById('docsContainer');
-      if (!list.length) {
-        container.innerHTML = '<div style="text-align: center; color: #888; padding: 15px;">Нет документов</div>';
-        return;
-      }
-
-      container.innerHTML = list.map(item => {
-        const url = getSafeDocumentUrl(item.file_url ?? item.url);
-        const dateValue = item.created_at || item.date;
-        const parsedDate = dateValue ? new Date(dateValue) : null;
-        const date = parsedDate && !Number.isNaN(parsedDate.getTime())
-          ? parsedDate.toLocaleDateString('ru-RU')
-          : 'Дата не указана';
-        return `
-          <article class="item-card document-row">
-            <div>
-              <div class="item-title">📄 ${escapeHtml(item.title)}</div>
-              <div class="item-date">${date}</div>
-              <div>${escapeHtml(item.description ?? item.text)}</div>
-            </div>
-            ${url ? `<a class="document-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Открыть документ ↗</a>` : ''}
-          </article>
-        `;
-      }).join('');
-    }
-
-    function getSafeDocumentUrl(value) {
-      try {
-        const url = new URL(String(value ?? ''));
-        return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
-      } catch {
-        return '';
-      }
-    }
-
-    async function loadNews() {
-      if (!supabaseClient) {
-        renderNewsList(getLocalNews());
-        renderDocuments(getLocalDocuments());
-        return;
-      }
-
-      try {
-        const [{ data: news, error: newsError }, { data: documents, error: documentsError }] = await Promise.all([
-          supabaseClient
-          .from('news')
-          .select('title, body, published_at')
-          .order('published_at', { ascending: false }),
-          supabaseClient
-            .from('documents')
-            .select('title, description, file_url, created_at')
-            .order('created_at', { ascending: false })
-        ]);
-        if (newsError) throw newsError;
-        if (documentsError) throw documentsError;
-        renderNewsList(news || []);
-        renderDocuments(documents || []);
-      } catch (error) {
-        console.error('Не удалось загрузить данные из Supabase:', error);
-        showStatus('Не удалось загрузить новости или документы из облачной базы. Попробуйте обновить страницу.', '#fee2e2', '#991b1b');
-        document.getElementById('newsContainer').innerHTML =
-          '<div style="text-align: center; color: #991b1b; padding: 15px;">Ошибка загрузки новостей</div>';
-        document.getElementById('docsContainer').innerHTML =
-          '<div style="text-align: center; color: #991b1b; padding: 15px;">Ошибка загрузки документов</div>';
-      }
-    }
-
-    function openModal(type) {
-      currentType = type;
-      const isDocument = type === 'doc';
-      document.getElementById('modalTitle').textContent = isDocument ? 'Добавить документ' : 'Добавить новость';
-      document.getElementById('contentLabel').textContent = isDocument ? 'Описание документа' : 'Текст новости';
-      document.getElementById('itemText').placeholder = isDocument ? 'Краткое описание (необязательно)' : 'Введите текст новости';
-      document.getElementById('itemText').required = !isDocument;
-      document.getElementById('fileLinkContainer').hidden = !isDocument;
-      document.getElementById('itemUrl').required = isDocument;
-      document.getElementById('itemTitle').value = '';
-      document.getElementById('itemText').value = '';
-      document.getElementById('itemUrl').value = '';
-      document.getElementById('addModal').style.display = 'flex';
-      document.getElementById('itemTitle').focus();
-    }
-
-    function closeModal() {
-      document.getElementById('addModal').style.display = 'none';
-    }
-
-    async function saveItem(event) {
-      event.preventDefault();
-      const title = document.getElementById('itemTitle').value.trim();
-      const text = document.getElementById('itemText').value.trim();
-      const isDocument = currentType === 'doc';
-      const url = getSafeDocumentUrl(document.getElementById('itemUrl').value.trim());
-      if (!title || (!isDocument && !text) || (isDocument && !url)) {
-        alert(isDocument
-          ? 'Укажите название и корректную ссылку на документ (http:// или https://).'
-          : 'Укажите заголовок и текст новости.');
-        return;
-      }
-
-      if (supabaseClient) {
-        const table = isDocument ? 'documents' : 'news';
-        const item = isDocument
-          ? { title, description: text, file_url: url }
-          : { title, body: text };
-        try {
-          const { error } = await supabaseClient.from(table).insert([item]);
-          if (error) throw error;
-        } catch (error) {
-          console.error('Не удалось сохранить запись в Supabase:', error);
-          const detail = error instanceof Error ? error.message : String(error);
-          alert('Не удалось сохранить запись в облачную базу. Для добавления требуется вход администратора. ' + detail);
-          return;
-        }
-      } else {
-        const storageKey = isDocument ? 'gornyak_docs' : 'gornyak_news';
-        const records = isDocument ? getLocalDocuments() : getLocalNews();
-        records.unshift(isDocument
-          ? { title, text, url, date: new Date().toISOString() }
-          : { title, body: text, created_at: new Date().toISOString() });
-        try {
-          localStorage.setItem(storageKey, JSON.stringify(records));
-        } catch (error) {
-          console.error('Не удалось сохранить запись в этом браузере:', error);
-          alert('Не удалось сохранить запись в этом браузере.');
-          return;
-        }
-      }
-
-      closeModal();
-      await loadNews();
-      alert(isDocument ? 'Документ успешно добавлен.' : 'Новость успешно добавлена.');
-    }
-
-    function showNotifications() {
-      alert('📬 Центр уведомлений НСТ «Горняк»:\n\n• Подключена система уведомлений.\n• Обновлено расписание транспорта.\n• Ведется настройка облачной базы данных.');
-      document.getElementById('notifBadge').style.display = 'none';
-    }
-
-    function showLoginNotice() {
-      alert('Вход для правления пока не настроен.');
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (!supabaseClient) {
-        const message = isSupabaseConfigured
-          ? 'Не удалось загрузить Supabase SDK. Сайт работает в локальном режиме.'
-          : 'Сайт работает в локальном режиме. Настройте ключи Supabase для сохранения в облако.';
-        showStatus(message, '#e2e8f0', '#334155');
-      } else {
-        showStatus('Облачная база данных Supabase активна.', '#d1fae5', '#065f46');
-      }
-      loadNews();
-    });
-  </script>
 </body>
 </html>
