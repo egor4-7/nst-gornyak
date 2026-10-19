@@ -16,6 +16,26 @@
 
     * { box-sizing: border-box; }
 
+      <!-- Плавающая шапка в одну строчку -->
+  <nav class="navbar">
+    <a href="#" class="nav-brand">
+      <span>🌿</span>
+      <span>НСТ Горняк</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#transport" class="nav-link active" onclick="setActive(this)">🚌 Транспорт</a>
+      <a href="#tariffs" class="nav-link" onclick="setActive(this)">⚡ Тарифы</a>
+      <a href="#news" class="nav-link" onclick="setActive(this)">📰 Новости</a>
+      <a href="#docs" class="nav-link" onclick="setActive(this)">📄 Документы</a>
+      <a href="#contacts" class="nav-link" onclick="setActive(this)">✉️ Контакты</a>
+    </div>
+
+    <div id="authContainer">
+      <button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>
+    </div>
+  </nav>
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
