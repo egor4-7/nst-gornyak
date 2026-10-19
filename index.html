@@ -573,7 +573,7 @@
       </div>
       
       <div id="docsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
+        <div data-role="item" style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
           <div>
             <strong class="doc-name">Согласие на обработку персональных данных (PDF)</strong>
             <div style="font-size: 0.75rem; color: #777;">Опубликовано: Сегодня</div>
@@ -699,9 +699,23 @@
   </div>
 
   <script>
+    window.SUPABASE_CONFIG = {
+      url: 'https://YOUR_PROJECT_ID.supabase.co',
+      anonKey: 'YOUR_SUPABASE_ANON_KEY'
+    };
+
     function setActive(element) {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       element.classList.add('active');
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -741,14 +755,16 @@
       const fio = localStorage.getItem('logged_user_fio') || 'Не указано';
 
       const container = document.getElementById('authContainer');
+      if (!container) return;
+
       container.innerHTML = `
         <div class="profile-wrapper">
           <div class="profile-btn" onclick="toggleProfileMenu(event)">👤</div>
           <div id="profileDropdown" class="profile-dropdown">
             <div id="profileDisplayView">
-              <div class="profile-field"><strong>Участок:</strong> <span id="valPlot">${plot}</span></div>
-              <div class="profile-field"><strong>Почта:</strong> <span id="valEmail">${email}</span></div>
-              <div class="profile-field"><strong>ФИО:</strong> <span id="valFio">${fio}</span></div>
+              <div class="profile-field"><strong>Участок:</strong> <span id="valPlot">${escapeHtml(plot)}</span></div>
+              <div class="profile-field"><strong>Почта:</strong> <span id="valEmail">${escapeHtml(email)}</span></div>
+              <div class="profile-field"><strong>ФИО:</strong> <span id="valFio">${escapeHtml(fio)}</span></div>
               <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
                 <button class="btn-delete-blur" onclick="triggerProfileDelete()">Удалить профиль</button>
                 <button class="btn-logout-blur" onclick="logoutUser()">Выйти из профиля</button>
@@ -773,9 +789,12 @@
     }
 
     function triggerProfileDelete() {
-      document.getElementById('valPlot').innerText = 'Очищено...';
-      document.getElementById('valEmail').innerText = 'Очищено...';
-      document.getElementById('valFio').innerText = 'Очищено...';
+      const valPlot = document.getElementById('valPlot');
+      const valEmail = document.getElementById('valEmail');
+      const valFio = document.getElementById('valFio');
+      if (valPlot) valPlot.innerText = 'Очищено...';
+      if (valEmail) valEmail.innerText = 'Очищено...';
+      if (valFio) valFio.innerText = 'Очищено...';
 
       setTimeout(() => {
         const pin = prompt("Введите 4-значный PIN-код для уничтожения профиля и данных:");
@@ -794,23 +813,29 @@
       localStorage.clear();
       document.body.classList.remove('is-authenticated');
       const container = document.getElementById('authContainer');
-      container.innerHTML = `<button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>`;
+      if (container) {
+        container.innerHTML = `<button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>`;
+      }
     }
 
     function toggleForm(id) {
       const f = document.getElementById(id);
+      if (!f) return;
       f.style.display = f.style.display === 'block' ? 'none' : 'block';
     }
 
     function addDoc() {
-      const title = document.getElementById('docTitle').value;
+      const title = document.getElementById('docTitle').value.trim();
       if (!title) return alert('Введите название документа');
       const list = document.getElementById('docsList');
+      if (!list) return;
+
       const item = document.createElement('div');
+      item.dataset.role = 'item';
       item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;';
       item.innerHTML = `
         <div>
-          <strong class="doc-name">${title}</strong>
+          <strong class="doc-name">${escapeHtml(title)}</strong>
           <div style="font-size: 0.75rem; color: #777;">Опубликовано: Только что</div>
         </div>
         <div style="display: flex; gap: 6px; align-items: center;">
@@ -826,20 +851,22 @@
     }
 
     function addNews() {
-      const title = document.getElementById('newsTitle').value;
-      const desc = document.getElementById('newsDesc').value;
+      const title = document.getElementById('newsTitle').value.trim();
+      const desc = document.getElementById('newsDesc').value.trim();
       if (!title) return alert('Введите заголовок новости');
       const list = document.getElementById('newsList');
-      
+      if (!list) return;
+
       const empty = list.querySelector('.empty-state');
       if (empty) empty.remove();
 
       const item = document.createElement('div');
+      item.dataset.role = 'item';
       item.style.cssText = 'background: rgba(27, 94, 32, 0.05); padding: 16px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--primary);';
       item.innerHTML = `
-        <h3 style="margin-bottom: 5px;">${title}</h3>
+        <h3 style="margin-bottom: 5px;">${escapeHtml(title)}</h3>
         <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">Опубликовано: Только что</p>
-        <p>${desc}</p>
+        <p>${escapeHtml(desc)}</p>
         <div class="admin-only" style="margin-top: 10px; display: flex; gap: 8px;">
           <button class="btn-green-blur" style="padding: 4px 10px; font-size: 0.75rem;" onclick="editItem(this)">Изменить</button>
           <button class="btn-delete-blur" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
@@ -864,13 +891,16 @@
     }
 
     function deleteItem(btn) {
-      if (confirm('Удалить эту запись?')) {
-        const parent = btn.closest('div').parentElement;
-        parent.remove();
-        const list = document.getElementById('newsList');
-        if (list.children.length === 0) {
-          list.innerHTML = '<div class="empty-state">Нет новостей</div>';
-        }
+      if (!confirm('Удалить эту запись?')) return;
+
+      const item = btn.closest('[data-role="item"]') || btn.closest('div').parentElement;
+      if (!item) return;
+
+      item.remove();
+
+      const newsList = document.getElementById('newsList');
+      if (newsList && newsList.children.length === 0) {
+        newsList.innerHTML = '<div class="empty-state">Нет новостей</div>';
       }
     }
   </script>
