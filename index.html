@@ -23,12 +23,9 @@
       color: var(--text-dark);
       padding-top: 95px;
       overflow-x: hidden;
-      position: relative;
     }
 
-    section, div[id], h2 {
-      scroll-margin-top: 105px;
-    }
+    section, div[id], h2 { scroll-margin-top: 105px; }
 
     /* Плавающая шапка */
     .navbar {
@@ -61,20 +58,9 @@
       text-decoration: none;
     }
 
-    .nav-brand span {
-      font-size: 0.75rem;
-      color: #666;
-      display: block;
-      font-weight: 400;
-    }
+    .nav-brand span { font-size: 0.75rem; color: #666; display: block; font-weight: 400; }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
 
-    .nav-links {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    /* Насыщенные кнопки меню с размытием */
     .nav-link {
       background: rgba(230, 235, 230, 0.75) !important;
       color: var(--text-dark) !important;
@@ -88,12 +74,8 @@
       backdrop-filter: blur(10px);
     }
 
-    .nav-link:hover {
-      background: rgba(200, 225, 205, 0.9) !important;
-      color: var(--primary) !important;
-    }
+    .nav-link:hover { background: rgba(200, 225, 205, 0.9) !important; color: var(--primary) !important; }
 
-    /* Выбранный раздел */
     .nav-link.active {
       background: rgba(165, 214, 167, 0.95) !important;
       color: var(--primary) !important;
@@ -102,7 +84,6 @@
       box-shadow: 0 2px 8px rgba(76, 175, 80, 0.25);
     }
 
-    /* Кнопка входа */
     .btn-login {
       background: var(--primary);
       color: #ffffff !important;
@@ -116,7 +97,6 @@
     }
     .btn-login:hover { background: var(--primary-hover); }
 
-    /* Выпадающий профиль */
     .profile-wrapper { position: relative; }
     .profile-btn {
       width: 40px;
@@ -154,12 +134,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Контейнер */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px 40px 20px;
-    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px 20px; }
 
     .card {
       background: var(--card-bg);
@@ -173,7 +148,6 @@
 
     h1, h2, h3 { color: var(--text-dark); margin-top: 0; }
 
-    /* Зеленые кнопки с белым текстом */
     .btn-yandex, .btn-action {
       display: inline-flex;
       align-items: center;
@@ -197,7 +171,21 @@
       transform: translateY(-2px);
     }
 
-    /* Кнопки выпадающего меню с блюром */
+    /* Зеленая кнопка с блюром */
+    .btn-green-blur {
+      background: rgba(46, 125, 50, 0.85);
+      color: #ffffff !important;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .btn-green-blur:hover { background: rgba(27, 94, 32, 0.95); }
+
     .btn-edit-blur {
       background: rgba(33, 150, 243, 0.85);
       color: #ffffff !important;
@@ -215,6 +203,30 @@
       color: #ffffff !important;
       backdrop-filter: blur(8px);
       border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.85rem; width: 100%;
+    }
+
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .data-table th, .data-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+    .data-table th { background-color: rgba(27, 94, 32, 0.08); color: var(--primary); }
+
+    .link-external { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .link-external:hover { text-decoration: underline; }
+
+    /* Формы создания документов / новостей */
+    .admin-form {
+      display: none;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 16px;
+      border-radius: 14px;
+      margin-top: 15px;
+      border: 1px solid #ddd;
+    }
+    .admin-form input, .admin-form textarea {
+      width: 100%;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
 
     @media (max-width: 768px) {
@@ -247,17 +259,6 @@
   </nav>
 
   <div class="container">
-
-    <!-- Секция: Главная карточка -->
-    <div class="card" style="background: rgba(232, 245, 233, 0.8); border: 1px solid rgba(129, 199, 132, 0.4);">
-      <span style="font-size: 0.75rem; background: rgba(27, 94, 32, 0.15); color: var(--primary); padding: 4px 10px; border-radius: 12px; font-weight: 700;">🌱 САДОВОЕ ТОВАРИЩЕСТВО • С 1982</span>
-      <h1 style="margin-top: 10px; margin-bottom: 10px; font-size: 1.8rem;">Всё важное для жителей НСТ «Горняк»</h1>
-      <p style="color: #444; margin-bottom: 18px;">Актуальные тарифы, протоколы, сметы, расписание транспорта и новости — в одном месте.</p>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <a href="#docs" class="btn-action">Перейти к документам →</a>
-        <a href="#tariffs" class="btn-action" style="background-color: rgba(255, 255, 255, 0.8) !important; color: var(--primary) !important; border: 1px solid var(--primary);">Посмотреть тарифы</a>
-      </div>
-    </div>
 
     <!-- Секция: Транспорт -->
     <div id="transport" class="card">
@@ -303,44 +304,128 @@
 
     <!-- Секция: Новости / Статьи -->
     <div id="news" class="card">
-      <h2>📰 Новости и объявления</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>📰 Новости и объявления</h2>
+        <button class="btn-green-blur" onclick="toggleForm('newsForm')">+ Добавить новость</button>
+      </div>
       <p style="color: #666; font-size: 0.9rem;">Праздничные поздравления и важная информация</p>
 
-      <div style="background: rgba(27, 94, 32, 0.05); padding: 16px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--primary);">
-        <h3 style="margin-bottom: 5px;">🎄 С Новым годом и Рождеством!</h3>
-        <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">Опубликовано: 31 декабря</p>
-        <p>Уважаемые садоводы! Правление НСТ «Горняк» сердечно поздравляет вас с наступающими праздниками! Желаем здоровье, тепла и отличного отдыха на природе!</p>
+      <!-- Форма создания новости -->
+      <div id="newsForm" class="admin-form">
+        <h4>Новая публикация</h4>
+        <input type="text" id="newsTitle" placeholder="Тема / Заголовок новости">
+        <textarea id="newsDesc" rows="3" placeholder="Описание новости..."></textarea>
+        <input type="file" accept="image/*,video/*">
+        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addNews()">Опубликовать</button>
+      </div>
+
+      <div id="newsList">
+        <div style="background: rgba(27, 94, 32, 0.05); padding: 16px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--primary); position: relative;">
+          <h3 style="margin-bottom: 5px;">🎄 С Новым годом и Рождеством!</h3>
+          <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">Опубликовано: <span class="pub-date">31 декабря</span></p>
+          <p>Уважаемые садоводы! Правление НСТ «Горняк» сердечно поздравляет вас с праздниками! Желаем здоровья, тепла и прекрасного отдыха!</p>
+          <div style="margin-top: 10px; display: flex; gap: 8px;">
+            <button class="btn-green-blur" style="padding: 4px 10px; font-size: 0.75rem;" onclick="editItem(this)">Изменить</button>
+            <button class="btn-delete-blur" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Секция: Документы -->
     <div id="docs" class="card">
-      <h2>Официальные документы</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Официальные документы</h2>
+        <button class="btn-green-blur" onclick="toggleForm('docForm')">+ Добавить документ</button>
+      </div>
       <p>Скачивайте бланки и документы на телефон или планшет.</p>
 
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee;">
-          <span>Согласие на обработку персональных данных (PDF)</span>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-action" style="padding: 6px 14px; font-size: 0.8rem;">👁️ Посмотреть</button>
-            <button class="btn-action" style="padding: 6px 14px; font-size: 0.8rem;">📥 Скачать</button>
+      <!-- Форма создания документа -->
+      <div id="docForm" class="admin-form">
+        <h4>Добавление документа</h4>
+        <input type="text" id="docTitle" placeholder="Тема / Название документа">
+        <textarea id="docDesc" rows="2" placeholder="Описание документа..."></textarea>
+        <input type="file" id="docFile">
+        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addDoc()">Опубликовать документ</button>
+      </div>
+
+      <div id="docsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong class="doc-name">Согласие на обработку персональных данных (PDF)</strong>
+            <div style="font-size: 0.75rem; color: #777;">Опубликовано: <span class="pub-date">Сегодня</span></div>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
+            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
+            <button class="btn-green-blur" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
+            <button class="btn-delete-blur" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
           </div>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee;">
-          <span>Заявление на оформление лицевого счета (PDF)</span>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-action" style="padding: 6px 14px; font-size: 0.8rem;">👁️ Посмотреть</button>
-            <button class="btn-action" style="padding: 6px 14px; font-size: 0.8rem;">📥 Скачать</button>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <strong class="doc-name">Заявление на оформление лицевого счета (PDF)</strong>
+            <div style="font-size: 0.75rem; color: #777;">Опубликовано: <span class="pub-date">Вчера</span></div>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
+            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
+            <button class="btn-green-blur" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
+            <button class="btn-delete-blur" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Секция: Контакты -->
+    <!-- Секция: Контакты и правление -->
     <div id="contacts" class="card">
       <h2>Контакты и правление</h2>
-      <p><strong>Фактический адрес:</strong> Московская область, г.о. Котельники, НСТ «Горняк», Центральная ул., 247</p>
-      <p><strong>Юридический адрес:</strong> Московская область, г.о. Котельники, Карьерная ул., 13</p>
+
+      <h3>📍 Адрес администрации</h3>
+      <p><strong>НСТ «Горняк»</strong> (основано в 1982 году)</p>
+      <p><strong>Фактический адрес:</strong> Московская область, г.о. Котельники, территория НСТ «Горняк», Центральная улица, 247</p>
+      <p><strong>Юридический / почтовый адрес:</strong> Московская область, г.о. Котельники, Карьерная улица, 13</p>
+
+      <h3>👥 Руководство и правление</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Телефон</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Макарова Ольга Михайловна</td>
+            <td>Председатель правления</td>
+            <td><a href="tel:+79167107418" class="link-external">8-916-710-74-18</a></td>
+          </tr>
+          <tr>
+            <td>Сафонова Ирина Викторовна</td>
+            <td>Главный бухгалтер</td>
+            <td><a href="tel:+79162220638" class="link-external">8-916-222-06-38</a></td>
+          </tr>
+          <tr>
+            <td>КраСенькова Наталья Борисовна</td>
+            <td>Бухгалтер</td>
+            <td><a href="tel:+79161040185" class="link-external">8-916-104-01-85</a></td>
+          </tr>
+          <tr>
+            <td>Вахрушев Константин Михайлович</td>
+            <td>Главный энергетик</td>
+            <td><a href="tel:+79269585251" class="link-external">8-926-958-52-51</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 25px;">👮 Экстренные службы и участковый</h3>
+      <p><strong>Участковый по НСТ «Горняк»:</strong> Сырчин Кирилл Владимирович<br>
+      Телефон: <a href="tel:+79851311484" class="link-external">8-985-131-14-84</a></p>
+
+      <p><strong>Полиция г. Котельники (дежурная часть):</strong><br>
+      Телефон: <a href="tel:+79267775784" class="link-external">8-926-777-57-84</a></p>
     </div>
 
   </div>
@@ -351,7 +436,19 @@
       element.classList.add('active');
     }
 
+    // Восстановление профиля из localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('user_logged_in') === 'true') {
+        renderProfile();
+      }
+    });
+
     function loginUser() {
+      localStorage.setItem('user_logged_in', 'true');
+      renderProfile();
+    }
+
+    function renderProfile() {
       const container = document.getElementById('authContainer');
       container.innerHTML = `
         <div class="profile-wrapper">
@@ -361,7 +458,7 @@
             <p style="margin: 0 0 8px 0; font-size: 0.85rem;"><strong>Почта:</strong> egor4u@gmail.com</p>
             <p style="margin: 0 0 12px 0; font-size: 0.85rem;"><strong>ФИО:</strong> Не указано</p>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-              <button class="btn-edit-blur" onclick="alert('Изменение профиля')">Изменить</button>
+              <button class="btn-edit-blur" onclick="alert('Редактирование профиля')">Изменить</button>
               <button class="btn-delete-blur" onclick="confirmDelete()">Удалить профиль</button>
               <button class="btn-logout-blur" onclick="logoutUser()">Выйти из профиля</button>
             </div>
@@ -373,7 +470,7 @@
     function toggleProfileMenu(e) {
       e.stopPropagation();
       const menu = document.getElementById('profileDropdown');
-      menu.classList.toggle('show');
+      if (menu) menu.classList.toggle('show');
     }
 
     window.onclick = function() {
@@ -383,15 +480,90 @@
       }
     }
 
+    // Полное удаление данных и уничтожение профиля
     function confirmDelete() {
-      if (confirm("Вы действительно хотите удалить профиль? Это действие необратимо.")) {
+      if (confirm("Вы уверены, что хотите полностью удалить профиль? Все ваши данные будут уничтожены из системы.")) {
+        localStorage.removeItem('user_logged_in');
+        alert("Ваш профиль и персональные данные успешно уничтожены.");
         logoutUser();
       }
     }
 
     function logoutUser() {
+      localStorage.removeItem('user_logged_in');
       const container = document.getElementById('authContainer');
       container.innerHTML = `<button onclick="loginUser()" class="btn-login">Войти</button>`;
+    }
+
+    function toggleForm(id) {
+      const f = document.getElementById(id);
+      f.style.display = f.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function addDoc() {
+      const title = document.getElementById('docTitle').value;
+      if (!title) return alert('Введите название документа');
+      const list = document.getElementById('docsList');
+      const item = document.createElement('div');
+      item.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;';
+      item.innerHTML = `
+        <div>
+          <strong class="doc-name"></strong>
+          <div style="font-size: 0.75rem; color: #777;">Опубликовано: <span class="pub-date">Только что</span></div>
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
+          <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
+          <button class="btn-green-blur" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
+          <button class="btn-delete-blur" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
+        </div>
+      `;
+      item.querySelector('.doc-name').textContent = title;
+      list.prepend(item);
+      document.getElementById('docTitle').value = '';
+      toggleForm('docForm');
+    }
+
+    function addNews() {
+      const title = document.getElementById('newsTitle').value;
+      const desc = document.getElementById('newsDesc').value;
+      if (!title) return alert('Введите заголовок новости');
+      const list = document.getElementById('newsList');
+      const item = document.createElement('div');
+      item.style.cssText = 'background: rgba(27, 94, 32, 0.05); padding: 16px; border-radius: 12px; margin-top: 15px; border-left: 4px solid var(--primary);';
+      item.innerHTML = `
+        <h3 style="margin-bottom: 5px;"></h3>
+        <p style="font-size: 0.85rem; color: #555; margin-bottom: 8px;">Опубликовано: Только что</p>
+        <p class="news-description"></p>
+        <div style="margin-top: 10px; display: flex; gap: 8px;">
+          <button class="btn-green-blur" style="padding: 4px 10px; font-size: 0.75rem;" onclick="editItem(this)">Изменить</button>
+          <button class="btn-delete-blur" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
+        </div>
+      `;
+      item.querySelector('h3').textContent = title;
+      item.querySelector('.news-description').textContent = desc;
+      list.prepend(item);
+      document.getElementById('newsTitle').value = '';
+      document.getElementById('newsDesc').value = '';
+      toggleForm('newsForm');
+    }
+
+    function editDoc(btn) {
+      const nameElem = btn.closest('div').parentElement.querySelector('.doc-name');
+      const newName = prompt('Введите новое название документа:', nameElem.innerText);
+      if (newName) nameElem.innerText = newName;
+    }
+
+    function editItem(btn) {
+      const titleElem = btn.parentElement.parentElement.querySelector('h3');
+      const newTitle = prompt('Введите новое название:', titleElem.innerText);
+      if (newTitle) titleElem.innerText = newTitle;
+    }
+
+    function deleteItem(btn) {
+      if (confirm('Вы действительно хотите удалить эту запись?')) {
+        btn.closest('div').parentElement.remove();
+      }
     }
   </script>
 </body>
