@@ -14,6 +14,9 @@
       --text-main: #2b2b2b;
       --text-secondary: #555555;
     }
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
@@ -36,16 +39,16 @@
     }
     .navbar {
       pointer-events: auto;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(20px) saturate(200%);
+      -webkit-backdrop-filter: blur(20px) saturate(200%);
       padding: 8px 14px;
       display: flex;
       align-items: center;
       gap: 8px;
       border-radius: 35px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.6);
       max-width: 100%;
       overflow-x: auto;
     }
@@ -71,14 +74,20 @@
       font-weight: 500;
       padding: 6px 12px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.3);
       white-space: nowrap;
       transition: all 0.2s ease;
+      border: 1px solid transparent;
     }
-    .nav-links a.active, .nav-links a:hover {
-      background: rgba(200, 230, 201, 0.7);
+    .nav-links a.active {
+      background: #e8f5e9;
       color: #1b4332;
-      font-weight: 600;
+      font-weight: 700;
+      border: 1.5px solid #2d6a4f;
+      box-shadow: 0 2px 8px rgba(45, 106, 79, 0.25);
+    }
+    .nav-links a:hover {
+      background: rgba(232, 245, 233, 0.6);
     }
     .nav-links a:active {
       transform: scale(0.95);
@@ -206,8 +215,8 @@
   <div class="navbar-container">
     <nav class="navbar">
       <div class="brand">🌿 Горняк</div>
-      <div class="nav-links">
-        <a href="#transport" class="active">🚌 Транспорт</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#transport">🚌 Транспорт</a>
         <a href="#tariffs">⚡ Тарифы</a>
         <a href="#news">📰 Новости</a>
         <a href="#documents">📁 Документы</a>
@@ -277,6 +286,45 @@
   <div class="footer">
     🌿 НСТ «Горняк» — Официальный портал
   </div>
+
+  <script>
+    const sections = document.querySelectorAll('.card');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    function updateActiveNavLink() {
+      let currentSectionId = '';
+      sections.forEach(section => {
+        const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+        if (window.scrollY >= sectionTop - 120) {
+          currentSectionId = section.id;
+        }
+      });
+
+      navLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === `#${currentSectionId}`;
+        link.classList.toggle('active', isActive);
+        if (isActive) {
+          link.setAttribute('aria-current', 'location');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+    updateActiveNavLink();
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(navLink => {
+          navLink.classList.remove('active');
+          navLink.removeAttribute('aria-current');
+        });
+        link.classList.add('active');
+        link.setAttribute('aria-current', 'location');
+      });
+    });
+  </script>
 
 </body>
 </html>
