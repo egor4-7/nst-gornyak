@@ -271,8 +271,8 @@
     }
 
     .admin-only { display: none !important; }
-    body.is-authenticated .admin-only { display: inline-flex !important; }
-    body.is-authenticated div.admin-only { display: block !important; }
+    body.is-admin .admin-only { display: inline-flex !important; }
+    body.is-admin div.admin-only { display: block !important; }
 
     .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
     .data-table th, .data-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
@@ -411,6 +411,8 @@
 
   <div class="container">
 
+  <div id="siteMessage" class="route-note" role="status" aria-live="polite" style="display:none;"></div>
+
     <!-- Секция: Транспорт -->
     <div id="transport" class="card">
       <h2>🚌 Маршруты № 474, № 1к и № 26</h2>
@@ -526,7 +528,8 @@
         <h4>Новая публикация</h4>
         <input type="text" id="newsTitle" placeholder="Тема / Заголовок новости">
         <textarea id="newsDesc" rows="3" placeholder="Описание новости..."></textarea>
-        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addNews()">Опубликовать</button>
+        <button id="newsSubmit" class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="saveNews()">Опубликовать</button>
+        <button id="newsCancel" class="btn-action" style="display:none; padding: 6px 14px; font-size: 0.85rem; background:#6a7f6b !important;" onclick="cancelEdit('newsForm')">Отмена</button>
       </div>
 
       <div id="newsList">
@@ -547,22 +550,13 @@
         <h4>Добавление документа</h4>
         <input type="text" id="docTitle" placeholder="Тема / Название документа">
         <textarea id="docDesc" rows="2" placeholder="Описание документа..."></textarea>
-        <button class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="addDoc()">Опубликовать документ</button>
+        <input type="url" id="docUrl" placeholder="Ссылка на документ (https://…)" autocomplete="url">
+        <button id="docSubmit" class="btn-action" style="padding: 6px 14px; font-size: 0.85rem;" onclick="saveDoc()">Опубликовать документ</button>
+        <button id="docCancel" class="btn-action" style="display:none; padding: 6px 14px; font-size: 0.85rem; background:#6a7f6b !important;" onclick="cancelEdit('docForm')">Отмена</button>
       </div>
 
       <div id="docsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 12px; border: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <strong class="doc-name">Согласие на обработку персональных данных (PDF)</strong>
-            <div style="font-size: 0.75rem; color: #777;">Опубликовано: Сегодня</div>
-          </div>
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">👁️ Посмотреть</button>
-            <button class="btn-action" style="padding: 6px 12px; font-size: 0.8rem;">📥 Скачать</button>
-            <button class="btn-green-blur admin-only" style="padding: 6px 10px; font-size: 0.75rem;" onclick="editDoc(this)">Изменить</button>
-            <button class="btn-delete-blur admin-only" style="width: auto; padding: 6px 10px; font-size: 0.75rem;" onclick="deleteItem(this)">Удалить</button>
-          </div>
-        </div>
+        <div class="empty-state">Загрузка документов…</div>
       </div>
     </div>
 
@@ -671,16 +665,16 @@
       </div>
 
       <div id="loginForm" class="auth-form active">
-        <div class="auth-message" id="loginMessage"></div>
-        <input type="text" id="loginUsername" placeholder="Логин" autocomplete="off" spellcheck="false">
-        <input type="password" id="loginPassword" placeholder="Пароль" autocomplete="new-password">
+        <div class="auth-message" id="loginMessage" role="status" aria-live="polite"></div>
+        <input type="email" id="loginEmail" placeholder="Электронная почта" autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="Пароль" autocomplete="current-password">
         <button class="btn-action" style="width:100%; border:none; margin-top: 4px;" onclick="handleLogin()">Войти</button>
       </div>
 
       <div id="registerForm" class="auth-form">
-        <div class="auth-message" id="registerMessage"></div>
-        <input type="text" id="registerUsername" placeholder="Логин" autocomplete="off" spellcheck="false">
-        <input type="password" id="registerPassword" placeholder="Пароль" autocomplete="new-password">
+        <div class="auth-message" id="registerMessage" role="status" aria-live="polite"></div>
+        <input type="email" id="registerEmail" placeholder="Электронная почта" autocomplete="email">
+        <input type="password" id="registerPassword" placeholder="Пароль (не менее 8 символов)" autocomplete="new-password">
         <input type="password" id="registerPasswordConfirm" placeholder="Повторите пароль" autocomplete="new-password">
         <button class="btn-action" style="width:100%; border:none; margin-top: 4px;" onclick="handleRegister()">Создать аккаунт</button>
       </div>
@@ -689,12 +683,31 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const STORAGE_KEY = 'nst-gornyak-auth';
+    // Use the project's public anon key here. Never put a service_role key in this file.
+    window.SUPABASE_CONFIG = {
+      url: 'https://YOUR_PROJECT_ID.supabase.co',
+      anonKey: 'YOUR_SUPABASE_ANON_KEY'
+    };
 
     function setActive(element) {
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       element.classList.add('active');
+    }
+
+    let supabaseClient = null;
+    let currentUser = null;
+    let isSiteAdmin = false;
+    let newsCache = [];
+    let docsCache = [];
+
+    function showNotice(message, isError = false) {
+      const notice = document.getElementById('siteMessage');
+      notice.textContent = message;
+      notice.style.display = 'block';
+      notice.style.borderColor = isError ? '#c62828' : '';
+      notice.style.color = isError ? '#b71c1c' : '';
     }
 
     function openAuthModal() {
@@ -710,193 +723,459 @@
       const forms = document.querySelectorAll('.auth-form');
       tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === tabName));
       forms.forEach((form) => form.classList.toggle('active', form.id === tabName + 'Form'));
-    }
-
-    function getUserState() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        return { authenticated: false, user: null };
-      }
-      try {
-        return JSON.parse(raw);
-      } catch (error) {
-        return { authenticated: false, user: null };
-      }
-    }
-
-    function saveUserState(state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      document.getElementById('loginMessage').textContent = '';
+      document.getElementById('registerMessage').textContent = '';
     }
 
     function updateAuthUI() {
-      const state = getUserState();
       const authContainer = document.getElementById('authContainer');
-      const adminEls = document.querySelectorAll('.admin-only');
+      document.body.classList.toggle('is-admin', isSiteAdmin);
+      authContainer.replaceChildren();
 
-      if (state.authenticated && state.user) {
-        document.body.classList.add('is-authenticated');
-        authContainer.innerHTML = `
-          <div class="profile-wrapper">
-            <button class="profile-btn" type="button" aria-label="Профиль">👤</button>
-            <div class="profile-dropdown">
-              <div class="profile-field"><strong>Пользователь:</strong> ${state.user}</div>
-              <button class="btn-logout-blur" type="button" onclick="logoutUser()">Выйти</button>
-            </div>
-          </div>
-        `;
-        const profileBtn = authContainer.querySelector('.profile-btn');
-        const profileDropdown = authContainer.querySelector('.profile-dropdown');
-        profileBtn.addEventListener('click', () => {
-          profileDropdown.classList.toggle('show');
-        });
-        document.addEventListener('click', (event) => {
-          if (!authContainer.contains(event.target)) {
-            profileDropdown.classList.remove('show');
-          }
-        });
+      if (currentUser) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'profile-wrapper';
+        const profileButton = document.createElement('button');
+        profileButton.className = 'profile-btn';
+        profileButton.type = 'button';
+        profileButton.setAttribute('aria-label', 'Профиль');
+        profileButton.textContent = '👤';
+        const dropdown = document.createElement('div');
+        dropdown.className = 'profile-dropdown';
+        const userLabel = document.createElement('div');
+        userLabel.className = 'profile-field';
+        const userName = document.createElement('strong');
+        userName.textContent = currentUser.email || 'Пользователь';
+        userLabel.append('Аккаунт: ', userName);
+        const roleLabel = document.createElement('div');
+        roleLabel.className = 'profile-field';
+        roleLabel.textContent = isSiteAdmin ? 'Роль: администратор' : 'Роль: просмотр';
+        const logoutButton = document.createElement('button');
+        logoutButton.className = 'btn-logout-blur';
+        logoutButton.type = 'button';
+        logoutButton.textContent = 'Выйти';
+        logoutButton.addEventListener('click', logoutUser);
+        profileButton.addEventListener('click', () => dropdown.classList.toggle('show'));
+        dropdown.append(userLabel, roleLabel, logoutButton);
+        wrapper.append(profileButton, dropdown);
+        authContainer.append(wrapper);
       } else {
-        document.body.classList.remove('is-authenticated');
-        authContainer.innerHTML = '<button onclick="openAuthModal()" class="btn-login">Войти / Регистрация</button>';
+        const loginButton = document.createElement('button');
+        loginButton.className = 'btn-login';
+        loginButton.type = 'button';
+        loginButton.textContent = 'Войти / Регистрация';
+        loginButton.addEventListener('click', openAuthModal);
+        authContainer.append(loginButton);
       }
-
-      adminEls.forEach((element) => {
-        element.style.display = state.authenticated ? '' : 'none';
-      });
     }
 
-    function resetAuthMessages() {
-      document.getElementById('loginMessage').textContent = '';
-      document.getElementById('registerMessage').textContent = '';
-      document.getElementById('loginMessage').classList.remove('success');
-      document.getElementById('registerMessage').classList.remove('success');
+    function setAuthMessage(id, message, success = false) {
+      const element = document.getElementById(id);
+      element.textContent = message;
+      element.classList.toggle('success', success);
     }
 
-    function handleRegister() {
-      resetAuthMessages();
-      const username = document.getElementById('registerUsername').value.trim();
+    async function handleRegister() {
+      setAuthMessage('registerMessage', '');
+      const email = document.getElementById('registerEmail').value.trim();
       const password = document.getElementById('registerPassword').value;
       const confirm = document.getElementById('registerPasswordConfirm').value;
-      const messageEl = document.getElementById('registerMessage');
 
-      if (!username || !password) {
-        messageEl.textContent = 'Укажите логин и пароль.';
+      if (!email || !password) {
+        setAuthMessage('registerMessage', 'Укажите электронную почту и пароль.');
         return;
       }
-      if (password.length < 6) {
-        messageEl.textContent = 'Пароль должен содержать минимум 6 символов.';
+      if (password.length < 8) {
+        setAuthMessage('registerMessage', 'Пароль должен содержать минимум 8 символов.');
         return;
       }
       if (password !== confirm) {
-        messageEl.textContent = 'Пароли не совпадают.';
+        setAuthMessage('registerMessage', 'Пароли не совпадают.');
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem('nst-gornyak-users') || '{}');
-      if (users[username]) {
-        messageEl.textContent = 'Пользователь с таким логином уже существует.';
-        return;
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: window.location.origin + window.location.pathname }
+        });
+        if (error) throw error;
+
+        document.getElementById('registerPassword').value = '';
+        document.getElementById('registerPasswordConfirm').value = '';
+        if (data.session) {
+          closeAuthModal();
+          showNotice('Аккаунт создан. Для редактирования материалов администратор должен выдать вам права.');
+        } else {
+          setAuthMessage('registerMessage', 'Аккаунт создан. Проверьте почту и подтвердите адрес, затем войдите.', true);
+        }
+      } catch (error) {
+        setAuthMessage('registerMessage', `Не удалось создать аккаунт: ${error.message}`);
       }
-      users[username] = password;
-      localStorage.setItem('nst-gornyak-users', JSON.stringify(users));
-      messageEl.textContent = 'Регистрация успешна. Теперь можно войти.';
-      messageEl.classList.add('success');
-      document.getElementById('registerUsername').value = '';
-      document.getElementById('registerPassword').value = '';
-      document.getElementById('registerPasswordConfirm').value = '';
-      switchAuthTab('login');
     }
 
-    function handleLogin() {
-      resetAuthMessages();
-      const username = document.getElementById('loginUsername').value.trim();
+    async function handleLogin() {
+      setAuthMessage('loginMessage', '');
+      const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
-      const messageEl = document.getElementById('loginMessage');
 
-      if (!username || !password) {
-        messageEl.textContent = 'Введите логин и пароль.';
+      if (!email || !password) {
+        setAuthMessage('loginMessage', 'Введите электронную почту и пароль.');
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem('nst-gornyak-users') || '{}');
-      if (!users[username] || users[username] !== password) {
-        messageEl.textContent = 'Неверный логин или пароль.';
-        return;
+      try {
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        closeAuthModal();
+      } catch (error) {
+        setAuthMessage('loginMessage', `Не удалось войти: ${error.message}`);
       }
-
-      saveUserState({ authenticated: true, user: username });
-      updateAuthUI();
-      closeAuthModal();
     }
 
-    function logoutUser() {
-      saveUserState({ authenticated: false, user: null });
-      updateAuthUI();
+    async function logoutUser() {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+      } catch (error) {
+        showNotice(`Не удалось выйти: ${error.message}`, true);
+      }
     }
 
     function toggleForm(id) {
       const form = document.getElementById(id);
-      if (!form) return;
+      if (!form || !isSiteAdmin) return;
       form.style.display = form.style.display === 'block' ? 'none' : 'block';
     }
 
-    function addDoc() {
-      const title = document.getElementById('docTitle')?.value.trim();
-      const desc = document.getElementById('docDesc')?.value.trim();
-      if (!title || !desc) {
-        alert('Заполните название и описание документа.');
-        return;
+    function cancelEdit(formId) {
+      const form = document.getElementById(formId);
+      form.dataset.editId = '';
+      if (formId === 'newsForm') {
+        document.getElementById('newsTitle').value = '';
+        document.getElementById('newsDesc').value = '';
+      } else {
+        document.getElementById('docTitle').value = '';
+        document.getElementById('docDesc').value = '';
+        document.getElementById('docUrl').value = '';
       }
-      alert('Документ успешно добавлен.');
-      document.getElementById('docTitle').value = '';
-      document.getElementById('docDesc').value = '';
-      document.getElementById('docForm').style.display = 'none';
+      form.style.display = 'none';
+      if (formId === 'newsForm') {
+        document.getElementById('newsSubmit').textContent = 'Опубликовать';
+        document.getElementById('newsCancel').style.display = 'none';
+      } else {
+        document.getElementById('docSubmit').textContent = 'Опубликовать документ';
+        document.getElementById('docCancel').style.display = 'none';
+      }
     }
 
-    function addNews() {
-      const title = document.getElementById('newsTitle')?.value.trim();
-      const desc = document.getElementById('newsDesc')?.value.trim();
-      if (!title || !desc) {
-        alert('Заполните тему и описание новости.');
-        return;
-      }
-      alert('Новость успешно опубликована.');
-      document.getElementById('newsTitle').value = '';
-      document.getElementById('newsDesc').value = '';
-      document.getElementById('newsForm').style.display = 'none';
+    function editNews(id) {
+      if (!isSiteAdmin) return;
+      const item = newsCache.find((news) => String(news.id) === id);
+      if (!item) return;
+      const form = document.getElementById('newsForm');
+      form.dataset.editId = item.id;
+      document.getElementById('newsTitle').value = item.title;
+      document.getElementById('newsDesc').value = item.body;
+      document.getElementById('newsSubmit').textContent = 'Сохранить изменения';
+      document.getElementById('newsCancel').style.display = 'inline-flex';
+      form.style.display = 'block';
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    function editDoc(button) {
-      const row = button.closest('div[style*="display: flex"]');
-      if (row) {
-        const name = row.querySelector('.doc-name');
-        if (name) {
-          const nextName = prompt('Введите новое название документа:', name.textContent.trim());
-          if (nextName && nextName.trim()) name.textContent = nextName.trim();
+    function editDoc(id) {
+      if (!isSiteAdmin) return;
+      const item = docsCache.find((doc) => String(doc.id) === id);
+      if (!item) return;
+      const form = document.getElementById('docForm');
+      form.dataset.editId = item.id;
+      document.getElementById('docTitle').value = item.title;
+      document.getElementById('docDesc').value = item.description || '';
+      document.getElementById('docUrl').value = item.file_url;
+      document.getElementById('docSubmit').textContent = 'Сохранить изменения';
+      document.getElementById('docCancel').style.display = 'inline-flex';
+      form.style.display = 'block';
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function saveNews() {
+      if (!isSiteAdmin) return;
+      const form = document.getElementById('newsForm');
+      const title = document.getElementById('newsTitle').value.trim();
+      const body = document.getElementById('newsDesc').value.trim();
+      if (!title || !body) {
+        showNotice('Заполните тему и описание новости.', true);
+        return;
+      }
+
+      try {
+        const editId = form.dataset.editId;
+        const query = editId
+          ? supabaseClient.from('news').update({ title, body }).eq('id', editId)
+          : supabaseClient.from('news').insert({ title, body });
+        const { error } = await query;
+        if (error) throw error;
+        cancelEdit('newsForm');
+        await loadNews();
+        showNotice(editId ? 'Новость обновлена.' : 'Новость опубликована.');
+      } catch (error) {
+        showNotice(`Не удалось сохранить новость: ${error.message}`, true);
+      }
+    }
+
+    async function saveDoc() {
+      if (!isSiteAdmin) return;
+      const form = document.getElementById('docForm');
+      const title = document.getElementById('docTitle').value.trim();
+      const description = document.getElementById('docDesc').value.trim();
+      const fileUrl = document.getElementById('docUrl').value.trim();
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(fileUrl);
+      } catch {
+        showNotice('Укажите корректную ссылку на документ.', true);
+        return;
+      }
+      if (!title || !fileUrl || !['https:', 'http:'].includes(parsedUrl.protocol)) {
+        showNotice('Укажите название и действующую ссылку http или https на документ.', true);
+        return;
+      }
+
+      try {
+        const editId = form.dataset.editId;
+        const documentData = { title, description, file_url: fileUrl };
+        const query = editId
+          ? supabaseClient.from('documents').update(documentData).eq('id', editId)
+          : supabaseClient.from('documents').insert(documentData);
+        const { error } = await query;
+        if (error) throw error;
+        cancelEdit('docForm');
+        await loadDocs();
+        showNotice(editId ? 'Документ обновлён.' : 'Документ опубликован.');
+      } catch (error) {
+        showNotice(`Не удалось сохранить документ: ${error.message}`, true);
+      }
+    }
+
+    async function deleteContent(table, id) {
+      if (!isSiteAdmin || !['news', 'documents'].includes(table)) return;
+      const label = table === 'news' ? 'новость' : 'документ';
+      if (!window.confirm(`Удалить ${label}?`)) return;
+      try {
+        const { error } = await supabaseClient.from(table).delete().eq('id', id);
+        if (error) throw error;
+      } catch (error) {
+        showNotice(`Не удалось удалить ${label}: ${error.message}`, true);
+        return;
+      }
+      try {
+        if (table === 'news') await loadNews();
+        else await loadDocs();
+      } catch (error) {
+        showNotice(`Запись удалена, но список не удалось обновить: ${error.message}`, true);
+        return;
+      }
+      showNotice(`${label[0].toUpperCase()}${label.slice(1)} удалён(а).`);
+    }
+
+    function makeEmptyState(text) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = text;
+      return empty;
+    }
+
+    function makeAdminButton(action, id, label, className) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `${className} admin-only`;
+      button.dataset.action = action;
+      button.dataset.id = id;
+      button.textContent = label;
+      return button;
+    }
+
+    function renderNews() {
+      const list = document.getElementById('newsList');
+      list.replaceChildren();
+      if (!newsCache.length) {
+        list.append(makeEmptyState('Нет новостей'));
+        return;
+      }
+      for (const item of newsCache) {
+        const card = document.createElement('article');
+        card.className = 'card news-item';
+        const title = document.createElement('h3');
+        title.className = 'news-title';
+        title.textContent = item.title;
+        const body = document.createElement('p');
+        body.textContent = item.body;
+        const date = document.createElement('div');
+        date.className = 'profile-field';
+        date.textContent = `Опубликовано: ${new Date(item.published_at).toLocaleDateString('ru-RU')}`;
+        const controls = document.createElement('div');
+        controls.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap;';
+        controls.append(
+          makeAdminButton('edit-news', item.id, 'Изменить', 'btn-green-blur'),
+          makeAdminButton('delete-news', item.id, 'Удалить', 'btn-delete-blur')
+        );
+        card.append(title, body, date, controls);
+        list.append(card);
+      }
+    }
+
+    function renderDocs() {
+      const list = document.getElementById('docsList');
+      list.replaceChildren();
+      if (!docsCache.length) {
+        list.append(makeEmptyState('Документы пока не опубликованы'));
+        return;
+      }
+      for (const item of docsCache) {
+        const card = document.createElement('article');
+        card.className = 'card doc-card';
+        card.style.cssText = 'display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin:0; padding:12px 16px;';
+        const info = document.createElement('div');
+        const title = document.createElement('strong');
+        title.className = 'doc-name';
+        title.textContent = item.title;
+        const description = document.createElement('div');
+        description.textContent = item.description || '';
+        const date = document.createElement('div');
+        date.className = 'profile-field';
+        date.textContent = `Опубликовано: ${new Date(item.created_at).toLocaleDateString('ru-RU')}`;
+        info.append(title, description, date);
+
+        const actions = document.createElement('div');
+        actions.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap;';
+        const link = document.createElement('a');
+        link.className = 'btn-action';
+        link.href = item.file_url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = '👁️ Открыть документ';
+        actions.append(link,
+          makeAdminButton('edit-doc', item.id, 'Изменить', 'btn-green-blur'),
+          makeAdminButton('delete-doc', item.id, 'Удалить', 'btn-delete-blur')
+        );
+        card.append(info, actions);
+        list.append(card);
+      }
+    }
+
+    async function loadNews() {
+      const { data, error } = await supabaseClient.from('news')
+        .select('id, title, body, published_at')
+        .order('published_at', { ascending: false });
+      if (error) throw error;
+      newsCache = data;
+      renderNews();
+    }
+
+    async function loadDocs() {
+      const { data, error } = await supabaseClient.from('documents')
+        .select('id, title, description, file_url, created_at')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      docsCache = data;
+      renderDocs();
+    }
+
+    async function loadContent() {
+      try {
+        await loadNews();
+      } catch (error) {
+        showNotice(`Не удалось загрузить новости: ${error.message}`, true);
+      }
+      try {
+        await loadDocs();
+      } catch (error) {
+        showNotice(`Не удалось загрузить документы: ${error.message}`, true);
+      }
+    }
+
+    async function syncAuthState(session) {
+      currentUser = session?.user || null;
+      isSiteAdmin = false;
+      if (currentUser) {
+        try {
+          const { data, error } = await supabaseClient.rpc('is_site_admin');
+          if (error) throw error;
+          isSiteAdmin = data === true;
+          if (!isSiteAdmin) showNotice('Вы вошли, но права на изменение сайта есть только у администратора.');
+        } catch (error) {
+          showNotice(`Не удалось проверить права администратора: ${error.message}`, true);
         }
       }
+      updateAuthUI();
     }
 
-    function editItem(button) {
-      const item = button.closest('.news-item');
-      const title = item?.querySelector('.news-title');
-      if (title) {
-        const nextTitle = prompt('Введите новый заголовок новости:', title.textContent.trim());
-        if (nextTitle && nextTitle.trim()) title.textContent = nextTitle.trim();
+    async function initializeSite() {
+      document.querySelectorAll('.auth-tab').forEach((tab) => {
+        tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+      });
+      document.addEventListener('click', (event) => {
+        const wrapper = document.querySelector('.profile-wrapper');
+        const dropdown = wrapper?.querySelector('.profile-dropdown');
+        if (dropdown && !wrapper.contains(event.target)) dropdown.classList.remove('show');
+      });
+      document.getElementById('newsList').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        if (button.dataset.action === 'edit-news') editNews(button.dataset.id);
+        if (button.dataset.action === 'delete-news') void deleteContent('news', button.dataset.id);
+      });
+      document.getElementById('docsList').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        if (button.dataset.action === 'edit-doc') editDoc(button.dataset.id);
+        if (button.dataset.action === 'delete-doc') void deleteContent('documents', button.dataset.id);
+      });
+
+      const config = window.SUPABASE_CONFIG;
+      if (!window.supabase || !config?.url || !config?.anonKey
+        || config.url.includes('YOUR_PROJECT_ID') || config.anonKey.includes('YOUR_SUPABASE_ANON_KEY')) {
+        showNotice('Для включения входа и управления материалами настройте URL и публичный anon key проекта Supabase в index.html.', true);
+        const loginButton = document.querySelector('#authContainer button');
+        loginButton.disabled = true;
+        loginButton.title = 'Сначала настройте подключение к Supabase';
+        document.getElementById('newsList').replaceChildren(makeEmptyState('Новости недоступны: не настроена база данных'));
+        document.getElementById('docsList').replaceChildren(makeEmptyState('Документы недоступны: не настроена база данных'));
+        return;
       }
-    }
 
-    function deleteItem(button) {
-      const card = button.closest('.doc-card, .news-item');
-      if (card) {
-        card.remove();
+      try {
+        supabaseClient = window.supabase.createClient(config.url, config.anonKey);
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+          window.setTimeout(() => { void syncAuthState(session); }, 0);
+        });
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) throw error;
+        await syncAuthState(data?.session);
+      } catch (error) {
+        showNotice(`Не удалось подключиться к Supabase: ${error.message}`, true);
+        updateAuthUI();
+        return;
       }
+      await loadContent();
     }
 
-    document.querySelectorAll('.auth-tab').forEach((tab) => {
-      tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+    window.setActive = setActive;
+    window.openAuthModal = openAuthModal;
+    window.closeAuthModal = closeAuthModal;
+    window.switchAuthTab = switchAuthTab;
+    window.handleRegister = handleRegister;
+    window.handleLogin = handleLogin;
+    window.logoutUser = logoutUser;
+    window.toggleForm = toggleForm;
+    window.cancelEdit = cancelEdit;
+    window.saveNews = saveNews;
+    window.saveDoc = saveDoc;
+    window.addEventListener('DOMContentLoaded', () => {
+      void initializeSite();
     });
 
-    updateAuthUI();
   </script>
 </body>
 </html>
