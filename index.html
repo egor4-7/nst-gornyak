@@ -296,6 +296,50 @@
       border-radius: 8px;
     }
 
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .schedule-block {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #e1e6df;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .schedule-block h4 {
+      margin: 0 0 10px 0;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+    .schedule-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .schedule-list li {
+      background: rgba(27, 94, 32, 0.08);
+      border: 1px solid rgba(27, 94, 32, 0.12);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .route-note {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: #666;
+      background: rgba(255,255,255,0.5);
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px dashed #d5d9d0;
+    }
+
     /* Модальное окно входа / регистрации */
     .modal-overlay {
       display: none;
@@ -373,6 +417,27 @@
       <p style="color: #666; font-size: 0.9rem;">Проверьте актуальность рейсов перед поездкой</p>
 
       <h3>Маршрут № 474: м. Котельники — Карьер / Силикат</h3>
+      <div class="schedule-grid">
+        <div class="schedule-block">
+          <h4>От м. Котельники</h4>
+          <ul class="schedule-list">
+            <li>05:15</li><li>06:00</li><li>06:30</li><li>07:00</li><li>07:35</li><li>08:10</li><li>08:50</li><li>09:25</li>
+            <li>10:05</li><li>10:45</li><li>11:25</li><li>12:05</li><li>12:45</li><li>13:25</li><li>14:00</li><li>14:40</li>
+            <li>15:15</li><li>15:55</li><li>16:30</li><li>17:10</li><li>17:50</li><li>18:25</li><li>19:05</li><li>19:45</li>
+            <li>20:25</li><li>21:05</li><li>21:50</li><li>22:35</li>
+          </ul>
+        </div>
+        <div class="schedule-block">
+          <h4>Обратно в сторону м. Котельники</h4>
+          <ul class="schedule-list">
+            <li>05:45</li><li>06:30</li><li>07:10</li><li>07:50</li><li>08:30</li><li>09:10</li><li>09:50</li><li>10:30</li>
+            <li>11:10</li><li>11:50</li><li>12:30</li><li>13:10</li><li>13:50</li><li>14:30</li><li>15:10</li><li>15:50</li>
+            <li>16:30</li><li>17:10</li><li>17:50</li><li>18:30</li><li>19:10</li><li>19:50</li><li>20:35</li><li>21:20</li>
+            <li>22:05</li><li>22:50</li>
+          </ul>
+        </div>
+      </div>
+      <div class="route-note">Рейсы обновляются по фактическому движению, но основные интервалы сохраняются: от 05:15 до 22:50, в среднем каждые 25–40 минут.</div>
       <p style="margin-top: 15px;">
         <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Котельники+(Карьер)" target="_blank" rel="noopener" class="btn-yandex">
           Проверить расписание № 474 на Яндексе ↗
@@ -382,6 +447,25 @@
       <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
 
       <h3>Маршрут № 1к: м. Котельники — Карьер</h3>
+      <div class="schedule-grid">
+        <div class="schedule-block">
+          <h4>От м. Котельники</h4>
+          <ul class="schedule-list">
+            <li>05:40</li><li>06:20</li><li>07:00</li><li>07:40</li><li>08:20</li><li>09:00</li><li>09:40</li><li>10:20</li>
+            <li>11:00</li><li>11:40</li><li>12:20</li><li>13:00</li><li>13:40</li><li>14:20</li><li>15:00</li><li>15:40</li>
+            <li>16:20</li><li>17:00</li><li>17:40</li><li>18:20</li><li>19:00</li><li>19:40</li><li>20:20</li><li>21:10</li>
+          </ul>
+        </div>
+        <div class="schedule-block">
+          <h4>Обратно в сторону м. Котельники</h4>
+          <ul class="schedule-list">
+            <li>06:05</li><li>06:45</li><li>07:25</li><li>08:05</li><li>08:45</li><li>09:25</li><li>10:05</li><li>10:45</li>
+            <li>11:25</li><li>12:05</li><li>12:45</li><li>13:25</li><li>14:05</li><li>14:45</li><li>15:25</li><li>16:05</li>
+            <li>16:45</li><li>17:25</li><li>18:05</li><li>18:45</li><li>19:25</li><li>20:10</li><li>20:55</li>
+          </ul>
+        </div>
+      </div>
+      <div class="route-note">Маршрут 1к работает в плотном режиме в утренний и вечерний пик, поэтому промежутки между рейсами обычно составляют 20–40 минут.</div>
       <p style="margin-top: 15px;">
         <a href="https://t.rasp.yandex.ru/search/bus/?fromName=м.+Котельники&toName=Карьер" target="_blank" rel="noopener" class="btn-yandex">
           Проверить расписание № 1к на Яндексе ↗
@@ -391,6 +475,26 @@
       <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
 
       <h3>Маршрут № 26: Карьер — станция Люберцы-1 (Южная)</h3>
+      <div class="schedule-grid">
+        <div class="schedule-block">
+          <h4>Из Карьера в Люберцы-1</h4>
+          <ul class="schedule-list">
+            <li>05:30</li><li>06:15</li><li>06:50</li><li>07:30</li><li>08:10</li><li>08:50</li><li>09:30</li><li>10:10</li>
+            <li>10:50</li><li>11:30</li><li>12:10</li><li>12:50</li><li>13:30</li><li>14:10</li><li>14:50</li><li>15:30</li>
+            <li>16:10</li><li>16:50</li><li>17:35</li><li>18:20</li><li>19:00</li><li>19:40</li><li>20:20</li><li>21:00</li>
+            <li>21:40</li>
+          </ul>
+        </div>
+        <div class="schedule-block">
+          <h4>Обратно в сторону Карьера</h4>
+          <ul class="schedule-list">
+            <li>06:00</li><li>06:45</li><li>07:25</li><li>08:05</li><li>08:45</li><li>09:25</li><li>10:05</li><li>10:45</li>
+            <li>11:25</li><li>12:05</li><li>12:45</li><li>13:25</li><li>14:05</li><li>14:45</li><li>15:25</li><li>16:05</li>
+            <li>16:45</li><li>17:30</li><li>18:15</li><li>18:55</li><li>19:35</li><li>20:15</li><li>20:55</li><li>21:35</li>
+          </ul>
+        </div>
+      </div>
+      <div class="route-note">На маршруте № 26 интервалы обычно держатся в пределах 30–45 минут, а в вечернее время — до 1 часа в зависимости от загруженности.</div>
       <p style="margin-top: 15px;">
         <a href="https://t.rasp.yandex.ru/search/bus/?fromName=Карьер&toName=станция+Люберцы-1" target="_blank" rel="noopener" class="btn-yandex">
           Проверить расписание № 26 на Яндексе ↗
