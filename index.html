@@ -384,6 +384,49 @@
       text-align: right;
       overflow-wrap: anywhere;
     }
+    .profile-edit[hidden] {
+      display: none;
+    }
+    .profile-edit label, .news-form label, .document-upload label {
+      display: block;
+      margin: 10px 0 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .profile-edit input, .news-form input, .news-form textarea, .document-upload input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #c8e6c9;
+      border-radius: 10px;
+      font: inherit;
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .news-form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .news-post-img {
+      display: block;
+      max-width: 100%;
+      max-height: 320px;
+      margin-top: 12px;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+    .document-upload {
+      margin-bottom: 18px;
+    }
+    .document-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .document-name {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
     .apple-btn-group {
       display: flex;
       flex-direction: column;
@@ -475,22 +518,37 @@
         <h3 id="authModalTitle">Личный кабинет</h3>
         <button class="modal-close" type="button" onclick="closeModal()" aria-label="Закрыть">✕</button>
       </div>
-      <div class="apple-field">
-        <span class="label">Номер участка:</span>
-        <span class="value">№ 253</span>
+      <div id="profileView">
+        <div class="apple-field">
+          <span class="label">Номер участка:</span>
+          <span class="value" id="dispPlot">Не указан</span>
+        </div>
+        <div class="apple-field">
+          <span class="label">Email:</span>
+          <span class="value" id="dispEmail">Не вошел</span>
+        </div>
+        <div class="apple-field">
+          <span class="label">ФИО:</span>
+          <span class="value" id="dispName">Гость</span>
+        </div>
+        <div class="apple-btn-group">
+          <button class="apple-btn apple-btn-blue" id="editProfileButton" type="button">Изменить профиль</button>
+          <button class="apple-btn apple-btn-red" id="resetProfileButton" type="button">Очистить профиль</button>
+        </div>
       </div>
-      <div class="apple-field">
-        <span class="label">Email:</span>
-        <span class="value">egor4u@gmail.com</span>
-      </div>
-      <div class="apple-field">
-        <span class="label">ФИО:</span>
-        <span class="value" style="color: #8e8e93;">Не указано</span>
-      </div>
-      <div class="apple-btn-group">
-        <button class="apple-btn apple-btn-blue" type="button" onclick="alert('Редактирование профиля')">Изменить</button>
-        <button class="apple-btn apple-btn-green" type="button" onclick="closeModal()">Выйти из профиля</button>
-        <button class="apple-btn apple-btn-red" type="button" onclick="alert('Удаление профиля')">Удалить профиль</button>
+      <form id="profileEdit" class="profile-edit" hidden>
+        <label for="inputPlot">Номер участка</label>
+        <input id="inputPlot" name="plot" autocomplete="off">
+        <label for="inputEmail">Email</label>
+        <input id="inputEmail" name="email" type="email" autocomplete="email">
+        <label for="inputName">ФИО</label>
+        <input id="inputName" name="name" autocomplete="name">
+        <div class="apple-btn-group">
+          <button class="apple-btn apple-btn-green" type="submit">Сохранить</button>
+          <button class="apple-btn apple-btn-blue" id="cancelProfileEditButton" type="button">Отмена</button>
+        </div>
+      </form>
+      <div class="apple-btn-group" id="profileEditActions">
       </div>
     </section>
   </div>
@@ -588,25 +646,28 @@
     <!-- Новости -->
     <div class="card" id="news">
       <h2>📰 Новости и объявления</h2>
-      <div class="sub-card" style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <b>Подготовка к летнему сезону</b><br>
-          <span style="font-size: 0.8rem; color: var(--text-secondary);">Плановая проверка электросетей и водопровода.</span>
-        </div>
-        <button class="btn-action" onclick="alert('Открыть новость')">Читать</button>
-      </div>
+      <form id="newsForm" class="sub-card news-form">
+        <h4>Новое объявление</h4>
+        <label for="newNewsTitle">Заголовок</label>
+        <input id="newNewsTitle" name="title" maxlength="120" required>
+        <label for="newNewsText">Текст объявления</label>
+        <textarea id="newNewsText" name="text" maxlength="5000" required></textarea>
+        <label for="newNewsImage">Изображение (до 1 МБ)</label>
+        <input id="newNewsImage" name="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+        <button class="btn-action" type="submit">Опубликовать</button>
+      </form>
+      <div id="newsList" aria-live="polite"></div>
     </div>
 
     <!-- Документы -->
     <div class="card" id="documents">
       <h2>📁 Документы</h2>
-      <div class="sub-card" style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <b>Смета доходов и расходов</b><br>
-          <span style="font-size: 0.8rem; color: var(--text-secondary);">PDF • Утвержденный финансовый документ</span>
-        </div>
-        <button class="btn-action" onclick="alert('Скачать смету')">Скачать</button>
-      </div>
+      <form id="documentForm" class="sub-card document-upload">
+        <label for="docFileInput">Добавить документ (до 10 МБ; хранится в этом браузере)</label>
+        <input id="docFileInput" name="document" type="file" required>
+        <button class="btn-action" type="submit">Загрузить документ</button>
+      </form>
+      <div id="docsList" aria-live="polite"></div>
     </div>
 
     <!-- Контакты -->
