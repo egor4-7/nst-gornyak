@@ -955,6 +955,70 @@
     .profile-tile {
       width: 100%;
     }
+    .container {
+      max-width: 620px;
+      box-sizing: border-box;
+      padding: 0 16px;
+    }
+    .app-launcher-card {
+      box-sizing: border-box;
+      max-width: 620px;
+      max-height: calc(100vh - 48px);
+      max-height: calc(100dvh - 48px);
+      gap: 22px;
+      padding: 30px;
+    }
+    .hero-banner {
+      min-height: 0;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 26px;
+      background: linear-gradient(135deg, rgba(45, 106, 79, 0.9), rgba(27, 67, 50, 0.96)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80') center / cover;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 26px;
+    }
+    .hero-banner h1 {
+      margin-bottom: 4px;
+      font-size: 1.4rem;
+    }
+    .weather-box {
+      flex-shrink: 0;
+      padding: 8px 14px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+    .weather-temperature {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .weather-description {
+      font-size: 0.75rem;
+    }
+    .liquid-tiles-grid {
+      gap: 18px;
+    }
+    .icon-glass-3d {
+      width: 84px;
+      height: 84px;
+      margin-bottom: 8px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.35));
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08), inset 0 3px 6px #fff, inset 0 -4px 8px rgba(0, 0, 0, 0.04);
+    }
+    .icon-glass-3d::before {
+      border-radius: 26px 26px 0 0;
+    }
+    .icon-svg {
+      z-index: 1;
+      width: 42px;
+      height: 42px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
     .app-screen {
       position: fixed;
       inset: 0;
@@ -1039,13 +1103,9 @@
       display: none;
     }
     @media (max-width: 520px) {
-      .app-header {
-        top: 12px;
-        width: calc(100% - 24px);
-      }
       .app-launcher-card {
-        max-height: calc(100vh - 90px);
-        max-height: calc(100dvh - 90px);
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
         padding: 20px;
         border-radius: 28px;
       }
@@ -1054,8 +1114,14 @@
         gap: 18px 12px;
       }
       .icon-glass-3d {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
+      }
+      .hero-banner {
+        padding: 18px;
+      }
+      .weather-box {
+        padding: 7px 10px;
       }
       .app-screen {
         padding: 20px 12px;
@@ -1079,11 +1145,6 @@
   </style>
 </head>
 <body>
-
-  <header class="app-header">
-    <div class="brand-title">🌿 НСТ «Горняк»</div>
-    <button class="btn-profile profile-btn" type="button" onclick="openModal()" title="Профиль" aria-label="Открыть личный кабинет">👤</button>
-  </header>
 
   <div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)" aria-hidden="true" inert>
     <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" tabindex="-1">
@@ -1131,19 +1192,23 @@
     <section class="app-launcher-card" aria-label="Главная панель приложения">
       <section class="hero-banner" aria-labelledby="welcomeTitle">
         <div>
-          <h1 id="welcomeTitle">Информационный портал</h1>
-          <p>НСТ «Горняк» — всё важное в одном месте</p>
+          <h1 id="welcomeTitle">НСТ «Горняк»</h1>
+          <p>Официальный портал</p>
+        </div>
+        <div class="weather-box" aria-label="Погода: плюс 18 градусов, ясно">
+          <div class="weather-temperature">+18°C</div>
+          <div class="weather-description">☀️ Ясно</div>
         </div>
       </section>
       <div class="liquid-tiles-grid">
-        <button class="liquid-tile" type="button" onclick="openApp('transport')"><span class="icon-glass-3d" aria-hidden="true">🚌</span><span class="tile-title">Транспорт</span></button>
-        <button class="liquid-tile" type="button" onclick="openApp('tariffs')"><span class="icon-glass-3d" aria-hidden="true">⚡</span><span class="tile-title">Тарифы</span></button>
-        <button class="liquid-tile" type="button" onclick="openApp('news')"><span class="icon-glass-3d" aria-hidden="true">📰</span><span class="tile-title">Новости</span></button>
-        <button class="liquid-tile" type="button" onclick="openApp('documents')"><span class="icon-glass-3d" aria-hidden="true">📁</span><span class="tile-title">Документы</span></button>
-        <button class="liquid-tile" type="button" onclick="openApp('contacts')"><span class="icon-glass-3d" aria-hidden="true">📞</span><span class="tile-title">Контакты</span></button>
-        <button class="liquid-tile profile-tile" type="button" onclick="openModal()"><span class="icon-glass-3d" aria-hidden="true">👤</span><span class="tile-title">Профиль</span></button>
-        <button class="liquid-tile" type="button" onclick="openApp('tariffs')"><span class="icon-glass-3d" aria-hidden="true">💳</span><span class="tile-title">Взносы</span></button>
-        <button class="liquid-tile" type="button" onclick="openApp('info')"><span class="icon-glass-3d" aria-hidden="true">ℹ️</span><span class="tile-title">О НСТ</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('transport')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2"><rect x="3" y="6" width="18" height="11" rx="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M3 11h18"/></svg></span><span class="tile-title">Транспорт</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('tariffs')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#d35400" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span class="tile-title">Тарифы</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('news')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#2980b9" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v10a2 2 0 0 1-2 2Z"/><path d="M16 3v5h5M7 13h10M7 17h10"/></svg></span><span class="tile-title">Новости</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('documents')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#8e44ad" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></span><span class="tile-title">Документы</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('contacts')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#16a085" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.1 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72l.45 3a2 2 0 0 1-.57 1.7L8.1 11.3a16 16 0 0 0 4.6 4.6l1.88-1.86a2 2 0 0 1 1.7-.57l3 .45a2 2 0 0 1 1.72 2z"/></svg></span><span class="tile-title">Контакты</span></button>
+        <button class="liquid-tile profile-tile" type="button" onclick="openModal()"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="tile-title">Профиль</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('tariffs')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span><span class="tile-title">Взносы</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('info')"><span class="icon-glass-3d" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#34495e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></svg></span><span class="tile-title">О НСТ</span></button>
       </div>
     </section>
 
@@ -1321,7 +1386,7 @@
 
   <script>
     const modal = document.getElementById('authModal');
-    const profileButton = document.querySelector('.btn-profile');
+    const profileButton = document.querySelector('.profile-tile');
     const modalCard = modal.querySelector('.modal-card');
     let lastAppTrigger = null;
     let modalTrigger = null;
