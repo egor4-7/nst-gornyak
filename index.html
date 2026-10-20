@@ -54,6 +54,13 @@
             overflow-x: hidden;
         }
 
+        /* Контейнер страниц для безупречной плавной анимации без рывков */
+        .pages-stack {
+            display: grid;
+            grid-template-areas: "stack";
+            width: 100%;
+        }
+
         /* Header */
         .main-header {
             background: var(--header-bg);
@@ -88,7 +95,7 @@
 
         .icon-btn:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.35); }
 
-        /* Плашка погоды в шапке */
+        /* Плашка погоды в шапке (без мерцания фона) */
         .weather-pill {
             background: rgba(255, 255, 255, 0.28);
             backdrop-filter: blur(15px);
@@ -182,8 +189,14 @@
             will-change: transform;
         }
 
+        .nav-card:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 12px 35px 0 rgba(31, 38, 135, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
         .nav-card:active { 
-            transform: scale(0.95); 
+            transform: scale(0.96); 
             background: rgba(255, 255, 255, 0.8); 
         }
 
@@ -203,27 +216,22 @@
         .card-icon-wrapper svg { width: 24px; height: 24px; }
         .card-label { font-size: 14px; font-weight: 600; color: var(--text-main); }
 
-        /* Аппаратное ускорение для безупречной анимации на тач-устройствах */
+        /* Идеальная плавная анимация переключения (Grid Stacking + Opacity/Scale) */
         .subpage {
-            display: none;
+            grid-area: stack;
+            display: flex;
             flex-direction: column;
             padding-bottom: 20px;
-            will-change: transform, opacity;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.94);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
         .subpage.active {
-            display: flex;
-            animation: ipadSpringOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes ipadSpringOpen {
-            0% {
-                opacity: 0;
-                transform: scale(0.90) translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
         }
 
         .subpage-header {
@@ -321,353 +329,341 @@
 <body>
 
 <div class="app-container">
+    <div class="pages-stack">
 
-    <!-- MAIN HOME PAGE -->
-    <div id="page-home" class="subpage active">
-        <header class="main-header">
-            <div class="header-title">
-                <h1>НСТ «Горняк»</h1>
-                <p>Официальный портал</p>
-            </div>
-            <div class="header-actions">
-                <button class="icon-btn" onpointerdown="openPage('notifications')" title="Уведомления">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                        <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg>
-                </button>
-                <div class="weather-pill" onpointerdown="openPage('weather')">
-                    <div class="weather-pill-content">
-                        <svg class="weather-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="4"></circle>
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        <!-- MAIN HOME PAGE -->
+        <div id="page-home" class="subpage active">
+            <header class="main-header">
+                <div class="header-title">
+                    <h1>НСТ «Горняк»</h1>
+                    <p>Официальный портал</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" onpointerdown="openPage('notifications')" title="Уведомления">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
-                        <div class="weather-text-col">
-                            <span class="weather-temp" id="pill-temp">+3°C</span>
-                            <span class="weather-desc" id="pill-desc">Солнечно</span>
+                    </button>
+                    <div class="weather-pill" onpointerdown="openPage('weather')">
+                        <div class="weather-pill-content">
+                            <svg class="weather-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                            </svg>
+                            <div class="weather-text-col">
+                                <span class="weather-temp" id="pill-temp">+3°C</span>
+                                <span class="weather-desc" id="pill-desc">Солнечно</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <!-- Smart Search Bar -->
-        <div class="search-container">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="global-search" class="search-input" placeholder="Умный поиск по сайту и документам..." oninput="handleSearch(this.value)">
+            <!-- Smart Search Bar -->
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="global-search" class="search-input" placeholder="Умный поиск по сайту и документам..." oninput="handleSearch(this.value)">
+            </div>
+
+            <div id="search-results" class="search-results-box"></div>
+
+            <nav class="nav-grid">
+                <div class="nav-card" onpointerdown="openPage('transport')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
+                            <rect x="3" y="6" width="18" height="11" rx="2"></rect>
+                            <circle cx="7" cy="17" r="2"></circle>
+                            <circle cx="17" cy="17" r="2"></circle>
+                            <path d="M5 11h14"></path>
+                        </svg>
+                    </div>
+                    <span class="card-label">Транспорт</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('tariffs')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#d84315" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <span class="card-label">Тарифы</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('news')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2">
+                            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
+                            <path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8z"></path>
+                        </svg>
+                    </div>
+                    <span class="card-label">Новости</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('documents')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <span class="card-label">Документы</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('contacts')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                    </div>
+                    <span class="card-label">Контакты</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('profile')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00838f" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <span class="card-label">Профиль</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('payments')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#b71c1c" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                    </div>
+                    <span class="card-label">Взносы</span>
+                </div>
+
+                <div class="nav-card" onpointerdown="openPage('about')">
+                    <div class="card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#263238" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </div>
+                    <span class="card-label">О НСТ</span>
+                </div>
+            </nav>
         </div>
 
-        <div id="search-results" class="search-results-box"></div>
-
-        <nav class="nav-grid">
-            <div class="nav-card" onpointerdown="openPage('transport')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
-                        <rect x="3" y="6" width="18" height="11" rx="2"></rect>
-                        <circle cx="7" cy="17" r="2"></circle>
-                        <circle cx="17" cy="17" r="2"></circle>
-                        <path d="M5 11h14"></path>
-                    </svg>
-                </div>
-                <span class="card-label">Транспорт</span>
+        <!-- SUBPAGE: WEATHER -->
+        <div id="page-weather" class="subpage">
+            <div class="subpage-header">
+                <button class="back-btn" onpointerdown="goHome()">← Назад</button>
+                <span class="subpage-title">Погода в НСТ «Горняк»</span>
+                <div style="width: 32px;"></div>
             </div>
-
-            <div class="nav-card" onpointerdown="openPage('tariffs')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#d84315" stroke-width="2">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
-                </div>
-                <span class="card-label">Тарифы</span>
-            </div>
-
-            <div class="nav-card" onpointerdown="openPage('news')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2">
-                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
-                        <path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8z"></path>
-                    </svg>
-                </div>
-                <span class="card-label">Новости</span>
-            </div>
-
-            <div class="nav-card" onpointerdown="openPage('documents')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
-                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </div>
-                <span class="card-label">Документы</span>
-            </div>
-
-            <div class="nav-card" onpointerdown="openPage('contacts')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                </div>
-                <span class="card-label">Контакты</span>
-            </div>
-
-            <div class="nav-card" onpointerdown="openPage('profile')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#00838f" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <span class="card-label">Профиль</span>
-            </div>
-
-            <div class="nav-card" onpointerdown="openPage('payments')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#b71c1c" stroke-width="2">
-                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                    </svg>
-                </div>
-                <span class="card-label">Взносы</span>
-            </div>
-
-            <div class="nav-card" onpointerdown="openPage('about')">
-                <div class="card-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#263238" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="16" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                    </svg>
-                </div>
-                <span class="card-label">О НСТ</span>
-            </div>
-        </nav>
-    </div>
-
-    <!-- SUBPAGE: WEATHER -->
-    <div id="page-weather" class="subpage">
-        <div class="subpage-header">
-            <button class="back-btn" onpointerdown="goHome()">← Назад</button>
-            <span class="subpage-title">Погода в НСТ «Горняк»</span>
-            <div style="width: 32px;"></div>
-        </div>
-        
-        <div class="weather-card-full">
-            <div style="font-size: 14px; opacity: 0.8;">Текущая погода · Open-Meteo</div>
-            <div class="weather-main-temp" id="full-temp">+3°</div>
-            <div style="font-size: 16px; font-weight: 500;" id="full-desc">Солнечно</div>
             
-            <div class="weather-grid" style="margin-top: 16px;">
-                <div class="weather-grid-item"><div class="weather-label">Ощущается как</div><div class="weather-val" id="full-feels">+1°C</div></div>
-                <div class="weather-grid-item"><div class="weather-label">Влажность</div><div class="weather-val" id="full-humidity">65%</div></div>
-                <div class="weather-grid-item"><div class="weather-label">Ветер</div><div class="weather-val" id="full-wind">4.3 м/с</div></div>
-                <div class="weather-grid-item"><div class="weather-label">Давление</div><div class="weather-val" id="full-pressure">758 мм</div></div>
+            <div class="weather-card-full">
+                <div style="font-size: 14px; opacity: 0.8;">Текущая погода · Open-Meteo</div>
+                <div class="weather-main-temp" id="full-temp">+3°</div>
+                <div style="font-size: 16px; font-weight: 500;" id="full-desc">Солнечно</div>
+                
+                <div class="weather-grid" style="margin-top: 16px;">
+                    <div class="weather-grid-item"><div class="weather-label">Ощущается как</div><div class="weather-val" id="full-feels">+1°C</div></div>
+                    <div class="weather-grid-item"><div class="weather-label">Влажность</div><div class="weather-val" id="full-humidity">65%</div></div>
+                    <div class="weather-grid-item"><div class="weather-label">Ветер</div><div class="weather-val" id="full-wind">4.3 м/с</div></div>
+                    <div class="weather-grid-item"><div class="weather-label">Давление</div><div class="weather-val" id="full-pressure">758 мм</div></div>
+                </div>
+            </div>
+
+            <div class="content-card" style="margin-top: 14px;">
+                <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--text-main);">Прогноз на 7 дней</h3>
+                <div id="weekly-forecast-container" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="font-size: 13px; color: var(--text-muted);">Загрузка прогноза...</div>
+                </div>
             </div>
         </div>
 
-        <div class="content-card" style="margin-top: 14px;">
-            <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--text-main);">Прогноз на 7 дней</h3>
-            <div id="weekly-forecast-container" style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-size: 13px; color: var(--text-muted);">Загрузка прогноза...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SUBPAGE: TRANSPORT -->
-    <div id="page-transport" class="subpage">
-        <div class="subpage-header">
-            <button class="back-btn" onpointerdown="goHome()">← Назад</button>
-            <span class="subpage-title">Транспорт и маршруты</span>
-            <div style="width: 32px;"></div>
-        </div>
-
-        <div class="content-card">
-            <div class="route-header">
-                <h3 style="font-size: 15px;">Маршрут №474</h3>
-                <div id="badge-474" class="live-badge"><span class="live-dot"></span><span id="status-text-474">На линии</span></div>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted);">Город — НСТ «Горняк»</p>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Интервал: каждый час с 07:00 до 21:00.</p>
-        </div>
-
-        <div class="content-card">
-            <div class="route-header">
-                <h3 style="font-size: 15px;">Маршрут №474к</h3>
-                <div id="badge-474k" class="live-badge"><span class="live-dot"></span><span id="status-text-474k">На линии</span></div>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted);">Укороченный рейс (до поворота)</p>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Утренние и вечерние часы пик.</p>
-        </div>
-
-        <div class="content-card">
-            <div class="route-header">
-                <h3 style="font-size: 15px;">Маршрут №26. К1</h3>
-                <div id="badge-26k1" class="live-badge"><span class="live-dot"></span><span id="status-text-26k1">На линии</span></div>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted);">Сезонный дачный рейс</p>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Пятница – Воскресенье по расписанию.</p>
-        </div>
-
-        <div class="content-card">
-            <h3 style="font-size: 15px; margin-bottom: 8px;">Служебные номера перевозчика</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">ООО «БАЛАШИХА-ЭКСПРЕСС»:</p>
-            <a href="tel:+74957862323" class="phone-link">📞 +7 (495) 786-23-23</a><br>
-            <a href="tel:+79851872802" class="phone-link">📞 +7 (985) 187-28-02</a><br>
-            <a href="tel:+74954249911" class="phone-link">📞 +7 (495) 424-99-11</a>
-            <div style="margin-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
-                <p style="font-size: 12px; color: var(--text-muted);">Справочная автостанции (м. Котельники):</p>
-                <a href="tel:89035816727" class="phone-link">📞 8 (903) 581-67-27</a>
-            </div>
-        </div>
-
-        <div class="content-card">
-            <h3 style="font-size: 15px; margin-bottom: 6px;">Интерактивная карта</h3>
-            <div class="map-wrapper">
-                <iframe src="https://yandex.ru/map-widget/v1/?ll=37.617635%2C55.755814&z=11&l=masstransit" width="100%" height="100%" frameborder="0" allowfullscreen="true"></iframe>
-            </div>
-        </div>
-    </div>
-
-    <!-- SUBPAGE: TARIFFS -->
-    <div id="page-tariffs" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Тарифы</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Электроэнергия</h3><p style="font-size: 13px; color: var(--text-muted);">День: 5.40 руб/кВтч. Ночь: 2.80 руб/кВтч.</p></div>
-    </div>
-
-    <!-- SUBPAGE: NEWS -->
-    <div id="page-news" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Новости</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Подготовка к сезону</h3><p style="font-size: 13px; color: var(--text-muted);">Проводится чистка дорог и проверка водопровода.</p></div>
-    </div>
-
-    <!-- SUBPAGE: DOCUMENTS -->
-    <div id="page-documents" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Документы</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Устав НСТ «Горняк»</h3><p style="font-size: 12px; color: var(--text-muted);">Основной регламентирующий документ товарищества.</p></div>
-    </div>
-
-    <!-- SUBPAGE: CONTACTS -->
-    <div id="page-contacts" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Контакты</span><div style="width: 32px;"></div></div>
-        <div class="content-card">
-            <h3 style="font-size: 15px; margin-bottom: 6px;">Правление НСТ «Горняк»</h3>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Председатель правления:</p>
-            <a href="tel:+79000000000" class="phone-link">📞 +7 (900) 000-00-00</a>
-            <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Аварийный электрик:</p>
-                <a href="tel:+79001112233" class="phone-link">📞 +7 (900) 111-22-33</a>
-            </div>
-            <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Бухгалтерия / Оплата взносов:</p>
-                <a href="tel:+79004445566" class="phone-link">📞 +7 (900) 444-55-66</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- SUBPAGE: PROFILE -->
-    <div id="page-profile" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Личный кабинет</span><div style="width: 32px;"></div></div>
-        
-        <div id="cabinet-login-view" class="content-card">
-            <h3 style="font-size: 15px; margin-bottom: 6px;">Авторизация участника</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Введите номер вашего участка для доступа к балансу и показаниям:</p>
-            <div class="login-box">
-                <input type="number" id="plot-number-input" class="cabinet-input" placeholder="Номер участка (например, 45)">
-                <button class="cabinet-btn" onclick="loginCabinet()">Войти</button>
-            </div>
-        </div>
-
-        <div id="cabinet-data-view" style="display: none;">
-            <div class="content-card" style="background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(46, 125, 50, 0.3);">
-                <h3 style="font-size: 16px; color: #1b4332;" id="cabinet-title">Участок № —</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Статус: <span style="color: #2e7d32; font-weight: 600;">Член НСТ (активен)</span></p>
+        <!-- SUBPAGE: TRANSPORT -->
+        <div id="page-transport" class="subpage">
+            <div class="subpage-header">
+                <button class="back-btn" onpointerdown="goHome()">← Назад</button>
+                <span class="subpage-title">Транспорт и маршруты</span>
+                <div style="width: 32px;"></div>
             </div>
 
             <div class="content-card">
-                <h3 style="font-size: 14px; margin-bottom: 8px;">Состояние счета</h3>
-                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
-                    <span style="color: var(--text-muted);">Баланс:</span>
-                    <span style="font-weight: 700; color: #2e7d32;" id="cabinet-balance">0 руб.</span>
+                <div class="route-header">
+                    <h3 style="font-size: 15px;">Маршрут №474</h3>
+                    <div id="badge-474" class="live-badge"><span class="live-dot"></span><span id="status-text-474">На линии</span></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                    <span style="color: var(--text-muted);">Целевой взнос 2026:</span>
-                    <span style="font-weight: 700; color: #b71c1c;" id="cabinet-debt">Оплачено</span>
+                <p style="font-size: 13px; color: var(--text-muted);">Город — НСТ «Горняк»</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Интервал: каждый час с 07:00 до 21:00.</p>
+            </div>
+
+            <div class="content-card">
+                <div class="route-header">
+                    <h3 style="font-size: 15px;">Маршрут №474к</h3>
+                    <div id="badge-474k" class="live-badge"><span class="live-dot"></span><span id="status-text-474k">На линии</span></div>
+                </div>
+                <p style="font-size: 13px; color: var(--text-muted);">Укороченный рейс (до поворота)</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Утренние и вечерние часы пик.</p>
+            </div>
+
+            <div class="content-card">
+                <div class="route-header">
+                    <h3 style="font-size: 15px;">Маршрут №26. К1</h3>
+                    <div id="badge-26k1" class="live-badge"><span class="live-dot"></span><span id="status-text-26k1">На линии</span></div>
+                </div>
+                <p style="font-size: 13px; color: var(--text-muted);">Сезонный дачный рейс</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Пятница – Воскресенье по расписанию.</p>
+            </div>
+
+            <div class="content-card">
+                <h3 style="font-size: 15px; margin-bottom: 8px;">Служебные номера перевозчика</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">ООО «БАЛАШИХА-ЭКСПРЕСС»:</p>
+                <a href="tel:+74957862323" class="phone-link">📞 +7 (495) 786-23-23</a><br>
+                <a href="tel:+79851872802" class="phone-link">📞 +7 (985) 187-28-02</a><br>
+                <a href="tel:+74954249911" class="phone-link">📞 +7 (495) 424-99-11</a>
+                <div style="margin-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
+                    <p style="font-size: 12px; color: var(--text-muted);">Справочная автостанции (м. Котельники):</p>
+                    <a href="tel:89035816727" class="phone-link">📞 8 (903) 581-67-27</a>
                 </div>
             </div>
 
             <div class="content-card">
-                <h3 style="font-size: 14px; margin-bottom: 8px;">Показания электросчетчика</h3>
-                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Последняя передача: 15 сентября</div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" class="cabinet-input" placeholder="Новые показания (кВт⋅ч)" id="meter-val">
-                    <button class="cabinet-btn" onclick="alert('Показания успешно переданы в правление!')">Передать</button>
+                <h3 style="font-size: 15px; margin-bottom: 6px;">Интерактивная карта</h3>
+                <div class="map-wrapper">
+                    <iframe src="https://yandex.ru/map-widget/v1/?ll=37.617635%2C55.755814&z=11&l=masstransit" width="100%" height="100%" frameborder="0" allowfullscreen="true"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBPAGE: TARIFFS -->
+        <div id="page-tariffs" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Тарифы</span><div style="width: 32px;"></div></div>
+            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Электроэнергия</h3><p style="font-size: 13px; color: var(--text-muted);">День: 5.40 руб/кВтч. Ночь: 2.80 руб/кВтч.</p></div>
+        </div>
+
+        <!-- SUBPAGE: NEWS -->
+        <div id="page-news" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Новости</span><div style="width: 32px;"></div></div>
+            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Подготовка к сезону</h3><p style="font-size: 13px; color: var(--text-muted);">Проводится чистка дорог и проверка водопровода.</p></div>
+        </div>
+
+        <!-- SUBPAGE: DOCUMENTS -->
+        <div id="page-documents" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Документы</span><div style="width: 32px;"></div></div>
+            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Устав НСТ «Горняк»</h3><p style="font-size: 12px; color: var(--text-muted);">Основной регламентирующий документ товарищества.</p></div>
+        </div>
+
+        <!-- SUBPAGE: CONTACTS -->
+        <div id="page-contacts" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Контакты</span><div style="width: 32px;"></div></div>
+            <div class="content-card">
+                <h3 style="font-size: 15px; margin-bottom: 6px;">Правление НСТ «Горняк»</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Председатель правления:</p>
+                <a href="tel:+79000000000" class="phone-link">📞 +7 (900) 000-00-00</a>
+                <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Аварийный электрик:</p>
+                    <a href="tel:+79001112233" class="phone-link">📞 +7 (900) 111-22-33</a>
+                </div>
+                <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Бухгалтерия / Оплата взносов:</p>
+                    <a href="tel:+79004445566" class="phone-link">📞 +7 (900) 444-55-66</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBPAGE: PROFILE -->
+        <div id="page-profile" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Личный кабинет</span><div style="width: 32px;"></div></div>
+            
+            <div id="cabinet-login-view" class="content-card">
+                <h3 style="font-size: 15px; margin-bottom: 6px;">Авторизация участника</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Введите номер вашего участка для доступа к балансу и показаниям:</p>
+                <div class="login-box">
+                    <input type="number" id="plot-number-input" class="cabinet-input" placeholder="Номер участка (например, 45)">
+                    <button class="cabinet-btn" onclick="loginCabinet()">Войти</button>
                 </div>
             </div>
 
-            <button class="cabinet-btn" style="width: 100%; background: #c62828; margin-top: 4px;" onclick="logoutCabinet()">Выйти из кабинета</button>
+            <div id="cabinet-data-view" style="display: none;">
+                <div class="content-card" style="background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(46, 125, 50, 0.3);">
+                    <h3 style="font-size: 16px; color: #1b4332;" id="cabinet-title">Участок № —</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Статус: <span style="color: #2e7d32; font-weight: 600;">Член НСТ (активен)</span></p>
+                </div>
+
+                <div class="content-card">
+                    <h3 style="font-size: 14px; margin-bottom: 8px;">Состояние счета</h3>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                        <span style="color: var(--text-muted);">Баланс:</span>
+                        <span style="font-weight: 700; color: #2e7d32;" id="cabinet-balance">0 руб.</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: var(--text-muted);">Целевой взнос 2026:</span>
+                        <span style="font-weight: 700; color: #b71c1c;" id="cabinet-debt">Оплачено</span>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3 style="font-size: 14px; margin-bottom: 8px;">Показания электросчетчика</h3>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Последняя передача: 15 сентября</div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" class="cabinet-input" placeholder="Новые показания (кВт⋅ч)" id="meter-val">
+                        <button class="cabinet-btn" onclick="alert('Показания успешно переданы в правление!')">Передать</button>
+                    </div>
+                </div>
+
+                <button class="cabinet-btn" style="width: 100%; background: #c62828; margin-top: 4px;" onclick="logoutCabinet()">Выйти из кабинета</button>
+            </div>
         </div>
-    </div>
 
-    <!-- SUBPAGE: PAYMENTS -->
-    <div id="page-payments" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Взносы</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Сведения по взносам</h3><p style="font-size: 12px; color: var(--text-muted);">Персональные начисления доступны в личном кабинете.</p></div>
-    </div>
-
-    <!-- SUBPAGE: ABOUT -->
-    <div id="page-about" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">О НСТ «Горняк»</span><div style="width: 32px;"></div></div>
-        
-        <div class="content-card">
-            <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);">История создания и развития</h3>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-                Садоводческое некоммерческое товарищество (НСТ) «Горняк» имеет богатую историю, уходящую корнями в эпоху активного развития пригородных хозяйственных инициатив. Товарищество было основано в 1985 году как объединение работников горнодобывающей и смежных отраслей.
-            </p>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-                В начале своего пути территория представляла собой необустроенные земельные массивы. Силами первых энтузиастов производилась расчистка участков, прокладывались первые подъездные пути и линии электропередач. 
-            </p>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-                В 1992 году земельные участки были официально переданы членам товарищества в частную собственность, что дало мощный толчок к капитальному строительству и благоустройству. Позже, в 2004 году, в ходе правовой реорганизации товарищество получило современный статус СНТ/НСТ «Горняк».
-            </p>
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-                Сегодня «Горняк» — это развитое, современное садовое товарищество с круглогодичной инфраструктурой, качественными дорогами и стабильным энергоснабжением.
-            </p>
+        <!-- SUBPAGE: PAYMENTS -->
+        <div id="page-payments" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Взносы</span><div style="width: 32px;"></div></div>
+            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Сведения по взносам</h3><p style="font-size: 12px; color: var(--text-muted);">Персональные начисления доступны в личном кабинете.</p></div>
         </div>
-    </div>
 
-    <!-- SUBPAGE: NOTIFICATIONS -->
-    <div id="page-notifications" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Уведомления</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Новых уведомлений нет</h3><p style="font-size: 12px; color: var(--text-muted);">Штатный режим работы.</p></div>
-    </div>
+        <!-- SUBPAGE: ABOUT -->
+        <div id="page-about" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">О НСТ «Горняк»</span><div style="width: 32px;"></div></div>
+            
+            <div class="content-card">
+                <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);">История создания и развития</h3>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+                    Садоводческое некоммерческое товарищество (НСТ) «Горняк» имеет богатую историю, уходящую корнями в эпоху активного развития пригородных хозяйственных инициатив. Товарищество было основано в 1985 году как объединение работников горнодобывающей и смежных отраслей.
+                </p>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+                    В начале своего пути территория представляла собой необустроенные земельные массивы. Силами первых энтузиастов производилась расчистка участков, прокладывались первые подъездные пути и линии электропередач. 
+                </p>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+                    В 1992 году земельные участки были официально переданы членам товарищества в частную собственность, что дало мощный толчок к капитальному строительству и благоустройству. Позже, в 2004 году, в ходе правовой реорганизации товарищество получило современный статус СНТ/НСТ «Горняк».
+                </p>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                    Сегодня «Горняк» — это развитое, современное садовое товарищество с круглогодичной инфраструктурой, качественными дорогами и стабильным энергоснабжением.
+                </p>
+            </div>
+        </div>
 
+        <!-- SUBPAGE: NOTIFICATIONS -->
+        <div id="page-notifications" class="subpage">
+            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Уведомления</span><div style="width: 32px;"></div></div>
+            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Новых уведомлений нет</h3><p style="font-size: 12px; color: var(--text-muted);">Штатный режим работы.</p></div>
+        </div>
+
+    </div>
 </div>
 
 <script>
-    // Мгновенный и плавный запуск анимации по касанию пальца (pointerdown)
+    // Мгновенное и абсолютно плавное переключение через Grid Stacking (без рывков)
     function openPage(pageId) {
-        const currentActive = document.querySelector('.subpage.active');
+        document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
         const target = document.getElementById('page-' + pageId);
-        
-        if (!target || currentActive === target) return;
-
-        if (currentActive) {
-            currentActive.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            currentActive.style.opacity = '0';
-            currentActive.style.transform = 'scale(0.93)';
-            setTimeout(() => {
-                currentActive.classList.remove('active');
-                currentActive.style.opacity = '';
-                currentActive.style.transform = '';
-            }, 200);
-        }
-
-        setTimeout(() => {
+        if (target) {
             target.classList.add('active');
             const container = document.querySelector('.app-container');
             if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
+        }
     }
 
     function goHome() {
