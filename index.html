@@ -30,12 +30,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 8px; /* Равномерный отступ от края экрана планшета */
+            padding: 8px;
             color: var(--text-main);
             overflow-x: hidden;
         }
 
-        /* Эффект жидкого стекла для главного контейнера */
         .app-container {
             width: 100%;
             max-width: 100%;
@@ -87,7 +86,7 @@
 
         .icon-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.3); }
 
-        /* Стабильная плашка погоды без мигания фона */
+        /* Стабильная маленькая плашка погоды (без мерцания фона) */
         .weather-pill {
             background: rgba(255, 255, 255, 0.28);
             backdrop-filter: blur(15px);
@@ -162,7 +161,6 @@
             margin-bottom: 16px;
         }
 
-        /* Карточки навигации с эффектом жидкого стекла */
         .nav-card, .content-card {
             background: rgba(255, 255, 255, 0.55);
             backdrop-filter: blur(20px);
@@ -301,6 +299,7 @@
                 </button>
                 <div class="weather-pill" onclick="openPage('weather')">
                     <div class="weather-pill-content">
+                        <!-- Живая плавная анимация лучей/иконки только для мини-виджета в шапке -->
                         <svg class="weather-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="4"></circle>
                             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
