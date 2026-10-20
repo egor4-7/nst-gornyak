@@ -87,7 +87,7 @@
         .icon-btn:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.25); }
         .icon-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.3); }
 
-        /* Плашка погоды в шапке (без мерцания, но с увеличением при наведении) */
+        /* Плашка погоды в шапке */
         .weather-pill {
             background: rgba(255, 255, 255, 0.28);
             backdrop-filter: blur(15px);
@@ -174,7 +174,6 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
 
-        /* Эффект легкого увеличения при наведении на карточки */
         .nav-card {
             padding: 16px 12px;
             display: flex;
@@ -185,7 +184,7 @@
         }
 
         .nav-card:hover {
-            transform: scale(1.03); /* Плавное увеличение при наведении */
+            transform: scale(1.03);
             background: rgba(255, 255, 255, 0.75);
             box-shadow: 0 12px 35px 0 rgba(31, 38, 135, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
@@ -206,16 +205,25 @@
             transition: transform 0.25s ease;
         }
 
-        .nav-card:hover .card-icon-wrapper {
-            transform: scale(1.05); /* Иконка внутри тоже чуть увеличивается */
-        }
+        .nav-card:hover .card-icon-wrapper { transform: scale(1.05); }
 
         .card-icon-wrapper svg { width: 24px; height: 24px; }
         .card-label { font-size: 14px; font-weight: 600; color: var(--text-main); }
 
-        /* Subpages */
-        .subpage { display: none; flex-direction: column; padding-bottom: 20px; }
-        .subpage.active { display: flex; }
+        /* Плавная анимация переключения страниц */
+        .subpage {
+            display: none;
+            flex-direction: column;
+            padding-bottom: 20px;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .subpage.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
 
         .subpage-header {
             display: flex;
@@ -252,9 +260,7 @@
             border-radius: var(--radius-xl);
             transition: transform 0.25s ease;
         }
-        .content-card:hover {
-            transform: scale(1.01); /* Легкое увеличение блоков контента */
-        }
+        .content-card:hover { transform: scale(1.01); }
 
         .route-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
         .live-badge {
@@ -297,6 +303,18 @@
         .weather-grid-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 10px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.1); }
         .weather-label { font-size: 10px; text-transform: uppercase; opacity: 0.6; }
         .weather-val { font-size: 14px; font-weight: 700; margin-top: 4px; }
+
+        /* Стили для личного кабинета */
+        .login-box { display: flex; gap: 8px; margin-top: 10px; }
+        .cabinet-input {
+            flex: 1; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.15);
+            background: rgba(255,255,255,0.8); font-size: 14px; outline: none; color: var(--text-main);
+        }
+        .cabinet-btn {
+            background: var(--header-bg); color: white; border: none; padding: 10px 18px;
+            border-radius: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+        }
+        .cabinet-btn:hover { transform: scale(1.03); }
 
         @media (max-width: 900px) {
             .nav-grid { grid-template-columns: repeat(2, 1fr); }
@@ -536,25 +554,90 @@
     <!-- SUBPAGE: CONTACTS -->
     <div id="page-contacts" class="subpage">
         <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">Контакты</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Председатель правления</h3><a href="tel:+79000000000" class="phone-link">📞 +7 (900) 000-00-00</a></div>
+        <div class="content-card">
+            <h3 style="font-size: 15px; margin-bottom: 6px;">Правление НСТ «Горняк»</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Председатель правления:</p>
+            <a href="tel:+79000000000" class="phone-link">📞 +7 (900) 000-00-00</a>
+            <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Аварийный электрик:</p>
+                <a href="tel:+79001112233" class="phone-link">📞 +7 (900) 111-22-33</a>
+            </div>
+            <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Бухгалтерия / Оплата взносов:</p>
+                <a href="tel:+79004445566" class="phone-link">📞 +7 (900) 444-55-66</a>
+            </div>
+        </div>
     </div>
 
-    <!-- SUBPAGE: PROFILE -->
+    <!-- SUBPAGE: PROFILE (РАБОЧИЙ ЛИЧНЫЙ КАБИНЕТ) -->
     <div id="page-profile" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">Профиль</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Личный кабинет</h3><p style="font-size: 13px; color: var(--text-muted);">Вход по номеру участка.</p></div>
+        <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">Личный кабинет</span><div style="width: 32px;"></div></div>
+        
+        <div id="cabinet-login-view" class="content-card">
+            <h3 style="font-size: 15px; margin-bottom: 6px;">Авторизация участника</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Введите номер вашего участка для доступа к балансу и показаниям:</p>
+            <div class="login-box">
+                <input type="number" id="plot-number-input" class="cabinet-input" placeholder="Номер участка (например, 45)">
+                <button class="cabinet-btn" onclick="loginCabinet()">Войти</button>
+            </div>
+        </div>
+
+        <div id="cabinet-data-view" style="display: none;">
+            <div class="content-card" style="background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(46, 125, 50, 0.3);">
+                <h3 style="font-size: 16px; color: #1b4332;" id="cabinet-title">Участок № —</h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Статус: <span style="color: #2e7d32; font-weight: 600;">Член НСТ (активен)</span></p>
+            </div>
+
+            <div class="content-card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Состояние счета</h3>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                    <span style="color: var(--text-muted);">Баланс:</span>
+                    <span style="font-weight: 700; color: #2e7d32;" id="cabinet-balance">0 руб.</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                    <span style="color: var(--text-muted);">Целевой взнос 2026:</span>
+                    <span style="font-weight: 700; color: #b71c1c;" id="cabinet-debt">Оплачено</span>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Показания электросчетчика</h3>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Последняя передача: 15 сентября</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" class="cabinet-input" placeholder="Новые показания (кВт⋅ч)" id="meter-val">
+                    <button class="cabinet-btn" onclick="alert('Показания успешно переданы в правление!')">Передать</button>
+                </div>
+            </div>
+
+            <button class="cabinet-btn" style="width: 100%; background: #c62828; margin-top: 4px;" onclick="logoutCabinet()">Выйти из кабинета</button>
+        </div>
     </div>
 
     <!-- SUBPAGE: PAYMENTS -->
     <div id="page-payments" class="subpage">
         <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">Взносы</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Сведения по взносам</h3><p style="font-size: 12px; color: var(--text-muted);">Персональные начисления доступны в кабинете.</p></div>
+        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Сведения по взносам</h3><p style="font-size: 12px; color: var(--text-muted);">Персональные начисления доступны в личном кабинете.</p></div>
     </div>
 
     <!-- SUBPAGE: ABOUT -->
     <div id="page-about" class="subpage">
-        <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">О НСТ</span><div style="width: 32px;"></div></div>
-        <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">НСТ «Горняк»</h3><p style="font-size: 13px; color: var(--text-muted);">Садовое товарищество, основанное в 1985 году.</p></div>
+        <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">О НСТ «Горняк»</span><div style="width: 32px;"></div></div>
+        
+        <div class="content-card">
+            <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);">История создания и развития</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+                Садоводческое некоммерческое товарищество (НСТ) «Горняк» имеет богатую историю, уходящую корнями в эпоху активного развития пригородных хозяйственных инициатив. Товарищество было основано в 1985 году как объединение работников горнодобывающей и смежных отраслей.
+            </p>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+                В начале своего пути территория представляла собой необустроенные земельные массивы. Силами первых энтузиастов производилась расчистка участков, прокладывались первые подъездные пути и линии электропередач. 
+            </p>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+                В 1992 году земельные участки были официально переданы членам товарищества в частную собственность, что дало мощный толчок к капитальному строительству и благоустройству. Позже, в 2004 году, в ходе правовой реорганизации товарищество получило современный статус СНТ/НСТ «Горняк».
+            </p>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                Сегодня «Горняк» — это развитое, современное садовое товарищество с круглогодичной инфраструктурой, качественными дорогами и стабильным энергоснабжением.
+            </p>
+        </div>
     </div>
 
     <!-- SUBPAGE: NOTIFICATIONS -->
@@ -571,7 +654,8 @@
         const target = document.getElementById('page-' + pageId);
         if (target) {
             target.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const container = document.querySelector('.app-container');
+            if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             document.getElementById('page-home').classList.add('active');
         }
@@ -580,15 +664,37 @@
     function goHome() {
         document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
         document.getElementById('page-home').classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const container = document.querySelector('.app-container');
+        if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Логика личного кабинета
+    function loginCabinet() {
+        const plotNum = document.getElementById('plot-number-input').value.trim();
+        if (!plotNum) {
+            alert('Пожалуйста, введите номер вашего участка.');
+            return;
+        }
+        document.getElementById('cabinet-title').innerText = 'Участок № ' + plotNum;
+        document.getElementById('cabinet-balance').innerText = (plotNum * 1200) % 5000 + ' руб.';
+        document.getElementById('cabinet-login-view').style.display = 'none';
+        document.getElementById('cabinet-data-view').style.display = 'block';
+    }
+
+    function logoutCabinet() {
+        document.getElementById('plot-number-input').value = '';
+        document.getElementById('cabinet-data-view').style.display = 'none';
+        document.getElementById('cabinet-login-view').style.display = 'block';
     }
 
     const siteData = [
         { page: 'transport', title: 'Яндекс Транспорт / Маршруты 474, 474к, 26.К1', text: 'маршруты автобусов 474 474к 26 к1 расписание транспорт диспетчер Балашиха экспресс' },
         { page: 'tariffs', title: 'Тарифы на электроэнергию', text: 'счетчик свет деньги киловатт день ночь оплата тариф' },
         { page: 'documents', title: 'Устав НСТ «Горняк»', text: 'устав правила застройки шум взносы граница участка земля документы правление' },
-        { page: 'contacts', title: 'Председатель правления и контакты', text: 'телефон контакты председатель аварийная служба диспетчер' },
-        { page: 'payments', title: 'Членские и целевые взносы', text: 'взносы реквизиты долги расчеты плата банк' }
+        { page: 'contacts', title: 'Контакты правления и председателя', text: 'телефон контакты председатель аварийная служба электрик бухгалтер' },
+        { page: 'payments', title: 'Членские и целевые взносы', text: 'взносы реквизиты долги расчеты плата банк' },
+        { page: 'about', title: 'История создания и развития НСТ Горняк', text: 'история о нст горняк 1985 год основание земельные участки' },
+        { page: 'profile', title: 'Личный кабинет участника', text: 'личный кабинет участок баланс показания счетчика' }
     ];
 
     function handleSearch(query) {
