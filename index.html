@@ -300,26 +300,6 @@
       transform: scale(0.92);
     }
 
-    /* Анимация падающих листьев */
-    .falling-leaves {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 999;
-    }
-    .leaf {
-      position: absolute;
-      top: -20px;
-      font-size: 1.1rem;
-      opacity: 0.4;
-      animation: fall linear infinite;
-    }
-    @keyframes fall {
-      0% { transform: translateY(-20px) rotate(0deg); }
-      100% { transform: translateY(105vh) rotate(360deg); }
-    }
-
     /* Контейнер */
     .container {
       max-width: 900px;
@@ -675,89 +655,435 @@
         font-size: 0.8rem;
       }
     }
+
+    body {
+      background: linear-gradient(160deg, #d8ecd8 0%, #edf5ed 50%, #e2eee2 100%);
+      background-attachment: fixed;
+    }
+    .win11-nav-bar {
+      left: 50%;
+      width: max-content;
+      max-width: calc(100% - 24px);
+      box-sizing: border-box;
+      justify-content: center;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.55);
+      border-color: rgba(255, 255, 255, 0.75);
+      border-radius: 40px;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      padding: 6px 12px;
+    }
+    .btn-profile {
+      width: 36px;
+      height: 36px;
+      background: rgba(45, 106, 79, 0.15);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+    .container {
+      width: 100%;
+      box-sizing: border-box;
+      padding-top: 90px;
+    }
+    .hero-banner {
+      display: flex;
+      align-items: center;
+      min-height: 170px;
+      margin-bottom: 28px;
+      padding: 36px;
+      color: #fff;
+      background: linear-gradient(135deg, rgba(45, 106, 79, 0.88), rgba(27, 67, 50, 0.92)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80') center / cover;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(31, 38, 135, 0.07);
+    }
+    .hero-banner h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+    .hero-banner p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    .tiles-glass-card {
+      width: 100%;
+      max-width: 680px;
+      box-sizing: border-box;
+      margin: 0 auto 35px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 36px;
+      box-shadow: 0 20px 40px rgba(31, 38, 135, 0.07);
+    }
+    .liquid-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .liquid-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .liquid-tile.profile-tile {
+      padding: 0;
+      background: none;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+    .liquid-tile:hover {
+      transform: translateY(-6px) scale(1.04);
+    }
+    .liquid-tile:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 4px;
+      border-radius: 22px;
+    }
+    .icon-glass-3d {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3));
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 22px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), inset 0 2px 4px #fff, inset 0 -3px 6px rgba(0, 0, 0, 0.05);
+      font-size: 2rem;
+    }
+    .liquid-tile .tile-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .card.content-section {
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(31, 38, 135, 0.07);
+      scroll-margin-top: 90px;
+    }
+    .card.content-section:hover {
+      transform: none;
+    }
+    .card.content-section h2 {
+      margin-bottom: 14px;
+    }
+    .sub-card {
+      background: rgba(252, 253, 252, 0.8);
+    }
+    @media (max-width: 760px) {
+      .win11-nav-bar {
+        justify-content: space-between;
+      }
+      .nav-links {
+        display: flex;
+      }
+      .nav-links a {
+        padding: 6px 9px;
+      }
+    }
+    @media (max-width: 600px) {
+      .nav-links {
+        max-width: calc(100vw - 100px);
+        overflow-x: auto;
+      }
+      .tiles-glass-card {
+        padding: 24px 18px;
+      }
+      .liquid-tiles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 12px;
+      }
+      .hero-banner {
+        min-height: 145px;
+        padding: 26px 22px;
+      }
+      .card.content-section {
+        padding: 22px;
+      }
+    }
+    body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app-header {
+      position: fixed;
+      top: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: calc(100% - 40px);
+      max-width: 680px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .container {
+      width: 100%;
+      max-width: 720px;
+      margin: 0;
+      padding: 0 20px;
+    }
+    .app-launcher-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-height: calc(100vh - 120px);
+      max-height: calc(100dvh - 120px);
+      overflow-y: auto;
+      padding: 28px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border: 1px solid var(--glass-border);
+      border-radius: 36px;
+      box-shadow: var(--glass-shadow);
+    }
+    .hero-banner {
+      min-height: 120px;
+      margin: 0;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(45, 106, 79, 0.88), rgba(27, 67, 50, 0.95)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80') center / cover;
+      border: 0;
+      border-radius: 24px;
+      color: #fff;
+    }
+    .hero-banner h1 {
+      margin: 0 0 8px;
+      font-size: 1.3rem;
+    }
+    .hero-banner p {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+    .tiles-glass-card {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+    .liquid-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .liquid-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text-main);
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .liquid-tile:hover {
+      transform: translateY(-6px) scale(1.05);
+    }
+    .liquid-tile:focus-visible,
+    .back-btn:focus-visible,
+    .profile-btn:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 4px;
+    }
+    .icon-glass-3d {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.35));
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), inset 0 2px 4px #fff;
+      font-size: 2rem;
+    }
+    .icon-glass-3d::before {
+      position: absolute;
+      inset: 0 0 50%;
+      content: '';
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), transparent);
+      border-radius: 22px 22px 0 0;
+    }
+    .tile-title {
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .profile-tile {
+      width: 100%;
+    }
+    .app-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      overflow-y: auto;
+      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transform: scale(0.96);
+      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.35s;
+    }
+    .card.content-section.app-screen {
+      margin: 0;
+      padding: 30px 20px;
+      border: 0;
+      border-radius: 0;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: none;
+    }
+    .app-screen.active {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+      transform: scale(1);
+      transition-delay: 0s;
+    }
+    .screen-header,
+    .screen-content {
+      width: 100%;
+      max-width: 600px;
+    }
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+      margin-bottom: 4px;
+    }
+    .screen-header h2 {
+      margin: 0;
+      text-align: right;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      padding: 8px 16px;
+      color: var(--primary);
+      font: inherit;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .screen-content {
+      flex: 0 0 auto;
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+    .screen-content > .sub-card:last-child,
+    .screen-content > p:last-child {
+      margin-bottom: 0;
+    }
+    .footer {
+      display: none;
+    }
+    @media (max-width: 520px) {
+      .app-header {
+        top: 12px;
+        width: calc(100% - 24px);
+      }
+      .app-launcher-card {
+        max-height: calc(100vh - 90px);
+        max-height: calc(100dvh - 90px);
+        padding: 20px;
+        border-radius: 28px;
+      }
+      .liquid-tiles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 12px;
+      }
+      .icon-glass-3d {
+        width: 64px;
+        height: 64px;
+      }
+      .app-screen {
+        padding: 20px 12px;
+      }
+      .screen-content {
+        padding: 18px;
+      }
+      .screen-header {
+        align-items: flex-start;
+      }
+      .screen-header h2 {
+        font-size: 1rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .app-screen,
+      .liquid-tile {
+        transition: none;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Падающие листочки -->
-  <div class="falling-leaves">
-    <div class="leaf" style="left: 15%; animation-duration: 14s; animation-delay: 0s;">🍃</div>
-    <div class="leaf" style="left: 75%; animation-duration: 18s; animation-delay: 2s;">🍂</div>
-  </div>
-
-  <nav class="win11-nav-bar" aria-label="Основная навигация">
-    <button class="win11-start-btn" id="startMenuButton" type="button" aria-controls="menuOverlay" aria-expanded="false" onclick="toggleStartMenu()">
-      <span class="win11-start-icon" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      Разделы
-    </button>
-    <div class="nav-links" id="navLinks">
-      <a href="#welcome">Главная</a>
-      <a href="#transport">Транспорт</a>
-      <a href="#tariffs">Тарифы</a>
-      <a href="#news">Новости</a>
-      <a href="#documents">Документы</a>
-      <a href="#contacts">Контакты</a>
-    </div>
-    <button class="btn-profile" type="button" onclick="openModal()" title="Профиль" aria-label="Открыть личный кабинет">👤</button>
-  </nav>
-
-  <div class="win11-menu-overlay" id="menuOverlay" onclick="closeStartMenu()" aria-hidden="true" inert>
-    <section class="win11-start-menu" aria-label="Закрепленные разделы" onclick="event.stopPropagation()">
-      <div class="menu-header">
-        <span>Закрепленные разделы</span>
-        <span style="font-size: 0.8rem; opacity: 0.7;">НСТ «Горняк» v2.0</span>
-      </div>
-      <div class="tiles-grid">
-        <a href="#welcome" class="tile-item" onclick="closeStartMenu()"><span class="tile-icon" aria-hidden="true">🌿</span><span class="tile-title">Главная</span></a>
-        <a href="#transport" class="tile-item" onclick="closeStartMenu()"><span class="tile-icon" aria-hidden="true">🚌</span><span class="tile-title">Транспорт</span></a>
-        <a href="#tariffs" class="tile-item" onclick="closeStartMenu()"><span class="tile-icon" aria-hidden="true">⚡</span><span class="tile-title">Тарифы</span></a>
-        <a href="#news" class="tile-item" onclick="closeStartMenu()"><span class="tile-icon" aria-hidden="true">📰</span><span class="tile-title">Новости</span></a>
-        <a href="#documents" class="tile-item" onclick="closeStartMenu()"><span class="tile-icon" aria-hidden="true">📁</span><span class="tile-title">Документы</span></a>
-        <a href="#contacts" class="tile-item" onclick="closeStartMenu()"><span class="tile-icon" aria-hidden="true">📞</span><span class="tile-title">Контакты</span></a>
-      </div>
-    </section>
-  </div>
-
-  <section class="win11-launcher-card" aria-labelledby="launcherTitle">
-    <div class="launcher-header">
-      <h1 class="launcher-title" id="launcherTitle">🌿 НСТ «Горняк»</h1>
-      <p class="launcher-subtitle">Официальный информационный портал</p>
-    </div>
-    <div class="win11-tiles-grid">
-      <a href="#transport" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">🚌</span>
-        <span class="tile-name">Автобусы</span>
-      </a>
-      <a href="#tariffs" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">⚡</span>
-        <span class="tile-name">Тарифы</span>
-      </a>
-      <a href="#news" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">📰</span>
-        <span class="tile-name">Новости</span>
-      </a>
-      <a href="#documents" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">📁</span>
-        <span class="tile-name">Документы</span>
-      </a>
-      <a href="#contacts" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">📞</span>
-        <span class="tile-name">Контакты</span>
-      </a>
-      <button class="tile-card" type="button" onclick="openModal()">
-        <span class="tile-icon" aria-hidden="true">👤</span>
-        <span class="tile-name">Профиль</span>
-      </button>
-      <a href="#tariffs" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">💳</span>
-        <span class="tile-name">Взносы</span>
-      </a>
-      <a href="#welcome" class="tile-card">
-        <span class="tile-icon" aria-hidden="true">ℹ️</span>
-        <span class="tile-name">О НСТ</span>
-      </a>
-    </div>
-  </section>
+  <header class="app-header">
+    <div class="brand-title">🌿 НСТ «Горняк»</div>
+    <button class="btn-profile profile-btn" type="button" onclick="openModal()" title="Профиль" aria-label="Открыть личный кабинет">👤</button>
+  </header>
 
   <div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)" aria-hidden="true" inert>
     <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" tabindex="-1">
@@ -802,21 +1128,43 @@
 
   <div class="container">
 
-    <div class="card" id="welcome">
-      <div class="hero-badge">🌿 САДОВОЕ ТОВАРИЩЕСТВО • С 1982</div>
-      <h2>Всё важное для жителей НСТ «Горняк»</h2>
-      <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
-        Актуальные тарифы, протоколы, сметы, расписание транспорта и обратная связь — в одном месте.
-      </p>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <a href="#documents" class="btn-action">Перейти к документам →</a>
-        <a href="#tariffs" class="btn-outline">Посмотреть тарифы</a>
+    <section class="app-launcher-card" aria-label="Главная панель приложения">
+      <section class="hero-banner" aria-labelledby="welcomeTitle">
+        <div>
+          <h1 id="welcomeTitle">Информационный портал</h1>
+          <p>НСТ «Горняк» — всё важное в одном месте</p>
+        </div>
+      </section>
+      <div class="liquid-tiles-grid">
+        <button class="liquid-tile" type="button" onclick="openApp('transport')"><span class="icon-glass-3d" aria-hidden="true">🚌</span><span class="tile-title">Транспорт</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('tariffs')"><span class="icon-glass-3d" aria-hidden="true">⚡</span><span class="tile-title">Тарифы</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('news')"><span class="icon-glass-3d" aria-hidden="true">📰</span><span class="tile-title">Новости</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('documents')"><span class="icon-glass-3d" aria-hidden="true">📁</span><span class="tile-title">Документы</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('contacts')"><span class="icon-glass-3d" aria-hidden="true">📞</span><span class="tile-title">Контакты</span></button>
+        <button class="liquid-tile profile-tile" type="button" onclick="openModal()"><span class="icon-glass-3d" aria-hidden="true">👤</span><span class="tile-title">Профиль</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('tariffs')"><span class="icon-glass-3d" aria-hidden="true">💳</span><span class="tile-title">Взносы</span></button>
+        <button class="liquid-tile" type="button" onclick="openApp('info')"><span class="icon-glass-3d" aria-hidden="true">ℹ️</span><span class="tile-title">О НСТ</span></button>
       </div>
-    </div>
+    </section>
+
+    <section class="app-screen card content-section" id="app-info" aria-labelledby="infoTitle" aria-hidden="true" inert>
+      <div class="screen-header">
+        <button class="back-btn" type="button" onclick="closeApp()">← Назад</button>
+        <h2 id="infoTitle">ℹ️ О НСТ</h2>
+      </div>
+      <div class="screen-content">
+        <p>НСТ «Горняк» — садовое товарищество. Здесь собраны актуальные тарифы, расписание транспорта, новости, документы и контакты правления.</p>
+      </div>
+    </section>
 
     <!-- Транспорт -->
-    <div class="card" id="transport">
-      <h2>🚌 Официальное расписание транспорта (Мострансавто)</h2>
+    <section class="app-screen card content-section" id="app-transport" aria-labelledby="transportTitle" aria-hidden="true" inert>
+      <div class="screen-header">
+        <button class="back-btn" type="button" onclick="closeApp()">← Назад</button>
+        <h2 id="transportTitle">🚌 Транспорт</h2>
+      </div>
+      <div class="screen-content">
+      <h3>Официальное расписание транспорта (Мострансавто)</h3>
       <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 15px;">
         Маршруты № 474, № 26 и № К1. Ближайший рейс подсвечен.
       </p>
@@ -866,6 +1214,7 @@
           </div>
         </div>
       </div>
+      </div>
       <div class="sub-card">
         <h4>🚌 Маршрут № 26: Автовокзал — СНТ «Горняк»</h4>
         <div id="status-26" class="bus-status-note" aria-live="polite">Проверка статуса рейсов...</div>
@@ -881,18 +1230,28 @@
         <div class="schedule-grid" id="sched-k1-daily">
           <span class="time-badge">06:50</span><span class="time-badge">08:20</span><span class="time-badge">11:00</span><span class="time-badge">14:15</span><span class="time-badge">17:30</span><span class="time-badge">20:00</span>
         </div>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- Тарифы -->
-    <div class="card" id="tariffs">
-      <h2>⚡ Актуальные тарифы</h2>
+    <section class="app-screen card content-section" id="app-tariffs" aria-labelledby="tariffsTitle" aria-hidden="true" inert>
+      <div class="screen-header">
+        <button class="back-btn" type="button" onclick="closeApp()">← Назад</button>
+        <h2 id="tariffsTitle">⚡ Тарифы и взносы</h2>
+      </div>
+      <div class="screen-content">
       <p style="font-size: 0.9rem; margin: 0;">Электроэнергия (День / Ночь): <b>10.14 руб</b> / <b>4.36 руб</b> за кВт·ч.</p>
-    </div>
+      </div>
+    </section>
 
     <!-- Новости -->
-    <div class="card" id="news">
-      <h2>📰 Новости и объявления</h2>
+    <section class="app-screen card content-section" id="app-news" aria-labelledby="newsTitle" aria-hidden="true" inert>
+      <div class="screen-header">
+        <button class="back-btn" type="button" onclick="closeApp()">← Назад</button>
+        <h2 id="newsTitle">📰 Новости и объявления</h2>
+      </div>
+      <div class="screen-content">
       <form id="newsForm" class="sub-card news-form">
         <h4>Новое объявление</h4>
         <label for="newNewsTitle">Заголовок</label>
@@ -904,22 +1263,33 @@
         <button class="btn-action" type="submit">Опубликовать</button>
       </form>
       <div id="newsList" aria-live="polite"></div>
-    </div>
+      </div>
+    </section>
 
     <!-- Документы -->
-    <div class="card" id="documents">
-      <h2>📁 Документы</h2>
+    <section class="app-screen card content-section" id="app-documents" aria-labelledby="documentsTitle" aria-hidden="true" inert>
+      <div class="screen-header">
+        <button class="back-btn" type="button" onclick="closeApp()">← Назад</button>
+        <h2 id="documentsTitle">📁 Документы</h2>
+      </div>
+      <div class="screen-content">
       <form id="documentForm" class="sub-card document-upload">
         <label for="docFileInput">Добавить документ (до 10 МБ; хранится в этом браузере)</label>
         <input id="docFileInput" name="document" type="file" required>
         <button class="btn-action" type="submit">Загрузить документ</button>
       </form>
       <div id="docsList" aria-live="polite"></div>
-    </div>
+      </div>
+    </section>
 
     <!-- Контакты -->
-    <div class="card" id="contacts">
-      <h2>📞 Контакты правления и экстренные службы</h2>
+    <section class="app-screen card content-section" id="app-contacts" aria-labelledby="contactsTitle" aria-hidden="true" inert>
+      <div class="screen-header">
+        <button class="back-btn" type="button" onclick="closeApp()">← Назад</button>
+        <h2 id="contactsTitle">📞 Контакты</h2>
+      </div>
+      <div class="screen-content">
+      <h3>Контакты правления и экстренные службы</h3>
       <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 10px;">
         Адрес правления: Московская область, г. Котельники, территория НСТ «Горняк», здание Правления. Часы приема: Сб 10:00 – 14:00.
       </p>
@@ -940,7 +1310,8 @@
       <h3 style="font-size: 1rem; color: var(--primary); margin-top: 20px; margin-bottom: 8px;">👮‍♂️ Экстренные службы и участковый</h3>
       <p style="font-size: 0.88rem; margin: 4px 0;"><b>Участковый по НСТ «Горняк»:</b> Сырчин Кирилл Владимирович<br>Телефон: <a class="contact-link" href="tel:89851311484">8-985-131-14-84</a></p>
       <p style="font-size: 0.88rem; margin: 8px 0 0;"><b>Полиция г. Котельники (дежурная часть):</b><br>Телефон: <a class="contact-link" href="tel:89267775784">8-926-777-57-84</a></p>
-    </div>
+      </div>
+    </section>
 
   </div>
 
@@ -949,33 +1320,38 @@
   </div>
 
   <script>
-    const sections = document.querySelectorAll('.card');
-    const navLinks = document.querySelectorAll('.nav-links a');
     const modal = document.getElementById('authModal');
     const profileButton = document.querySelector('.btn-profile');
     const modalCard = modal.querySelector('.modal-card');
-    const menuOverlay = document.getElementById('menuOverlay');
-    const startMenuButton = document.getElementById('startMenuButton');
+    let lastAppTrigger = null;
+    let modalTrigger = null;
 
-    function toggleStartMenu() {
-      if (menuOverlay.classList.contains('open')) {
-        closeStartMenu();
-      } else {
-        menuOverlay.classList.add('open');
-        menuOverlay.setAttribute('aria-hidden', 'false');
-        menuOverlay.removeAttribute('inert');
-        startMenuButton.setAttribute('aria-expanded', 'true');
-      }
+    function openApp(screenId) {
+      const screen = document.getElementById(`app-${screenId}`);
+      if (!screen) return;
+
+      lastAppTrigger = document.activeElement;
+      screen.classList.add('active');
+      screen.setAttribute('aria-hidden', 'false');
+      screen.removeAttribute('inert');
+      screen.querySelector('.back-btn').focus();
     }
 
-    function closeStartMenu() {
-      menuOverlay.classList.remove('open');
-      menuOverlay.setAttribute('aria-hidden', 'true');
-      menuOverlay.setAttribute('inert', '');
-      startMenuButton.setAttribute('aria-expanded', 'false');
+    function closeApp() {
+      const activeScreen = document.querySelector('.app-screen.active');
+      if (!activeScreen) return;
+
+      activeScreen.classList.remove('active');
+      activeScreen.setAttribute('aria-hidden', 'true');
+      activeScreen.setAttribute('inert', '');
+      if (lastAppTrigger instanceof HTMLElement) {
+        lastAppTrigger.focus();
+      }
+      lastAppTrigger = null;
     }
 
     function openModal() {
+      modalTrigger = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       modal.removeAttribute('inert');
@@ -986,7 +1362,12 @@
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       modal.setAttribute('inert', '');
-      profileButton.focus();
+      if (modalTrigger instanceof HTMLElement) {
+        modalTrigger.focus();
+      } else {
+        profileButton.focus();
+      }
+      modalTrigger = null;
     }
 
     function handleOverlayClick(event) {
@@ -996,47 +1377,11 @@
     }
 
     document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && menuOverlay.classList.contains('open')) {
-        closeStartMenu();
-        startMenuButton.focus();
-      }
       if (event.key === 'Escape' && modal.classList.contains('open')) {
         closeModal();
+      } else if (event.key === 'Escape' && document.querySelector('.app-screen.active')) {
+        closeApp();
       }
-    });
-
-    function updateActiveNavLink() {
-      let currentSectionId = '';
-      sections.forEach(section => {
-        const sectionTop = window.scrollY + section.getBoundingClientRect().top;
-        if (window.scrollY >= sectionTop - 120) {
-          currentSectionId = section.id;
-        }
-      });
-
-      navLinks.forEach(link => {
-        const isActive = link.getAttribute('href') === `#${currentSectionId}`;
-        link.classList.toggle('active', isActive);
-        if (isActive) {
-          link.setAttribute('aria-current', 'location');
-        } else {
-          link.removeAttribute('aria-current');
-        }
-      });
-    }
-
-    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
-    updateActiveNavLink();
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.forEach(navLink => {
-          navLink.classList.remove('active');
-          navLink.removeAttribute('aria-current');
-        });
-        link.classList.add('active');
-        link.setAttribute('aria-current', 'location');
-      });
     });
 
     function processBusRoute(containerId, statusNoteId, currentMinutes) {
