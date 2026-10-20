@@ -95,7 +95,7 @@
 
         .icon-btn:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.35); }
 
-        /* Плашка погоды в шапке (без мерцания фона) */
+        /* Плашка погоды в шапке */
         .weather-pill {
             background: rgba(255, 255, 255, 0.28);
             backdrop-filter: blur(15px);
@@ -216,7 +216,7 @@
         .card-icon-wrapper svg { width: 24px; height: 24px; }
         .card-label { font-size: 14px; font-weight: 600; color: var(--text-main); }
 
-        /* Идеальная плавная анимация переключения (Grid Stacking + Opacity/Scale) */
+        /* Замедленная и максимально плавная анимация (0.45s) */
         .subpage {
             grid-area: stack;
             display: flex;
@@ -224,8 +224,8 @@
             padding-bottom: 20px;
             opacity: 0;
             pointer-events: none;
-            transform: scale(0.94);
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.92);
+            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity, transform;
         }
         .subpage.active {
@@ -655,7 +655,7 @@
 </div>
 
 <script>
-    // Мгновенное и абсолютно плавное переключение через Grid Stacking (без рывков)
+    // Мгновенный отклик на касание (pointerdown) и плавная смена страниц
     function openPage(pageId) {
         document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
         const target = document.getElementById('page-' + pageId);
