@@ -228,6 +228,14 @@
         .weather-status { margin-top: 12px; color: rgba(255,255,255,.68); font-size: 10px; line-height: 1.5; text-align: center; }
         .transport-map { width: 100%; height: 330px; display: block; border: 0; border-radius: 17px; background: rgba(255,255,255,.42); }
         .map-link { display: inline-flex; min-height: 38px; margin-top: 10px; padding: 0 13px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.86); border-radius: 12px; color: #315743; background: rgba(255,255,255,.78); font-size: 11px; font-weight: 700; text-decoration: none; }
+        .route-list { margin-top: 14px; display: grid; gap: 9px; }
+        .route-card { padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid rgba(255,255,255,.82); border-radius: 15px; background: rgba(255,255,255,.56); }
+        .route-number { color: var(--ink); font-size: 14px; font-weight: 700; }
+        .route-status { margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+        .status-indicator { flex: 0 0 auto; padding: 6px 8px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(102,117,108,.18); border-radius: 999px; color: #53645a; background: rgba(237,240,237,.9); font-size: 9px; font-weight: 700; }
+        .status-indicator::before { width: 7px; height: 7px; border-radius: 50%; background: #89958d; content: ''; }
+        .service-contact { padding: 10px 0; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-top: 1px solid rgba(27,67,50,.09); font-size: 10px; }
+        .service-contact strong { color: var(--ink); text-align: right; }
         .profile-icon { width: 54px; height: 54px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.86); border-radius: 17px; color: #087c91; background: #ddf4f7; box-shadow: 0 6px 16px rgba(31,67,52,.08), inset 0 1px 0 #fff; }
         .profile-icon svg { width: 25px; height: 25px; }
         .contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -297,7 +305,41 @@
         <div class="home-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 4.5-9 4.5-9-4.5L12 3Z"></path><path d="m3 12 9 4.5 9-4.5M3 16.5 12 21l9-4.5"></path></svg><span>Новости, документы и сведения о взносах публикуются по мере обновления данных правлением.</span></div>
     </section>
 
-    <section id="page-transport" class="screen subpage" aria-labelledby="title-transport"><header class="subpage-header"><button class="back-btn" type="button" onclick="goHome()">← Назад</button><h1 class="subpage-title" id="title-transport">Транспорт</h1><span class="header-spacer"></span></header><article class="content-card"><div class="eyebrow">Маршруты и остановки</div><h2>Транспорт до НСТ «Горняк»</h2><p>Интерактивная карта Яндекс показывает расположение СНТ и доступные остановки общественного транспорта. Выберите начальную точку на карте, чтобы построить маршрут.</p><iframe class="transport-map" title="Карта Яндекс с поиском НСТ «Горняк» и остановками транспорта" src="https://yandex.ru/map-widget/v1/?text=%D0%9D%D0%A1%D0%A2%20%D0%93%D0%BE%D1%80%D0%BD%D1%8F%D0%BA&amp;z=12&amp;l=map%2Ctrf" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><a class="map-link" href="https://yandex.ru/maps/?text=%D0%9D%D0%A1%D0%A2%20%D0%93%D0%BE%D1%80%D0%BD%D1%8F%D0%BA&amp;l=map%2Ctrf" target="_blank" rel="noopener noreferrer">Открыть карту и построить маршрут ↗</a></article><article class="content-card"><h3>Полезная информация</h3><div class="content-row"><span>Проверьте остановку и направление</span><strong>Перед поездкой</strong></div><div class="content-row"><span>Уточните время обратного рейса</span><strong>Заранее</strong></div></article><div class="info-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5m0-8h.01"></path></svg><span>Поиск «НСТ Горняк» может показать несколько одноимённых мест. Перед поездкой проверьте точку назначения и актуальность маршрута на карте.</span></div></section>
+    <section id="page-transport" class="screen subpage" aria-labelledby="title-transport">
+        <header class="subpage-header"><button class="back-btn" type="button" onclick="goHome()">← Назад</button><h1 class="subpage-title" id="title-transport">Транспорт</h1><span class="header-spacer"></span></header>
+        <article class="content-card">
+            <div class="eyebrow">Маршруты и остановки</div>
+            <h2>Транспорт до НСТ «Горняк»</h2>
+            <p>Список маршрутов предоставлен для справки. Оперативные данные о движении не подключены.</p>
+            <div class="route-list" aria-label="Маршруты общественного транспорта">
+                <article class="route-card" aria-label="Маршрут 474">
+                    <div><div class="route-number">Маршрут 474</div><div class="route-status">Онлайн-данные перевозчика недоступны</div></div>
+                    <span class="status-indicator" role="status" aria-live="polite">Нет данных</span>
+                </article>
+                <article class="route-card" aria-label="Маршрут 474к">
+                    <div><div class="route-number">Маршрут 474к</div><div class="route-status">Онлайн-данные перевозчика недоступны</div></div>
+                    <span class="status-indicator" role="status" aria-live="polite">Нет данных</span>
+                </article>
+                <article class="route-card" aria-label="Маршрут 26.K1">
+                    <div><div class="route-number">Маршрут 26.K1</div><div class="route-status">Онлайн-данные перевозчика недоступны</div></div>
+                    <span class="status-indicator" role="status" aria-live="polite">Нет данных</span>
+                </article>
+            </div>
+        </article>
+        <article class="content-card">
+            <h3>Контакты для уточнения движения</h3>
+            <div class="service-contact"><span>Перевозчик</span><strong>Номер не указан</strong></div>
+            <div class="service-contact"><span>Автостанция</span><strong>Номер не указан</strong></div>
+            <p>Телефоны со скриншота нельзя добавить: изображение не было приложено к материалам.</p>
+        </article>
+        <article class="content-card">
+            <h3>Карта</h3>
+            <p>Проверьте точку назначения и остановки перед поездкой.</p>
+            <iframe class="transport-map" title="Карта Яндекс с поиском НСТ «Горняк» и остановками транспорта" src="https://yandex.ru/map-widget/v1/?text=%D0%9D%D0%A1%D0%A2%20%D0%93%D0%BE%D1%80%D0%BD%D1%8F%D0%BA&amp;z=12&amp;l=map%2Ctrf" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <a class="map-link" href="https://yandex.ru/maps/?text=%D0%9D%D0%A1%D0%A2%20%D0%93%D0%BE%D1%80%D0%BD%D1%8F%D0%BA&amp;l=map%2Ctrf" target="_blank" rel="noopener noreferrer">Открыть карту ↗</a>
+        </article>
+        <div class="info-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5m0-8h.01"></path></svg><span>Актуальное расписание и статусы рейсов необходимо уточнять у перевозчика: подключённый источник данных отсутствует.</span></div>
+    </section>
 
     <section id="page-tariffs" class="screen subpage" aria-labelledby="title-tariffs"><header class="subpage-header"><button class="back-btn" type="button" onclick="goHome()">← Назад</button><h1 class="subpage-title" id="title-tariffs">Тарифы</h1><span class="header-spacer"></span></header><article class="content-card"><div class="eyebrow">Платежи товарищества</div><h2>Действующие начисления</h2><p>Размеры и сроки оплаты устанавливаются решениями общего собрания участников НСТ.</p></article><article class="content-card"><div class="content-row"><span>Членские взносы</span><strong>По решению собрания</strong></div><div class="content-row"><span>Целевые взносы</span><strong>По утверждённой смете</strong></div><div class="content-row"><span>Сроки и реквизиты</span><strong>В уведомлении правления</strong></div></article><div class="info-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5m0-8h.01"></path></svg><span>Сверяйте актуальные суммы и реквизиты с последними сообщениями правления.</span></div></section>
 
