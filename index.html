@@ -1388,8 +1388,279 @@
     const modal = document.getElementById('authModal');
     const profileButton = document.querySelector('.profile-tile');
     const modalCard = modal.querySelector('.modal-card');
+    const profileView = document.getElementById('profileView');
+    const profileEdit = document.getElementById('profileEdit');
+    const inputPlot = document.getElementById('inputPlot');
+    const inputEmail = document.getElementById('inputEmail');
+    const inputName = document.getElementById('inputName');
+    const dispPlot = document.getElementById('dispPlot');
+    const dispEmail = document.getElementById('dispEmail');
+    const dispName = document.getElementById('dispName');
+    const editProfileButton = document.getElementById('editProfileButton');
+    const cancelProfileEditButton = document.getElementById('cancelProfileEditButton');
+    const resetProfileButton = document.getElementById('resetProfileButton');
+    const newsForm = document.getElementById('newsForm');
+    const newsList = document.getElementById('newsList');
+    const documentForm = document.getElementById('documentForm');
+    const docsList = document.getElementById('docsList');
+
+    const SUPABASE_URL = 'ВАШ_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'ВАШ_SUPABASE_ANON_KEY';
+    const STORAGE_KEYS = {
+      profile: 'nst-gornyak-profile',
+      news: 'nst-gornyak-news',
+      documents: 'nst-gornyak-documents'
+    };
+    const supabaseClient = (window.supabase && SUPABASE_URL && SUPABASE_URL !== 'ВАШ_SUPABASE_URL' && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== 'ВАШ_SUPABASE_ANON_KEY')
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
     let lastAppTrigger = null;
     let modalTrigger = null;
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, match => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[match]));
+    }
+
+    function readStorage(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function writeStorage(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderProfile() {
+      const profile = readStorage(STORAGE_KEYS.profile, { plot: '', email: '', name: '' });
+      const plot = profile.plot ? profile.plot.trim() : '';
+      const email = profile.email ? profile.email.trim() : '';
+      const name = profile.name ? profile.name.trim() : '';
+
+      dispPlot.textContent = plot || 'Не указан';
+      dispEmail.textContent = email || 'Не вошел';
+      dispName.textContent = name || 'Гость';
+    }
+
+    function setProfileEditorVisible(visible) {
+      profileView.hidden = visible;
+      profileEdit.hidden = !visible;
+      if (visible) {
+        const profile = readStorage(STORAGE_KEYS.profile, { plot: '', email: '', name: '' });
+        inputPlot.value = profile.plot || '';
+        inputEmail.value = profile.email || '';
+        inputName.value = profile.name || '';
+        inputPlot.focus();
+      }
+    }
+
+    function handleProfileSubmit(event) {
+      event.preventDefault();
+      const nextProfile = {
+        plot: inputPlot.value.trim(),
+        email: inputEmail.value.trim(),
+        name: inputName.value.trim()
+      };
+      writeStorage(STORAGE_KEYS.profile, nextProfile);
+      renderProfile();
+      setProfileEditorVisible(false);
+    }
+
+    function handleProfileReset() {
+      localStorage.removeItem(STORAGE_KEYS.profile);
+      renderProfile();
+      setProfileEditorVisible(false);
+    }
+
+    async function resolveNews() {
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient.from('news').select('*').order('published_at', { ascending: false });
+          if (!error && Array.isArray(data) && data.length > 0) {
+            const mapped = data.map(item => ({
+              id: item.id,
+              title: item.title,
+              text: item.body || '',
+              image: item.image || null,
+              createdAt: item.published_at || new Date().toISOString()
+            }));
+            writeStorage(STORAGE_KEYS.news, mapped);
+            return mapped;
+          }
+        } catch (error) {
+          console.warn('Supabase news load failed, falling back to local data.', error);
+        }
+      }
+      return readStorage(STORAGE_KEYS.news, []);
+    }
+
+    async function renderNews() {
+      const news = await resolveNews();
+      if (!Array.isArray(news) || news.length === 0) {
+        newsList.innerHTML = '<p class="empty-state">Пока нет новостей и объявлений.</p>';
+        return;
+      }
+
+      newsList.innerHTML = news.map(item => `
+        <article class="sub-card news-item">
+          ${item.image ? `<img class="news-post-img" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : ''}
+          <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.text).replace(/\n/g, '<br>')}</p>
+          <div class="meta-row">${new Date(item.createdAt).toLocaleString('ru-RU')}</div>
+        </article>
+      `).join('');
+    }
+
+    async function handleNewsSubmit(event) {
+      event.preventDefault();
+      const title = document.getElementById('newNewsTitle').value.trim();
+      const text = document.getElementById('newNewsText').value.trim();
+      const file = document.getElementById('newNewsImage').files[0];
+
+      if (!title || !text) {
+        alert('Укажите заголовок и текст объявления.');
+        return;
+      }
+
+      let imageData = null;
+      if (file) {
+        if (file.size > 1024 * 1024) {
+          alert('Размер изображения не должен превышать 1 МБ.');
+          return;
+        }
+        imageData = await readFileAsDataUrl(file);
+      }
+
+      const item = {
+        id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+        title,
+        text,
+        image: imageData,
+        createdAt: new Date().toISOString()
+      };
+
+      const news = readStorage(STORAGE_KEYS.news, []);
+      news.unshift(item);
+      writeStorage(STORAGE_KEYS.news, news);
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('news').insert({
+            title: item.title,
+            body: item.text,
+            image: item.image,
+            published_at: item.createdAt
+          });
+        } catch (error) {
+          console.warn('Supabase news save failed; saved locally instead.', error);
+        }
+      }
+
+      newsForm.reset();
+      renderNews();
+    }
+
+    async function resolveDocuments() {
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient.from('documents').select('*').order('created_at', { ascending: false });
+          if (!error && Array.isArray(data) && data.length > 0) {
+            const mapped = data.map(item => ({
+              id: item.id,
+              name: item.title || item.file_name || 'Документ',
+              data: item.file_url || '',
+              url: item.file_url || '',
+              createdAt: item.created_at || new Date().toISOString()
+            }));
+            writeStorage(STORAGE_KEYS.documents, mapped);
+            return mapped;
+          }
+        } catch (error) {
+          console.warn('Supabase documents load failed, falling back to local data.', error);
+        }
+      }
+      return readStorage(STORAGE_KEYS.documents, []);
+    }
+
+    async function renderDocuments() {
+      const docs = await resolveDocuments();
+      if (!Array.isArray(docs) || docs.length === 0) {
+        docsList.innerHTML = '<p class="empty-state">Документы не загружены.</p>';
+        return;
+      }
+
+      docsList.innerHTML = docs.map(doc => `
+        <div class="sub-card document-item">
+          <div class="document-actions">
+            <span class="document-name">${escapeHtml(doc.name)}</span>
+            <a class="btn-action" href="${escapeHtml(doc.url || doc.data)}" download="${escapeHtml(doc.name)}" target="_blank" rel="noopener">Открыть</a>
+          </div>
+          <small>${new Date(doc.createdAt).toLocaleString('ru-RU')}</small>
+        </div>
+      `).join('');
+    }
+
+    async function handleDocumentSubmit(event) {
+      event.preventDefault();
+      const file = document.getElementById('docFileInput').files[0];
+      if (!file) {
+        alert('Выберите документ для загрузки.');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Размер документа не должен превышать 10 МБ.');
+        return;
+      }
+
+      const dataUrl = await readFileAsDataUrl(file);
+      const item = {
+        id: (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+        name: file.name,
+        data: dataUrl,
+        url: dataUrl,
+        createdAt: new Date().toISOString()
+      };
+
+      const docs = readStorage(STORAGE_KEYS.documents, []);
+      docs.unshift(item);
+      writeStorage(STORAGE_KEYS.documents, docs);
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('documents').insert({
+            title: item.name,
+            description: 'Загружено через браузер',
+            file_url: item.url,
+            created_at: item.createdAt
+          });
+        } catch (error) {
+          console.warn('Supabase document save failed; saved locally instead.', error);
+        }
+      }
+
+      documentForm.reset();
+      renderDocuments();
+    }
 
     function openApp(screenId) {
       const screen = document.getElementById(`app-${screenId}`);
@@ -1448,6 +1719,17 @@
         closeApp();
       }
     });
+
+    editProfileButton.addEventListener('click', () => setProfileEditorVisible(true));
+    cancelProfileEditButton.addEventListener('click', () => setProfileEditorVisible(false));
+    resetProfileButton.addEventListener('click', handleProfileReset);
+    profileEdit.addEventListener('submit', handleProfileSubmit);
+    newsForm.addEventListener('submit', handleNewsSubmit);
+    documentForm.addEventListener('submit', handleDocumentSubmit);
+
+    renderProfile();
+    renderNews();
+    renderDocuments();
 
     function processBusRoute(containerId, statusNoteId, currentMinutes) {
       const container = document.getElementById(containerId);
