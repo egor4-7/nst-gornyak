@@ -50,6 +50,7 @@
             flex-direction: column;
             position: relative;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         /* Header */
@@ -210,19 +211,26 @@
         .card-icon-wrapper svg { width: 24px; height: 24px; }
         .card-label { font-size: 14px; font-weight: 600; color: var(--text-main); }
 
-        /* Плавная анимация переключения страниц */
+        /* Истинная плавная анимация через JavaScript (класс .page-animating) */
         .subpage {
             display: none;
             flex-direction: column;
             padding-bottom: 20px;
-            opacity: 0;
-            transform: scale(0.98);
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
         .subpage.active {
             display: flex;
-            opacity: 1;
-            transform: scale(1);
+            animation: ipadOpen 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes ipadOpen {
+            0% {
+                opacity: 0;
+                transform: scale(0.85) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .subpage-header {
@@ -569,7 +577,7 @@
         </div>
     </div>
 
-    <!-- SUBPAGE: PROFILE (РАБОЧИЙ ЛИЧНЫЙ КАБИНЕТ) -->
+    <!-- SUBPAGE: PROFILE -->
     <div id="page-profile" class="subpage">
         <div class="subpage-header"><button class="back-btn" onclick="goHome()">← Назад</button><span class="subpage-title">Личный кабинет</span><div style="width: 32px;"></div></div>
         
@@ -649,26 +657,38 @@
 </div>
 
 <script>
+    // Плавное открытие страниц с защитой от резких скачков
     function openPage(pageId) {
-        document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
+        const currentActive = document.querySelector('.subpage.active');
         const target = document.getElementById('page-' + pageId);
-        if (target) {
+        
+        if (!target || currentActive === target) return;
+
+        // Плавное растворение текущей страницы
+        if (currentActive) {
+            currentActive.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+            currentActive.style.opacity = '0';
+            currentActive.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                currentActive.classList.remove('active');
+                currentActive.style.opacity = '';
+                currentActive.style.transform = '';
+            }, 250);
+        }
+
+        // Появление целевой страницы
+        setTimeout(() => {
             target.classList.add('active');
             const container = document.querySelector('.app-container');
             if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            document.getElementById('page-home').classList.add('active');
-        }
+        }, 150);
     }
 
     function goHome() {
-        document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
-        document.getElementById('page-home').classList.add('active');
-        const container = document.querySelector('.app-container');
-        if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+        openPage('home');
     }
 
-    // Логика личного кабинета
+    // Личный кабинет
     function loginCabinet() {
         const plotNum = document.getElementById('plot-number-input').value.trim();
         if (!plotNum) {
