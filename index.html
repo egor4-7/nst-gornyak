@@ -22,7 +22,7 @@
             min-height: 100vh;
             min-height: 100svh;
             margin: 0;
-            padding: 16px;
+            padding: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -39,7 +39,8 @@
         .app-container {
             position: relative;
             isolation: isolate;
-            width: min(100%, 460px);
+            width: 100%;
+            max-width: 100% !important;
             min-height: min(840px, calc(100svh - 32px));
             max-height: calc(100svh - 32px);
             padding: 16px 16px 40px;
@@ -94,7 +95,10 @@
         }
         .icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 14px; }
         .icon-btn svg { width: 19px; height: 19px; }
-        .weather-pill { min-width: 76px; padding: 7px 10px; border-radius: 15px; text-align: right; animation: weather-pulse 3s ease-in-out infinite; }
+        .weather-pill { min-width: 76px; padding: 7px 10px; border-radius: 15px; text-align: left; animation: weather-pulse 3s ease-in-out infinite; }
+        .weather-pill-content { display: flex; align-items: center; gap: 8px; }
+        .weather-icon-mini { width: 20px; height: 20px; flex: 0 0 20px; color: #ffeb3b; animation: spinSlow 12s linear infinite; }
+        @keyframes spinSlow { to { transform: rotate(360deg); } }
         @keyframes weather-pulse {
             0%, 100% { filter: brightness(1); box-shadow: inset 0 1px 0 rgba(255,255,255,.24); }
             50% { filter: brightness(1.12); box-shadow: 0 0 15px rgba(255,255,255,.2), inset 0 1px 0 rgba(255,255,255,.35); }
@@ -124,7 +128,7 @@
         .section-heading { margin: 0 2px 11px; display: flex; align-items: baseline; justify-content: space-between; }
         .section-heading h2 { margin: 0; font-size: 14px; font-weight: 700; }
         .section-heading span { color: var(--muted); font-size: 9px; font-weight: 600; }
-        .nav-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .nav-card {
             min-width: 0;
             min-height: 112px;
@@ -263,7 +267,7 @@
         .account-stat strong { margin-top: 6px; color: var(--ink); font-size: 13px; }
         .meter-reading-preview { margin-top: 12px; padding: 12px; border: 1px solid rgba(255,255,255,.75); border-radius: 15px; color: #486451; background: rgba(232,245,233,.55); font-size: 11px; line-height: 1.5; }
         @media (max-width: 520px) {
-            body { padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); align-items: flex-start; }
+            body { padding: max(6px, env(safe-area-inset-top)) 6px max(6px, env(safe-area-inset-bottom)); align-items: flex-start; }
             .app-container { min-height: calc(100svh - max(16px, env(safe-area-inset-top) + env(safe-area-inset-bottom))); max-height: none; padding: 12px; border-radius: 29px; }
             .main-header { min-height: 88px; padding: 14px; border-radius: 22px; }
             .header-title h1 { font-size: 18px; }
@@ -285,7 +289,18 @@
             <div class="header-title"><h1 id="home-title">НСТ «Горняк»</h1><p>Официальный портал</p></div>
             <div class="header-actions">
                 <button class="icon-btn" type="button" onclick="openPage('notifications')" title="Уведомления" aria-label="Открыть уведомления"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></button>
-                <button class="weather-pill" type="button" onclick="openPage('weather')" aria-label="Открыть погоду"><span id="header-weather-temp" class="weather-temp">—°C</span><span id="header-weather-desc" class="weather-desc">Погода</span></button>
+                <button class="weather-pill" type="button" onclick="openPage('weather')" aria-label="Открыть погоду">
+                    <span class="weather-pill-content">
+                        <svg class="weather-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                        </svg>
+                        <span>
+                            <span id="header-weather-temp" class="weather-temp">—°C</span>
+                            <span id="header-weather-desc" class="weather-desc">Погода</span>
+                        </span>
+                    </span>
+                </button>
             </div>
         </header>
         <label class="search-container"><svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="site-search" class="search-input" type="search" placeholder="Поиск по сайту..." autocomplete="off" aria-label="Поиск по разделам"></label>
