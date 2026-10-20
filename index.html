@@ -1,901 +1,962 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Официальный портал НСТ «Горняк»</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>НСТ «Горняк»</title>
   <style>
     :root {
-      --primary: #1b4332;
-      --accent: #2d6a4f;
-      --glass-bg: rgba(255, 255, 255, 0.42);
-      --glass-border: rgba(255, 255, 255, 0.85);
-      --glass-shadow: 0 30px 60px rgba(27, 67, 50, 0.12);
-      --text-main: #111812;
-      --text-sub: #4a5568;
+      --bg-1: #dfeee7;
+      --bg-2: #bfd9cc;
+      --bg-3: #c9d8d4;
+      --glass: rgba(255,255,255,0.38);
+      --glass-strong: rgba(255,255,255,0.58);
+      --glass-border: rgba(255,255,255,0.82);
+      --text: #0f1720;
+      --muted: #4f5f5a;
+      --primary: #133e32;
+      --primary-2: #1e5a4b;
+      --shadow: rgba(22, 43, 33, 0.12);
+      --warm: #ffb870;
+      --sky: #9dcaf7;
+      --blue-glow: rgba(134, 195, 255, 0.55);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-3) 100%);
+      color: var(--text);
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #d8ebd9 0%, #c2d8c3 50%, #b0cca9 100%);
-      color: var(--text-main);
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      padding: 18px;
+      overflow-x: hidden;
     }
 
-    /* --- ГЛАВНЫЙ ЛАУНЧЕР --- */
-    .app-launcher-card {
-      width: calc(100% - 24px);
-      max-width: 740px;
-      max-height: 92vh;
-      overflow-y: auto;
-      background: var(--glass-bg);
-      backdrop-filter: blur(40px) saturate(210%);
-      -webkit-backdrop-filter: blur(40px) saturate(210%);
-      border: 1px solid var(--glass-border);
-      border-radius: 36px;
-      padding: 24px;
-      box-shadow: var(--glass-shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    button, input {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: min(100%, 480px);
       position: relative;
+      padding-bottom: 120px;
     }
 
-    .app-launcher-card::-webkit-scrollbar { display: none; }
+    .glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(24px) saturate(175%);
+      -webkit-backdrop-filter: blur(24px) saturate(175%);
+      box-shadow: 0 22px 54px rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+    }
 
-    /* Верхний баннер погоды */
-    .hero-banner {
-      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
-      border-radius: 24px;
-      padding: 20px 24px;
+    .view {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      border-radius: 31px;
+      padding: 22px 20px;
+      background: linear-gradient(135deg, #123d32 0%, #2a6250 100%);
       color: #fff;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 12px 30px rgba(27, 67, 50, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
       overflow: hidden;
+      position: relative;
+      box-shadow: 0 18px 38px rgba(18, 61, 50, 0.2);
+      border: 1px solid rgba(255,255,255,0.18);
     }
 
-    .hero-banner::before {
-      content: '';
+    .hero::before {
+      content: "";
       position: absolute;
-      top: -50%; right: -20%; width: 220px; height: 220px;
-      background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, transparent 70%);
+      width: 230px;
+      height: 230px;
+      right: -30px;
+      top: -80px;
       border-radius: 50%;
-      animation: pulseSun 4s ease-in-out infinite;
-    }
-    @keyframes pulseSun {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.3); opacity: 0.95; }
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+      animation: glow 6s ease-in-out infinite alternate;
     }
 
-    .weather-box {
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      padding: 10px 16px;
-      border-radius: 16px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      cursor: pointer;
+    @keyframes glow {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.35); opacity: 1; }
+    }
+
+    .brand {
       position: relative;
-      z-index: 2;
-      transition: transform 0.2s, background 0.2s;
+      z-index: 1;
     }
 
-    .weather-box:hover {
-      transform: scale(1.04);
-      background: rgba(255, 255, 255, 0.35);
+    .brand h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: -0.04em;
+      font-weight: 700;
     }
 
-    /* АДАПТИВНАЯ СЕТКА ИКОНОК */
-    .tiles-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+    .brand p {
+      margin-top: 4px;
+      font-size: 0.72rem;
+      opacity: 0.78;
     }
 
-    @media (max-width: 600px) {
-      .tiles-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .liquid-tile {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      border-radius: 22px;
-      padding: 18px 10px;
+    .hero-actions {
       position: relative;
-      overflow: hidden;
-      outline: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.04), inset 0 1px 2px rgba(255,255,255,0.8);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .liquid-tile::after {
-      content: '';
-      position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.6) 50%, transparent 60%);
-      transform: rotate(35deg) translateX(-100%);
-      transition: transform 0.6s ease;
-    }
-
-    .liquid-tile:hover::after {
-      transform: rotate(35deg) translateX(100%);
-    }
-
-    .liquid-tile:hover {
-      transform: translateY(-4px) scale(1.02);
-      background: rgba(255, 255, 255, 0.4);
-      border-color: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 15px 35px rgba(27,67,50,0.1);
-    }
-
-    .icon-glass-3d {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.2) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.9), inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 8px;
-      position: relative;
-    }
-
-    .icon-svg {
-      width: 28px;
-      height: 28px;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
-    }
-
-    .tile-title {
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    /* ПОИСК НА ГЛАВНОМ */
-    .launcher-search {
+      z-index: 1;
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 20px;
-      padding: 12px 18px;
-      width: 100%;
-      color: var(--text-sub);
-      font-size: 0.92rem;
+    }
+
+    .mail-btn,
+    .weather-pill {
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 16px;
+      color: #fff;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
-    .launcher-search:hover { background: rgba(255, 255, 255, 0.5); }
 
-    /* ВНУТРЕННИЕ ЭКРАНЫ */
-    .app-screen {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(210, 230, 213, 0.85);
-      backdrop-filter: blur(50px) saturate(200%);
-      -webkit-backdrop-filter: blur(50px) saturate(200%);
-      z-index: 100;
+    .mail-btn:hover,
+    .weather-pill:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.2);
+    }
+
+    .mail-btn {
+      width: 38px;
+      height: 38px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding: 16px;
-      opacity: 0.001;
-      pointer-events: none;
-      transform: scale(0.85);
-      border-radius: 40px;
-      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow-y: auto;
-    }
-
-    .app-screen.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1);
-      border-radius: 0;
-    }
-
-    .screen-island {
-      width: 100%;
-      max-width: 720px;
-      margin: auto 0;
-      background: rgba(255, 255, 255, 0.68);
-      backdrop-filter: blur(45px);
-      -webkit-backdrop-filter: blur(45px);
-      border-radius: 32px;
-      padding: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.95);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,1), inset 0 -2px 4px rgba(0,0,0,0.03);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      justify-content: center;
+      padding: 0;
       position: relative;
       overflow: hidden;
     }
 
-    .floating-header {
+    .mail-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .weather-pill {
+      min-width: 86px;
+      padding: 7px 12px 8px;
+      text-align: center;
+    }
+
+    .weather-pill .temp {
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .weather-pill .cond {
+      font-size: 0.62rem;
+      opacity: 0.8;
+      line-height: 1.1;
+    }
+
+    .search-wrap {
+      margin: 18px 0 20px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 17px 20px 17px 52px;
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.52);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      box-shadow: inset 0 2px 3px rgba(16,24,40,0.02);
+      outline: none;
+      font-size: 0.96rem;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .search-input:focus {
+      background: rgba(255,255,255,0.75);
+      border-color: rgba(20, 80, 67, 0.35);
+      box-shadow: 0 0 0 4px rgba(24, 96, 77, 0.08);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .nav-item {
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.42);
+      border-radius: 30px;
+      padding: 18px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      box-shadow: 0 12px 30px rgba(14, 33, 28, 0.05);
+    }
+
+    .nav-item:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.6);
+      box-shadow: 0 20px 34px rgba(31, 38, 135, 0.09);
+    }
+
+    .nav-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.25) 100%);
+      border: 1px solid rgba(255,255,255,0.8);
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      box-shadow: inset 0 2px 2px rgba(255,255,255,0.9), inset 0 -3px 10px rgba(15, 24, 32, 0.04);
+    }
+
+    .nav-item span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .panel {
+      margin-top: 18px;
+      border-radius: 30px;
+      padding: 22px 18px;
+    }
+
+    .subheader {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      padding: 8px 16px;
-      border-radius: 20px;
-      margin-bottom: 4px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-    }
-
-    .back-btn-wrap {
-      position: relative;
-      display: inline-block;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 22px;
+      margin-bottom: 16px;
     }
 
     .back-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.95);
+      border: 0;
+      background: rgba(255,255,255,0.52);
       border-radius: 14px;
+      padding: 9px 12px;
       font-weight: 600;
-      font-size: 0.86rem;
+      color: var(--text);
       cursor: pointer;
+    }
+
+    .subheader-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: -0.03em;
+      text-align: center;
+      flex: 1;
+    }
+
+    .search-mini {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      font-size: 1.05rem;
+    }
+
+    .content-card {
+      background: rgba(255,255,255,0.42);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 22px;
+      padding: 16px 16px 14px;
+      margin-bottom: 12px;
+    }
+
+    .content-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
       color: var(--primary);
-      transition: background 0.2s;
+      letter-spacing: -0.03em;
     }
-    .back-btn:hover { background: #fff; }
 
-    .long-press-menu {
-      position: absolute;
-      top: 100%; left: 0; margin-top: 8px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(35px);
-      border: 1px solid rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    .content-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.52;
+    }
+
+    .pill-row {
       display: flex;
-      flex-direction: column;
-      min-width: 180px;
-      padding: 6px;
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-10px) scale(0.95);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
     }
-    .long-press-menu.show {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0) scale(1);
-    }
-    .long-press-item {
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--text-main);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .long-press-item:hover { background: rgba(27,67,50,0.1); color: var(--primary); }
 
-    .header-search-icon {
-      width: 36px; height: 36px;
-      background: rgba(255,255,255,0.7);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.9);
-      transition: transform 0.2s, background 0.2s;
-    }
-    .header-search-icon:hover { transform: scale(1.08); background: #fff; }
-
-    /* КНОПКА НАВЕРХ */
-    .bubble-scroll-top {
-      position: fixed;
-      bottom: 20px; right: 20px;
-      width: 46px; height: 46px;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(30px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      border-radius: 50%;
-      display: flex;
+    .time-pill {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.8);
-      transition: all 0.3s;
-      z-index: 200;
-    }
-    .bubble-scroll-top.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1);
-    }
-    .bubble-scroll-top:hover { background: rgba(255, 255, 255, 0.7); transform: scale(1.08); }
-
-    /* ПОГОДА FULLSCREEN */
-    .weather-fullscreen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
-      color: #fff;
-      z-index: 500;
-      padding: 24px;
-      overflow-y: auto;
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.92);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .weather-fullscreen.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: scale(1);
-    }
-
-    .weather-fullscreen::before {
-      content: '';
-      position: absolute;
-      top: -10%; right: -10%; width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
-      border-radius: 50%;
-      animation: weatherGlow 6s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes weatherGlow {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.4; }
-      50% { transform: scale(1.2) translate(-20px, 20px); opacity: 0.8; }
-    }
-
-    .weather-main-info {
-      text-align: center;
-      margin: 15px 0 25px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .weather-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      max-width: 680px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .w-card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 20px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .fab-add-btn {
-      width: 50px; height: 50px;
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 258, 0.8);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      margin: 10px auto 0;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      transition: transform 0.2s, background 0.2s;
-    }
-    .fab-add-btn:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.6); }
-
-    .modal-form {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(40px);
-      border-radius: 24px;
-      padding: 20px;
-      border: 1px solid #fff;
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .modal-form.active { display: flex; }
-
-    .form-input {
-      width: 100%;
-      padding: 11px 15px;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 12px;
-      font-size: 0.92rem;
-      outline: none;
-    }
-
-    .file-attach-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      background: rgba(27,67,50,0.08);
-      border: 1px dashed var(--primary);
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.85rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(26, 87, 69, 0.1);
       color: var(--primary);
-      cursor: pointer;
-      width: fit-content;
+      font-size: 0.72rem;
+      font-weight: 700;
     }
 
-    .contact-row {
+    .contact-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      background: rgba(255,255,255,0.45);
-      padding: 12px 16px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.7);
+      justify-content: space-between;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .contact-meta {
+      flex: 1;
+    }
+
+    .contact-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .contact-role {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .phone-badge {
+      background: rgba(27, 76, 62, 0.1);
+      color: var(--primary);
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .weather-screen {
+      border-radius: 32px;
+      padding: 18px 16px 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #1d2f4b 0%, #1c1b34 100%);
+      position: relative;
+      box-shadow: 0 24px 70px rgba(13, 19, 34, 0.18);
+    }
+
+    .weather-screen::before {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      top: -70px;
+      right: -30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(147, 197, 253, 0.55) 0%, rgba(147, 197, 253, 0.1) 30%, rgba(0,0,0,0) 70%);
+      animation: weatherPulse 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes weatherPulse {
+      0% { transform: scale(1); opacity: 0.5; }
+      100% { transform: scale(1.45); opacity: 1; }
+    }
+
+    .weather-main {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 12px 0 20px;
+      color: #fff;
+    }
+
+    .weather-temp {
+      font-size: clamp(3rem, 10vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: -0.08em;
+      font-weight: 700;
+    }
+
+    .weather-state {
+      font-size: 1rem;
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+
+    .weather-meta {
+      font-size: 0.74rem;
+      opacity: 0.6;
+      margin-top: 8px;
+    }
+
+    .weather-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .weather-stat {
+      border-radius: 18px;
+      padding: 16px 14px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+    }
+
+    .weather-stat label {
+      display: block;
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+
+    .weather-stat strong {
+      font-size: 1.15rem;
+      letter-spacing: -0.05em;
+    }
+
+    .weather-stat small {
+      display: block;
+      margin-top: 5px;
+      opacity: 0.7;
+      font-size: 0.66rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 14, 16, 0.42);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 50;
+      padding: 22px;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(100%, 430px);
+      border-radius: 30px;
+      padding: 22px 18px;
+      border: 1px solid rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      box-shadow: 0 20px 45px rgba(15, 20, 22, 0.22);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 0;
+      cursor: pointer;
+      background: rgba(0,0,0,0.06);
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
     }
   </style>
 </head>
 <body>
+  <div class="app-shell">
 
-  <!-- ГЛАВНЫЙ ЛАУНЧЕР -->
-  <div class="app-launcher-card" id="mainLauncher">
-
-    <div class="hero-banner">
-      <div style="position: relative; z-index: 2;">
-        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 2px;">НСТ «Горняк»</h2>
-        <p style="font-size: 0.85rem; opacity: 0.9;">Официальный портал</p>
-      </div>
-      <div class="weather-box" onclick="openWeatherApp()">
-        <div style="font-size: 1.1rem; font-weight: 700;">+10°C</div>
-        <div style="font-size: 0.72rem;">Солнечно</div>
-      </div>
-    </div>
-
-    <!-- Поиск на главном -->
-    <div class="launcher-search" onclick="openApp('search')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <span>Поиск по сайту...</span>
-    </div>
-
-    <!-- Адаптивная сетка иконок -->
-    <div class="tiles-grid">
-      <button class="liquid-tile" onclick="openApp('transport')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#1b4332" stroke-width="2.2"><rect x="3" y="6" width="18" height="11" rx="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M3 11h18"/></svg>
+    <div id="view-home" class="view active">
+      <header class="hero glass">
+        <div class="brand">
+          <h1>НСТ «Горняк»</h1>
+          <p>Официальный портал</p>
         </div>
-        <span class="tile-title">Транспорт</span>
-      </button>
 
-      <button class="liquid-tile" onclick="openApp('tariffs')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#c05621" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <span class="tile-title">Тарифы</span>
-      </button>
-
-      <button class="liquid-tile" onclick="openApp('news')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#2b6cb0" stroke-width="2.2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/></svg>
-        </div>
-        <span class="tile-title">Новости</span>
-      </button>
-
-      <button class="liquid-tile" onclick="openApp('docs')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#2f855a" stroke-width="2.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <span class="tile-title">Документы</span>
-      </button>
-
-      <button class="liquid-tile" onclick="openApp('contacts')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#6b46c1" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <span class="tile-title">Контакты</span>
-      </button>
-
-      <button class="liquid-tile" onclick="openApp('profile')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#319795" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <span class="tile-title">Профиль</span>
-      </button>
-
-      <button class="liquid-tile" onclick="openApp('payments')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#9b2c2c" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        </div>
-        <span class="tile-title">Взносы</span>
-      </button>
-
-      <button class="liquid-tile" onclick="openApp('info')">
-        <div class="icon-glass-3d">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#2d3748" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        </div>
-        <span class="tile-title">О НСТ</span>
-      </button>
-    </div>
-  </div>
-
-
-  <!-- ВНУТРЕННИЕ ЭКРАНЫ -->
-
-  <!-- 1. НОВОСТИ -->
-  <div class="app-screen" id="screen-news" onscroll="handleScreenScroll(this)">
-    <div class="screen-island">
-      <div class="floating-header">
-        <div class="back-btn-wrap" id="backWrap-news">
-          <button class="back-btn" onclick="closeApp('news')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Назад
+        <div class="hero-actions">
+          <button class="mail-btn" aria-label="Почта" title="Почта">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5v9A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5v-9Z"></path>
+              <path d="m4 7 8 6 8-6"></path>
+            </svg>
           </button>
-          <div class="long-press-menu" id="menu-news">
-            <div class="long-press-item" onclick="closeApp('news'); openApp('launcher')">На главную</div>
-            <div class="long-press-item" onclick="closeApp('news'); openApp('transport')">Транспорт</div>
-            <div class="long-press-item" onclick="closeApp('news'); openApp('contacts')">Контакты</div>
+          <button class="weather-pill" type="button" onclick="openWeather()">
+            <div class="temp">+10°C</div>
+            <div class="cond">Солнечно</div>
+          </button>
+        </div>
+      </header>
+
+      <div class="search-wrap">
+        <span class="search-icon">🔎</span>
+        <input id="globalSearch" class="search-input" type="text" placeholder="Поиск по сайту..." aria-label="Поиск по сайту" oninput="handleSearch(this.value)" />
+      </div>
+
+      <nav class="nav-grid" aria-label="Навигация по разделам">
+        <button class="nav-item glass" type="button" onclick="openScreen('transport')">
+          <div class="nav-icon">🚌</div>
+          <span>Транспорт</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('tariffs')">
+          <div class="nav-icon">⚡</div>
+          <span>Тарифы</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('news')">
+          <div class="nav-icon">📰</div>
+          <span>Новости</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('documents')">
+          <div class="nav-icon">📁</div>
+          <span>Документы</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('contacts')">
+          <div class="nav-icon">📞</div>
+          <span>Контакты</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('profile')">
+          <div class="nav-icon">👤</div>
+          <span>Профиль</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('fees')">
+          <div class="nav-icon">💳</div>
+          <span>Взносы</span>
+        </button>
+        <button class="nav-item glass" type="button" onclick="openScreen('about')">
+          <div class="nav-icon">ℹ️</div>
+          <span>О НСТ</span>
+        </button>
+      </nav>
+    </div>
+
+    <div id="view-search" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Результаты поиска</div>
+          <div style="width: 40px;"></div>
+        </div>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+
+    <div id="view-transport" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Транспорт</div>
+          <div class="search-mini" onclick="openScreen('search')" aria-label="Поиск">🔍</div>
+        </div>
+
+        <div class="content-card">
+          <h3>Маршрут № 474</h3>
+          <p><strong>От СНТ «Горняк»:</strong></p>
+          <div class="pill-row">
+            <span class="time-pill">06:21</span>
+            <span class="time-pill">09:43</span>
+            <span class="time-pill">14:48</span>
+            <span class="time-pill">18:08</span>
+          </div>
+          <p style="margin-top: 12px;"><strong>От м. Котельники:</strong></p>
+          <div class="pill-row">
+            <span class="time-pill">07:02</span>
+            <span class="time-pill">11:16</span>
+            <span class="time-pill">15:28</span>
+            <span class="time-pill">19:00</span>
           </div>
         </div>
-        <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">Новости и объявления</h3>
-        <div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      </div>
 
-      <div style="text-align: center; padding: 20px 0;">
-        <div style="width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(27,67,50,0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; animation: float3D 3s ease-in-out infinite;">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/></svg>
-        </div>
-        <p style="font-size: 0.92rem; color: var(--text-sub); font-weight: 500;">Пока нет новостей и объявлений.</p>
-
-        <div class="fab-add-btn" onclick="toggleForm('news-form')">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="content-card">
+          <h3>Маршрут № 26</h3>
+          <p><strong>Прямые рейсы:</strong> 06:50, 10:15, 15:10, 18:40</p>
+          <p style="margin-top: 8px;"><strong>Обратные рейсы:</strong> 07:40, 12:00, 16:30, 19:50</p>
         </div>
 
-        <div class="modal-form" id="news-form">
-          <input type="text" class="form-input" placeholder="Заголовок объявления">
-          <textarea class="form-input" rows="3" placeholder="Текст объявления..."></textarea>
-          <label class="file-attach-btn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            Прикрепить файл
-            <input type="file" style="display: none;">
-          </label>
-          <button style="padding: 11px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">Опубликовать</button>
+        <div class="content-card">
+          <h3>Маршрут № К1</h3>
+          <p><strong>Прямые рейсы:</strong> 06:10, 09:00, 13:30, 17:20</p>
+          <p style="margin-top: 8px;"><strong>Обратные рейсы:</strong> 07:15, 10:45, 14:55, 18:30</p>
         </div>
       </div>
     </div>
-  </div>
 
+    <div id="view-tariffs" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Тарифы ЖКХ</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+        <div class="content-card">
+          <h3>Электроэнергия</h3>
+          <p>Одноставочный тариф: <strong>4.28 руб / кВт·ч</strong></p>
+          <p style="margin-top: 6px;">День — 4.95 руб, ночь — 2.15 руб.</p>
+        </div>
+        <div class="content-card">
+          <h3>Членские взносы</h3>
+          <p>Утверждены общим собранием. Оплата принимается до 1 июля текущего года.</p>
+        </div>
+      </div>
+    </div>
 
-  <!-- 2. ДОКУМЕНТЫ -->
-  <div class="app-screen" id="screen-docs" onscroll="handleScreenScroll(this)">
-    <div class="screen-island">
-      <div class="floating-header">
-        <div class="back-btn-wrap" id="backWrap-docs">
-          <button class="back-btn" onclick="closeApp('docs')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Назад
-          </button>
-          <div class="long-press-menu" id="menu-docs">
-            <div class="long-press-item" onclick="closeApp('docs'); openApp('launcher')">На главную</div>
+    <div id="view-news" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Новости НСТ</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+        <div class="content-card">
+          <h3>Открытие летнего водопровода</h3>
+          <p>Запуск системы запланирован на 1 мая. Проверьте краны на участках и устраните возможные протечки.</p>
+        </div>
+        <div class="content-card">
+          <h3>Собрание собственников</h3>
+          <p>Очередное ежегодное собрание состоится в следующую субботу в 12:00 у правления.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-documents" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Документы</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+        <div class="content-card">
+          <h3>Устав НСТ «Горняк»</h3>
+          <p>Основной правовой документ товарищества, редакция 2024 года.</p>
+        </div>
+        <div class="content-card">
+          <h3>Правила внутреннего распорядка</h3>
+          <p>Пожарная безопасность, содержание животных и режим тишины.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-contacts" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Контакты</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+
+        <div class="content-card">
+          <p style="margin-bottom: 12px;">Адрес правления: Московская область, г. Котельники, территория НСТ «Горняк». Часы приема: сб 10:00–14:00.</p>
+        </div>
+
+        <a class="content-card contact-item" href="tel:+79096570631">
+          <div class="contact-meta">
+            <div class="contact-name">Торицкая Нина Александровна</div>
+            <div class="contact-role">Дворник</div>
+          </div>
+          <span class="phone-badge">8-909-657-06-31</span>
+        </a>
+
+        <a class="content-card contact-item" href="tel:+79296645806">
+          <div class="contact-meta">
+            <div class="contact-name">Асланов Телман Магомед Оглы</div>
+            <div class="contact-role">Член правления</div>
+          </div>
+          <span class="phone-badge">8-929-664-58-06</span>
+        </a>
+
+        <a class="content-card contact-item" href="tel:+79774882663">
+          <div class="contact-meta">
+            <div class="contact-name">Зеневкина Александра Владимировна</div>
+            <div class="contact-role">Член правления</div>
+          </div>
+          <span class="phone-badge">8-977-488-26-63</span>
+        </a>
+
+        <a class="content-card contact-item" href="tel:+79250082122">
+          <div class="contact-meta">
+            <div class="contact-name">Князева Ирина Вениаминовна</div>
+            <div class="contact-role">Член правления</div>
+          </div>
+          <span class="phone-badge">8-925-008-21-22</span>
+        </a>
+
+        <a class="content-card contact-item" href="tel:+79175323912">
+          <div class="contact-meta">
+            <div class="contact-name">Личманова Евгения Александровна</div>
+            <div class="contact-role">Член правления</div>
+          </div>
+          <span class="phone-badge">8-917-532-39-12</span>
+        </a>
+
+        <a class="content-card contact-item" href="tel:+79031567525">
+          <div class="contact-meta">
+            <div class="contact-name">Мичкасов Валентин Васильевич</div>
+            <div class="contact-role">Член правления</div>
+          </div>
+          <span class="phone-badge">8-903-156-75-25</span>
+        </a>
+
+        <a class="content-card contact-item" href="tel:+79263615061">
+          <div class="contact-meta">
+            <div class="contact-name">Черкесс Игорь Викторович</div>
+            <div class="contact-role">Член правления</div>
+          </div>
+          <span class="phone-badge">8-926-361-50-61</span>
+        </a>
+      </div>
+    </div>
+
+    <div id="view-profile" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Личный кабинет</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+        <div class="content-card">
+          <h3>Мой участок</h3>
+          <p>Участок № 142, площадь 6 соток. Задолженностей нет.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-fees" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Взносы</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+        <div class="content-card">
+          <h3>Реквизиты</h3>
+          <p>Оплата членских взносов производится через мобильное приложение банка по расчётному счёту товарищества.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-about" class="view">
+      <div class="panel glass">
+        <div class="subheader glass">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">О НСТ</div>
+          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+        </div>
+        <div class="content-card">
+          <h3>Историческая справка</h3>
+          <p>НСТ «Горняк» основано в 1978 году ветеранами горнодобывающей промышленности Подмосковья. Территория обустроена в лесопарковой зоне у Котельников и включает развитую инфраструктуру.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-weather" class="view">
+      <div class="panel" style="margin-top: 0; padding: 0; background: transparent; border: 0; box-shadow: none;">
+        <div class="subheader glass" style="margin-bottom: 10px;">
+          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
+          <div class="subheader-title">Погода</div>
+          <div style="width: 40px;"></div>
+        </div>
+
+        <div class="weather-screen">
+          <div class="weather-main">
+            <div class="weather-temp">+10°</div>
+            <div class="weather-state">Солнечно</div>
+            <div class="weather-meta">Макс.: +10° · Мин.: +1°</div>
+          </div>
+
+          <div class="weather-grid">
+            <div class="weather-stat">
+              <label>Закат</label>
+              <strong>17:16</strong>
+              <small>Восход 07:10</small>
+            </div>
+            <div class="weather-stat">
+              <label>УФ</label>
+              <strong>1</strong>
+              <small>Низкий</small>
+            </div>
+            <div class="weather-stat">
+              <label>Ветер</label>
+              <strong>2 м/с</strong>
+              <small>Порывы до 5</small>
+            </div>
+            <div class="weather-stat">
+              <label>Давление</label>
+              <strong>779</strong>
+              <small>мм рт. ст.</small>
+            </div>
           </div>
         </div>
-        <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">Документы</h3>
-        <div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       </div>
+    </div>
 
-      <div style="text-align: center; padding: 20px 0;">
-        <div style="width: 64px; height: 64px; margin: 0 auto 12px; background: rgba(47,133,90,0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; animation: float3D 3s ease-in-out infinite;">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2f855a" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <p style="font-size: 0.92rem; color: var(--text-sub); font-weight: 500;">Документы не загружены.</p>
+  </div>
 
-        <div class="fab-add-btn" onclick="toggleForm('docs-form')">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </div>
-
-        <div class="modal-form" id="docs-form">
-          <input type="text" class="form-input" placeholder="Название документа">
-          <label class="file-attach-btn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            Прикрепить документ
-            <input type="file" style="display: none;">
-          </label>
-          <button style="padding: 11px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">Загрузить документ</button>
-        </div>
+  <div id="notificationModal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Уведомления</h3>
+        <button class="close-btn" type="button" onclick="closeModal()" aria-label="Закрыть">×</button>
+      </div>
+      <div class="content-card">
+        <h3>Внимание! Субботник</h3>
+        <p>Общий весенний субботник состоится в эту субботу в 10:00. Инструменты выдаются у сторожки.</p>
+      </div>
+      <div class="content-card" style="margin-bottom: 0;">
+        <h3>Поверка счетчиков</h3>
+        <p>Необходимо передать показания электросчетчиков до 25 числа текущего месяца.</p>
       </div>
     </div>
   </div>
-
-
-  <!-- 3. ТРАНСПОРТ -->
-  <div class="app-screen" id="screen-transport" onscroll="handleScreenScroll(this)">
-    <div class="screen-island">
-      <div class="floating-header">
-        <button class="back-btn" onclick="closeApp('transport')">← Назад</button>
-        <h3 style="color: var(--primary); font-size: 0.95rem;">Транспорт</h3>
-        <div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      </div>
-
-      <!-- Маршрут 474 -->
-      <div style="background: rgba(255,255,255,0.7); border-radius: 18px; padding: 14px; border: 1px solid rgba(27,67,50,0.15); margin-bottom: 10px;">
-        <h4 style="color: var(--primary); margin-bottom: 6px; font-size: 0.92rem;">Маршрут № 474 (м. Котельники — СНТ «Горняк»)</h4>
-        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 3px;">От СНТ «Горняк»:</div>
-        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">06:21</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">09:43</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">14:48</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">18:08</div>
-        </div>
-        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 3px;">От м. Котельники:</div>
-        <div style="display: flex; gap: 6px;">
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">07:02</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">11:16</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">15:28</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">19:00</div>
-        </div>
-      </div>
-
-      <!-- Маршрут 26 -->
-      <div style="background: rgba(255,255,255,0.7); border-radius: 18px; padding: 14px; border: 1px solid rgba(27,67,50,0.15); margin-bottom: 10px;">
-        <h4 style="color: var(--primary); margin-bottom: 6px; font-size: 0.92rem;">Маршрут № 26</h4>
-        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 3px;">Прямые рейсы:</div>
-        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">06:50</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">10:15</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">15:10</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">18:40</div>
-        </div>
-        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 3px;">Обратные рейсы:</div>
-        <div style="display: flex; gap: 6px;">
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">07:40</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">12:00</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">16:30</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">19:50</div>
-        </div>
-      </div>
-
-      <!-- Маршрут К1 -->
-      <div style="background: rgba(255,255,255,0.7); border-radius: 18px; padding: 14px; border: 1px solid rgba(27,67,50,0.15);">
-        <h4 style="color: var(--primary); margin-bottom: 6px; font-size: 0.92rem;">Маршрут № К1</h4>
-        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 3px;">Прямые рейсы:</div>
-        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">06:10</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">09:00</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">13:30</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">17:20</div>
-        </div>
-        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 3px;">Обратные рейсы:</div>
-        <div style="display: flex; gap: 6px;">
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">07:15</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">10:45</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">14:55</div>
-          <div style="flex:1; background: rgba(27,67,50,0.08); padding: 5px; text-align: center; border-radius: 8px; font-weight: 700; font-size: 0.82rem;">18:30</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- 4. КОНТАКТЫ -->
-  <div class="app-screen" id="screen-contacts" onscroll="handleScreenScroll(this)">
-    <div class="screen-island">
-      <div class="floating-header">
-        <button class="back-btn" onclick="closeApp('contacts')">← Назад</button>
-        <h3 style="color: var(--primary); font-size: 0.95rem;">Контакты правления</h3>
-        <div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      </div>
-
-      <p style="font-size: 0.84rem; color: var(--text-sub); line-height: 1.4;">Адрес правления: Московская область, г. Котельники, территория НСТ «Горняк». Часы приема: Сб 10:00 – 14:00.</p>
-
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Торицкая Нина Александровна</div><div style="font-size: 0.76rem; color: var(--text-sub);">Дворник</div></div>
-          <a href="tel:89096570631" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-909-657-06-31</a>
-        </div>
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Асланов Телман Магомед Оглы</div><div style="font-size: 0.76rem; color: var(--text-sub);">Член правления</div></div>
-          <a href="tel:89296645806" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-929-664-58-06</a>
-        </div>
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Зеневкина Александра Владимировна</div><div style="font-size: 0.76rem; color: var(--text-sub);">Член правления</div></div>
-          <a href="tel:89774882663" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-977-488-26-63</a>
-        </div>
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Князева Ирина Вениаминовна</div><div style="font-size: 0.76rem; color: var(--text-sub);">Член правления</div></div>
-          <a href="tel:89250082122" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-925-008-21-22</a>
-        </div>
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Личманова Евгения Александровна</div><div style="font-size: 0.76rem; color: var(--text-sub);">Член правления</div></div>
-          <a href="tel:89175323912" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-917-532-39-12</a>
-        </div>
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Мичкасов Валентин Васильевич</div><div style="font-size: 0.76rem; color: var(--text-sub);">Член правления</div></div>
-          <a href="tel:89031567525" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-903-156-75-25</a>
-        </div>
-        <div class="contact-row">
-          <div><div style="font-weight: 700; font-size: 0.9rem;">Черкесс Игорь Викторович</div><div style="font-size: 0.76rem; color: var(--text-sub);">Член правления</div></div>
-          <a href="tel:89263615061" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.88rem; white-space: nowrap;">8-926-361-50-61</a>
-        </div>
-      </div>
-
-      <div style="margin-top: 6px; background: rgba(255,255,255,0.7); border-radius: 18px; padding: 14px; border: 1px solid rgba(27,67,50,0.15);">
-        <h4 style="color: var(--primary); font-size: 0.92rem; margin-bottom: 8px;">Экстренные службы и участковый</h4>
-        <div style="font-size: 0.85rem; line-height: 1.5;">
-          <strong>Участковый по НСТ «Горняк»:</strong> Сырчин Кирилл Владимирович<br>
-          Телефон: <a href="tel:89851311484" style="color: var(--primary); font-weight: 700; text-decoration: none;">8-985-131-14-84</a><br><br>
-          <strong>Полиция г. Котельники (дежурная часть):</strong><br>
-          Телефон: <a href="tel:89267775784" style="color: var(--primary); font-weight: 700; text-decoration: none;">8-926-777-57-84</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- 5. ТАРИФЫ -->
-  <div class="app-screen" id="screen-tariffs" onscroll="handleScreenScroll(this)">
-    <div class="screen-island">
-      <div class="floating-header">
-        <button class="back-btn" onclick="closeApp('tariffs')">← Назад</button>
-        <h3 style="color: var(--primary); font-size: 0.95rem;">Тарифы и смета</h3>
-        <div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      </div>
-      <div style="background: rgba(255,255,255,0.7); border-radius: 18px; padding: 16px; border: 1px solid rgba(27,67,50,0.15);">
-        <p style="font-size: 0.88rem; color: var(--text-main); margin-bottom: 12px;">Электроэнергия (День / Ночь): <strong>10.14 руб / 4.36 руб</strong> за кВт·ч.</p>
-        <button style="padding: 10px 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">Скачать Смету 2026</button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- 6. О НСТ (ЭНЦИКЛОПЕДИЧЕСКАЯ СПРАВКА И ИСТОРИЯ) -->
-  <div class="app-screen" id="screen-info" onscroll="handleScreenScroll(this)">
-    <div class="screen-island">
-      <div class="floating-header">
-        <button class="back-btn" onclick="closeApp('info')">← Назад</button>
-        <h3 style="color: var(--primary); font-size: 0.95rem;">О НСТ «Горняк»</h3>
-        <div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      </div>
-      <div style="background: rgba(255,255,255,0.7); border-radius: 18px; padding: 16px; border: 1px solid rgba(27,67,50,0.15); display: flex; flex-direction: column; gap: 12px;">
-        <h4 style="color: var(--primary); font-size: 0.98rem; font-weight: 700;">Историческая справка из энциклопедий и архивов</h4>
-        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5;">
-          <strong>НСТ «Горняк»</strong> (Некоммерческое садоводческое товарищество) территориально и исторически связано с развитием Люберецкого района и городского округа Котельники Московской области. Своё название и истоки товарищество берет со второй половины XX века, когда земли вблизи подмосковных разработок и Люберецких карьеров массово выделялись под коллективное садоводство работникам горно-добывающей промышленности, силикатных заводов и строительных комбинатах региона.
-        </p>
-        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5;">
-          Согласно справочным материалам и географическим реестрам Подмосковья, территория Котельников и прилегающих дачных массивов формировалась как стратегический зелёный пояс столицы. За десятилетия дачный посёлок превратился в развитую, благоустроенную территорию с круглогодичным подъездом, устойчивым энергоснабжением и тесными социально-бытовыми связями с городом Котельники.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="app-screen" id="screen-profile"><div class="screen-island"><div class="floating-header"><button class="back-btn" onclick="closeApp('profile')">← Назад</button><h3>Профиль</h3><div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div><p>Личный кабинет участника НСТ.</p></div></div>
-  <div class="app-screen" id="screen-payments"><div class="screen-island"><div class="floating-header"><button class="back-btn" onclick="closeApp('payments')">← Назад</button><h3>Взносы</h3><div class="header-search-icon" onclick="openApp('search')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div><p>Реквизиты для оплаты членских взносов.</p></div></div>
-  <div class="app-screen" id="screen-search"><div class="screen-island"><div class="floating-header"><button class="back-btn" onclick="closeApp('search')">← Назад</button><h3>Поиск</h3><div></div></div><input type="text" class="form-input" placeholder="Введите запрос..."></div></div>
-
-
-  <!-- ПОГОДА FULLSCREEN -->
-  <div class="weather-fullscreen" id="weatherAppScreen">
-    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 680px; margin: 0 auto 15px; position: relative; z-index: 2;">
-      <button class="back-btn" onclick="closeWeatherApp()">← Назад</button>
-      <h3 style="font-size: 1.05rem; font-weight: 600;">Котельники</h3>
-      <div></div>
-    </div>
-
-    <div class="weather-main-info">
-      <div style="font-size: 3.5rem; font-weight: 800; letter-spacing: -2px;">10°</div>
-      <div style="font-size: 1.1rem; font-weight: 500;">Солнечно</div>
-      <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 3px;">Макс.: 10°, мин.: 1°</div>
-    </div>
-
-    <div class="weather-cards-grid">
-      <div class="w-card"><div style="font-size: 0.78rem; opacity: 0.8; text-transform: uppercase;">Закат</div><div style="font-size: 1.4rem; font-weight: 700;">17:16</div><div style="font-size: 0.8rem; opacity: 0.8;">Восход в 07:10</div></div>
-      <div class="w-card"><div style="font-size: 0.78rem; opacity: 0.8; text-transform: uppercase;">УФ-индекс</div><div style="font-size: 1.4rem; font-weight: 700;">1</div><div style="font-size: 0.8rem; opacity: 0.8;">Низкий до конца дня</div></div>
-      <div class="w-card"><div style="font-size: 0.78rem; opacity: 0.8; text-transform: uppercase;">Ветер</div><div style="font-size: 1.4rem; font-weight: 700;">2 м/с</div><div style="font-size: 0.8rem; opacity: 0.8;">Порывы до 5 м/с</div></div>
-      <div class="w-card"><div style="font-size: 0.78rem; opacity: 0.8; text-transform: uppercase;">Давление</div><div style="font-size: 1.4rem; font-weight: 700;">779</div><div style="font-size: 0.8rem; opacity: 0.8;">мм рт. ст.</div></div>
-    </div>
-  </div>
-
-
-  <!-- КНОПКА «НАВЕРХ» -->
-  <div class="bubble-scroll-top" id="scrollTopBubble" onclick="scrollToTopActiveScreen()">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-  </div>
-
-  <style>
-    @keyframes float3D {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(1.5deg); }
-    }
-  </style>
 
   <script>
-    let activeScreenId = null;
-    let longPressTimer = null;
+    const screenIds = ['home', 'search', 'transport', 'tariffs', 'news', 'documents', 'contacts', 'profile', 'fees', 'about', 'weather'];
 
-    function openApp(appId) {
-      activeScreenId = 'screen-' + appId;
-      const screen = document.getElementById(activeScreenId);
-      if (screen) {
-        screen.classList.add('active');
-        setupLongPress(appId);
+    function openScreen(name) {
+      screenIds.forEach(id => {
+        const el = document.getElementById('view-' + id);
+        if (el) el.classList.toggle('active', id === name);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openWeather() {
+      openScreen('weather');
+    }
+
+    function openModal() {
+      document.getElementById('notificationModal').classList.add('open');
+      document.getElementById('notificationModal').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      document.getElementById('notificationModal').classList.remove('open');
+      document.getElementById('notificationModal').setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelector('.mail-btn').addEventListener('click', openModal);
+
+    const searchDatabase = [
+      { title: 'Транспорт и маршрут 474', view: 'transport', text: 'автобус 474 расписание котельники горняк транспорт' },
+      { title: 'Тарифы ЖКХ', view: 'tariffs', text: 'электричество тарифы свет квт ч взносы' },
+      { title: 'Новости НСТ', view: 'news', text: 'новости вода водопровод субботник собрание' },
+      { title: 'Документы НСТ', view: 'documents', text: 'устав правила документы распорядок' },
+      { title: 'Контакты правления', view: 'contacts', text: 'контакты телефон правление торицкая асланов' },
+      { title: 'Профиль участка', view: 'profile', text: 'профиль участок личный кабинет личный' },
+      { title: 'Взносы и оплата', view: 'fees', text: 'взносы оплата реквизиты банк' },
+      { title: 'О НСТ Горняк', view: 'about', text: 'история о нст горняк информация' }
+    ];
+
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      const results = document.getElementById('searchResults');
+
+      if (!q) {
+        openScreen('home');
+        return;
       }
-    }
 
-    function closeApp(appId) {
-      const screen = document.getElementById('screen-' + appId);
-      if (screen) {
-        screen.classList.remove('active');
-        document.getElementById('scrollTopBubble').classList.remove('visible');
-        activeScreenId = null;
+      openScreen('search');
+      const filtered = searchDatabase.filter(item =>
+        item.title.toLowerCase().includes(q) || item.text.toLowerCase().includes(q)
+      );
+
+      if (!filtered.length) {
+        results.innerHTML = '<div class="content-card"><p style="text-align:center;">Ничего не найдено по запросу «' + query + '»</p></div>';
+        return;
       }
+
+      results.innerHTML = filtered.map(item => `
+        <div class="content-card" style="cursor:pointer;" onclick="openScreen('${item.view}')">
+          <h3>${item.title}</h3>
+          <p>Нажмите, чтобы открыть раздел</p>
+        </div>
+      `).join('');
     }
 
-    function openWeatherApp() { document.getElementById('weatherAppScreen').classList.add('active'); }
-    function closeWeatherApp() { document.getElementById('weatherAppScreen').classList.remove('active'); }
-    function toggleForm(formId) { document.getElementById(formId).classList.toggle('active'); }
+    document.getElementById('notificationModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
 
-    function handleScreenScroll(el) {
-      const bubble = document.getElementById('scrollTopBubble');
-      if (el.scrollTop > 120) {
-        bubble.classList.add('visible');
-      } else {
-        bubble.classList.remove('visible');
+    document.getElementById('globalSearch').addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        this.value = '';
+        openScreen('home');
       }
-    }
-
-    function scrollToTopActiveScreen() {
-      if (activeScreenId) {
-        const screen = document.getElementById(activeScreenId);
-        if (screen) { screen.scrollTo({ top: 0, behavior: 'smooth' }); }
-      }
-    }
-
-    function setupLongPress(appId) {
-      const wrap = document.getElementById('backWrap-' + appId);
-      const menu = document.getElementById('menu-' + appId);
-      if (!wrap || !menu) return;
-
-      const startPress = () => { longPressTimer = setTimeout(() => { menu.classList.add('show'); }, 2000); };
-      const endPress = () => { clearTimeout(longPressTimer); };
-
-      wrap.onmousedown = startPress; wrap.onmouseup = endPress;
-      wrap.ontouchstart = startPress; wrap.ontouchend = endPress;
-
-      document.onclick = (e) => { if (!wrap.contains(e.target)) { menu.classList.remove('show'); } };
-    }
+    });
   </script>
-
 </body>
 </html>
