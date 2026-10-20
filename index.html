@@ -421,7 +421,7 @@
 
     <section id="page-notifications" class="screen subpage" aria-labelledby="title-notifications"><header class="subpage-header"><button class="back-btn" type="button" onclick="goHome()">← Назад</button><h1 class="subpage-title" id="title-notifications">Уведомления</h1><span class="header-spacer"></span></header><article class="content-card empty-state"><span class="card-icon-wrapper icon-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg></span><h2>Новых уведомлений нет</h2><p>Важные сообщения правления и напоминания появятся в этом разделе.</p></article><article class="content-card"><div class="eyebrow">Уведомления о</div><div class="content-row"><span>Собраниях и решениях</span></div><div class="content-row"><span>Работах на территории</span></div><div class="content-row"><span>Сроках оплаты взносов</span></div></article></section>
 
-    <section id="page-weather" class="screen subpage" aria-labelledby="title-weather"><header class="subpage-header"><button class="back-btn" type="button" onclick="goHome()">← Назад</button><h1 class="subpage-title" id="title-weather">Погода</h1><span class="header-spacer"></span></header><article class="weather-card-full"><div style="font-size:12px;opacity:.76">НСТ «Горняк» · Open-Meteo</div><div class="weather-current"><span class="sun-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg></span><span id="weather-temperature" class="weather-main-temp">—°</span><span id="weather-description" class="weather-summary">Загрузка погоды<small id="weather-updated">Данные Open-Meteo</small></span></div><div class="weather-grid"><div class="weather-grid-item"><div class="weather-label">Ощущается как</div><div id="weather-feels-like" class="weather-val">—</div></div><div class="weather-grid-item"><div class="weather-label">Влажность</div><div id="weather-humidity" class="weather-val">—</div></div><div class="weather-grid-item"><div class="weather-label">Ветер</div><div id="weather-wind" class="weather-val">—</div></div><div class="weather-grid-item"><div class="weather-label">Давление</div><div id="weather-pressure" class="weather-val">—</div></div></div><p id="weather-status" class="weather-status" role="status">Используются координаты Москвы / Балашихи / Подмосковья; при ошибке сети отображаются запасные значения.</p></article><div class="info-banner" style="margin-top:11px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5m0-8h.01"></path></svg><span>Погода загружается с Open-Meteo и обновляется автоматически каждые 15 минут.</span></div></section>
+    <section id="page-weather" class="screen subpage" aria-labelledby="title-weather"><header class="subpage-header"><button class="back-btn" type="button" onclick="goHome()">← Назад</button><h1 class="subpage-title" id="title-weather">Погода</h1><span class="header-spacer"></span></header><article class="weather-card-full"><div style="font-size:12px;opacity:.76">НСТ «Горняк» · Open-Meteo</div><div class="weather-current"><span class="sun-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg></span><span id="weather-temperature" class="weather-main-temp">—°</span><span id="weather-description" class="weather-summary">Загрузка погоды<small id="weather-updated">Данные Open-Meteo</small></span></div><div class="weather-grid"><div class="weather-grid-item"><div class="weather-label">Ощущается как</div><div id="weather-feels-like" class="weather-val">—</div></div><div class="weather-grid-item"><div class="weather-label">Влажность</div><div id="weather-humidity" class="weather-val">—</div></div><div class="weather-grid-item"><div class="weather-label">Ветер</div><div id="weather-wind" class="weather-val">—</div></div><div class="weather-grid-item"><div class="weather-label">Давление</div><div id="weather-pressure" class="weather-val">—</div></div></div><p id="weather-status" class="weather-status" role="status">Загружаются текущие данные погоды для НСТ «Горняк»; при ошибке значения будут отмечены как недоступные.</p></article><div class="info-banner" style="margin-top:11px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5m0-8h.01"></path></svg><span>Погода загружается с Open-Meteo и обновляется автоматически каждые 15 минут.</span></div></section>
 </main>
 <script>
     const screens = document.querySelectorAll('.screen');
@@ -608,37 +608,80 @@
         if (!targetElement?.matches('.nav-card')) targetElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
+    function describeWeatherCode(code) {
+        if (code === 0) return 'Ясно';
+        if (code === 1) return 'Преимущественно ясно';
+        if (code === 2) return 'Переменная облачность';
+        if (code === 3) return 'Пасмурно';
+        if (code === 45 || code === 48) return 'Туман';
+        if (code >= 51 && code <= 55) return 'Морось';
+        if (code === 56 || code === 57) return 'Ледяная морось';
+        if (code >= 61 && code <= 65) return 'Дождь';
+        if (code === 66 || code === 67) return 'Ледяной дождь';
+        if (code >= 71 && code <= 75) return 'Снег';
+        if (code === 77) return 'Снежные зерна';
+        if (code >= 80 && code <= 82) return 'Ливень';
+        if (code === 85 || code === 86) return 'Снегопад';
+        if (code === 95) return 'Гроза';
+        if (code === 96 || code === 99) return 'Гроза с градом';
+        return 'Погодные условия';
+    }
+
     async function updateWeather() {
         const status = document.getElementById('weather-status');
         try {
             const latitude = 55.80;
             const longitude = 37.95;
-            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+            const parameters = new URLSearchParams({
+                latitude,
+                longitude,
+                current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m',
+                wind_speed_unit: 'ms',
+                timezone: 'Europe/Moscow'
+            });
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?${parameters}`);
             if (!response.ok) throw new Error(`Open-Meteo ответил с кодом ${response.status}`);
             const data = await response.json();
-            const currentWeather = data?.current_weather;
-            if (!currentWeather || !Number.isFinite(currentWeather.temperature) || !Number.isFinite(currentWeather.windspeed)) {
+            const currentWeather = data?.current;
+            if (
+                !currentWeather
+                || !Number.isFinite(currentWeather.temperature_2m)
+                || !Number.isFinite(currentWeather.relative_humidity_2m)
+                || !Number.isFinite(currentWeather.apparent_temperature)
+                || !Number.isFinite(currentWeather.weather_code)
+                || !Number.isFinite(currentWeather.surface_pressure)
+                || !Number.isFinite(currentWeather.wind_speed_10m)
+            ) {
                 throw new Error('Open-Meteo вернул неполные данные о текущей погоде');
             }
-            const temperature = Math.round(currentWeather.temperature);
+            const temperature = Math.round(currentWeather.temperature_2m);
             const temperatureText = `${temperature > 0 ? '+' : ''}${temperature}`;
-            const wind = `${currentWeather.windspeed} м/с`;
+            const apparentTemperature = Math.round(currentWeather.apparent_temperature);
+            const apparentTemperatureText = `${apparentTemperature > 0 ? '+' : ''}${apparentTemperature}°C`;
+            const weatherDescription = describeWeatherCode(currentWeather.weather_code);
+            const wind = `${currentWeather.wind_speed_10m} м/с`;
             document.getElementById('weather-temperature').textContent = `${temperatureText}°`;
-            document.getElementById('weather-description').firstChild.textContent = `Солнечно · Ветер ${wind}`;
+            document.getElementById('weather-description').firstChild.textContent = weatherDescription;
             document.getElementById('weather-updated').textContent = `Обновлено: ${currentWeather.time?.slice(11, 16) || 'сейчас'}`;
+            document.getElementById('weather-feels-like').textContent = apparentTemperatureText;
+            document.getElementById('weather-humidity').textContent = `${currentWeather.relative_humidity_2m}%`;
             document.getElementById('weather-wind').textContent = wind;
-            document.getElementById('weather-pressure').textContent = '758 мм рт. ст.';
+            document.getElementById('weather-pressure').textContent = `${Math.round(currentWeather.surface_pressure * 0.750061683)} мм рт. ст.`;
             document.getElementById('header-weather-temp').textContent = `${temperatureText}°C`;
-            document.getElementById('header-weather-desc').textContent = 'Солнечно';
+            document.getElementById('header-weather-desc').textContent = weatherDescription;
             status.textContent = 'Источник: Open-Meteo · данные обновляются каждые 15 минут.';
         } catch (error) {
             console.error('Не удалось загрузить погоду из Open-Meteo.', error);
-            document.getElementById('weather-temperature').textContent = '+10°';
-            document.getElementById('weather-description').firstChild.textContent = 'Солнечно';
-            document.getElementById('weather-wind').textContent = '2 м/с';
-            document.getElementById('header-weather-temp').textContent = '+10°C';
-            document.getElementById('header-weather-desc').textContent = 'Солнечно';
-            status.textContent = 'Не удалось загрузить погоду. Показаны запасные значения.';
+            document.getElementById('weather-temperature').textContent = '—°';
+            document.getElementById('weather-description').firstChild.textContent = 'Погода недоступна';
+            document.getElementById('weather-updated').textContent = 'Нет данных';
+            document.getElementById('weather-feels-like').textContent = '—';
+            document.getElementById('weather-humidity').textContent = '—';
+            document.getElementById('weather-wind').textContent = '—';
+            document.getElementById('weather-pressure').textContent = '—';
+            document.getElementById('header-weather-temp').textContent = '—°C';
+            document.getElementById('header-weather-desc').textContent = 'Нет данных';
+            status.textContent = 'Не удалось загрузить погоду. Проверьте соединение и попробуйте позже.';
         }
     }
 
