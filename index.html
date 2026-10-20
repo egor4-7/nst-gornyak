@@ -84,9 +84,10 @@
             color: white;
         }
 
+        .icon-btn:hover { transform: scale(1.08); background: rgba(255, 255, 255, 0.25); }
         .icon-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.3); }
 
-        /* Стабильная маленькая плашка погоды (без мерцания фона) */
+        /* Плашка погоды в шапке (без мерцания, но с увеличением при наведении) */
         .weather-pill {
             background: rgba(255, 255, 255, 0.28);
             backdrop-filter: blur(15px);
@@ -95,9 +96,10 @@
             border-radius: 20px;
             padding: 6px 14px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
+        .weather-pill:hover { transform: scale(1.04); }
         .weather-pill:active { transform: scale(0.95); }
         .weather-pill-content { display: flex; align-items: center; gap: 8px; }
         .weather-text-col { display: flex; flex-direction: column; align-items: flex-end; }
@@ -129,7 +131,9 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
         }
+        .search-input:focus { transform: scale(1.005); background: rgba(255, 255, 255, 0.7); }
         .search-input::placeholder { color: #769481; }
         .search-icon {
             position: absolute; left: 15px; top: 50%;
@@ -148,7 +152,7 @@
             overflow-y: auto;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
-        .search-result-item { padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; border-radius: 8px; }
+        .search-result-item { padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; border-radius: 8px; transition: background 0.15s; }
         .search-result-item:hover { background: rgba(200, 230, 201, 0.4); }
         .search-result-title { font-size: 13px; font-weight: 600; color: var(--text-main); }
         .search-result-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
@@ -170,6 +174,7 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
 
+        /* Эффект легкого увеличения при наведении на карточки */
         .nav-card {
             padding: 16px 12px;
             display: flex;
@@ -177,6 +182,12 @@
             gap: 12px;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-card:hover {
+            transform: scale(1.03); /* Плавное увеличение при наведении */
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 12px 35px 0 rgba(31, 38, 135, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         .nav-card:active { transform: scale(0.96); background: rgba(255, 255, 255, 0.8); }
@@ -192,6 +203,11 @@
             background: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.95);
             flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+
+        .nav-card:hover .card-icon-wrapper {
+            transform: scale(1.05); /* Иконка внутри тоже чуть увеличивается */
         }
 
         .card-icon-wrapper svg { width: 24px; height: 24px; }
@@ -224,7 +240,9 @@
             font-weight: 600;
             cursor: pointer;
             color: var(--text-main);
+            transition: transform 0.2s;
         }
+        .back-btn:hover { transform: scale(1.04); }
 
         .subpage-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
 
@@ -232,6 +250,10 @@
             padding: 16px;
             margin-bottom: 10px;
             border-radius: var(--radius-xl);
+            transition: transform 0.25s ease;
+        }
+        .content-card:hover {
+            transform: scale(1.01); /* Легкое увеличение блоков контента */
         }
 
         .route-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
@@ -266,7 +288,10 @@
             background: linear-gradient(180deg, #1f2d3d 0%, #111a24 100%);
             border-radius: 28px; padding: 24px 20px; color: white; text-align: center;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            transition: transform 0.25s ease;
         }
+        .weather-card-full:hover { transform: scale(1.01); }
+
         .weather-main-temp { font-size: 48px; font-weight: 700; letter-spacing: -2px; margin: 8px 0 2px; }
         .weather-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
         .weather-grid-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 10px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -299,7 +324,6 @@
                 </button>
                 <div class="weather-pill" onclick="openPage('weather')">
                     <div class="weather-pill-content">
-                        <!-- Живая плавная анимация лучей/иконки только для мини-виджета в шапке -->
                         <svg class="weather-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="4"></circle>
                             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
