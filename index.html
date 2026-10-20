@@ -1,938 +1,554 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>НСТ «Горняк»</title>
-  <style>
-    :root {
-      --bg-top: #e4efe8;
-      --bg-mid: #c7ddd3;
-      --bg-bottom: #bfd7d0;
-      --glass: rgba(255,255,255,0.38);
-      --glass-strong: rgba(255,255,255,0.62);
-      --glass-border: rgba(255,255,255,0.85);
-      --text: #14211d;
-      --muted: #52635d;
-      --primary: #123c2f;
-      --primary-2: #1b5d4d;
-      --shadow: rgba(18, 60, 47, 0.12);
-      --sky: rgba(147, 197, 253, 0.65);
-      --sun: #ffd68a;
-      --card-radius: 32px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, var(--bg-top) 0%, var(--bg-mid) 40%, var(--bg-bottom) 100%);
-      color: var(--text);
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      padding: 18px;
-      overflow-x: hidden;
-    }
-
-    button, input, a {
-      font: inherit;
-    }
-
-    .app-shell {
-      width: min(100%, 480px);
-      position: relative;
-      padding-bottom: 120px;
-    }
-
-    .glass {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(26px) saturate(170%);
-      -webkit-backdrop-filter: blur(26px) saturate(170%);
-      box-shadow: 0 18px 42px rgba(40, 61, 48, 0.08), inset 0 1px 0 rgba(255,255,255,0.45);
-    }
-
-    .view {
-      display: none;
-      animation: fadeIn 0.28s ease;
-    }
-
-    .view.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero {
-      border-radius: 30px;
-      padding: 22px 20px;
-      background: linear-gradient(135deg, #143e32 0%, #2a654f 100%);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(19, 61, 47, 0.2);
-      border: 1px solid rgba(255,255,255,0.18);
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      right: -40px;
-      top: -90px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 70%);
-      animation: pulseGlow 6s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: scale(1); opacity: 0.55; }
-      100% { transform: scale(1.45); opacity: 1; }
-    }
-
-    .brand {
-      position: relative;
-      z-index: 1;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.05em;
-    }
-
-    .brand p {
-      margin-top: 4px;
-      font-size: 0.72rem;
-      opacity: 0.8;
-    }
-
-    .hero-actions {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mail-btn, .weather-pill {
-      border: 1px solid rgba(255,255,255,0.24);
-      background: rgba(255,255,255,0.14);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-radius: 16px;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .mail-btn:hover, .weather-pill:hover {
-      transform: translateY(-1px);
-      background: rgba(255,255,255,0.18);
-    }
-
-    .mail-btn {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      padding: 0;
-    }
-
-    .mail-btn svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-    }
-
-    .weather-pill {
-      min-width: 86px;
-      padding: 7px 12px 8px;
-      text-align: center;
-    }
-
-    .weather-pill .temp {
-      font-size: 0.9rem;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .weather-pill .cond {
-      font-size: 0.62rem;
-      opacity: 0.8;
-      line-height: 1.1;
-    }
-
-    .search-wrap {
-      position: relative;
-      margin: 18px 0 20px;
-    }
-
-    .search-input {
-      width: 100%;
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.52);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      color: var(--text);
-      border-radius: 22px;
-      padding: 17px 18px 17px 52px;
-      font-size: 0.96rem;
-      outline: none;
-      box-shadow: inset 0 1px 2px rgba(27, 33, 36, 0.02);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-
-    .search-input:focus {
-      background: rgba(255,255,255,0.7);
-      border-color: rgba(27, 93, 77, 0.4);
-      box-shadow: 0 0 0 4px rgba(27, 93, 77, 0.08);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.06rem;
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .nav-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .nav-item {
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.42);
-      border-radius: 30px;
-      padding: 18px 12px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 118px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 12px 30px rgba(10, 25, 20, 0.04);
-      transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
-    }
-
-    .nav-item:hover {
-      transform: translateY(-3px);
-      background: rgba(255,255,255,0.58);
-      box-shadow: 0 18px 35px rgba(38, 49, 54, 0.08);
-    }
-
-    .nav-icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 19px;
-      background: linear-gradient(145deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.25) 100%);
-      border: 1px solid rgba(255,255,255,0.8);
-      display: grid;
-      place-items: center;
-      margin-bottom: 10px;
-      box-shadow: inset 0 2px 2px rgba(255,255,255,0.9), inset 0 -3px 8px rgba(15,24,32,0.03);
-    }
-
-    .nav-item span {
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
-    .panel {
-      margin-top: 20px;
-      border-radius: 30px;
-      padding: 20px 16px;
-    }
-
-    .subheader {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 22px;
-      margin-bottom: 16px;
-    }
-
-    .back-btn {
-      border: 0;
-      background: rgba(255,255,255,0.54);
-      border-radius: 14px;
-      color: var(--text);
-      padding: 9px 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .subheader-title {
-      flex: 1;
-      text-align: center;
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-    }
-
-    .search-mini {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      cursor: pointer;
-      font-size: 1.05rem;
-    }
-
-    .content-card {
-      background: rgba(255,255,255,0.42);
-      border: 1px solid rgba(255,255,255,0.72);
-      border-radius: 22px;
-      padding: 16px 16px 14px;
-      margin-bottom: 12px;
-    }
-
-    .content-card h3 {
-      margin: 0 0 8px;
-      font-size: 1rem;
-      letter-spacing: -0.03em;
-      color: var(--primary);
-    }
-
-    .content-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.52;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .time-pill {
-      background: rgba(20, 83, 67, 0.1);
-      color: var(--primary);
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .contact-meta {
-      flex: 1;
-    }
-
-    .contact-name {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 3px;
-      color: var(--text);
-    }
-
-    .contact-role {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .phone-badge {
-      background: rgba(29, 84, 68, 0.1);
-      color: var(--primary);
-      border-radius: 12px;
-      padding: 6px 10px;
-      font-size: 0.73rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .weather-screen {
-      border-radius: 32px;
-      padding: 18px 16px 24px;
-      background: linear-gradient(180deg, #1c2e4d 0%, #211d3d 100%);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(16, 20, 29, 0.24);
-    }
-
-    .weather-screen::before {
-      content: "";
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      top: -80px;
-      right: -30px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(147,197,253,0.42) 0%, rgba(147,197,253,0.16) 30%, rgba(0,0,0,0) 70%);
-      animation: weatherPulse 7s ease-in-out infinite alternate;
-    }
-
-    @keyframes weatherPulse {
-      0% { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(1.45); opacity: 1; }
-    }
-
-    .weather-main {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      color: #fff;
-      padding: 10px 0 18px;
-    }
-
-    .weather-temp {
-      font-size: clamp(3rem, 10vw, 4.2rem);
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: -0.08em;
-    }
-
-    .weather-state {
-      font-size: 1rem;
-      margin-top: 8px;
-      opacity: 0.8;
-    }
-
-    .weather-meta {
-      font-size: 0.74rem;
-      opacity: 0.6;
-      margin-top: 8px;
-    }
-
-    .weather-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .weather-stat {
-      border-radius: 18px;
-      padding: 16px 14px;
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: #fff;
-    }
-
-    .weather-stat label {
-      display: block;
-      font-size: 0.64rem;
-      letter-spacing: 0.11em;
-      text-transform: uppercase;
-      opacity: 0.6;
-      margin-bottom: 8px;
-    }
-
-    .weather-stat strong {
-      font-size: 1.15rem;
-      letter-spacing: -0.05em;
-    }
-
-    .weather-stat small {
-      display: block;
-      margin-top: 5px;
-      opacity: 0.7;
-      font-size: 0.66rem;
-    }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(13, 18, 23, 0.36);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 50;
-      padding: 22px;
-    }
-
-    .modal.open { display: flex; }
-
-    .modal-card {
-      width: min(100%, 430px);
-      border-radius: 30px;
-      padding: 22px 18px;
-      background: rgba(255,255,255,0.74);
-      border: 1px solid rgba(255,255,255,0.8);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      box-shadow: 0 22px 50px rgba(10, 18, 22, 0.26);
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .modal-header h3 {
-      margin: 0;
-      font-size: 1.05rem;
-    }
-
-    .close-btn {
-      width: 30px;
-      height: 30px;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.06);
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Официальный портал НСТ «Горняк»</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 50%, #81c784 100%);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            --header-bg: #1e4620;
+            --text-main: #1b4332;
+            --text-muted: #52796f;
+            --accent-green: #2d6a4f;
+            --radius-xl: 28px;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            color: var(--text-main);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            min-height: 840px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-header {
+            background: var(--header-bg);
+            border-radius: var(--radius-xl);
+            padding: 16px 20px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 20px rgba(30, 70, 32, 0.25);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .header-title p {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            font-size: 16px;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .weather-pill {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 6px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .weather-pill:active { transform: scale(0.95); }
+
+        .weather-temp { font-size: 13px; font-weight: 700; }
+        .weather-desc { font-size: 10px; opacity: 0.85; }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 13px 16px 13px 44px;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+            backdrop-filter: blur(15px);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .search-input::placeholder { color: #769481; }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            opacity: 0.5;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .nav-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .nav-card:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .card-icon-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+        }
+
+        .card-icon-wrapper svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .card-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .subpage {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .subpage.active { display: flex; }
+
+        .subpage-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--glass-bg);
+            border-radius: var(--radius-lg);
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--glass-border);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .subpage-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .content-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .weather-card-full {
+            background: linear-gradient(180deg, #1f2d3d 0%, #111a24 100%);
+            border-radius: 28px;
+            padding: 28px 20px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .weather-card-full::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(92,157,255,0.4) 0%, rgba(0,0,0,0) 70%);
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0.9; }
+        }
+
+        .weather-main-temp {
+            font-size: 54px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin: 10px 0 2px;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .weather-grid-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .weather-label { font-size: 10px; text-transform: uppercase; opacity: 0.6; }
+        .weather-val { font-size: 16px; font-weight: 700; margin-top: 4px; }
+
+        .doc-empty-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .add-doc-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .contacts-wrapper {
+            padding-bottom: 40px;
+        }
+    </style>
 </head>
 <body>
-  <div class="app-shell">
 
-    <div id="view-home" class="view active">
-      <header class="hero glass">
-        <div class="brand">
-          <h1>НСТ «Горняк»</h1>
-          <p>Официальный портал</p>
-        </div>
+<div class="app-container">
 
-        <div class="hero-actions">
-          <button class="mail-btn" type="button" aria-label="Почта" title="Почта">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5v9A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5v-9Z"></path>
-              <path d="m4 7 8 6 8-6"></path>
+    <div id="page-home">
+        <header class="main-header">
+            <div class="header-title">
+                <h1>НСТ «Горняк»</h1>
+                <p>Официальный портал</p>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="openPage('notifications')" title="Уведомления">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </button>
+                <div class="weather-pill" onclick="openPage('weather')">
+                    <span class="weather-temp">+10°C</span>
+                    <span class="weather-desc">Солнечно</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="search-container">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-          </button>
-
-          <button class="weather-pill" type="button" onclick="openScreen('weather')">
-            <div class="temp">+10°C</div>
-            <div class="cond">Солнечно</div>
-          </button>
-        </div>
-      </header>
-
-      <div class="search-wrap">
-        <span class="search-icon">🔎</span>
-        <input id="globalSearch" class="search-input" type="text" placeholder="Поиск по сайту..." aria-label="Поиск по сайту" oninput="handleSearch(this.value)" />
-      </div>
-
-      <nav class="nav-grid" aria-label="Навигация по разделам">
-        <button class="nav-item glass" type="button" onclick="openScreen('transport')">
-          <div class="nav-icon">🚌</div>
-          <span>Транспорт</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('tariffs')">
-          <div class="nav-icon">⚡</div>
-          <span>Тарифы</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('news')">
-          <div class="nav-icon">📰</div>
-          <span>Новости</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('documents')">
-          <div class="nav-icon">📁</div>
-          <span>Документы</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('contacts')">
-          <div class="nav-icon">📞</div>
-          <span>Контакты</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('profile')">
-          <div class="nav-icon">👤</div>
-          <span>Профиль</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('fees')">
-          <div class="nav-icon">💳</div>
-          <span>Взносы</span>
-        </button>
-        <button class="nav-item glass" type="button" onclick="openScreen('about')">
-          <div class="nav-icon">ℹ️</div>
-          <span>О НСТ</span>
-        </button>
-      </nav>
-    </div>
-
-    <div id="view-search" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Результаты поиска</div>
-          <div style="width: 40px;"></div>
-        </div>
-        <div id="searchResults"></div>
-      </div>
-    </div>
-
-    <div id="view-transport" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Транспорт</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
+            <input type="text" class="search-input" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)">
         </div>
 
-        <div class="content-card">
-          <h3>Маршрут № 474</h3>
-          <p><strong>От СНТ «Горняк»:</strong></p>
-          <div class="pill-row">
-            <span class="time-pill">06:21</span>
-            <span class="time-pill">09:43</span>
-            <span class="time-pill">14:48</span>
-            <span class="time-pill">18:08</span>
-          </div>
-          <p style="margin-top: 12px;"><strong>От м. Котельники:</strong></p>
-          <div class="pill-row">
-            <span class="time-pill">07:02</span>
-            <span class="time-pill">11:16</span>
-            <span class="time-pill">15:28</span>
-            <span class="time-pill">19:00</span>
-          </div>
-        </div>
-
-        <div class="content-card">
-          <h3>Маршрут № 26</h3>
-          <p><strong>Прямые рейсы:</strong> 06:50, 10:15, 15:10, 18:40</p>
-          <p style="margin-top: 8px;"><strong>Обратные рейсы:</strong> 07:40, 12:00, 16:30, 19:50</p>
-        </div>
-
-        <div class="content-card">
-          <h3>Маршрут № К1</h3>
-          <p><strong>Прямые рейсы:</strong> 06:10, 09:00, 13:30, 17:20</p>
-          <p style="margin-top: 8px;"><strong>Обратные рейсы:</strong> 07:15, 10:45, 14:55, 18:30</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-tariffs" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Тарифы ЖКХ</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-        <div class="content-card">
-          <h3>Электроэнергия</h3>
-          <p>Одноставочный тариф: <strong>4.28 руб / кВт·ч</strong></p>
-          <p style="margin-top: 6px;">День — 4.95 руб, ночь — 2.15 руб.</p>
-        </div>
-        <div class="content-card">
-          <h3>Членские взносы</h3>
-          <p>Утверждены общим собранием. Оплата принимается до 1 июля текущего года.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-news" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Новости НСТ</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-        <div class="content-card">
-          <h3>Открытие летнего водопровода</h3>
-          <p>Запуск системы запланирован на 1 мая. Проверьте краны на участках и устраните возможные протечки.</p>
-        </div>
-        <div class="content-card">
-          <h3>Собрание собственников</h3>
-          <p>Очередное ежегодное собрание состоится в следующую субботу в 12:00 у правления.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-documents" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Документы</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-        <div class="content-card">
-          <h3>Устав НСТ «Горняк»</h3>
-          <p>Основной правовой документ товарищества, редакция 2024 года.</p>
-        </div>
-        <div class="content-card">
-          <h3>Правила внутреннего распорядка</h3>
-          <p>Пожарная безопасность, содержание животных и режим тишины.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-contacts" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Контакты</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-
-        <div class="content-card">
-          <p style="margin-bottom: 12px;">Адрес правления: Московская область, г. Котельники, территория НСТ «Горняк». Часы приема: сб 10:00–14:00.</p>
-        </div>
-
-        <a class="content-card contact-item" href="tel:+79096570631">
-          <div class="contact-meta">
-            <div class="contact-name">Торицкая Нина Александровна</div>
-            <div class="contact-role">Дворник</div>
-          </div>
-          <span class="phone-badge">8-909-657-06-31</span>
-        </a>
-
-        <a class="content-card contact-item" href="tel:+79296645806">
-          <div class="contact-meta">
-            <div class="contact-name">Асланов Телман Магомед Оглы</div>
-            <div class="contact-role">Член правления</div>
-          </div>
-          <span class="phone-badge">8-929-664-58-06</span>
-        </a>
-
-        <a class="content-card contact-item" href="tel:+79774882663">
-          <div class="contact-meta">
-            <div class="contact-name">Зеневкина Александра Владимировна</div>
-            <div class="contact-role">Член правления</div>
-          </div>
-          <span class="phone-badge">8-977-488-26-63</span>
-        </a>
-
-        <a class="content-card contact-item" href="tel:+79250082122">
-          <div class="contact-meta">
-            <div class="contact-name">Князева Ирина Вениаминовна</div>
-            <div class="contact-role">Член правления</div>
-          </div>
-          <span class="phone-badge">8-925-008-21-22</span>
-        </a>
-
-        <a class="content-card contact-item" href="tel:+79175323912">
-          <div class="contact-meta">
-            <div class="contact-name">Личманова Евгения Александровна</div>
-            <div class="contact-role">Член правления</div>
-          </div>
-          <span class="phone-badge">8-917-532-39-12</span>
-        </a>
-
-        <a class="content-card contact-item" href="tel:+79031567525">
-          <div class="contact-meta">
-            <div class="contact-name">Мичкасов Валентин Васильевич</div>
-            <div class="contact-role">Член правления</div>
-          </div>
-          <span class="phone-badge">8-903-156-75-25</span>
-        </a>
-
-        <a class="content-card contact-item" href="tel:+79263615061">
-          <div class="contact-meta">
-            <div class="contact-name">Черкесс Игорь Викторович</div>
-            <div class="contact-role">Член правления</div>
-          </div>
-          <span class="phone-badge">8-926-361-50-61</span>
-        </a>
-      </div>
-    </div>
-
-    <div id="view-profile" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Личный кабинет</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-        <div class="content-card">
-          <h3>Мой участок</h3>
-          <p>Участок № 142, площадь 6 соток. Задолженностей нет.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-fees" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Взносы</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-        <div class="content-card">
-          <h3>Реквизиты</h3>
-          <p>Оплата членских взносов производится через мобильное приложение банка по расчётному счёту товарищества.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-about" class="view">
-      <div class="panel glass">
-        <div class="subheader glass">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">О НСТ</div>
-          <div class="search-mini" onclick="openScreen('search')">🔍</div>
-        </div>
-        <div class="content-card">
-          <h3>Историческая справка</h3>
-          <p>НСТ «Горняк» основано в 1978 году ветеранами горнодобывающей промышленности Подмосковья. Территория обустроена в лесопарковой зоне у Котельников и включает развитую инфраструктуру.</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="view-weather" class="view">
-      <div class="panel" style="padding: 0; margin-top: 0; background: transparent; border: 0; box-shadow: none;">
-        <div class="subheader glass" style="margin-bottom: 10px;">
-          <button class="back-btn" type="button" onclick="openScreen('home')">← Назад</button>
-          <div class="subheader-title">Погода</div>
-          <div style="width: 40px;"></div>
-        </div>
-
-        <div class="weather-screen">
-          <div class="weather-main">
-            <div class="weather-temp">+10°</div>
-            <div class="weather-state">Солнечно</div>
-            <div class="weather-meta">Макс.: +10° • Мин.: +1°</div>
-          </div>
-
-          <div class="weather-grid">
-            <div class="weather-stat">
-              <label>Закат</label>
-              <strong>17:16</strong>
-              <small>Восход 07:10</small>
+        <nav class="nav-grid">
+            <div class="nav-card" onclick="openPage('transport')">
+                <div class="card-icon-wrapper" style="background: #e8f5e9;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
+                        <rect x="3" y="6" width="18" height="11" rx="2"></rect>
+                        <circle cx="7" cy="17" r="2"></circle>
+                        <circle cx="17" cy="17" r="2"></circle>
+                        <path d="M5 11h14"></path>
+                    </svg>
+                </div>
+                <span class="card-label">Транспорт</span>
             </div>
-            <div class="weather-stat">
-              <label>УФ</label>
-              <strong>1</strong>
-              <small>Низкий</small>
+
+            <div class="nav-card" onclick="openPage('tariffs')">
+                <div class="card-icon-wrapper" style="background: #fff3e0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#ef6c00" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <span class="card-label">Тарифы</span>
             </div>
-            <div class="weather-stat">
-              <label>Ветер</label>
-              <strong>2 м/с</strong>
-              <small>Порывы до 5</small>
+
+            <div class="nav-card" onclick="openPage('news')">
+                <div class="card-icon-wrapper" style="background: #e3f2fd;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2">
+                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
+                        <path d="M18 14h-8"></path>
+                        <path d="M15 18h-5"></path>
+                        <path d="M10 6h8v4h-8z"></path>
+                    </svg>
+                </div>
+                <span class="card-label">Новости</span>
             </div>
-            <div class="weather-stat">
-              <label>Давление</label>
-              <strong>779</strong>
-              <small>мм рт. ст.</small>
+
+            <div class="nav-card" onclick="openPage('documents')">
+                <div class="card-icon-wrapper" style="background: #e0f2f1;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00695c" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <span class="card-label">Документы</span>
             </div>
-          </div>
+
+            <div class="nav-card" onclick="openPage('contacts')">
+                <div class="card-icon-wrapper" style="background: #f3e5f5;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <span class="card-label">Контакты</span>
+            </div>
+
+            <div class="nav-card" onclick="openPage('profile')">
+                <div class="card-icon-wrapper" style="background: #e0f7fa;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#00838f" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span class="card-label">Профиль</span>
+            </div>
+
+            <div class="nav-card" onclick="openPage('payments')">
+                <div class="card-icon-wrapper" style="background: #ffebee;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                </div>
+                <span class="card-label">Взносы</span>
+            </div>
+
+            <div class="nav-card" onclick="openPage('about')">
+                <div class="card-icon-wrapper" style="background: #f1f8e9;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#33691e" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                </div>
+                <span class="card-label">О НСТ</span>
+            </div>
+        </nav>
+    </div>
+
+    <div id="page-weather" class="subpage">
+        <div class="subpage-header">
+            <button class="back-btn" onclick="goHome()">← Назад</button>
+            <span class="subpage-title">Погода</span>
+            <div style="width: 32px;"></div>
         </div>
-      </div>
+        <div class="weather-card-full">
+            <div style="font-size: 14px; opacity: 0.8;">НСТ «Горняк»</div>
+            <div class="weather-main-temp">+10°</div>
+            <div style="font-size: 16px; font-weight: 500;">Солнечно</div>
+            <div style="font-size: 12px; opacity: 0.6; margin-top: 4px;">Макс.: +10° · Мин.: +1°</div>
+
+            <div class="weather-grid">
+                <div class="weather-grid-item">
+                    <div class="weather-label">Закат</div>
+                    <div class="weather-val">17:16</div>
+                    <div style="font-size: 10px; opacity: 0.5; margin-top: 2px;">Восход 07:10</div>
+                </div>
+                <div class="weather-grid-item">
+                    <div class="weather-label">УФ-индекс</div>
+                    <div class="weather-val">1</div>
+                    <div style="font-size: 10px; opacity: 0.5; margin-top: 2px;">Низкий</div>
+                </div>
+                <div class="weather-grid-item">
+                    <div class="weather-label">Ветер</div>
+                    <div class="weather-val">2 м/с</div>
+                    <div style="font-size: 10px; opacity: 0.5; margin-top: 2px;">Порывы до 5</div>
+                </div>
+                <div class="weather-grid-item">
+                    <div class="weather-label">Давление</div>
+                    <div class="weather-val">779</div>
+                    <div style="font-size: 10px; opacity: 0.5; margin-top: 2px;">мм рт. ст.</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-  </div>
-
-  <div id="notificationModal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>Уведомления</h3>
-        <button class="close-btn" type="button" onclick="closeModal()" aria-label="Закрыть">×</button>
-      </div>
-      <div class="content-card">
-        <h3>Внимание! Субботник</h3>
-        <p>Общий весенний субботник состоится в эту субботу в 10:00. Инструменты выдаются у сторожки.</p>
-      </div>
-      <div class="content-card" style="margin-bottom: 0;">
-        <h3>Поверка счетчиков</h3>
-        <p>Необходимо передать показания электросчетчиков до 25 числа текущего месяца.</p>
-      </div>
+    <div id="page-documents" class="subpage">
+        <div class="subpage-header">
+            <button class="back-btn" onclick="goHome()">← Назад</button>
+            <span class="subpage-title">Документы</span>
+            <div style="width: 32px;"></div>
+        </div>
+        <div class="content-card doc-empty-box">
+            <div class="card-icon-wrapper" style="background: #e0f2f1; width: 60px; height: 60px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#00695c" stroke-width="2" width="30" height="30">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </div>
+            <p style="font-size: 14px; color: var(--text-muted); font-weight: 500;">Документы не загружены.</p>
+            <button class="add-doc-btn" onclick="alert('Форма загрузки откроется в следующем обновлении')">+</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    const screenIds = ['home', 'search', 'transport', 'tariffs', 'news', 'documents', 'contacts', 'profile', 'fees', 'about', 'weather'];
+    <div id="page-contacts" class="subpage">
+        <div class="subpage-header">
+            <button class="back-btn" onclick="goHome()">← Назад</button>
+            <span class="subpage-title">Контакты</span>
+            <div style="width: 32px;"></div>
+        </div>
+        <div class="contacts-wrapper">
+            <div class="content-card">
+                <h3 style="font-size: 16px; margin-bottom: 6px;">Председатель правления</h3>
+                <p style="font-size: 13px; color: var(--text-muted);">+7 (900) 000-00-00</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Часы приема: Сб 10:00 - 14:00</p>
+            </div>
+            <div class="content-card">
+                <h3 style="font-size: 16px; margin-bottom: 6px;">Аварийная служба</h3>
+                <p style="font-size: 13px; color: var(--text-muted);">+7 (900) 111-22-33</p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Круглосуточно</p>
+            </div>
+        </div>
+    </div>
 
-    function openScreen(name) {
-      screenIds.forEach(id => {
-        const el = document.getElementById('view-' + id);
-        if (el) el.classList.toggle('active', id === name);
-      });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+</div>
+
+<script>
+    function openPage(pageId) {
+        document.getElementById('page-home').style.display = 'none';
+        document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
+        
+        const target = document.getElementById('page-' + pageId);
+        if (target) {
+            target.classList.add('active');
+        } else {
+            alert('Раздел "' + pageId + '" находится в разработке.');
+            document.getElementById('page-home').style.display = 'block';
+        }
     }
 
-    function openModal() {
-      const modal = document.getElementById('notificationModal');
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
+    function goHome() {
+        document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
+        document.getElementById('page-home').style.display = 'block';
     }
-
-    function closeModal() {
-      const modal = document.getElementById('notificationModal');
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-    }
-
-    document.querySelector('.mail-btn').addEventListener('click', openModal);
-
-    const searchDatabase = [
-      { title: 'Транспорт и маршрут 474', view: 'transport', text: 'автобус 474 расписание котельники горняк транспорт' },
-      { title: 'Тарифы ЖКХ', view: 'tariffs', text: 'электричество тарифы свет квт ч взносы' },
-      { title: 'Новости НСТ', view: 'news', text: 'новости вода водопровод субботник собрание' },
-      { title: 'Документы НСТ', view: 'documents', text: 'устав правила документы распорядок' },
-      { title: 'Контакты правления', view: 'contacts', text: 'контакты телефон правление торицкая асланов' },
-      { title: 'Профиль участка', view: 'profile', text: 'профиль участок личный кабинет личный' },
-      { title: 'Взносы и оплата', view: 'fees', text: 'взносы оплата реквизиты банк' },
-      { title: 'О НСТ Горняк', view: 'about', text: 'история о нст горняк информация' }
-    ];
 
     function handleSearch(query) {
-      const q = query.trim().toLowerCase();
-      const results = document.getElementById('searchResults');
-
-      if (!q) {
-        openScreen('home');
-        return;
-      }
-
-      openScreen('search');
-      const filtered = searchDatabase.filter(item =>
-        item.title.toLowerCase().includes(q) || item.text.toLowerCase().includes(q)
-      );
-
-      if (!filtered.length) {
-        results.innerHTML = '<div class="content-card"><p style="text-align:center;">Ничего не найдено по запросу «' + query + '»</p></div>';
-        return;
-      }
-
-      results.innerHTML = filtered.map(item => `
-        <div class="content-card" style="cursor:pointer;" onclick="openScreen('${item.view}')">
-          <h3>${item.title}</h3>
-          <p>Нажмите, чтобы открыть раздел</p>
-        </div>
-      `).join('');
+        if (!query) return;
+        console.log("Поиск:", query);
     }
-
-    document.getElementById('notificationModal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
-
-    document.getElementById('globalSearch').addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        this.value = '';
-        openScreen('home');
-      }
-    });
-  </script>
+</script>
 </body>
 </html>
