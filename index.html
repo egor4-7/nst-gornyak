@@ -10,6 +10,7 @@
       --primary: #2d6a4f;
       --primary-hover: #1b4332;
       --bg-color: #f4f6f4;
+      --bg-gradient: linear-gradient(135deg, #c3ecb2 0%, #ada996 50%, #f2f5f3 100%);
       --card-bg: rgba(255, 255, 255, 0.85);
       --text-main: #1c1c1e;
       --text-secondary: #545458;
@@ -19,11 +20,91 @@
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
+      background: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text-main);
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .win11-launcher-card {
+      width: calc(100% - 30px);
+      max-width: 580px;
+      margin: 90px auto 24px;
+      padding: 32px 28px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(35px) saturate(190%);
+      -webkit-backdrop-filter: blur(35px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 28px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+    }
+    .launcher-header {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .launcher-title {
+      margin: 0 0 6px;
+      color: var(--text-main);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .launcher-subtitle {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .win11-tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .tile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+      color: var(--text-main);
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.22s ease, background 0.22s ease;
+    }
+    .tile-card:hover {
+      transform: translateY(-6px) scale(1.04);
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    }
+    .tile-card:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 3px;
+    }
+    .win11-launcher-card .tile-icon {
+      margin-bottom: 8px;
+      font-size: 2.3rem;
+      line-height: 1;
+    }
+    .win11-launcher-card .tile-name {
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .win11-launcher-card {
+        padding: 24px 18px;
+      }
+      .win11-tiles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
     }
 
     /* Windows 11 Fluent Glass navigation */
@@ -242,7 +323,7 @@
     /* Контейнер */
     .container {
       max-width: 900px;
-      margin: 90px auto 30px;
+      margin: 0 auto 30px;
       padding: 0 15px;
     }
     .card {
@@ -636,6 +717,47 @@
       </div>
     </section>
   </div>
+
+  <section class="win11-launcher-card" aria-labelledby="launcherTitle">
+    <div class="launcher-header">
+      <h1 class="launcher-title" id="launcherTitle">🌿 НСТ «Горняк»</h1>
+      <p class="launcher-subtitle">Официальный информационный портал</p>
+    </div>
+    <div class="win11-tiles-grid">
+      <a href="#transport" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">🚌</span>
+        <span class="tile-name">Автобусы</span>
+      </a>
+      <a href="#tariffs" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">⚡</span>
+        <span class="tile-name">Тарифы</span>
+      </a>
+      <a href="#news" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">📰</span>
+        <span class="tile-name">Новости</span>
+      </a>
+      <a href="#documents" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">📁</span>
+        <span class="tile-name">Документы</span>
+      </a>
+      <a href="#contacts" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">📞</span>
+        <span class="tile-name">Контакты</span>
+      </a>
+      <button class="tile-card" type="button" onclick="openModal()">
+        <span class="tile-icon" aria-hidden="true">👤</span>
+        <span class="tile-name">Профиль</span>
+      </button>
+      <a href="#tariffs" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">💳</span>
+        <span class="tile-name">Взносы</span>
+      </a>
+      <a href="#welcome" class="tile-card">
+        <span class="tile-icon" aria-hidden="true">ℹ️</span>
+        <span class="tile-name">О НСТ</span>
+      </a>
+    </div>
+  </section>
 
   <div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)" aria-hidden="true" inert>
     <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" tabindex="-1">
