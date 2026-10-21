@@ -108,10 +108,19 @@
             padding: 66px 0;
             color: #fff;
             background:
-                radial-gradient(ellipse at 82% 18%, rgba(134, 239, 172, .38), transparent 28%),
-                radial-gradient(ellipse at 7% 110%, rgba(250, 204, 21, .24), transparent 34%),
-                linear-gradient(125deg, #123b28 0%, #166534 52%, #15803d 100%);
-            box-shadow: 0 12px 30px rgba(20,83,45,.2);
+                radial-gradient(ellipse at 74% 8%, rgba(190, 242, 100, .48), transparent 30%),
+                radial-gradient(ellipse at 9% 105%, rgba(250, 204, 21, .32), transparent 37%),
+                linear-gradient(120deg, #064e3b 0%, #15803d 48%, #22a447 100%);
+            box-shadow: 0 14px 34px rgba(20,83,45,.28);
+        }
+        .forest-art {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: min(68%, 900px);
+            height: 100%;
+            opacity: .88;
+            pointer-events: none;
         }
         .hero::after {
             position: absolute;
@@ -211,6 +220,10 @@
         .icon-transport { background: linear-gradient(145deg, #38bdf8, #2563eb); }
         .icon-tariffs { background: linear-gradient(145deg, #fbbf24, #f97316); }
         .icon-news { background: linear-gradient(145deg, #c084fc, #db2777); }
+        .section-card:nth-child(1) { background: linear-gradient(150deg, #fff, #ecfdf5); border-top: 3px solid #34d399; }
+        .section-card:nth-child(2) { background: linear-gradient(150deg, #fff, #eff6ff); border-top: 3px solid #38bdf8; }
+        .section-card:nth-child(3) { background: linear-gradient(150deg, #fff, #fffbeb); border-top: 3px solid #fbbf24; }
+        .section-card:nth-child(4) { background: linear-gradient(150deg, #fff, #fdf2f8); border-top: 3px solid #c084fc; }
         .section-card h3 { margin-bottom: 7px; color: #14532d; font-size: 17px; }
         .section-card p { margin-bottom: 0; color: #526477; font-size: 13px; line-height: 1.55; }
         .section-status {
@@ -236,6 +249,7 @@
 
         @media (max-width: 760px) {
             .hero { padding-block: 48px; }
+            .forest-art { width: 100%; opacity: .55; }
             .hero-inner { align-items: flex-start; flex-direction: column; gap: 24px; }
             .weather-card { min-width: 0; }
             .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -290,6 +304,12 @@
 
     <main>
         <section class="hero">
+            <svg class="forest-art" viewBox="0 0 900 360" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+                <path fill="#0b3d2b" opacity=".35" d="M0 256 58 218l35 27 46-73 48 77 42-43 51 75 65-102 59 91 57-55 54 69 64-108 52 75 55-52 66 72 68-85 51 72v102H0Z"/>
+                <path fill="#06452f" opacity=".62" d="m0 286 43-50 37 50 48-83 55 83 48-61 53 68 52-97 60 94 44-53 52 68 44-91 59 83 51-61 54 72 48-95 53 75 51-54 67 82v144H0Z"/>
+                <path fill="#083b2a" opacity=".85" d="m0 318 38-66 37 66 46-103 51 103 42-72 47 77 54-119 59 119 43-81 48 81 46-110 53 110 46-75 46 80 48-112 55 112 43-67 46 67h72v42H0Z"/>
+                <path fill="#fef3c7" opacity=".38" d="M0 325c115-20 193-8 278 8 99 19 180 17 280-8 111-28 213-28 342-4v39H0Z"/>
+            </svg>
             <div class="hero-inner content">
                 <div class="hero-copy">
                     <h1>НСТ «Горняк»</h1>
