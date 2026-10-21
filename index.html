@@ -1,793 +1,416 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Официальный портал НСТ «Горняк»</title>
-    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 50%, #81c784 100%);
-            --header-bg: #1e4620;
-            --text-main: #1b4332;
-            --text-muted: #52796f;
-            --radius-xl: 24px;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 8px;
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 100%;
-            height: calc(100vh - 16px);
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 28px;
-            padding: 16px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        /* Контейнер страниц для безупречной плавной анимации без рывков */
-        .pages-stack {
-            display: grid;
-            grid-template-areas: "stack";
-            width: 100%;
-        }
-
-        /* Header */
-        .main-header {
-            background: var(--header-bg);
-            border-radius: var(--radius-xl);
-            padding: 14px 22px;
-            color: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            box-shadow: 0 8px 20px rgba(30, 70, 32, 0.25);
-        }
-
-        .header-title h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-        .header-title p { font-size: 12px; opacity: 0.75; margin-top: 2px; }
-
-        .header-actions { display: flex; align-items: center; gap: 10px; }
-
-        .icon-btn {
-            background: rgba(255, 255, 255, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.15s ease, background 0.15s ease;
-            color: white;
-        }
-
-        .icon-btn:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.35); }
-
-        /* Плашка погоды в шапке */
-        .weather-pill {
-            background: rgba(255, 255, 255, 0.28);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            padding: 6px 14px;
-            cursor: pointer;
-            transition: transform 0.15s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-        .weather-pill:active { transform: scale(0.94); }
-        .weather-pill-content { display: flex; align-items: center; gap: 8px; }
-        .weather-text-col { display: flex; flex-direction: column; align-items: flex-end; }
-        .weather-temp { font-size: 13px; font-weight: 700; color: #ffffff; }
-        .weather-desc { font-size: 10px; opacity: 0.85; color: #ffffff; }
-        
-        .weather-icon-mini {
-            width: 20px; 
-            height: 20px; 
-            stroke: #ffeb3b;
-            animation: spinSlow 15s linear infinite;
-        }
-        @keyframes spinSlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Search */
-        .search-container { position: relative; margin-bottom: 12px; }
-        .search-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            border-radius: var(--radius-lg);
-            padding: 12px 16px 12px 44px;
-            font-size: 14px;
-            color: var(--text-main);
-            outline: none;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-        }
-        .search-input::placeholder { color: #769481; }
-        .search-icon {
-            position: absolute; left: 15px; top: 50%;
-            transform: translateY(-50%); width: 18px; height: 18px; opacity: 0.5;
-        }
-
-        .search-results-box {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            border-radius: var(--radius-lg);
-            padding: 10px;
-            margin-bottom: 12px;
-            max-height: 250px;
-            overflow-y: auto;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-        .search-result-item { padding: 10px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; border-radius: 8px; }
-        .search-result-item:active { background: rgba(200, 230, 201, 0.6); }
-        .search-result-title { font-size: 13px; font-weight: 600; color: var(--text-main); }
-        .search-result-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-        /* Nav Grid (4 колонки) */
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .nav-card, .content-card {
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-        }
-
-        .nav-card {
-            padding: 16px 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: transform 0.15s ease, background 0.15s ease;
-            will-change: transform;
-        }
-
-        .nav-card:hover {
-            transform: scale(1.03);
-            background: rgba(255, 255, 255, 0.75);
-            box-shadow: 0 12px 35px 0 rgba(31, 38, 135, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        .nav-card:active { 
-            transform: scale(0.96); 
-            background: rgba(255, 255, 255, 0.8); 
-        }
-
-        .card-icon-wrapper {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 1px 2px rgba(255,255,255,0.9), 0 4px 12px rgba(0, 0, 0, 0.04);
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.95);
-            flex-shrink: 0;
-        }
-
-        .card-icon-wrapper svg { width: 24px; height: 24px; }
-        .card-label { font-size: 14px; font-weight: 600; color: var(--text-main); }
-
-        /* Замедленная и максимально плавная анимация (0.45s) */
-        .subpage {
-            grid-area: stack;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.92);
-            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-        .subpage.active {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
-        }
-
-        .subpage-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            padding: 10px 16px;
-            margin-bottom: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text-main);
-            transition: transform 0.15s ease;
-        }
-        .back-btn:active { transform: scale(0.92); }
-
-        .subpage-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-
-        .content-card {
-            padding: 16px;
-            margin-bottom: 10px;
-            border-radius: var(--radius-xl);
-        }
-
-        .route-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .live-badge {
-            display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600;
-            padding: 3px 8px; border-radius: 12px; background: rgba(46, 125, 50, 0.12); color: #2e7d32;
-        }
-        .live-dot {
-            width: 7px; height: 7px; border-radius: 50%; background-color: #2e7d32;
-            box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.6); animation: livePulse 1.8s infinite;
-        }
-        .live-badge.offline { background: rgba(100, 100, 100, 0.1); color: #666; }
-        .live-badge.offline .live-dot { background-color: #999; animation: none; box-shadow: none; }
-        @keyframes livePulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(46, 125, 50, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
-        }
-
-        .phone-link {
-            display: inline-flex; align-items: center; gap: 6px;
-            color: #1b4332; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 4px;
-        }
-
-        .map-wrapper {
-            width: 100%; height: 260px; border-radius: var(--radius-lg);
-            overflow: hidden; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .weather-card-full {
-            background: linear-gradient(180deg, #1f2d3d 0%, #111a24 100%);
-            border-radius: 28px; padding: 24px 20px; color: white; text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-
-        .weather-main-temp { font-size: 48px; font-weight: 700; letter-spacing: -2px; margin: 8px 0 2px; }
-        .weather-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
-        .weather-grid-item { background: rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 10px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .weather-label { font-size: 10px; text-transform: uppercase; opacity: 0.6; }
-        .weather-val { font-size: 14px; font-weight: 700; margin-top: 4px; }
-
-        /* Личный кабинет */
-        .login-box { display: flex; gap: 8px; margin-top: 10px; }
-        .cabinet-input {
-            flex: 1; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.15);
-            background: rgba(255,255,255,0.8); font-size: 14px; outline: none; color: var(--text-main);
-        }
-        .cabinet-btn {
-            background: var(--header-bg); color: white; border: none; padding: 10px 18px;
-            border-radius: 12px; font-weight: 600; cursor: pointer; transition: transform 0.15s;
-        }
-        .cabinet-btn:active { transform: scale(0.95); }
-
-        @media (max-width: 900px) {
-            .nav-grid { grid-template-columns: repeat(2, 1fr); }
-            .weather-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-    </style>
-</head>
-<body>
-
-<div class="app-container">
-    <div class="pages-stack">
-
-        <!-- MAIN HOME PAGE -->
-        <div id="page-home" class="subpage active">
-            <header class="main-header">
-                <div class="header-title">
-                    <h1>НСТ «Горняк»</h1>
-                    <p>Официальный портал</p>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn" onpointerdown="openPage('notifications')" title="Уведомления">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                    </button>
-                    <div class="weather-pill" onpointerdown="openPage('weather')">
-                        <div class="weather-pill-content">
-                            <svg class="weather-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="4"></circle>
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                            </svg>
-                            <div class="weather-text-col">
-                                <span class="weather-temp" id="pill-temp">+3°C</span>
-                                <span class="weather-desc" id="pill-desc">Солнечно</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Smart Search Bar -->
-            <div class="search-container">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="global-search" class="search-input" placeholder="Умный поиск по сайту и документам..." oninput="handleSearch(this.value)">
-            </div>
-
-            <div id="search-results" class="search-results-box"></div>
-
-            <nav class="nav-grid">
-                <div class="nav-card" onpointerdown="openPage('transport')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
-                            <rect x="3" y="6" width="18" height="11" rx="2"></rect>
-                            <circle cx="7" cy="17" r="2"></circle>
-                            <circle cx="17" cy="17" r="2"></circle>
-                            <path d="M5 11h14"></path>
-                        </svg>
-                    </div>
-                    <span class="card-label">Транспорт</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('tariffs')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#d84315" stroke-width="2">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                        </svg>
-                    </div>
-                    <span class="card-label">Тарифы</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('news')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2">
-                            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
-                            <path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8z"></path>
-                        </svg>
-                    </div>
-                    <span class="card-label">Новости</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('documents')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </div>
-                    <span class="card-label">Документы</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('contacts')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#6a1b9a" stroke-width="2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                    </div>
-                    <span class="card-label">Контакты</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('profile')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#00838f" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </div>
-                    <span class="card-label">Профиль</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('payments')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#b71c1c" stroke-width="2">
-                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                            <line x1="1" y1="10" x2="23" y2="10"></line>
-                        </svg>
-                    </div>
-                    <span class="card-label">Взносы</span>
-                </div>
-
-                <div class="nav-card" onpointerdown="openPage('about')">
-                    <div class="card-icon-wrapper">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#263238" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                    </div>
-                    <span class="card-label">О НСТ</span>
-                </div>
-            </nav>
-        </div>
-
-        <!-- SUBPAGE: WEATHER -->
-        <div id="page-weather" class="subpage">
-            <div class="subpage-header">
-                <button class="back-btn" onpointerdown="goHome()">← Назад</button>
-                <span class="subpage-title">Погода в НСТ «Горняк»</span>
-                <div style="width: 32px;"></div>
-            </div>
-            
-            <div class="weather-card-full">
-                <div style="font-size: 14px; opacity: 0.8;">Текущая погода · Open-Meteo</div>
-                <div class="weather-main-temp" id="full-temp">+3°</div>
-                <div style="font-size: 16px; font-weight: 500;" id="full-desc">Солнечно</div>
-                
-                <div class="weather-grid" style="margin-top: 16px;">
-                    <div class="weather-grid-item"><div class="weather-label">Ощущается как</div><div class="weather-val" id="full-feels">+1°C</div></div>
-                    <div class="weather-grid-item"><div class="weather-label">Влажность</div><div class="weather-val" id="full-humidity">65%</div></div>
-                    <div class="weather-grid-item"><div class="weather-label">Ветер</div><div class="weather-val" id="full-wind">4.3 м/с</div></div>
-                    <div class="weather-grid-item"><div class="weather-label">Давление</div><div class="weather-val" id="full-pressure">758 мм</div></div>
-                </div>
-            </div>
-
-            <div class="content-card" style="margin-top: 14px;">
-                <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--text-main);">Прогноз на 7 дней</h3>
-                <div id="weekly-forecast-container" style="display: flex; flex-direction: column; gap: 8px;">
-                    <div style="font-size: 13px; color: var(--text-muted);">Загрузка прогноза...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SUBPAGE: TRANSPORT -->
-        <div id="page-transport" class="subpage">
-            <div class="subpage-header">
-                <button class="back-btn" onpointerdown="goHome()">← Назад</button>
-                <span class="subpage-title">Транспорт и маршруты</span>
-                <div style="width: 32px;"></div>
-            </div>
-
-            <div class="content-card">
-                <div class="route-header">
-                    <h3 style="font-size: 15px;">Маршрут №474</h3>
-                    <div id="badge-474" class="live-badge"><span class="live-dot"></span><span id="status-text-474">На линии</span></div>
-                </div>
-                <p style="font-size: 13px; color: var(--text-muted);">Город — НСТ «Горняк»</p>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Интервал: каждый час с 07:00 до 21:00.</p>
-            </div>
-
-            <div class="content-card">
-                <div class="route-header">
-                    <h3 style="font-size: 15px;">Маршрут №474к</h3>
-                    <div id="badge-474k" class="live-badge"><span class="live-dot"></span><span id="status-text-474k">На линии</span></div>
-                </div>
-                <p style="font-size: 13px; color: var(--text-muted);">Укороченный рейс (до поворота)</p>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Утренние и вечерние часы пик.</p>
-            </div>
-
-            <div class="content-card">
-                <div class="route-header">
-                    <h3 style="font-size: 15px;">Маршрут №26. К1</h3>
-                    <div id="badge-26k1" class="live-badge"><span class="live-dot"></span><span id="status-text-26k1">На линии</span></div>
-                </div>
-                <p style="font-size: 13px; color: var(--text-muted);">Сезонный дачный рейс</p>
-                <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Пятница – Воскресенье по расписанию.</p>
-            </div>
-
-            <div class="content-card">
-                <h3 style="font-size: 15px; margin-bottom: 8px;">Служебные номера перевозчика</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">ООО «БАЛАШИХА-ЭКСПРЕСС»:</p>
-                <a href="tel:+74957862323" class="phone-link">📞 +7 (495) 786-23-23</a><br>
-                <a href="tel:+79851872802" class="phone-link">📞 +7 (985) 187-28-02</a><br>
-                <a href="tel:+74954249911" class="phone-link">📞 +7 (495) 424-99-11</a>
-                <div style="margin-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
-                    <p style="font-size: 12px; color: var(--text-muted);">Справочная автостанции (м. Котельники):</p>
-                    <a href="tel:89035816727" class="phone-link">📞 8 (903) 581-67-27</a>
-                </div>
-            </div>
-
-            <div class="content-card">
-                <h3 style="font-size: 15px; margin-bottom: 6px;">Интерактивная карта</h3>
-                <div class="map-wrapper">
-                    <iframe src="https://yandex.ru/map-widget/v1/?ll=37.617635%2C55.755814&z=11&l=masstransit" width="100%" height="100%" frameborder="0" allowfullscreen="true"></iframe>
-                </div>
-            </div>
-        </div>
-
-        <!-- SUBPAGE: TARIFFS -->
-        <div id="page-tariffs" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Тарифы</span><div style="width: 32px;"></div></div>
-            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Электроэнергия</h3><p style="font-size: 13px; color: var(--text-muted);">День: 5.40 руб/кВтч. Ночь: 2.80 руб/кВтч.</p></div>
-        </div>
-
-        <!-- SUBPAGE: NEWS -->
-        <div id="page-news" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Новости</span><div style="width: 32px;"></div></div>
-            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Подготовка к сезону</h3><p style="font-size: 13px; color: var(--text-muted);">Проводится чистка дорог и проверка водопровода.</p></div>
-        </div>
-
-        <!-- SUBPAGE: DOCUMENTS -->
-        <div id="page-documents" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Документы</span><div style="width: 32px;"></div></div>
-            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Устав НСТ «Горняк»</h3><p style="font-size: 12px; color: var(--text-muted);">Основной регламентирующий документ товарищества.</p></div>
-        </div>
-
-        <!-- SUBPAGE: CONTACTS -->
-        <div id="page-contacts" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Контакты</span><div style="width: 32px;"></div></div>
-            <div class="content-card">
-                <h3 style="font-size: 15px; margin-bottom: 6px;">Правление НСТ «Горняк»</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Председатель правления:</p>
-                <a href="tel:+79000000000" class="phone-link">📞 +7 (900) 000-00-00</a>
-                <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Аварийный электрик:</p>
-                    <a href="tel:+79001112233" class="phone-link">📞 +7 (900) 111-22-33</a>
-                </div>
-                <div style="margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 8px;">
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Бухгалтерия / Оплата взносов:</p>
-                    <a href="tel:+79004445566" class="phone-link">📞 +7 (900) 444-55-66</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- SUBPAGE: PROFILE -->
-        <div id="page-profile" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Личный кабинет</span><div style="width: 32px;"></div></div>
-            
-            <div id="cabinet-login-view" class="content-card">
-                <h3 style="font-size: 15px; margin-bottom: 6px;">Авторизация участника</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Введите номер вашего участка для доступа к балансу и показаниям:</p>
-                <div class="login-box">
-                    <input type="number" id="plot-number-input" class="cabinet-input" placeholder="Номер участка (например, 45)">
-                    <button class="cabinet-btn" onclick="loginCabinet()">Войти</button>
-                </div>
-            </div>
-
-            <div id="cabinet-data-view" style="display: none;">
-                <div class="content-card" style="background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(46, 125, 50, 0.3);">
-                    <h3 style="font-size: 16px; color: #1b4332;" id="cabinet-title">Участок № —</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Статус: <span style="color: #2e7d32; font-weight: 600;">Член НСТ (активен)</span></p>
-                </div>
-
-                <div class="content-card">
-                    <h3 style="font-size: 14px; margin-bottom: 8px;">Состояние счета</h3>
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
-                        <span style="color: var(--text-muted);">Баланс:</span>
-                        <span style="font-weight: 700; color: #2e7d32;" id="cabinet-balance">0 руб.</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                        <span style="color: var(--text-muted);">Целевой взнос 2026:</span>
-                        <span style="font-weight: 700; color: #b71c1c;" id="cabinet-debt">Оплачено</span>
-                    </div>
-                </div>
-
-                <div class="content-card">
-                    <h3 style="font-size: 14px; margin-bottom: 8px;">Показания электросчетчика</h3>
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Последняя передача: 15 сентября</div>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" class="cabinet-input" placeholder="Новые показания (кВт⋅ч)" id="meter-val">
-                        <button class="cabinet-btn" onclick="alert('Показания успешно переданы в правление!')">Передать</button>
-                    </div>
-                </div>
-
-                <button class="cabinet-btn" style="width: 100%; background: #c62828; margin-top: 4px;" onclick="logoutCabinet()">Выйти из кабинета</button>
-            </div>
-        </div>
-
-        <!-- SUBPAGE: PAYMENTS -->
-        <div id="page-payments" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Взносы</span><div style="width: 32px;"></div></div>
-            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 6px;">Сведения по взносам</h3><p style="font-size: 12px; color: var(--text-muted);">Персональные начисления доступны в личном кабинете.</p></div>
-        </div>
-
-        <!-- SUBPAGE: ABOUT -->
-        <div id="page-about" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">О НСТ «Горняк»</span><div style="width: 32px;"></div></div>
-            
-            <div class="content-card">
-                <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);">История создания и развития</h3>
-                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-                    Садоводческое некоммерческое товарищество (НСТ) «Горняк» имеет богатую историю, уходящую корнями в эпоху активного развития пригородных хозяйственных инициатив. Товарищество было основано в 1985 году как объединение работников горнодобывающей и смежных отраслей.
-                </p>
-                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-                    В начале своего пути территория представляла собой необустроенные земельные массивы. Силами первых энтузиастов производилась расчистка участков, прокладывались первые подъездные пути и линии электропередач. 
-                </p>
-                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-                    В 1992 году земельные участки были официально переданы членам товарищества в частную собственность, что дало мощный толчок к капитальному строительству и благоустройству. Позже, в 2004 году, в ходе правовой реорганизации товарищество получило современный статус СНТ/НСТ «Горняк».
-                </p>
-                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-                    Сегодня «Горняк» — это развитое, современное садовое товарищество с круглогодичной инфраструктурой, качественными дорогами и стабильным энергоснабжением.
-                </p>
-            </div>
-        </div>
-
-        <!-- SUBPAGE: NOTIFICATIONS -->
-        <div id="page-notifications" class="subpage">
-            <div class="subpage-header"><button class="back-btn" onpointerdown="goHome()">← Назад</button><span class="subpage-title">Уведомления</span><div style="width: 32px;"></div></div>
-            <div class="content-card"><h3 style="font-size: 15px; margin-bottom: 4px;">Новых уведомлений нет</h3><p style="font-size: 12px; color: var(--text-muted);">Штатный режим работы.</p></div>
-        </div>
-
-    </div>
-</div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">НСТ «Горняк» — Официальный портал</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 
 <script>
-    // Мгновенный отклик на касание (pointerdown) и плавная смена страниц
-    function openPage(pageId) {
-        document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
-        const target = document.getElementById('page-' + pageId);
-        if (target) {
-            target.classList.add('active');
-            const container = document.querySelector('.app-container');
-            if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        emerald: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16',
         }
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        heading: ['Montserrat', 'sans-serif'],
+      }
     }
+  }
+}
+</script>
 
-    function goHome() {
-        openPage('home');
-    }
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f8f5;
+  color: #1e293b;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+.page-section {
+  display: none;
+}
+.page-section.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nav-link.active-link {
+  color: #15803d;
+  font-weight: 700;
+  border-bottom: 2px solid #15803d;
+}
 
-    // Личный кабинет
-    function loginCabinet() {
-        const plotNum = document.getElementById('plot-number-input').value.trim();
-        if (!plotNum) {
-            alert('Пожалуйста, введите номер вашего участка.');
-            return;
-        }
-        document.getElementById('cabinet-title').innerText = 'Участок № ' + plotNum;
-        document.getElementById('cabinet-balance').innerText = (plotNum * 1200) % 5000 + ' руб.';
-        document.getElementById('cabinet-login-view').style.display = 'none';
-        document.getElementById('cabinet-data-view').style.display = 'block';
-    }
+/* Живой баннер и анимация природы */
+.live-hero-bg {
+  background: linear-gradient(135deg, #133820 0%, #1e4d2e 50%, #2e7d32 100%);
+  position: relative;
+  overflow: hidden;
+}
+.clouds-animation {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  opacity: 0.3;
+  animation: slowPan 40s linear infinite alternate;
+}
+@keyframes slowPan {
+  0% { transform: scale(1) translateX(0); }
+  100% { transform: scale(1.08) translateX(-25px); }
+}
 
-    function logoutCabinet() {
-        document.getElementById('plot-number-input').value = '';
-        document.getElementById('cabinet-data-view').style.display = 'none';
-        document.getElementById('cabinet-login-view').style.display = 'block';
-    }
+/* Летящие птицы */
+.bird {
+  position: absolute;
+  width: 14px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  clip-path: polygon(0 50%, 50% 0, 100% 50%, 50% 20%);
+  animation: flyBird 14s linear infinite;
+  z-index: 2;
+}
+.bird-1 { top: 20%; left: -10%; animation-duration: 15s; animation-delay: 0s; }
+.bird-2 { top: 40%; left: -10%; animation-duration: 19s; animation-delay: 5s; transform: scale(0.7); }
+.bird-3 { top: 15%; left: -10%; animation-duration: 12s; animation-delay: 8s; transform: scale(0.5); }
 
-    const siteData = [
-        { page: 'transport', title: 'Яндекс Транспорт / Маршруты 474, 474к, 26.К1', text: 'маршруты автобусов 474 474к 26 к1 расписание транспорт диспетчер Балашиха экспресс' },
-        { page: 'tariffs', title: 'Тарифы на электроэнергию', text: 'счетчик свет деньги киловатт день ночь оплата тариф' },
-        { page: 'documents', title: 'Устав НСТ «Горняк»', text: 'устав правила застройки шум взносы граница участка земля документы правление' },
-        { page: 'contacts', title: 'Контакты правления и председателя', text: 'телефон контакты председатель аварийная служба электрик бухгалтер' },
-        { page: 'payments', title: 'Членские и целевые взносы', text: 'взносы реквизиты долги расчеты плата банк' },
-        { page: 'about', title: 'История создания и развития НСТ Горняк', text: 'история о нст горняк 1985 год основание земельные участки' },
-        { page: 'profile', title: 'Личный кабинет участника', text: 'личный кабинет участок баланс показания счетчика' }
-    ];
+@keyframes flyBird {
+  0% { transform: translate(0, 0) scale(var(--s, 1)); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(120vw, -30px) scale(var(--s, 1)); opacity: 0; }
+}
 
-    function handleSearch(query) {
-        const resultsBox = document.getElementById('search-results');
-        if (!query.trim()) { resultsBox.style.display = 'none'; resultsBox.innerHTML = ''; return; }
-        const q = query.toLowerCase();
-        const matches = siteData.filter(item => item.title.toLowerCase().includes(q) || item.text.toLowerCase().includes(q));
-        if (matches.length > 0) {
-            resultsBox.innerHTML = matches.map(m => `
-                <div class="search-result-item" onpointerdown="openPage('${m.page}'); document.getElementById('search-results').style.display='none';">
-                    <div class="search-result-title">${m.title}</div>
-                    <div class="search-result-desc">Найдено в разделе ${m.page}</div>
-                </div>
-            `).join('');
-            resultsBox.style.display = 'block';
-        } else {
-            resultsBox.innerHTML = `<div style="padding:10px; font-size:12px; color:#888;">Ничего не найдено</div>`;
-            resultsBox.style.display = 'block';
-        }
-    }
+/* Эффект жидкого стекла (Liquid Glass / Frosted Glass) */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  transition: all 0.2s ease;
+}
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
 
-    async function fetchWeather() {
-        try {
-            const lat = 55.80;
-            const lon = 37.95;
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m,apparent_temperature&daily=temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow`);
-            const data = await res.json();
-            
-            if (data && data.current_weather) {
-                const temp = Math.round(data.current_weather.temperature);
-                const tempStr = (temp > 0 ? '+' : '') + temp + '°';
-                
-                document.getElementById('pill-temp').innerText = tempStr + 'C';
-                document.getElementById('full-temp').innerText = tempStr;
-                document.getElementById('full-wind').innerText = data.current_weather.windspeed + ' м/с';
+.glass-pill {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
 
-                const nowHourIndex = new Date().getHours();
-                if (data.hourly) {
-                    if (data.hourly.relativehumidity_2m) {
-                        document.getElementById('full-humidity').innerText = (data.hourly.relativehumidity_2m[nowHourIndex] || 65) + '%';
-                    }
-                    if (data.hourly.apparent_temperature) {
-                        const appTemp = Math.round(data.hourly.apparent_temperature[nowHourIndex]);
-                        document.getElementById('full-feels').innerText = (appTemp > 0 ? '+' : '') + appTemp + '°C';
-                    }
-                }
+/* Плавный аккордеон для транспорта */
+.transport-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+.transport-collapse.expanded {
+  max-height: 300px;
+  opacity: 1;
+}
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-600 selection:text-white">
 
-                if (data.daily && data.daily.time) {
-                    const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
-                    let forecastHtml = '';
-                    for (let i = 0; i < 7; i++) {
-                        const dateObj = new Date(data.daily.time[i]);
-                        const dayName = i === 0 ? 'Сегодня' : days[dateObj.getDay()];
-                        const maxT = Math.round(data.daily.temperature_2m_max[i]);
-                        const minT = Math.round(data.daily.temperature_2m_min[i]);
-                        
-                        forecastHtml += `
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255,255,255,0.6); border-radius: 12px; font-size: 13px;">
-                                <span style="font-weight: 600; width: 80px; color: var(--text-main);">${dayName}</span>
-                                <span style="color: var(--text-muted); font-size: 12px;">Солнечно</span>
-                                <span style="font-weight: 700; color: var(--text-main);">${maxT}° / <span style="opacity: 0.6;">${minT}°</span></span>
-                            </div>
-                        `;
-                    }
-                    document.getElementById('weekly-forecast-container').innerHTML = forecastHtml;
-                }
-            }
-        } catch (e) {
-            console.log('Weather offline');
-        }
-    }
-    fetchWeather();
+<!-- Верхняя плашка уведомлений -->
+<div id="topBanner" class="bg-emerald-900 text-emerald-100 text-sm py-2 px-4 flex justify-between items-center border-b border-emerald-800">
+  <div class="container mx-auto flex items-center justify-between text-xs sm:text-sm">
+    <span class="flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <i class="fa-solid fa-bullhorn text-emerald-300"></i>
+      <strong class="font-semibold hidden sm:inline">Объявление:</strong>
+      <span id="bannerText">Внимание! На этой неделе работает выездной терапевтический прием.</span>
+    </span>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1 bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-700/50 text-xs font-semibold">
+        <button onclick="setLanguage('ru')" id="lang-ru" class="px-1.5 py-0.5 rounded transition text-white bg-emerald-700">RU</button>
+        <span class="text-emerald-500">|</span>
+        <button onclick="setLanguage('tr')" id="lang-tr" class="px-1.5 py-0.5 rounded transition text-emerald-300 hover:text-white">TR</button>
+      </div>
+      <button onclick="document.getElementById('topBanner').remove()" class="text-emerald-300 hover:text-white p-1">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+</div>
 
-    function updateTransportStatus() {
-        const hour = new Date().getHours();
-        const isActive = hour >= 6 && hour < 23;
-        ['474', '474k', '26k1'].forEach(id => {
-            const badge = document.getElementById('badge-' + id);
-            const text = document.getElementById('status-text-' + id);
-            if (badge && text) {
-                if (isActive) {
-                    badge.className = 'live-badge';
-                    text.innerText = 'На линии';
-                } else {
-                    badge.className = 'live-badge offline';
-                    text.innerText = 'Рейсы завершены';
-                }
-            }
-        });
-    }
-    updateTransportStatus();
+<!-- Навигационная шапка -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-slate-100">
+  <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-3 group">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform">
+        <i class="fa-solid fa-tree"></i>
+      </div>
+      <div>
+        <span class="block text-lg font-extrabold text-emerald-950 tracking-tight leading-none">НСТ «Горняк»</span>
+        <span class="text-xs font-medium text-emerald-700 tracking-wider uppercase">Московская область</span>
+      </div>
+    </a>
+    <!-- Десктопное меню -->
+    <nav class="hidden xl:flex items-center gap-5 font-medium text-slate-700 text-xs sm:text-sm">
+      <button onclick="navigateTo('home')" id="nav-home" class="nav-link py-1 hover:text-emerald-700 transition active-link">Главная</button>
+      <button onclick="navigateTo('infrastructure')" id="nav-infrastructure" class="nav-link py-1 hover:text-emerald-700 transition">О СНТ</button>
+      <button onclick="navigateTo('transport')" id="nav-transport" class="nav-link py-1 hover:text-emerald-700 transition">Транспорт</button>
+      <button onclick="navigateTo('announcements')" id="nav-announcements" class="nav-link py-1 hover:text-emerald-700 transition">Новости</button>
+      <button onclick="navigateTo('documents')" id="nav-documents" class="nav-link py-1 hover:text-emerald-700 transition">Финансы & Документы</button>
+      <button onclick="navigateTo('gallery')" id="nav-gallery" class="nav-link py-1 hover:text-emerald-700 transition">Галерея</button>
+      <button onclick="navigateTo('contacts')" id="nav-contacts" class="nav-link py-1 hover:text-emerald-700 transition">Контакты</button>
+    </nav>
+    <div class="hidden sm:flex items-center gap-3">
+      <button onclick="navigateTo('issue')" class="bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 px-3.5 py-2 rounded-lg font-semibold text-xs flex items-center gap-2 transition">
+        <i class="fa-solid fa-wrench text-emerald-600"></i> Заявка в правление
+      </button>
+    </div>
+    <button onclick="toggleMobileMenu()" class="xl:hidden p-2 text-slate-700 hover:text-emerald-700 text-xl focus:outline-none">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+
+  <!-- Мобильное меню -->
+  <div id="mobileMenu" class="hidden xl:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-2 font-medium text-slate-700 text-sm">
+    <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Главная</button>
+    <button onclick="navigateTo('infrastructure'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">О СНТ</button>
+    <button onclick="navigateTo('transport'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Транспорт и расписание</button>
+    <button onclick="navigateTo('announcements'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Новости и объявления</button>
+    <button onclick="navigateTo('documents'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Документы и финансы</button>
+    <button onclick="navigateTo('gallery'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Галерея</button>
+    <button onclick="navigateTo('contacts'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Контакты</button>
+  </div>
+</header>
+
+<main class="flex-grow">
+  <!-- 1. ГЛАВНАЯ СТРАНИЦА (С ЖИВЫМ БАННЕРОМ, ПТИЦАМИ И НОВЫМ ВИДЖЕТОМ) -->
+  <section id="page-home" class="page-section active">
+    <div class="live-hero-bg text-white py-12 lg:py-16">
+      <div class="clouds-animation"></div>
+      <div class="bird bird-1"></div>
+      <div class="bird bird-2"></div>
+      <div class="bird bird-3"></div>
+
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-8">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/20 backdrop-blur border border-white/20 text-emerald-100 text-xs sm:text-sm font-semibold uppercase tracking-wider mb-4">
+              <i class="fa-solid fa-house-chimney text-emerald-300"></i> Официальный портал товарищества
+            </span>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 drop-shadow-md">
+              НСТ «Горняк»
+            </h1>
+            <p class="text-base sm:text-lg text-emerald-100 font-light mb-8 max-w-2xl leading-relaxed drop-shadow">
+              Наше СНТ — это наш дом, наши соседи, наша ответственность! Вместе делаем наше СНТ лучше!
+            </p>
+          </div>
+
+          <!-- Новый дизайн виджета в стиле "Жидкое стекло" (как на референсе) -->
+          <div class="lg:col-span-4 flex justify-lg-end items-center gap-3">
+            <!-- Кнопка уведомлений / почты -->
+            <button onclick="navigateTo('announcements')" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer" title="Уведомления">
+              <i class="fa-regular fa-envelope text-lg"></i>
+            </button>
+            <!-- Капсульный блок погоды -->
+            <div class="glass-pill px-5 py-2.5 rounded-full shadow-lg flex items-center gap-3 text-white">
+              <i class="fa-solid fa-sun text-yellow-300 text-2xl animate-spin" style="animation-duration: 20s;"></i>
+              <div>
+                <div class="text-lg font-bold leading-none">+18°C</div>
+                <div class="text-[11px] text-emerald-100 opacity-90 mt-0.5">Ясно</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Карточки быстрого доступа -->
+    <div class="py-10 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div onclick="navigateTo('infrastructure')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
+            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-tree"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 text-lg mb-1">О СНТ</h3>
+            <p class="text-slate-600 text-xs leading-relaxed">История, территория, информация о товариществе.</p>
+          </div>
+          <div onclick="navigateTo('transport')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
+            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-bus"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 text-lg mb-1">Транспорт</h3>
+            <p class="text-slate-600 text-xs leading-relaxed">Маршруты №474, №474к, №26.К1 и контакты перевозчиков.</p>
+          </div>
+          <div onclick="navigateTo('announcements')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
+            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 text-lg mb-1">Новости</h3>
+            <p class="text-slate-600 text-xs leading-relaxed">Актуальные события, объявления и собрания правления.</p>
+          </div>
+          <div onclick="navigateTo('documents')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
+            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-folder-closed"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 text-lg mb-1">Финансы & Сметы</h3>
+            <p class="text-slate-600 text-xs leading-relaxed">Отчеты, взносы, сметы и регламенты товарищества.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. РАЗДЕЛ «ТРАНСПОРТ» С АНИМИРОВАННЫМИ ЧАСАМИ РЕЙСОВ -->
+  <section id="page-transport" class="page-section py-12 bg-white">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Маршруты</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Транспорт и расписание</h2>
+        </div>
+        <button onclick="navigateTo('home')" class="bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl text-xs font-bold text-slate-700">← Назад</button>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Маршрут 474 -->
+        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 transition shadow-sm">
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-474')">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Маршрут №474</h3>
+              <p class="text-xs text-slate-600 mt-0.5">Город — НСТ «Горняк». Интервал: каждый час с 07:00 до 21:00.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> На линии
+              </span>
+              <i id="icon-route-474" class="fa-solid fa-chevron-down text-xs text-emerald-700 transition-transform duration-300"></i>
+            </div>
+          </div>
+          <div id="route-474" class="transport-collapse mt-3 pt-3 border-t border-emerald-200/60 text-xs text-slate-700 space-y-1.5">
+            <p><strong>Отправление из Города:</strong> 07:00, 08:00, 09:00, 11:00, 13:00, 15:00, 17:00, 19:00, 21:00</p>
+            <p><strong>Отправление из НСТ «Горняк»:</strong> 07:45, 08:45, 09:45, 11:45, 13:45, 15:45, 17:45, 19:45, 21:45</p>
+          </div>
+        </div>
+
+        <!-- Маршрут 474к -->
+        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 transition shadow-sm">
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-474k')">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Маршрут №474к</h3>
+              <p class="text-xs text-slate-600 mt-0.5">Укороченный рейс (до поворота). Утренние и вечерние часы пик.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> На линии
+              </span>
+              <i id="icon-route-474k" class="fa-solid fa-chevron-down text-xs text-emerald-700 transition-transform duration-300"></i>
+            </div>
+          </div>
+          <div id="route-474k" class="transport-collapse mt-3 pt-3 border-t border-emerald-200/60 text-xs text-slate-700 space-y-1.5">
+            <p><strong>Утренние рейсы (часы пик):</strong> 06:30, 07:15, 08:15</p>
+            <p><strong>Вечерние рейсы (часы пик):</strong> 18:15, 19:15, 20:30</p>
+          </div>
+        </div>
+
+        <!-- Маршрут 26.К1 -->
+        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 transition shadow-sm">
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-26')">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Маршрут №26.К1</h3>
+              <p class="text-xs text-slate-600 mt-0.5">Сезонный дачный рейс. Пятница – Воскресенье по расписанию.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> На линии
+              </span>
+              <i id="icon-route-26" class="fa-solid fa-chevron-down text-xs text-emerald-700 transition-transform duration-300"></i>
+            </div>
+          </div>
+          <div id="route-26" class="transport-collapse mt-3 pt-3 border-t border-emerald-200/60 text-xs text-slate-700 space-y-1.5">
+            <p><strong>Пятница:</strong> 16:00, 18:30, 20:00</p>
+            <p><strong>Суббота и Воскресенье:</strong> 09:00, 12:00, 15:00, 18:00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Контакты перевозчика -->
+      <div class="mt-8 p-6 rounded-2xl bg-slate-50 border border-slate-200">
+        <h3 class="font-bold text-slate-900 text-sm mb-3"><i class="fa-solid fa-phone text-emerald-700 mr-2"></i> Служебные номера перевозчика</h3>
+        <p class="text-xs text-slate-600 mb-2">ООО «БАЛАШИХА-ЭКСПРЕСС»:</p>
+        <div class="text-xs font-mono text-emerald-800 space-y-1">
+          <p>📞 +7 (495) 786-23-23</p>
+          <p>📞 +7 (985) 187-28-02</p>
+          <p>📞 +7 (495) 424-99-11</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Заглушки остальных страниц -->
+  <section id="page-infrastructure" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">О СНТ «Горняк»</h2><p class="text-sm mt-2 text-slate-600">Информация о товариществе.</p></div></section>
+  <section id="page-announcements" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Новости и объявления</h2><p class="text-sm mt-2 text-slate-600">Собрания и важные события.</p></div></section>
+  <section id="page-documents" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Документы и Финансы</h2><p class="text-sm mt-2 text-slate-600">Устав, сметы расходов.</p></div></section>
+  <section id="page-gallery" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Галерея</h2><p class="text-sm mt-2 text-slate-600">Фотографии нашего поселка.</p></div></section>
+  <section id="page-contacts" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Контакты правления</h2><p class="text-sm mt-2 text-slate-600">Экстренные службы.</p></div></section>
+  <section id="page-issue" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Заявка в правление</h2><p class="text-sm mt-2 text-slate-600">Форма отправки обращений.</p></div></section>
+</main>
+
+<footer class="bg-emerald-950 text-emerald-100 py-6 text-xs text-center border-t border-emerald-900">
+  <p>© 2026 НСТ «Горняк» Московская область. Все права защищены.</p>
+</footer>
+
+<script>
+function navigateTo(pageId) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+
+function toggleRoute(routeId) {
+  const content = document.getElementById(routeId);
+  const icon = document.getElementById('icon-' + routeId);
+  if (content.classList.contains('expanded')) {
+    content.classList.remove('expanded');
+    icon.style.transform = 'rotate(0deg)';
+  } else {
+    content.classList.add('expanded');
+    icon.style.transform = 'rotate(180deg)';
+  }
+}
+
+function setLanguage(lang) {
+  document.getElementById('lang-ru').className = lang === 'ru' ? 'px-1.5 py-0.5 rounded transition text-white bg-emerald-700' : 'px-1.5 py-0.5 rounded transition text-emerald-300 hover:text-white';
+  document.getElementById('lang-tr').className = lang === 'tr' ? 'px-1.5 py-0.5 rounded transition text-white bg-emerald-700' : 'px-1.5 py-0.5 rounded transition text-emerald-300 hover:text-white';
+}
 </script>
 </body>
 </html>
