@@ -17,6 +17,22 @@
         .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(20, 79, 43, 0.15); }
         .forest-footer { background: linear-gradient(to top, #a5d6a7 0%, #c8e6c9 60%, rgba(255,255,255,0) 100%); }
+        .section-card { border: 1px solid transparent; cursor: pointer; text-align: left; }
+        .section-card:focus-visible { outline: 3px solid #0f766e; outline-offset: 3px; }
+        .section-card:nth-child(1) .section-icon { background: linear-gradient(135deg, #34d399, #059669); }
+        .section-card:nth-child(2) .section-icon { background: linear-gradient(135deg, #38bdf8, #2563eb); }
+        .section-card:nth-child(3) .section-icon { background: linear-gradient(135deg, #fbbf24, #f97316); }
+        .section-card:nth-child(4) .section-icon { background: linear-gradient(135deg, #c084fc, #db2777); }
+        .section-card:hover, .section-card[aria-pressed="true"] {
+            border-color: #34d399;
+            box-shadow: 0 14px 30px rgba(20, 79, 43, 0.18);
+            transform: translateY(-5px);
+        }
+        .section-card[aria-pressed="true"] .section-icon { color: white; transform: scale(1.08) rotate(-4deg); }
+        .section-icon { transition: transform 0.2s ease; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
     </style>
 </head>
 <body class="flex flex-col justify-between antialiased">
@@ -65,27 +81,28 @@
         <!-- Разноцветные карточки разделов -->
         <div class="container mx-auto px-4 py-8 space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-tree"></i></div>
+                <button type="button" class="section-card bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover" aria-pressed="false" data-section="О СНТ">
+                    <span class="section-icon w-12 h-12 rounded-xl text-white flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-tree"></i></span>
                     <h3 class="font-bold text-emerald-900 text-base mb-1">О СНТ</h3>
                     <p class="text-slate-600 text-xs">История товарищества, устав и общая информация для садоводов.</p>
-                </div>
-                <div class="bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-green-100 text-green-700 flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-bus"></i></div>
+                </button>
+                <button type="button" class="section-card bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover" aria-pressed="false" data-section="Транспорт">
+                    <span class="section-icon w-12 h-12 rounded-xl text-white flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-bus"></i></span>
                     <h3 class="font-bold text-emerald-900 text-base mb-1">Транспорт</h3>
                     <p class="text-slate-600 text-xs">Актуальное расписание автобусов и сезонных дачных маршрутов.</p>
-                </div>
-                <div class="bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-bolt"></i></div>
+                </button>
+                <button type="button" class="section-card bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover" aria-pressed="false" data-section="Тарифы">
+                    <span class="section-icon w-12 h-12 rounded-xl text-white flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-bolt"></i></span>
                     <h3 class="font-bold text-emerald-900 text-base mb-1">Тарифы</h3>
                     <p class="text-slate-600 text-xs">Актуальные расценки на электроэнергию и членские взносы.</p>
-                </div>
-                <div class="bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover">
-                    <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-bullhorn"></i></div>
+                </button>
+                <button type="button" class="section-card bg-white/90 backdrop-blur p-6 rounded-2xl border border-emerald-100 shadow-sm card-hover" aria-pressed="false" data-section="Новости">
+                    <span class="section-icon w-12 h-12 rounded-xl text-white flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-bullhorn"></i></span>
                     <h3 class="font-bold text-emerald-900 text-base mb-1">Новости</h3>
                     <p class="text-slate-600 text-xs">Важные объявления правления, собрания и новости товарищества.</p>
-                </div>
+                </button>
             </div>
+            <p id="section-status" class="text-center text-sm font-semibold text-emerald-800" aria-live="polite" hidden></p>
         </div>
     </main>
 
@@ -97,5 +114,17 @@
         </div>
     </footer>
 
+    <script>
+        const sectionCards = document.querySelectorAll('.section-card');
+        const sectionStatus = document.getElementById('section-status');
+
+        sectionCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                sectionCards.forEach((item) => item.setAttribute('aria-pressed', String(item === card)));
+                sectionStatus.textContent = `Выбран раздел «${card.dataset.section}»`;
+                sectionStatus.hidden = false;
+            });
+        });
+    </script>
 </body>
 </html>
