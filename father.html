@@ -3,275 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#14532d">
-    <title>Официальный портал НСТ «Горняк»</title>
+    <meta name="theme-color" content="#123b28">
+    <title>НСТ «Горняк» — официальный портал</title>
     <style>
         :root {
             color-scheme: light;
             font-family: Inter, "Segoe UI", Arial, sans-serif;
-            color: #18352a;
-            background: #e8f5e9;
+            color: #1e293b;
+            background: #f2f9f4;
             font-synthesis: none;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            --green-950: #123b28;
-            --green-900: #14532d;
-            --green-800: #166534;
-            --green-700: #15803d;
-            --green-100: #dcfce7;
-            --shadow: 0 16px 40px rgba(20, 83, 45, 0.12);
+            --forest-950: #0f3d22;
+            --forest-900: #144f2b;
+            --forest-800: #176334;
+            --forest-700: #16803e;
+            --forest-100: #e1f3e6;
+            --page-width: 1200px;
         }
 
         * { box-sizing: border-box; }
-
+        html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+        .icon-library { position: absolute; width: 0; height: 0; overflow: hidden; }
         body {
-            display: flex;
+            min-width: 320px;
             min-height: 100vh;
-            flex-direction: column;
             margin: 0;
             background:
-                radial-gradient(ellipse at 10% 15%, rgba(253, 230, 138, 0.32), transparent 35%),
-                linear-gradient(145deg, #f0fdf4, #d1fae5 55%, #dcfce7);
+                radial-gradient(ellipse at 8% 8%, rgba(254, 240, 138, .25), transparent 27rem),
+                linear-gradient(150deg, #f7fcf8, #e8f5ec 52%, #f3f8ff);
         }
-
         button, a { font: inherit; }
+        button { color: inherit; }
+        a { color: inherit; }
+        svg { display: block; }
+        .icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .page-width { width: min(var(--page-width), 100%); margin-inline: auto; padding-inline: 24px; }
 
         .site-header {
             position: sticky;
-            z-index: 5;
+            z-index: 10;
             top: 0;
-            color: #fff;
-            background: linear-gradient(110deg, #123b28, #166534);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-            box-shadow: 0 5px 20px rgba(18, 59, 40, 0.2);
+            border-bottom: 1px solid #dce9df;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 4px 18px rgba(19, 57, 33, .08);
+            backdrop-filter: blur(14px);
         }
-
-        .header-inner, .content, .footer-inner {
-            width: min(1120px, 100%);
-            margin-inline: auto;
-            padding-inline: 24px;
-        }
-
-        .header-inner {
+        .header-row {
             display: flex;
-            min-height: 72px;
+            min-height: 76px;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 22px;
         }
-
-        .brand { display: flex; align-items: center; gap: 12px; }
-        .brand-mark {
-            display: grid;
-            width: 44px;
-            height: 44px;
-            flex: 0 0 auto;
-            place-items: center;
-            border: 1px solid rgba(255,255,255,.25);
-            border-radius: 15px;
-            background: linear-gradient(145deg, #34d399, #15803d);
-            box-shadow: 0 5px 14px rgba(0,0,0,.16);
-        }
-        .brand-mark svg { width: 25px; height: 25px; }
-        .brand-name { display: block; font-size: 17px; font-weight: 800; letter-spacing: .01em; }
-        .brand-caption { display: block; margin-top: 4px; color: #bbf7d0; font-size: 11px; }
-
-        .back-link {
+        .brand {
             display: inline-flex;
-            min-height: 40px;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+        }
+        .brand-symbol {
+            display: grid;
+            width: 46px;
+            height: 46px;
+            place-items: center;
+            border-radius: 15px;
+            color: white;
+            background: linear-gradient(145deg, #34d399, #166534);
+            box-shadow: 0 5px 13px rgba(22, 99, 52, .24);
+        }
+        .brand-symbol .icon { width: 27px; height: 27px; }
+        .brand-name { display: block; color: var(--forest-950); font-size: 16px; font-weight: 850; }
+        .brand-caption { display: block; margin-top: 3px; color: #64748b; font-size: 10px; }
+        .main-nav { display: flex; align-items: center; gap: 4px; }
+        .main-nav a {
+            display: inline-flex;
+            min-height: 42px;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 9px 15px;
-            border: 1px solid rgba(255,255,255,.36);
-            border-radius: 13px;
-            color: #fff;
-            background: rgba(255,255,255,.12);
-            font-size: 13px;
+            padding: 8px 10px;
+            border-radius: 11px;
+            color: #475569;
+            font-size: 11px;
             font-weight: 700;
             text-decoration: none;
-            transition: background .2s ease, transform .2s ease;
+            transition: color .18s ease, background .18s ease;
         }
-        .back-link:hover { transform: translateY(-1px); background: rgba(255,255,255,.22); }
-        .back-link:focus-visible, .section-card:focus-visible {
-            outline: 3px solid #facc15;
-            outline-offset: 3px;
+        .main-nav a:hover, .main-nav a:focus-visible { color: var(--forest-800); background: #eaf7ed; }
+        .main-nav a:first-child { color: var(--forest-800); }
+        .search-mark {
+            display: grid;
+            width: 40px;
+            height: 40px;
+            flex: 0 0 auto;
+            place-items: center;
+            border: 1px solid #dbe7de;
+            border-radius: 13px;
+            color: var(--forest-800);
+            background: #f5fbf6;
         }
-        .back-link svg { width: 17px; height: 17px; color: #fde047; }
-
-        main { flex: 1; }
+        .search-mark .icon { width: 19px; height: 19px; }
 
         .hero {
             position: relative;
             overflow: hidden;
-            padding: 66px 0;
-            color: #fff;
+            color: white;
             background:
-                radial-gradient(ellipse at 74% 8%, rgba(190, 242, 100, .48), transparent 30%),
-                radial-gradient(ellipse at 9% 105%, rgba(250, 204, 21, .32), transparent 37%),
-                linear-gradient(120deg, #064e3b 0%, #15803d 48%, #22a447 100%);
-            box-shadow: 0 14px 34px rgba(20,83,45,.28);
+                radial-gradient(ellipse at 76% 5%, rgba(190, 242, 100, .52), transparent 30%),
+                radial-gradient(ellipse at 5% 100%, rgba(250, 204, 21, .30), transparent 37%),
+                linear-gradient(115deg, #103d28 0%, #176334 49%, #22a447 100%);
+            box-shadow: 0 13px 34px rgba(20, 83, 45, .24);
         }
         .forest-art {
             position: absolute;
             right: 0;
             bottom: 0;
-            width: min(68%, 900px);
+            width: min(76%, 920px);
             height: 100%;
-            opacity: .88;
-            pointer-events: none;
-        }
-        .hero::after {
-            position: absolute;
-            right: -90px;
-            bottom: -205px;
-            width: 430px;
-            height: 430px;
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 50%;
-            box-shadow: 0 0 0 36px rgba(255,255,255,.035), 0 0 0 78px rgba(255,255,255,.03);
-            content: "";
+            opacity: .92;
             pointer-events: none;
         }
         .hero-inner {
             position: relative;
             z-index: 1;
             display: flex;
+            min-height: 300px;
             align-items: center;
             justify-content: space-between;
-            gap: 32px;
+            gap: 34px;
+            padding-block: 48px;
         }
         .hero-copy { max-width: 650px; }
-        h1, h2, h3, p { margin-top: 0; }
-        h1 {
-            margin-bottom: 12px;
-            font-size: clamp(36px, 6vw, 58px);
+        .hero h1 {
+            margin: 0 0 11px;
+            font-size: clamp(36px, 5vw, 58px);
             font-weight: 850;
-            letter-spacing: -.04em;
+            letter-spacing: -.045em;
             line-height: 1.08;
-            text-shadow: 0 3px 18px rgba(0,0,0,.18);
+            text-shadow: 0 3px 18px rgba(0, 0, 0, .2);
         }
-        .hero-copy p { max-width: 620px; margin-bottom: 0; color: #dcfce7; font-size: 16px; line-height: 1.7; }
-
+        .hero-copy p { max-width: 620px; margin: 0; color: #e5fbe9; font-size: 15px; line-height: 1.7; }
+        .hero-side { display: flex; align-items: center; gap: 12px; }
         .weather-card {
             display: flex;
-            min-width: 230px;
+            min-width: 224px;
             align-items: center;
-            gap: 14px;
-            padding: 17px 20px;
-            border: 1px solid rgba(255,255,255,.75);
-            border-radius: 20px;
-            color: #18352a;
-            background: rgba(255,255,255,.94);
-            box-shadow: 0 16px 34px rgba(0,0,0,.17);
+            gap: 12px;
+            padding: 14px 17px;
+            border: 1px solid rgba(255, 255, 255, .72);
+            border-radius: 18px;
+            color: #1e293b;
+            background: rgba(255, 255, 255, .95);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .16);
         }
         .weather-sun {
             display: grid;
-            width: 48px;
-            height: 48px;
+            width: 43px;
+            height: 43px;
             flex: 0 0 auto;
             place-items: center;
-            border-radius: 16px;
-            color: #b45309;
-            background: linear-gradient(145deg, #fef3c7, #fde68a);
+            border-radius: 14px;
+            color: #c2410c;
+            background: linear-gradient(145deg, #fef3c7, #fbbf24);
         }
-        .weather-sun svg { width: 30px; height: 30px; }
-        .weather-temperature { font-size: 22px; font-weight: 800; line-height: 1.1; white-space: nowrap; }
-        .weather-place { color: #64748b; font-size: 11px; font-weight: 500; }
-        .weather-description { margin-top: 5px; color: #15803d; font-size: 12px; font-weight: 700; }
+        .weather-sun .icon { width: 27px; height: 27px; }
+        .weather-temperature { font-size: 20px; font-weight: 850; white-space: nowrap; }
+        .weather-place { color: #64748b; font-size: 10px; font-weight: 500; }
+        .weather-description { margin-top: 3px; color: #15803d; font-size: 11px; font-weight: 700; }
+        .hero-motto {
+            position: absolute;
+            right: 30px;
+            bottom: 16px;
+            z-index: 2;
+            color: rgba(255, 255, 255, .92);
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-style: italic;
+            text-shadow: 0 2px 8px rgba(0,0,0,.3);
+        }
 
-        .content { padding-block: 38px 10px; }
-        .section-heading { margin-bottom: 18px; }
-        .section-heading h2 { margin-bottom: 5px; color: var(--green-950); font-size: 23px; }
-        .section-heading p { margin-bottom: 0; color: #52796f; font-size: 14px; }
-        .card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-        .section-card {
-            min-height: 210px;
-            padding: 22px;
-            border: 1px solid rgba(22, 101, 52, .11);
-            border-radius: 22px;
+        .section-wrap { padding-block: 34px 0; }
+        .section-intro { margin: 0 0 17px; }
+        .section-intro h2 { margin: 0 0 5px; color: var(--forest-950); font-size: 23px; }
+        .section-intro p { margin: 0; color: #5b7180; font-size: 13px; }
+        .portal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; }
+        .portal-card {
+            position: relative;
+            display: block;
+            min-height: 188px;
+            padding: 20px;
+            overflow: hidden;
+            border: 1px solid var(--card-border, #dbe7de);
+            border-top: 3px solid var(--card-accent, #34d399);
+            border-radius: 18px;
             color: inherit;
-            background: rgba(255,255,255,.92);
-            box-shadow: 0 5px 18px rgba(20,83,45,.07);
-            cursor: pointer;
-            text-align: left;
-            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            background: var(--card-bg, #fff);
+            box-shadow: 0 5px 17px rgba(22, 61, 39, .07);
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease;
         }
-        .section-card:hover, .section-card[aria-pressed="true"] {
-            transform: translateY(-5px);
-            border-color: #34d399;
-            box-shadow: 0 16px 32px rgba(20,83,45,.16);
+        .portal-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(22, 61, 39, .14); }
+        .portal-card:focus-visible, .action-button:focus-visible, .main-nav a:focus-visible, .brand:focus-visible {
+            outline: 3px solid #eab308;
+            outline-offset: 3px;
         }
-        .section-icon {
+        .portal-card.about { --card-bg: linear-gradient(145deg, #fff, #eafaf0); --card-border: #d2f2dc; --card-accent: #34d399; --card-ink: #16803e; --card-icon-bg: linear-gradient(145deg, #34d399, #059669); }
+        .portal-card.board { --card-bg: linear-gradient(145deg, #fff, #eef2ff); --card-border: #dfe4ff; --card-accent: #818cf8; --card-ink: #4f46e5; --card-icon-bg: linear-gradient(145deg, #a5b4fc, #4f46e5); }
+        .portal-card.news { --card-bg: linear-gradient(145deg, #fff, #faf5ff); --card-border: #efddff; --card-accent: #c084fc; --card-ink: #9333ea; --card-icon-bg: linear-gradient(145deg, #d8b4fe, #9333ea); }
+        .portal-card.finance { --card-bg: linear-gradient(145deg, #fff, #fffbeb); --card-border: #f8e8bc; --card-accent: #fbbf24; --card-ink: #d97706; --card-icon-bg: linear-gradient(145deg, #fcd34d, #d97706); }
+        .portal-card.documents { --card-bg: linear-gradient(145deg, #fff, #f0f9ff); --card-border: #d5efff; --card-accent: #38bdf8; --card-ink: #0284c7; --card-icon-bg: linear-gradient(145deg, #7dd3fc, #0284c7); }
+        .portal-card.decisions { --card-bg: linear-gradient(145deg, #fff, #f0fdf4); --card-border: #d7f4df; --card-accent: #4ade80; --card-ink: #15803d; --card-icon-bg: linear-gradient(145deg, #86efac, #15803d); }
+        .portal-card.contacts { --card-bg: linear-gradient(145deg, #fff, #f8fafc); --card-border: #e2e8f0; --card-accent: #94a3b8; --card-ink: #475569; --card-icon-bg: linear-gradient(145deg, #cbd5e1, #475569); }
+        .portal-card.chat { --card-bg: linear-gradient(145deg, #fff, #f5edff); --card-border: #e8d5ff; --card-accent: #a855f7; --card-ink: #9333ea; --card-icon-bg: linear-gradient(145deg, #d8b4fe, #9333ea); }
+        .card-icon {
+            display: grid;
+            width: 44px;
+            height: 44px;
+            margin-bottom: 13px;
+            place-items: center;
+            border-radius: 14px;
+            color: #fff;
+            background: var(--card-icon-bg, linear-gradient(145deg, #34d399, #15803d));
+            box-shadow: 0 5px 12px rgba(22, 99, 52, .2);
+        }
+        .card-icon .icon { width: 24px; height: 24px; }
+        .portal-card h3 { margin: 0 0 6px; color: #1e293b; font-size: 15px; font-weight: 800; }
+        .portal-card p { margin: 0; color: #5b6778; font-size: 12px; line-height: 1.55; }
+        .card-arrow { position: absolute; right: 17px; bottom: 16px; width: 17px; height: 17px; color: #94a3b8; transition: transform .2s ease, color .2s ease; }
+        .portal-card:hover .card-arrow { transform: translateX(4px); color: var(--card-ink); }
+        .card-grid-span { grid-column: span 3; }
+
+        .news-panel {
+            min-width: 0;
+            padding: 20px;
+            border: 1px solid #e1e8e3;
+            border-radius: 19px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 6px 20px rgba(22,61,39,.07);
+        }
+        .news-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+        .news-heading h3 { display: flex; align-items: center; gap: 9px; margin: 0; color: #1e293b; font-size: 16px; }
+        .news-heading h3 .icon { width: 19px; height: 19px; color: #16803e; }
+        .news-link { color: #176334; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+        .news-link:hover { text-decoration: underline; }
+        .news-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+        .news-item { min-width: 0; padding: 9px; border: 1px solid #e6ece8; border-radius: 13px; background: #f8faf9; }
+        .news-art {
+            display: grid;
+            height: 74px;
+            margin-bottom: 9px;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 9px;
+            color: white;
+            background: linear-gradient(135deg, #86efac, #15803d);
+        }
+        .news-item:nth-child(2) .news-art { background: linear-gradient(135deg, #fde68a, #f97316); }
+        .news-item:nth-child(3) .news-art { background: linear-gradient(135deg, #c4b5fd, #7c3aed); }
+        .news-art .icon { width: 37px; height: 37px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.18)); }
+        .news-date { color: #82909d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; }
+        .news-item h4 { margin: 4px 0 0; color: #334155; font-size: 12px; line-height: 1.45; }
+
+        .giveaway {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-top: 16px;
+            padding: 22px 24px;
+            border: 1px solid #b9e5c5;
+            border-radius: 20px;
+            background:
+                radial-gradient(ellipse at 90% 10%, rgba(134,239,172,.35), transparent 40%),
+                linear-gradient(105deg, #dcfce7, #f0fdf4 55%, #d1fae5);
+            box-shadow: 0 6px 20px rgba(22, 99, 52, .07);
+        }
+        .giveaway-copy { display: flex; align-items: center; gap: 15px; }
+        .giveaway-icon {
             display: grid;
             width: 52px;
             height: 52px;
-            margin-bottom: 16px;
+            flex: 0 0 auto;
             place-items: center;
             border-radius: 17px;
-            color: #fff;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 5px 12px rgba(0,0,0,.12);
-            transition: transform .2s ease;
+            color: white;
+            background: linear-gradient(145deg, #34d399, #15803d);
+            box-shadow: 0 7px 16px rgba(22,99,52,.2);
         }
-        .section-card[aria-pressed="true"] .section-icon { transform: scale(1.08) rotate(-4deg); }
-        .section-icon svg { width: 27px; height: 27px; }
-        .icon-about { background: linear-gradient(145deg, #34d399, #059669); }
-        .icon-transport { background: linear-gradient(145deg, #38bdf8, #2563eb); }
-        .icon-tariffs { background: linear-gradient(145deg, #fbbf24, #f97316); }
-        .icon-news { background: linear-gradient(145deg, #c084fc, #db2777); }
-        .section-card:nth-child(1) { background: linear-gradient(150deg, #fff, #ecfdf5); border-top: 3px solid #34d399; }
-        .section-card:nth-child(2) { background: linear-gradient(150deg, #fff, #eff6ff); border-top: 3px solid #38bdf8; }
-        .section-card:nth-child(3) { background: linear-gradient(150deg, #fff, #fffbeb); border-top: 3px solid #fbbf24; }
-        .section-card:nth-child(4) { background: linear-gradient(150deg, #fff, #fdf2f8); border-top: 3px solid #c084fc; }
-        .section-card h3 { margin-bottom: 7px; color: #14532d; font-size: 17px; }
-        .section-card p { margin-bottom: 0; color: #526477; font-size: 13px; line-height: 1.55; }
-        .section-status {
-            min-height: 22px;
-            margin: 18px 0 0;
-            color: #166534;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
+        .giveaway-icon .icon { width: 27px; height: 27px; }
+        .giveaway h3 { margin: 0 0 5px; color: var(--forest-950); font-size: 20px; }
+        .giveaway p { margin: 0; color: #536779; font-size: 12px; }
+        .giveaway-actions { display: flex; flex: 0 0 auto; gap: 10px; }
+        .action-button {
+            min-height: 40px;
+            padding: 9px 15px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(145deg, #16803e, #14532d);
+            box-shadow: 0 4px 11px rgba(20,83,45,.17);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 800;
+            transition: transform .18s ease, filter .18s ease;
         }
-        .section-status[hidden] { display: none; }
-
+        .action-button:hover { transform: translateY(-1px); filter: brightness(1.08); }
+        .action-button.secondary { border-color: #cbd5e1; color: #334155; background: rgba(255,255,255,.88); box-shadow: 0 3px 8px rgba(15,23,42,.06); }
         .site-footer {
             margin-top: 30px;
-            padding-block: 26px;
-            border-top: 1px solid rgba(22,101,52,.15);
+            padding-block: 24px 16px;
+            border-top: 1px solid #c8e5d0;
             color: #14532d;
-            background: linear-gradient(0deg, rgba(134,239,172,.48), rgba(220,252,231,.1));
+            background: linear-gradient(0deg, #c5e7cd, #e1f3e6 68%, rgba(255,255,255,.18));
         }
-        .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-        .footer-motto { font-family: Georgia, serif; font-size: 17px; font-style: italic; font-weight: 700; }
-        .footer-copyright { color: #3f6b50; font-size: 12px; text-align: right; }
+        .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+        .footer-motto { color: #0f3d22; font-family: Georgia, serif; font-size: 17px; font-style: italic; font-weight: 700; }
+        .footer-location { display: flex; align-items: center; gap: 7px; color: #536779; font-size: 12px; }
+        .footer-location .icon { width: 16px; height: 16px; color: #16803e; }
+        .footer-copyright { margin: 18px 0 0; color: #788b81; font-size: 10px; text-align: center; }
 
-        @media (max-width: 760px) {
-            .hero { padding-block: 48px; }
-            .forest-art { width: 100%; opacity: .55; }
-            .hero-inner { align-items: flex-start; flex-direction: column; gap: 24px; }
-            .weather-card { min-width: 0; }
-            .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .section-card { min-height: 195px; }
+        @media (max-width: 1000px) {
+            .header-row { flex-wrap: wrap; gap: 10px 16px; padding-block: 11px; }
+            .main-nav { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; }
+            .main-nav a { flex: 0 0 auto; }
+            .search-mark { margin-left: auto; }
+            .portal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .card-grid-span { grid-column: span 2; }
         }
-        @media (max-width: 480px) {
-            .header-inner, .content, .footer-inner { padding-inline: 16px; }
-            .header-inner { min-height: 66px; gap: 10px; }
-            .brand { gap: 9px; }
-            .brand-mark { width: 40px; height: 40px; }
-            .brand-name { font-size: 15px; }
-            .brand-caption { font-size: 10px; }
-            .back-link { padding-inline: 10px; font-size: 12px; }
-            .hero { padding-block: 40px; }
-            .hero-copy p { font-size: 14px; }
-            .content { padding-top: 28px; }
-            .card-grid { gap: 11px; }
-            .section-card { min-height: 190px; padding: 17px; border-radius: 18px; }
-            .section-card h3 { font-size: 15px; }
-            .section-card p { font-size: 12px; }
-            .footer-inner { align-items: flex-start; flex-direction: column; }
-            .footer-copyright { text-align: left; }
+        @media (max-width: 640px) {
+            .page-width { padding-inline: 16px; }
+            .brand-caption { max-width: 210px; }
+            .hero-inner { min-height: 0; align-items: flex-start; flex-direction: column; gap: 23px; padding-block: 42px 54px; }
+            .forest-art { width: 100%; opacity: .58; }
+            .hero-side { flex-wrap: wrap; }
+            .hero-motto { right: 16px; bottom: 13px; font-size: 13px; }
+            .section-wrap { padding-top: 28px; }
+            .portal-grid { gap: 11px; }
+            .portal-card { min-height: 172px; padding: 16px; border-radius: 16px; }
+            .card-grid-span { grid-column: span 2; }
+            .news-panel { padding: 15px; }
+            .news-grid { gap: 8px; }
+            .news-item { padding: 7px; }
+            .news-art { height: 58px; }
+            .news-item h4 { font-size: 11px; }
+            .giveaway { align-items: flex-start; flex-direction: column; gap: 16px; padding: 18px; }
+            .giveaway-actions { width: 100%; }
+            .action-button { flex: 1; }
+            .footer-row { align-items: flex-start; flex-direction: column; }
+        }
+        @media (max-width: 380px) {
+            .brand-caption { max-width: 155px; }
+            .main-nav { gap: 0; }
+            .main-nav a { padding-inline: 8px; font-size: 10px; }
+            .portal-card { min-height: 182px; padding: 13px; }
+            .card-icon { width: 40px; height: 40px; }
+            .card-grid-span { grid-column: span 2; }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
@@ -279,30 +366,48 @@
     </style>
 </head>
 <body>
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
+        <symbol id="icon-tree" viewBox="0 0 24 24"><path d="m12 3 6 8h-3l4 6h-6v4h-2v-4H5l4-6H6l6-8Z"/></symbol>
+        <symbol id="icon-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1V10Z"/></symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+        <symbol id="icon-bullhorn" viewBox="0 0 24 24"><path d="m3 11 18-5-5 17-4-7-7-5Z"/><path d="m12 16 4-5"/></symbol>
+        <symbol id="icon-coins" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v5c0 1.66 3.58 3 8 3 1.46 0 2.83-.17 4-.46M4 10v5c0 1.66 3.58 3 8 3"/><path d="M20 10c0 1.66-3.58 3-8 3"/><path d="M16 16c0-1.66 1.79-3 4-3s4 1.34 4 3-1.79 3-4 3-4-1.34-4-3Zm4 3v2m0-10v2"/></symbol>
+        <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Z"/></symbol>
+        <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8m-8 4h8"/></symbol>
+        <symbol id="icon-news" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8m-8 4h8m-8 4h4"/></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24"><path d="M9 12 11 14 15 10"/><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/></symbol>
+        <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72l.45 2.77a2 2 0 0 1-.57 1.72L7.3 9.9a16 16 0 0 0 6.8 6.8l1.69-1.69a2 2 0 0 1 1.72-.57l2.77.45a2 2 0 0 1 1.72 2Z"/></symbol>
+        <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></symbol>
+        <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+        <symbol id="icon-gift" viewBox="0 0 24 24"><path d="M20 12v10H4V12m18-5H2v5h20V7Zm-10 15V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 2.5-2c0 1.5 2 2 2 2Zm0 0h4.5a2.5 2.5 0 1 0-2.5-2c0 1.5-2 2-2 2Z"/></symbol>
+        <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></symbol>
+    </svg>
+
     <header class="site-header">
-        <div class="header-inner">
-            <div class="brand">
-                <div class="brand-mark" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m12 3 6 8h-3l4 6h-6v4h-2v-4H5l4-6H6l6-8Z"/>
-                    </svg>
-                </div>
-                <div>
+        <div class="page-width header-row">
+            <a class="brand" href="#home" aria-label="НСТ «Горняк» — главная">
+                <span class="brand-symbol"><svg class="icon"><use href="#icon-tree"/></svg></span>
+                <span>
                     <span class="brand-name">НСТ «Горняк»</span>
-                    <span class="brand-caption">Официальный портал правления</span>
-                </div>
-            </div>
-            <a href="index.html" class="back-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12m-8.48 8.48-2.12 2.12"/>
-                    <circle cx="12" cy="12" r="4"/>
-                </svg>
-                Мой интерфейс
+                    <span class="brand-caption">Садовое некоммерческое товарищество</span>
+                </span>
             </a>
+            <nav class="main-nav" aria-label="Разделы сайта">
+                <a href="#home">Главная</a>
+                <a href="#about">О СНТ</a>
+                <a href="#board">Правление</a>
+                <a href="#news">Новости</a>
+                <a href="#finance">Финансы</a>
+                <a href="#documents">Документы</a>
+                <a href="#contacts">Контакты</a>
+            </nav>
+            <a class="search-mark" href="#news" aria-label="Перейти к новостям"><svg class="icon"><use href="#icon-search"/></svg></a>
         </div>
     </header>
 
-    <main>
+    <main id="home">
         <section class="hero">
             <svg class="forest-art" viewBox="0 0 900 360" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
                 <path fill="#0b3d2b" opacity=".35" d="M0 256 58 218l35 27 46-73 48 77 42-43 51 75 65-102 59 91 57-55 54 69 64-108 52 75 55-52 66 72 68-85 51 72v102H0Z"/>
@@ -310,83 +415,134 @@
                 <path fill="#083b2a" opacity=".85" d="m0 318 38-66 37 66 46-103 51 103 42-72 47 77 54-119 59 119 43-81 48 81 46-110 53 110 46-75 46 80 48-112 55 112 43-67 46 67h72v42H0Z"/>
                 <path fill="#fef3c7" opacity=".38" d="M0 325c115-20 193-8 278 8 99 19 180 17 280-8 111-28 213-28 342-4v39H0Z"/>
             </svg>
-            <div class="hero-inner content">
+            <div class="page-width hero-inner">
                 <div class="hero-copy">
+                    <span class="hero-kicker">Наш общий дом</span>
                     <h1>НСТ «Горняк»</h1>
                     <p>Наше СНТ — это наш дом, наши соседи, наша ответственность! Вместе делаем наше товарищество лучше и комфортнее.</p>
                 </div>
-                <div class="weather-card" aria-label="Погода: ясно, плюс 18 градусов, ветер 3 метра в секунду">
-                    <div class="weather-sun" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="weather-temperature">+18°C <span class="weather-place">Московская обл.</span></div>
-                        <div class="weather-description">Ясно · Ветер 3 м/с</div>
+                <div class="hero-side">
+                    <a href="index.html" class="back-link">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-house"/></svg>
+                        Мой интерфейс
+                    </a>
+                    <div class="weather-card" aria-label="Погода: ясно, плюс 18 градусов, ветер 3 метра в секунду">
+                        <span class="weather-sun"><svg class="icon"><use href="#icon-sun"/></svg></span>
+                        <span>
+                            <span class="weather-temperature">+18°C <span class="weather-place">Московская обл.</span></span>
+                            <span class="weather-description">Ясно · Ветер 3 м/с</span>
+                        </span>
                     </div>
                 </div>
             </div>
+            <p class="hero-motto">Вместе делаем наше СНТ лучше!</p>
         </section>
 
-        <section class="content" aria-labelledby="sections-heading">
-            <div class="section-heading">
-                <h2 id="sections-heading">Разделы товарищества</h2>
-                <p>Полезная информация для садоводов и жителей НСТ.</p>
+        <section class="page-width section-wrap" aria-labelledby="sections-heading">
+            <div class="section-intro">
+                <h2 id="sections-heading">Информация для жителей</h2>
+                <p>Важные разделы и последние события НСТ «Горняк».</p>
             </div>
-            <div class="card-grid">
-                <button type="button" class="section-card" aria-pressed="false" data-section="О СНТ">
-                    <span class="section-icon icon-about" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 6 8h-3l4 6h-6v4h-2v-4H5l4-6H6l6-8Z"/></svg>
-                    </span>
+            <div class="portal-grid">
+                <a class="portal-card about" id="about" href="#about">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-tree"/></svg></span>
                     <h3>О СНТ</h3>
-                    <p>История товарищества, устав и общая информация для садоводов.</p>
-                </button>
-                <button type="button" class="section-card" aria-pressed="false" data-section="Транспорт">
-                    <span class="section-icon icon-transport" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11M5 12h14M7 16h10M7 19h.01M17 19h.01M5 16l-2 3v2h18v-2l-2-3"/></svg>
-                    </span>
-                    <h3>Транспорт</h3>
-                    <p>Актуальное расписание автобусов и сезонных дачных маршрутов.</p>
-                </button>
-                <button type="button" class="section-card" aria-pressed="false" data-section="Тарифы">
-                    <span class="section-icon icon-tariffs" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-3 8h7l-6 12 1-9H6l7-11Z"/></svg>
-                    </span>
-                    <h3>Тарифы</h3>
-                    <p>Актуальные расценки на электроэнергию и членские взносы.</p>
-                </button>
-                <button type="button" class="section-card" aria-pressed="false" data-section="Новости">
-                    <span class="section-icon icon-news" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5-5 17-4-7-7-5Z"/><path d="m12 16 4-5"/></svg>
-                    </span>
+                    <p>История, территория, информация о товариществе.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
+                <a class="portal-card board" id="board" href="#board">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-users"/></svg></span>
+                    <h3>Правление</h3>
+                    <p>Состав, контакты и работа правления.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
+                <a class="portal-card news" id="announcements" href="#news">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-bullhorn"/></svg></span>
                     <h3>Новости</h3>
-                    <p>Важные объявления правления, собрания и новости товарищества.</p>
-                </button>
+                    <p>Актуальные события и объявления товарищества.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
+                <a class="portal-card finance" id="finance" href="#finance">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-coins"/></svg></span>
+                    <h3>Финансы</h3>
+                    <p>Отчёты, сметы и информация о платежах.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
+                <a class="portal-card documents" id="documents" href="#documents">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-folder"/></svg></span>
+                    <h3>Документы</h3>
+                    <p>Устав, сметы, договоры и другие документы.</p>
+                    <span class="document-chip"><svg class="icon"><use href="#icon-file"/></svg> Все разделы →</span>
+                </a>
+
+                <section class="news-panel card-grid-span" id="news" aria-labelledby="news-heading">
+                    <div class="news-heading">
+                        <h3 id="news-heading"><svg class="icon"><use href="#icon-news"/></svg> Колонка новостей</h3>
+                        <a class="news-link" href="#announcements">Все новости →</a>
+                    </div>
+                    <div class="news-grid">
+                        <article class="news-item">
+                            <div class="news-art"><svg class="icon"><use href="#icon-tree"/></svg></div>
+                            <time class="news-date" datetime="2025-09-12">12.09.2025</time>
+                            <h4>Проведены работы по благоустройству территории</h4>
+                        </article>
+                        <article class="news-item">
+                            <div class="news-art"><svg class="icon"><use href="#icon-coins"/></svg></div>
+                            <time class="news-date" datetime="2025-09-08">08.09.2025</time>
+                            <h4>Информация о взносах и платежах</h4>
+                        </article>
+                        <article class="news-item">
+                            <div class="news-art"><svg class="icon"><use href="#icon-users"/></svg></div>
+                            <time class="news-date" datetime="2025-09-03">03.09.2025</time>
+                            <h4>Важное: собрание правления 10 сентября</h4>
+                        </article>
+                    </div>
+                </section>
+
+                <a class="portal-card decisions" id="decisions" href="#decisions">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-check"/></svg></span>
+                    <h3>Решения</h3>
+                    <p>Общее собрание, правление и официальные решения.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
+                <a class="portal-card contacts" id="contacts" href="#contacts">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-phone"/></svg></span>
+                    <h3>Контакты</h3>
+                    <p>Телефоны правления, служб и экстренные номера.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
+                <a class="portal-card chat" id="chat" href="#contacts">
+                    <span class="card-icon"><svg class="icon"><use href="#icon-chat"/></svg></span>
+                    <h3>Чат</h3>
+                    <p>Общение с соседями и важная информация.</p>
+                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
+                </a>
             </div>
-            <p id="section-status" class="section-status" aria-live="polite" hidden></p>
+
+            <section class="giveaway" aria-labelledby="giveaway-heading">
+                <div class="giveaway-copy">
+                    <span class="giveaway-icon"><svg class="icon"><use href="#icon-gift"/></svg></span>
+                    <span>
+                        <h3 id="giveaway-heading">ОТДАТЬ ДАРОМ</h3>
+                        <p>Возможно, то, что не нужно вам, пригодится соседу.</p>
+                    </span>
+                </div>
+                <div class="giveaway-actions">
+                    <a class="action-button" href="#contacts">+ Отдать</a>
+                    <a class="action-button secondary" href="#contacts">⌕ Нужно</a>
+                </div>
+            </section>
         </section>
     </main>
 
     <footer class="site-footer">
-        <div class="footer-inner">
-            <div class="footer-motto">Вместе — мы сильнее!</div>
-            <div class="footer-copyright">© 2026 НСТ «Горняк» Московская область. Все права защищены.</div>
+        <div class="page-width">
+            <div class="footer-row">
+                <div class="footer-motto">Вместе — мы сильнее!</div>
+                <div class="footer-location"><svg class="icon"><use href="#icon-pin"/></svg><span><strong>НСТ «Горняк»</strong> · Московская область</span></div>
+            </div>
+            <p class="footer-copyright">© 2026 НСТ «Горняк». Все права защищены.</p>
         </div>
     </footer>
-
-    <script>
-        const sectionCards = document.querySelectorAll('.section-card');
-        const sectionStatus = document.getElementById('section-status');
-
-        sectionCards.forEach((card) => {
-            card.addEventListener('click', () => {
-                sectionCards.forEach((item) => item.setAttribute('aria-pressed', String(item === card)));
-                sectionStatus.textContent = `Выбран раздел «${card.dataset.section}»`;
-                sectionStatus.hidden = false;
-            });
-        });
-    </script>
 </body>
 </html>
