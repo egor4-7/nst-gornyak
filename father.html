@@ -1,548 +1,300 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#123b28">
-    <title>НСТ «Горняк» — официальный портал</title>
-    <style>
-        :root {
-            color-scheme: light;
-            font-family: Inter, "Segoe UI", Arial, sans-serif;
-            color: #1e293b;
-            background: #f2f9f4;
-            font-synthesis: none;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            --forest-950: #0f3d22;
-            --forest-900: #144f2b;
-            --forest-800: #176334;
-            --forest-700: #16803e;
-            --forest-100: #e1f3e6;
-            --page-width: 1200px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>НСТ «Горняк» — Официальный портал</title>
 
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; scroll-padding-top: 92px; }
-        .icon-library { position: absolute; width: 0; height: 0; overflow: hidden; }
-        body {
-            min-width: 320px;
-            min-height: 100vh;
-            margin: 0;
-            background:
-                radial-gradient(ellipse at 8% 8%, rgba(254, 240, 138, .25), transparent 27rem),
-                linear-gradient(150deg, #f7fcf8, #e8f5ec 52%, #f3f8ff);
-        }
-        button, a { font: inherit; }
-        button { color: inherit; }
-        a { color: inherit; }
-        svg { display: block; }
-        .icon { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-        .page-width { width: min(var(--page-width), 100%); margin-inline: auto; padding-inline: 24px; }
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 
-        .site-header {
-            position: sticky;
-            z-index: 10;
-            top: 0;
-            border-bottom: 1px solid #dce9df;
-            background: rgba(255, 255, 255, .96);
-            box-shadow: 0 4px 18px rgba(19, 57, 33, .08);
-            backdrop-filter: blur(14px);
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        gornyak: {
+          50: '#f2f9f4',
+          100: '#e1f3e6',
+          200: '#c5e7cd',
+          700: '#176334',
+          800: '#144f2b',
+          900: '#0f3d22',
         }
-        .header-row {
-            display: flex;
-            min-height: 76px;
-            align-items: center;
-            justify-content: space-between;
-            gap: 22px;
-        }
-        .brand {
-            display: inline-flex;
-            flex: 0 0 auto;
-            align-items: center;
-            gap: 11px;
-            text-decoration: none;
-        }
-        .brand-symbol {
-            display: grid;
-            width: 46px;
-            height: 46px;
-            place-items: center;
-            border-radius: 15px;
-            color: white;
-            background: linear-gradient(145deg, #34d399, #166534);
-            box-shadow: 0 5px 13px rgba(22, 99, 52, .24);
-        }
-        .brand-symbol .icon { width: 27px; height: 27px; }
-        .brand-name { display: block; color: var(--forest-950); font-size: 16px; font-weight: 850; }
-        .brand-caption { display: block; margin-top: 3px; color: #64748b; font-size: 10px; }
-        .main-nav { display: flex; align-items: center; gap: 4px; }
-        .main-nav a {
-            display: inline-flex;
-            min-height: 42px;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 10px;
-            border-radius: 11px;
-            color: #475569;
-            font-size: 11px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: color .18s ease, background .18s ease;
-        }
-        .main-nav a:hover, .main-nav a:focus-visible { color: var(--forest-800); background: #eaf7ed; }
-        .main-nav a:first-child { color: var(--forest-800); }
-        .search-mark {
-            display: grid;
-            width: 40px;
-            height: 40px;
-            flex: 0 0 auto;
-            place-items: center;
-            border: 1px solid #dbe7de;
-            border-radius: 13px;
-            color: var(--forest-800);
-            background: #f5fbf6;
-        }
-        .search-mark .icon { width: 19px; height: 19px; }
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        heading: ['Montserrat', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
 
-        .hero {
-            position: relative;
-            overflow: hidden;
-            color: white;
-            background:
-                radial-gradient(ellipse at 76% 5%, rgba(190, 242, 100, .52), transparent 30%),
-                radial-gradient(ellipse at 5% 100%, rgba(250, 204, 21, .30), transparent 37%),
-                linear-gradient(115deg, #103d28 0%, #176334 49%, #22a447 100%);
-            box-shadow: 0 13px 34px rgba(20, 83, 45, .24);
-        }
-        .forest-art {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: min(76%, 920px);
-            height: 100%;
-            opacity: .92;
-            pointer-events: none;
-        }
-        .hero-inner {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            min-height: 300px;
-            align-items: center;
-            justify-content: space-between;
-            gap: 34px;
-            padding-block: 48px;
-        }
-        .hero-copy { max-width: 650px; }
-        .hero h1 {
-            margin: 0 0 11px;
-            font-size: clamp(36px, 5vw, 58px);
-            font-weight: 850;
-            letter-spacing: -.045em;
-            line-height: 1.08;
-            text-shadow: 0 3px 18px rgba(0, 0, 0, .2);
-        }
-        .hero-copy p { max-width: 620px; margin: 0; color: #e5fbe9; font-size: 15px; line-height: 1.7; }
-        .hero-side { display: flex; align-items: center; gap: 12px; }
-        .weather-card {
-            display: flex;
-            min-width: 224px;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 17px;
-            border: 1px solid rgba(255, 255, 255, .72);
-            border-radius: 18px;
-            color: #1e293b;
-            background: rgba(255, 255, 255, .95);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, .16);
-        }
-        .weather-sun {
-            display: grid;
-            width: 43px;
-            height: 43px;
-            flex: 0 0 auto;
-            place-items: center;
-            border-radius: 14px;
-            color: #c2410c;
-            background: linear-gradient(145deg, #fef3c7, #fbbf24);
-        }
-        .weather-sun .icon { width: 27px; height: 27px; }
-        .weather-temperature { font-size: 20px; font-weight: 850; white-space: nowrap; }
-        .weather-place { color: #64748b; font-size: 10px; font-weight: 500; }
-        .weather-description { margin-top: 3px; color: #15803d; font-size: 11px; font-weight: 700; }
-        .hero-motto {
-            position: absolute;
-            right: 30px;
-            bottom: 16px;
-            z-index: 2;
-            color: rgba(255, 255, 255, .92);
-            font-family: Georgia, serif;
-            font-size: 16px;
-            font-style: italic;
-            text-shadow: 0 2px 8px rgba(0,0,0,.3);
-        }
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #1e293b;
+}
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+}
+.page-section { display: none; }
+.page-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .section-wrap { padding-block: 34px 0; }
-        .section-intro { margin: 0 0 17px; }
-        .section-intro h2 { margin: 0 0 5px; color: var(--forest-950); font-size: 23px; }
-        .section-intro p { margin: 0; color: #5b7180; font-size: 13px; }
-        .portal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; }
-        .portal-card {
-            position: relative;
-            display: block;
-            min-height: 188px;
-            padding: 20px;
-            overflow: hidden;
-            border: 1px solid var(--card-border, #dbe7de);
-            border-top: 3px solid var(--card-accent, #34d399);
-            border-radius: 18px;
-            color: inherit;
-            background: var(--card-bg, #fff);
-            box-shadow: 0 5px 17px rgba(22, 61, 39, .07);
-            text-decoration: none;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-        .portal-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(22, 61, 39, .14); }
-        .portal-card:focus-visible, .action-button:focus-visible, .main-nav a:focus-visible, .brand:focus-visible {
-            outline: 3px solid #eab308;
-            outline-offset: 3px;
-        }
-        .portal-card.about { --card-bg: linear-gradient(145deg, #fff, #eafaf0); --card-border: #d2f2dc; --card-accent: #34d399; --card-ink: #16803e; --card-icon-bg: linear-gradient(145deg, #34d399, #059669); }
-        .portal-card.board { --card-bg: linear-gradient(145deg, #fff, #eef2ff); --card-border: #dfe4ff; --card-accent: #818cf8; --card-ink: #4f46e5; --card-icon-bg: linear-gradient(145deg, #a5b4fc, #4f46e5); }
-        .portal-card.news { --card-bg: linear-gradient(145deg, #fff, #faf5ff); --card-border: #efddff; --card-accent: #c084fc; --card-ink: #9333ea; --card-icon-bg: linear-gradient(145deg, #d8b4fe, #9333ea); }
-        .portal-card.finance { --card-bg: linear-gradient(145deg, #fff, #fffbeb); --card-border: #f8e8bc; --card-accent: #fbbf24; --card-ink: #d97706; --card-icon-bg: linear-gradient(145deg, #fcd34d, #d97706); }
-        .portal-card.documents { --card-bg: linear-gradient(145deg, #fff, #f0f9ff); --card-border: #d5efff; --card-accent: #38bdf8; --card-ink: #0284c7; --card-icon-bg: linear-gradient(145deg, #7dd3fc, #0284c7); }
-        .portal-card.decisions { --card-bg: linear-gradient(145deg, #fff, #f0fdf4); --card-border: #d7f4df; --card-accent: #4ade80; --card-ink: #15803d; --card-icon-bg: linear-gradient(145deg, #86efac, #15803d); }
-        .portal-card.contacts { --card-bg: linear-gradient(145deg, #fff, #f8fafc); --card-border: #e2e8f0; --card-accent: #94a3b8; --card-ink: #475569; --card-icon-bg: linear-gradient(145deg, #cbd5e1, #475569); }
-        .portal-card.chat { --card-bg: linear-gradient(145deg, #fff, #f5edff); --card-border: #e8d5ff; --card-accent: #a855f7; --card-ink: #9333ea; --card-icon-bg: linear-gradient(145deg, #d8b4fe, #9333ea); }
-        .card-icon {
-            display: grid;
-            width: 44px;
-            height: 44px;
-            margin-bottom: 13px;
-            place-items: center;
-            border-radius: 14px;
-            color: #fff;
-            background: var(--card-icon-bg, linear-gradient(145deg, #34d399, #15803d));
-            box-shadow: 0 5px 12px rgba(22, 99, 52, .2);
-        }
-        .card-icon .icon { width: 24px; height: 24px; }
-        .portal-card h3 { margin: 0 0 6px; color: #1e293b; font-size: 15px; font-weight: 800; }
-        .portal-card p { margin: 0; color: #5b6778; font-size: 12px; line-height: 1.55; }
-        .card-arrow { position: absolute; right: 17px; bottom: 16px; width: 17px; height: 17px; color: #94a3b8; transition: transform .2s ease, color .2s ease; }
-        .portal-card:hover .card-arrow { transform: translateX(4px); color: var(--card-ink); }
-        .card-grid-span { grid-column: span 3; }
+/* Точная копия баннера с фото */
+.father-hero {
+  background: linear-gradient(90deg, rgba(14,62,32,0.92) 0%, rgba(20,79,43,0.75) 50%, rgba(0,0,0,0.2) 100%),
+              url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+}
 
-        .news-panel {
-            min-width: 0;
-            padding: 20px;
-            border: 1px solid #e1e8e3;
-            border-radius: 19px;
-            background: rgba(255,255,255,.94);
-            box-shadow: 0 6px 20px rgba(22,61,39,.07);
-        }
-        .news-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-        .news-heading h3 { display: flex; align-items: center; gap: 9px; margin: 0; color: #1e293b; font-size: 16px; }
-        .news-heading h3 .icon { width: 19px; height: 19px; color: #16803e; }
-        .news-link { color: #176334; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
-        .news-link:hover { text-decoration: underline; }
-        .news-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
-        .news-item { min-width: 0; padding: 9px; border: 1px solid #e6ece8; border-radius: 13px; background: #f8faf9; }
-        .news-art {
-            display: grid;
-            height: 74px;
-            margin-bottom: 9px;
-            place-items: center;
-            overflow: hidden;
-            border-radius: 9px;
-            color: white;
-            background: linear-gradient(135deg, #86efac, #15803d);
-        }
-        .news-item:nth-child(2) .news-art { background: linear-gradient(135deg, #fde68a, #f97316); }
-        .news-item:nth-child(3) .news-art { background: linear-gradient(135deg, #c4b5fd, #7c3aed); }
-        .news-art .icon { width: 37px; height: 37px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.18)); }
-        .news-date { color: #82909d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; }
-        .news-item h4 { margin: 4px 0 0; color: #334155; font-size: 12px; line-height: 1.45; }
-
-        .giveaway {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-            margin-top: 16px;
-            padding: 22px 24px;
-            border: 1px solid #b9e5c5;
-            border-radius: 20px;
-            background:
-                radial-gradient(ellipse at 90% 10%, rgba(134,239,172,.35), transparent 40%),
-                linear-gradient(105deg, #dcfce7, #f0fdf4 55%, #d1fae5);
-            box-shadow: 0 6px 20px rgba(22, 99, 52, .07);
-        }
-        .giveaway-copy { display: flex; align-items: center; gap: 15px; }
-        .giveaway-icon {
-            display: grid;
-            width: 52px;
-            height: 52px;
-            flex: 0 0 auto;
-            place-items: center;
-            border-radius: 17px;
-            color: white;
-            background: linear-gradient(145deg, #34d399, #15803d);
-            box-shadow: 0 7px 16px rgba(22,99,52,.2);
-        }
-        .giveaway-icon .icon { width: 27px; height: 27px; }
-        .giveaway h3 { margin: 0 0 5px; color: var(--forest-950); font-size: 20px; }
-        .giveaway p { margin: 0; color: #536779; font-size: 12px; }
-        .giveaway-actions { display: flex; flex: 0 0 auto; gap: 10px; }
-        .action-button {
-            min-height: 40px;
-            padding: 9px 15px;
-            border: 1px solid transparent;
-            border-radius: 12px;
-            color: white;
-            background: linear-gradient(145deg, #16803e, #14532d);
-            box-shadow: 0 4px 11px rgba(20,83,45,.17);
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 800;
-            transition: transform .18s ease, filter .18s ease;
-        }
-        .action-button:hover { transform: translateY(-1px); filter: brightness(1.08); }
-        .action-button.secondary { border-color: #cbd5e1; color: #334155; background: rgba(255,255,255,.88); box-shadow: 0 3px 8px rgba(15,23,42,.06); }
-        .site-footer {
-            margin-top: 30px;
-            padding-block: 24px 16px;
-            border-top: 1px solid #c8e5d0;
-            color: #14532d;
-            background: linear-gradient(0deg, #c5e7cd, #e1f3e6 68%, rgba(255,255,255,.18));
-        }
-        .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-        .footer-motto { color: #0f3d22; font-family: Georgia, serif; font-size: 17px; font-style: italic; font-weight: 700; }
-        .footer-location { display: flex; align-items: center; gap: 7px; color: #536779; font-size: 12px; }
-        .footer-location .icon { width: 16px; height: 16px; color: #16803e; }
-        .footer-copyright { margin: 18px 0 0; color: #788b81; font-size: 10px; text-align: center; }
-
-        @media (max-width: 1000px) {
-            .header-row { flex-wrap: wrap; gap: 10px 16px; padding-block: 11px; }
-            .main-nav { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; }
-            .main-nav a { flex: 0 0 auto; }
-            .search-mark { margin-left: auto; }
-            .portal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .card-grid-span { grid-column: span 2; }
-        }
-        @media (max-width: 640px) {
-            .page-width { padding-inline: 16px; }
-            .brand-caption { max-width: 210px; }
-            .hero-inner { min-height: 0; align-items: flex-start; flex-direction: column; gap: 23px; padding-block: 42px 54px; }
-            .forest-art { width: 100%; opacity: .58; }
-            .hero-side { flex-wrap: wrap; }
-            .hero-motto { right: 16px; bottom: 13px; font-size: 13px; }
-            .section-wrap { padding-top: 28px; }
-            .portal-grid { gap: 11px; }
-            .portal-card { min-height: 172px; padding: 16px; border-radius: 16px; }
-            .card-grid-span { grid-column: span 2; }
-            .news-panel { padding: 15px; }
-            .news-grid { gap: 8px; }
-            .news-item { padding: 7px; }
-            .news-art { height: 58px; }
-            .news-item h4 { font-size: 11px; }
-            .giveaway { align-items: flex-start; flex-direction: column; gap: 16px; padding: 18px; }
-            .giveaway-actions { width: 100%; }
-            .action-button { flex: 1; }
-            .footer-row { align-items: flex-start; flex-direction: column; }
-        }
-        @media (max-width: 380px) {
-            .brand-caption { max-width: 155px; }
-            .main-nav { gap: 0; }
-            .main-nav a { padding-inline: 8px; font-size: 10px; }
-            .portal-card { min-height: 182px; padding: 13px; }
-            .card-icon { width: 40px; height: 40px; }
-            .card-grid-span { grid-column: span 2; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
-        }
-    </style>
+/* Лесная плашка внизу */
+.forest-footer {
+  background: linear-gradient(to top, #c5e7cd 0%, #e1f3e6 60%, rgba(255,255,255,0) 100%);
+}
+</style>
 </head>
-<body>
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon-library" aria-hidden="true">
-        <symbol id="icon-tree" viewBox="0 0 24 24"><path d="m12 3 6 8h-3l4 6h-6v4h-2v-4H5l4-6H6l6-8Z"/></symbol>
-        <symbol id="icon-house" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1V10Z"/></symbol>
-        <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-        <symbol id="icon-bullhorn" viewBox="0 0 24 24"><path d="m3 11 18-5-5 17-4-7-7-5Z"/><path d="m12 16 4-5"/></symbol>
-        <symbol id="icon-coins" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v5c0 1.66 3.58 3 8 3 1.46 0 2.83-.17 4-.46M4 10v5c0 1.66 3.58 3 8 3"/><path d="M20 10c0 1.66-3.58 3-8 3"/><path d="M16 16c0-1.66 1.79-3 4-3s4 1.34 4 3-1.79 3-4 3-4-1.34-4-3Zm4 3v2m0-10v2"/></symbol>
-        <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Z"/></symbol>
-        <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8m-8 4h8"/></symbol>
-        <symbol id="icon-news" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8m-8 4h8m-8 4h4"/></symbol>
-        <symbol id="icon-check" viewBox="0 0 24 24"><path d="M9 12 11 14 15 10"/><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/></symbol>
-        <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72l.45 2.77a2 2 0 0 1-.57 1.72L7.3 9.9a16 16 0 0 0 6.8 6.8l1.69-1.69a2 2 0 0 1 1.72-.57l2.77.45a2 2 0 0 1 1.72 2Z"/></symbol>
-        <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></symbol>
-        <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></symbol>
-        <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
-        <symbol id="icon-gift" viewBox="0 0 24 24"><path d="M20 12v10H4V12m18-5H2v5h20V7Zm-10 15V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 2.5-2c0 1.5 2 2 2 2Zm0 0h4.5a2.5 2.5 0 1 0-2.5-2c0 1.5-2 2-2 2Z"/></symbol>
-        <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
-        <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></symbol>
-    </svg>
+<body class="min-h-screen flex flex-col justify-between antialiased">
 
-    <header class="site-header">
-        <div class="page-width header-row">
-            <a class="brand" href="#home" aria-label="НСТ «Горняк» — главная">
-                <span class="brand-symbol"><svg class="icon"><use href="#icon-tree"/></svg></span>
-                <span>
-                    <span class="brand-name">НСТ «Горняк»</span>
-                    <span class="brand-caption">Садовое некоммерческое товарищество</span>
-                </span>
-            </a>
-            <nav class="main-nav" aria-label="Разделы сайта">
-                <a href="#home">Главная</a>
-                <a href="#about">О СНТ</a>
-                <a href="#board">Правление</a>
-                <a href="#news">Новости</a>
-                <a href="#finance">Финансы</a>
-                <a href="#documents">Документы</a>
-                <a href="#contacts">Контакты</a>
-            </nav>
-            <a class="search-mark" href="#news" aria-label="Перейти к новостям"><svg class="icon"><use href="#icon-search"/></svg></a>
+<!-- 1. Верхняя шапка с иконками -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+  <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+    <!-- Логотип -->
+    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2.5">
+      <div class="text-gornyak-700 text-2xl">
+        <i class="fa-solid fa-tree"></i><i class="fa-solid fa-house -ml-1 text-gornyak-800"></i>
+      </div>
+      <div>
+        <span class="block text-base font-extrabold text-gornyak-900 leading-none">НСТ «Горняк»</span>
+        <span class="text-[9px] text-slate-500 font-medium">Садовое некоммерческое товарищество</span>
+      </div>
+    </a>
+
+    <!-- Меню иконки + текст -->
+    <nav class="hidden lg:flex items-center gap-5 text-[11px] font-semibold text-slate-700">
+      <button onclick="navigateTo('home')" class="flex flex-col items-center gap-0.5 text-gornyak-800 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-house text-sm"></i> Главная
+      </button>
+      <button onclick="navigateTo('infrastructure')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-tree text-sm"></i> О СНТ
+      </button>
+      <button onclick="navigateTo('infrastructure')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-users text-sm"></i> Правление
+      </button>
+      <button onclick="navigateTo('announcements')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-bullhorn text-sm"></i> Новости
+      </button>
+      <button onclick="navigateTo('documents')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-coins text-sm"></i> Финансы
+      </button>
+      <button onclick="navigateTo('documents')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-folder text-sm"></i> Документы
+      </button>
+      <button onclick="navigateTo('announcements')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-gift text-sm"></i> Отдать даром
+      </button>
+      <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-phone text-sm"></i> Контакты
+      </button>
+      <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition">
+        <i class="fa-solid fa-comments text-sm"></i> Чат
+      </button>
+    </nav>
+
+    <!-- Поиск -->
+    <button class="text-slate-600 hover:text-gornyak-700 p-2 text-lg"><i class="fa-solid fa-magnifying-glass"></i></button>
+  </div>
+</header>
+
+<main class="flex-grow">
+  <section id="page-home" class="page-section active">
+    
+    <!-- 2. Главный баннер -->
+    <div class="father-hero text-white py-12 px-4 relative overflow-hidden">
+      <div class="container mx-auto relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-2 drop-shadow">НСТ «Горняк»</h1>
+          <p class="text-sm sm:text-base text-emerald-100 font-light max-w-xl drop-shadow">
+            Наше СНТ — это наш дом, наши соседи, наша ответственность!
+          </p>
         </div>
-    </header>
 
-    <main id="home">
-        <section class="hero">
-            <svg class="forest-art" viewBox="0 0 900 360" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-                <path fill="#0b3d2b" opacity=".35" d="M0 256 58 218l35 27 46-73 48 77 42-43 51 75 65-102 59 91 57-55 54 69 64-108 52 75 55-52 66 72 68-85 51 72v102H0Z"/>
-                <path fill="#06452f" opacity=".62" d="m0 286 43-50 37 50 48-83 55 83 48-61 53 68 52-97 60 94 44-53 52 68 44-91 59 83 51-61 54 72 48-95 53 75 51-54 67 82v144H0Z"/>
-                <path fill="#083b2a" opacity=".85" d="m0 318 38-66 37 66 46-103 51 103 42-72 47 77 54-119 59 119 43-81 48 81 46-110 53 110 46-75 46 80 48-112 55 112 43-67 46 67h72v42H0Z"/>
-                <path fill="#fef3c7" opacity=".38" d="M0 325c115-20 193-8 278 8 99 19 180 17 280-8 111-28 213-28 342-4v39H0Z"/>
-            </svg>
-            <div class="page-width hero-inner">
-                <div class="hero-copy">
-                    <span class="hero-kicker">Наш общий дом</span>
-                    <h1>НСТ «Горняк»</h1>
-                    <p>Наше СНТ — это наш дом, наши соседи, наша ответственность! Вместе делаем наше товарищество лучше и комфортнее.</p>
-                </div>
-                <div class="hero-side">
-                    <a href="index.html" class="back-link">
-                        <svg class="icon" aria-hidden="true"><use href="#icon-house"/></svg>
-                        Мой интерфейс
-                    </a>
-                    <div class="weather-card" aria-label="Погода: ясно, плюс 18 градусов, ветер 3 метра в секунду">
-                        <span class="weather-sun"><svg class="icon"><use href="#icon-sun"/></svg></span>
-                        <span>
-                            <span class="weather-temperature">+18°C <span class="weather-place">Московская обл.</span></span>
-                            <span class="weather-description">Ясно · Ветер 3 м/с</span>
-                        </span>
-                    </div>
-                </div>
+        <div class="flex items-center gap-3">
+          <!-- РАБОЧАЯ КНОПКА ПЕРЕКЛЮЧЕНИЯ НА ВАШ ИНТЕРФЕЙС -->
+          <a href="gornyak.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition" title="Переключиться на ваш интерфейс">
+            <i class="fa-solid fa-shuffle text-yellow-300"></i> Мой интерфейс
+          </a>
+
+          <!-- Погода -->
+          <div class="bg-white/95 backdrop-blur text-slate-800 px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+            <i class="fa-solid fa-sun text-yellow-500 text-2xl"></i>
+            <div>
+              <div class="flex items-center gap-2 font-bold text-base leading-none text-slate-900">
+                +18°C
+                <span class="text-[9px] font-normal text-slate-500">Московская область</span>
+              </div>
+              <div class="text-[10px] text-slate-500 mt-1 flex items-center gap-1.5">
+                <span>Ясно</span>
+                <span>•</span>
+                <span>3 м/с</span>
+              </div>
             </div>
-            <p class="hero-motto">Вместе делаем наше СНТ лучше!</p>
-        </section>
-
-        <section class="page-width section-wrap" aria-labelledby="sections-heading">
-            <div class="section-intro">
-                <h2 id="sections-heading">Информация для жителей</h2>
-                <p>Важные разделы и последние события НСТ «Горняк».</p>
-            </div>
-            <div class="portal-grid">
-                <a class="portal-card about" id="about" href="#about">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-tree"/></svg></span>
-                    <h3>О СНТ</h3>
-                    <p>История, территория, информация о товариществе.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-                <a class="portal-card board" id="board" href="#board">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-users"/></svg></span>
-                    <h3>Правление</h3>
-                    <p>Состав, контакты и работа правления.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-                <a class="portal-card news" id="announcements" href="#news">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-bullhorn"/></svg></span>
-                    <h3>Новости</h3>
-                    <p>Актуальные события и объявления товарищества.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-                <a class="portal-card finance" id="finance" href="#finance">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-coins"/></svg></span>
-                    <h3>Финансы</h3>
-                    <p>Отчёты, сметы и информация о платежах.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-                <a class="portal-card documents" id="documents" href="#documents">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-folder"/></svg></span>
-                    <h3>Документы</h3>
-                    <p>Устав, сметы, договоры и другие документы.</p>
-                    <span class="document-chip"><svg class="icon"><use href="#icon-file"/></svg> Все разделы →</span>
-                </a>
-
-                <section class="news-panel card-grid-span" id="news" aria-labelledby="news-heading">
-                    <div class="news-heading">
-                        <h3 id="news-heading"><svg class="icon"><use href="#icon-news"/></svg> Колонка новостей</h3>
-                        <a class="news-link" href="#announcements">Все новости →</a>
-                    </div>
-                    <div class="news-grid">
-                        <article class="news-item">
-                            <div class="news-art"><svg class="icon"><use href="#icon-tree"/></svg></div>
-                            <time class="news-date" datetime="2025-09-12">12.09.2025</time>
-                            <h4>Проведены работы по благоустройству территории</h4>
-                        </article>
-                        <article class="news-item">
-                            <div class="news-art"><svg class="icon"><use href="#icon-coins"/></svg></div>
-                            <time class="news-date" datetime="2025-09-08">08.09.2025</time>
-                            <h4>Информация о взносах и платежах</h4>
-                        </article>
-                        <article class="news-item">
-                            <div class="news-art"><svg class="icon"><use href="#icon-users"/></svg></div>
-                            <time class="news-date" datetime="2025-09-03">03.09.2025</time>
-                            <h4>Важное: собрание правления 10 сентября</h4>
-                        </article>
-                    </div>
-                </section>
-
-                <a class="portal-card decisions" id="decisions" href="#decisions">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-check"/></svg></span>
-                    <h3>Решения</h3>
-                    <p>Общее собрание, правление и официальные решения.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-                <a class="portal-card contacts" id="contacts" href="#contacts">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-phone"/></svg></span>
-                    <h3>Контакты</h3>
-                    <p>Телефоны правления, служб и экстренные номера.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-                <a class="portal-card chat" id="chat" href="#contacts">
-                    <span class="card-icon"><svg class="icon"><use href="#icon-chat"/></svg></span>
-                    <h3>Чат</h3>
-                    <p>Общение с соседями и важная информация.</p>
-                    <svg class="icon card-arrow"><use href="#icon-arrow"/></svg>
-                </a>
-            </div>
-
-            <section class="giveaway" aria-labelledby="giveaway-heading">
-                <div class="giveaway-copy">
-                    <span class="giveaway-icon"><svg class="icon"><use href="#icon-gift"/></svg></span>
-                    <span>
-                        <h3 id="giveaway-heading">ОТДАТЬ ДАРОМ</h3>
-                        <p>Возможно, то, что не нужно вам, пригодится соседу.</p>
-                    </span>
-                </div>
-                <div class="giveaway-actions">
-                    <a class="action-button" href="#contacts">+ Отдать</a>
-                    <a class="action-button secondary" href="#contacts">⌕ Нужно</a>
-                </div>
-            </section>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="page-width">
-            <div class="footer-row">
-                <div class="footer-motto">Вместе — мы сильнее!</div>
-                <div class="footer-location"><svg class="icon"><use href="#icon-pin"/></svg><span><strong>НСТ «Горняк»</strong> · Московская область</span></div>
-            </div>
-            <p class="footer-copyright">© 2026 НСТ «Горняк». Все права защищены.</p>
+          </div>
         </div>
-    </footer>
+      </div>
+
+      <div class="hidden lg:block absolute right-8 bottom-3 text-white font-serif italic text-lg opacity-90 drop-shadow">
+        Вместе делаем наше СНТ лучше!
+      </div>
+    </div>
+
+    <!-- 3. Сетка карточек -->
+    <div class="container mx-auto px-4 py-8 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- О СНТ -->
+        <div onclick="navigateTo('infrastructure')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-tree"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">О СНТ</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">История, территория, информация о товариществе</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-gornyak-700 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+        <!-- Правление -->
+        <div onclick="navigateTo('infrastructure')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-indigo-700 text-2xl mb-3"><i class="fa-solid fa-users"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Правление</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Состав, контакты, работа правления</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-indigo-700 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+        <!-- Новости -->
+        <div onclick="navigateTo('announcements')" class="bg-[#faf5ff] p-6 rounded-2xl border border-purple-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-newspaper"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Новости</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Актуальные события и объявления</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-purple-700 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+        <!-- Финансы -->
+        <div onclick="navigateTo('documents')" class="bg-[#fffbeb] p-6 rounded-2xl border border-amber-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-amber-600 text-2xl mb-3"><i class="fa-solid fa-coins"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Финансы</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Отчеты, сметы, платежи</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-amber-600 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+        <!-- Документы -->
+        <div onclick="navigateTo('documents')" class="bg-[#f0f9ff] p-6 rounded-2xl border border-sky-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-folder"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Документы</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Устав, сметы, договоры, другие документы</p>
+          <div class="mt-3 inline-flex items-center gap-1 px-2.5 py-1 bg-sky-100 text-sky-800 rounded-lg text-[11px] font-semibold">
+            <i class="fa-solid fa-file-lines"></i> Все разделы →
+          </div>
+        </div>
+
+        <!-- Колонка новостей -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-3">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <i class="fa-solid fa-newspaper text-gornyak-700"></i> Колонка новостей
+            </h3>
+            <button onclick="navigateTo('announcements')" class="text-xs font-semibold text-gornyak-700 hover:underline">Все новости →</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="rounded-xl overflow-hidden border border-slate-100 bg-slate-50 p-2.5">
+              <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?auto=format&fit=crop&w=400&q=80" class="w-full h-20 object-cover rounded-lg mb-2">
+              <span class="text-[9px] text-slate-400 font-mono">12.09.2025</span>
+              <h4 class="font-bold text-slate-800 text-xs mt-0.5 leading-snug">Проведены работы по благоустройству территории</h4>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-100 bg-slate-50 p-2.5">
+              <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80" class="w-full h-20 object-cover rounded-lg mb-2">
+              <span class="text-[9px] text-slate-400 font-mono">08.09.2025</span>
+              <h4 class="font-bold text-slate-800 text-xs mt-0.5 leading-snug">Информация о взносах и платежах</h4>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-slate-100 bg-slate-50 p-2.5">
+              <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=400&q=80" class="w-full h-20 object-cover rounded-lg mb-2">
+              <span class="text-[9px] text-slate-400 font-mono">03.09.2025</span>
+              <h4 class="font-bold text-slate-800 text-xs mt-0.5 leading-snug">Важное: собрание правления 10 сентября</h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- Решения -->
+        <div onclick="navigateTo('documents')" class="bg-[#f0fdf4] p-6 rounded-2xl border border-emerald-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-emerald-700 text-2xl mb-3"><i class="fa-solid fa-clipboard-check"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Решения</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Общее собрание, правление, официальные решения</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-emerald-700 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+        <!-- Контакты -->
+        <div onclick="navigateTo('contacts')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-slate-700 text-2xl mb-3"><i class="fa-solid fa-phone"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Контакты</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Телефоны правления, службы, экстренные номера</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-slate-700 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+        <!-- Чат -->
+        <div onclick="navigateTo('contacts')" class="bg-[#f3e8ff] p-6 rounded-2xl border border-purple-200 hover:shadow-md transition cursor-pointer group relative lg:col-span-2">
+          <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-comments"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Чат</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Общение с соседями, важная информация</p>
+          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-purple-700 transition-transform group-hover:translate-x-1"></i>
+        </div>
+
+      </div>
+
+      <!-- 4. Блок ОТДАТЬ ДАРОМ -->
+      <div class="bg-gradient-to-r from-emerald-50 via-gornyak-50 to-emerald-100 border border-gornyak-200 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-gornyak-700 text-white flex items-center justify-center text-xl shadow">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-extrabold text-gornyak-900">ОТДАТЬ ДАРОМ</h3>
+            <p class="text-xs text-slate-600">Возможно, то, что не нужно вам, пригодится соседу.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="navigateTo('announcements')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition">+ Отдать</button>
+          <button onclick="navigateTo('announcements')" class="bg-white hover:bg-slate-50 text-slate-800 font-bold px-4 py-2 rounded-xl text-xs border border-slate-300 shadow-sm transition">🔍 Нужно</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 5. Подвал -->
+<footer class="forest-footer pt-10 pb-4 text-xs text-slate-700 border-t border-gornyak-200 mt-10">
+  <div class="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="font-serif italic font-bold text-gornyak-900 text-base">
+      Вместе — мы сильнее!
+    </div>
+    <div class="flex items-center gap-2 text-slate-600">
+      <i class="fa-solid fa-location-dot text-gornyak-700"></i>
+      <span><strong>НСТ «Горняк»</strong> Московская область</span>
+    </div>
+  </div>
+  <div class="text-center text-[10px] text-slate-400 mt-6">
+    © 2026 НСТ «Горняк». Все права защищены.
+  </div>
+</footer>
+
+<script>
+function navigateTo(pageId) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
 </body>
 </html>
