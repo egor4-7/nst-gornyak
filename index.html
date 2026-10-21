@@ -8,15 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+        
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #dceada;
             color: #0f2417;
         }
 
-        /* Стиль Apple Liquid Glass (жидкое стекло) */
+        /* Apple Liquid Glass */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.82);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.7);
@@ -31,15 +32,15 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
 
-        /* Баннер с лесом */
+        /* Баннер с глубоким лесом */
         .forest-banner {
-            background: linear-gradient(135deg, rgba(16, 51, 30, 0.92), rgba(28, 92, 56, 0.85)),
+            background: linear-gradient(135deg, rgba(16, 51, 30, 0.92), rgba(28, 92, 56, 0.85)), 
                         url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
         }
 
-        /* Анимация и блик для карточек */
+        /* Карточки и блик */
         .portal-card {
             position: relative;
             overflow: hidden;
@@ -77,9 +78,10 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .weather-3d-sun {
-            background: radial-gradient(circle at 30% 30%, #fff7ad, #ffa800, #ff5500);
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.8);
+        /* Объемное солнце наружу (без надписи 3D) */
+        .sun-icon-3d {
+            background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900, #e65c00);
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
@@ -87,7 +89,7 @@
 
     <div class="w-full max-w-6xl mx-auto flex flex-col gap-6">
 
-        <!-- Баннер с лесом и рабочим переключателем -->
+        <!-- Баннер -->
         <div class="forest-banner w-full rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative flex flex-col md:flex-row justify-between items-center gap-6 border border-white/20">
             <div class="flex flex-col gap-1 text-center md:text-left">
                 <h1 class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
@@ -95,15 +97,17 @@
             </div>
             
             <div class="flex items-center gap-3 bg-black/40 backdrop-blur-2xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
+                <!-- Погода -->
                 <div onclick="openWeatherModal()" class="flex items-center gap-3 pr-3 border-r border-white/20 cursor-pointer hover:opacity-90 transition">
-                    <div class="w-9 h-9 rounded-full weather-3d-sun animate-pulse flex items-center justify-center text-white text-xs font-black">3D</div>
+                    <div class="w-10 h-10 rounded-full sun-icon-3d flex items-center justify-center text-white text-lg">☀️</div>
                     <div class="flex flex-col text-left leading-tight">
                         <span class="text-white font-extrabold text-lg">+10°C</span>
-                        <span class="text-[11px] text-green-200 font-bold">Солнечно (24/7)</span>
+                        <span class="text-[11px] text-green-200 font-bold">Солнечно</span>
                     </div>
                 </div>
 
-                <a href="father.html" title="Перейти на портал ЖК Fortuna"
+                <!-- Прямая рабочая ссылка на папин сайт -->
+                <a href="father.html" title="Перейти на портал ЖК Fortuna" 
                    class="w-11 h-11 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition active:scale-95 text-white shadow border border-white/20">
                     <i class="fa-solid fa-right-left text-lg"></i>
                 </a>
@@ -114,129 +118,136 @@
             </div>
         </div>
 
-        <!-- Умный поиск с подсказками и проваливанием -->
+        <!-- Поиск -->
         <div class="relative w-full">
             <div class="relative flex items-center">
-                <i class="fa-solid fa-magnifying-glass absolute left-5 text-green-700 text-xl"></i>
+                <i class="fa-solid fa-magnifying-glass absolute left-5 text-green-800 text-xl"></i>
                 <input type="text" id="searchInput" placeholder="Умный поиск по сайту, транспорту, документам..." 
-                    class="w-full glass-panel border border-green-300 rounded-2xl py-4 pl-14 pr-4 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#236b43] transition text-base font-semibold">
+                    class="w-full glass-panel border border-green-300/80 rounded-2xl py-4 pl-14 pr-4 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#1c5c38] transition text-base font-bold">
             </div>
 
-            <!-- Выпадающие подсказки -->
             <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
-                <div class="p-3 text-xs font-bold text-gray-500 uppercase bg-green-100/60 border-b border-green-200">Результаты поиска (нажмите для перехода)</div>
-                <div class="flex flex-col py-1" id="searchResultsList">
+                <div class="p-3 text-xs font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
+                <div class="flex flex-col py-1">
                     <button onclick="openTransportModal()" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-bus text-[#1c5c38]"></i> Транспорт и лайв-активность рейсов</button>
-                    <button onclick="openSection('Тарифы', 'Электроэнергия: 4.85 руб/кВт. Членские взносы: 1200 руб/сотка.')" class="px-5 py-3 text-left text-sm font-medium text-gray-800 hover:bg-green-100/70 flex items-center gap-3 transition"><i class="fa-solid fa-bolt text-amber-500"></i> Тарифы на свет и взносы</button>
+                    <button onclick="openSection('Тарифы', 'Электроэнергия: 4.85 руб/кВт. Членские взносы: 1200 руб/сотка.')" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-bolt text-amber-500"></i> Тарифы на свет и взносы</button>
                     <button onclick="openDocsModal()" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-folder-open text-[#1c5c38]"></i> Документы и реквизиты</button>
-                    <button onclick="openSection('История НСТ', 'НСТ «Горняк» основано в 1985 году. На территории 320 участков.')" class="px-5 py-3 text-left text-sm font-medium text-gray-800 hover:bg-green-100/70 flex items-center gap-3 transition"><i class="fa-solid fa-book-open text-emerald-700"></i> Подробная история НСТ</button>
+                    <button onclick="openSection('История НСТ', 'НСТ «Горняк» основано в 1985 году. На территории 320 участков.')" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-book-open text-emerald-800"></i> Подробная история НСТ</button>
                 </div>
             </div>
         </div>
 
-        <!-- 8 Растянутых на всю ширину иконок с анимацией -->
+        <!-- 8 Растянутых Карточек -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             
-            <!-- 1. Транспорт (с выпадающим списком 3 маршрутов и лайв-активностью) -->
-            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#236b43] flex items-center justify-center text-2xl shrink-0 shadow-inner">
+            <!-- 1. Транспорт -->
+            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bus"></i>
                 </div>
-                <div class="flex flex-col w-full">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-gray-900 text-lg">Транспорт</h3>
-                        <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold animate-pulse">Live рейсы</span>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <div class="flex justify-between items-center gap-1">
+                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Транспорт</h3>
+                        <span class="text-[9px] bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded-full font-black animate-pulse shrink-0">Live</span>
                     </div>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">3 маршрута • Нажмите для расписания</p>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">3 маршрута • Расписание</p>
                 </div>
             </div>
 
             <!-- 2. Тарифы -->
-            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0 shadow-inner">
+            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
-                <div class="flex flex-col">
-                    <h3 class="font-extrabold text-gray-900 text-xl">Тарифы</h3>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">Свет, вода, услуги</p>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Тарифы</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Свет, вода, услуги</p>
                 </div>
             </div>
 
-            <!-- 3. Новости (с кнопками + и скрепка) -->
-            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0 shadow-inner">
-                    <i class="fa-solid fa-newspaper"></i>
-                </div>
-                <div class="flex flex-col w-full">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-extrabold text-gray-900 text-xl">Новости</h3>
-                        <div class="flex gap-1.5" onclick="event.stopPropagation()">
-                            <button onclick="openCreateNewsModal()" title="Выложить новость" class="w-8 h-8 bg-blue-50 hover:bg-blue-200 rounded-xl text-blue-700 flex items-center justify-center text-sm font-black shadow-sm transition active:scale-90">+</button>
-                            <button onclick="openCreateNewsModal()" title="Прикрепить файл" class="w-8 h-8 bg-blue-50 hover:bg-blue-200 rounded-xl text-blue-700 flex items-center justify-center text-xs font-black shadow-sm transition active:scale-90"><i class="fa-solid fa-paperclip"></i></button>
-                        </div>
+            <!-- 3. Новости -->
+            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+                        <i class="fa-solid fa-newspaper"></i>
                     </div>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5">Объявления правления</p>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Новости</h3>
+                        <p class="text-xs text-gray-600 font-bold truncate">Объявления правления</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 mt-3 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
+                    <button onclick="openCreateNewsModal()" class="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-xs font-extrabold shadow-sm flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Новость
+                    </button>
+                    <button onclick="openCreateNewsModal()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-xs font-extrabold shadow-sm">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- 4. Документы (с кнопками + и скрепка) -->
-            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#236b43] flex items-center justify-center text-2xl shrink-0 shadow-inner">
-                    <i class="fa-solid fa-folder-open"></i>
-                </div>
-                <div class="flex flex-col w-full">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-extrabold text-gray-900 text-xl">Документы</h3>
-                        <div class="flex gap-1.5" onclick="event.stopPropagation()">
-                            <button onclick="openCreateDocModal()" title="Добавить документ" class="w-8 h-8 bg-emerald-50 hover:bg-emerald-200 rounded-xl text-emerald-800 flex items-center justify-center text-sm font-black shadow-sm transition active:scale-90">+</button>
-                            <button onclick="openCreateDocModal()" title="Прикрепить файл" class="w-8 h-8 bg-emerald-50 hover:bg-emerald-200 rounded-xl text-emerald-800 flex items-center justify-center text-xs font-black shadow-sm transition active:scale-90"><i class="fa-solid fa-paperclip"></i></button>
-                        </div>
+            <!-- 4. Документы -->
+            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+                        <i class="fa-solid fa-folder-open"></i>
                     </div>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">Устав, акты, бланки</p>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Документы</h3>
+                        <p class="text-xs text-gray-600 font-bold truncate">Устав, бланки, акты</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 mt-3 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
+                    <button onclick="openCreateDocModal()" class="flex-1 py-1.5 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-xs font-extrabold shadow-sm flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Файл
+                    </button>
+                    <button onclick="openCreateDocModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-xs font-extrabold shadow-sm">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
                 </div>
             </div>
 
             <!-- 5. Контакты -->
-            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shrink-0 shadow-inner">
+            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-address-book"></i>
                 </div>
-                <div class="flex flex-col">
-                    <h3 class="font-bold text-gray-900 text-lg">Контакты</h3>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">Правление и службы</p>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Контакты</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Правление и службы</p>
                 </div>
             </div>
 
             <!-- 6. Профиль -->
-            <div onclick="openSection('Профиль', 'Участок №42\nЛицевой счет: 883920\nСтатус: Задолженностей нет.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-inner">
+            <div onclick="openSection('Профиль', 'Участок №42\nЛицевой счет: 883920\nСтатус: Задолженностей нет.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-user-gear"></i>
                 </div>
-                <div class="flex flex-col">
-                    <h3 class="font-bold text-gray-900 text-lg">Профиль</h3>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">Данные участка</p>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Профиль</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Данные участка</p>
                 </div>
             </div>
 
             <!-- 7. Взносы -->
-            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl shrink-0 shadow-inner">
+            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-credit-card"></i>
                 </div>
-                <div class="flex flex-col">
-                    <h3 class="font-bold text-gray-900 text-lg">Взносы</h3>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">Оплата и история</p>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Взносы</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Оплата и история</p>
                 </div>
             </div>
 
-            <!-- 8. О НСТ (с подробной историей) -->
-            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-5 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#236b43] flex items-center justify-center text-2xl shrink-0 shadow-inner">
+            <!-- 8. О НСТ -->
+            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-circle-info"></i>
                 </div>
-                <div class="flex flex-col">
-                    <h3 class="font-bold text-gray-900 text-lg">О НСТ</h3>
-                    <p class="text-xs text-gray-600 font-medium mt-0.5">Подробная история и схема</p>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">О НСТ</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">История и схема</p>
                 </div>
             </div>
 
@@ -244,6 +255,7 @@
 
     </div>
 
+    <!-- Модальное окно уведомлений -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3">
@@ -251,66 +263,63 @@
                     <i class="fa-solid fa-bell text-xl"></i>
                     <h3 class="text-xl font-extrabold">Уведомления</h3>
                 </div>
-                <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
             <div class="flex flex-col gap-3 py-2">
                 <div class="bg-green-50/80 p-3.5 rounded-2xl border border-green-200">
                     <div class="text-xs font-bold text-emerald-800">10 минут назад</div>
                     <div class="text-sm font-bold text-gray-800 mt-1">Оплачен членский взнос по участку №42</div>
                 </div>
-                <div class="bg-blue-50/80 p-3.5 rounded-2xl border border-blue-200">
-                    <div class="text-xs font-bold text-blue-800">Сегодня в 09:00</div>
-                    <div class="text-sm font-bold text-gray-800 mt-1">График планового обслуживания ЛЭП обновлен</div>
-                </div>
             </div>
             <button onclick="closeNotifModal()" class="w-full py-3 bg-[#1c5c38] text-white rounded-2xl font-bold shadow-md">Закрыть</button>
         </div>
     </div>
 
+    <!-- Создание новости -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-xl font-extrabold text-gray-900">📝 Выложить новость</h3>
                 <button onclick="closeCreateNewsModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form onsubmit="handlePublishNews(event)" class="flex flex-col gap-3">
+            <div class="flex flex-col gap-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Тема новости</label>
-                    <input type="text" required placeholder="Введите заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <input type="text" id="newsTitleInput" placeholder="Введите заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Описание</label>
-                    <textarea required rows="3" placeholder="Подробный текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]"></textarea>
+                    <textarea id="newsDescInput" rows="3" placeholder="Подробный текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]"></textarea>
                 </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Прикрепить файл (опционально)</label>
-                    <input type="file" class="w-full mt-1 text-xs text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-emerald-800 hover:file:bg-emerald-200">
-                </div>
-                <button type="submit" class="w-full py-3.5 mt-2 bg-gradient-to-r from-[#1c5c38] to-[#288a50] text-white font-extrabold rounded-2xl shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2"><i class="fa-solid fa-paper-plane"></i> Опубликовать</button>
-            </form>
+                <button onclick="submitNews()" class="w-full py-3.5 mt-2 bg-gradient-to-r from-[#1c5c38] to-[#288a50] text-white font-extrabold rounded-2xl shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Опубликовать
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Загрузка документа -->
     <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-xl font-extrabold text-gray-900">📄 Загрузить документ</h3>
                 <button onclick="closeCreateDocModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form onsubmit="handlePublishDoc(event)" class="flex flex-col gap-3">
+            <div class="flex flex-col gap-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Название документа</label>
-                    <input type="text" required placeholder="Устав, бланк, акт..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <input type="text" id="docNameInput" placeholder="Устав, бланк, акт..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
                 </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Выберите файл (PDF / DOCX)</label>
-                    <input type="file" required accept=".pdf,.doc,.docx" class="w-full mt-1 text-xs text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-emerald-800 hover:file:bg-emerald-200">
-                </div>
-                <button type="submit" class="w-full py-3.5 mt-2 bg-gradient-to-r from-[#1c5c38] to-[#288a50] text-white font-extrabold rounded-2xl shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2"><i class="fa-solid fa-upload"></i> Загрузить в базу</button>
-            </form>
+                <button onclick="submitDoc()" class="w-full py-3.5 mt-2 bg-gradient-to-r from-[#1c5c38] to-[#288a50] text-white font-extrabold rounded-2xl shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-upload"></i> Загрузить в базу
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Список документов с возможностью скачать -->
     <div id="docsListModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -319,95 +328,82 @@
             </div>
             <div class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 flex justify-between items-center shadow-sm">
-                    <div><div class="font-extrabold text-gray-900 text-sm">Устав НСТ «Горняк»</div><div class="text-xs text-gray-500 font-bold">PDF • 2.4 МБ</div></div>
-                    <button onclick="downloadFile('Устав_НСТ_Горняк.pdf')" class="px-3.5 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 rounded-xl font-bold text-xs flex items-center gap-1.5 transition"><i class="fa-solid fa-download"></i> Скачать</button>
-                </div>
-                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 flex justify-between items-center shadow-sm">
-                    <div><div class="font-extrabold text-gray-900 text-sm">Реквизиты для оплаты взносов</div><div class="text-xs text-gray-500 font-bold">DOCX • 180 КБ</div></div>
-                    <button onclick="downloadFile('Реквизиты_Оплаты.docx')" class="px-3.5 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 rounded-xl font-bold text-xs flex items-center gap-1.5 transition"><i class="fa-solid fa-download"></i> Скачать</button>
+                    <div>
+                        <div class="font-extrabold text-gray-900 text-sm">Устав НСТ «Горняк»</div>
+                        <div class="text-xs text-gray-500 font-bold">PDF • 2.4 МБ</div>
+                    </div>
+                    <button onclick="downloadFile('Устав_НСТ_Горняк.pdf')" class="px-3.5 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-900 rounded-xl font-bold text-xs flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-download"></i> Скачать
+                    </button>
                 </div>
             </div>
             <button onclick="closeDocsModal()" class="w-full py-3 bg-[#1c5c38] text-white rounded-2xl font-bold">Понятно</button>
         </div>
     </div>
 
-    <!-- Модальное окно общей информации -->
+    <!-- Общая модалка -->
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3">
                 <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900"></h3>
-                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="modalContent" class="text-gray-800 text-base font-medium whitespace-pre-line py-2 leading-relaxed"></div>
-            <button onclick="closeModal()" class="w-full py-3.5 bg-[#236b43] text-white rounded-2xl font-bold hover:bg-[#1a5233] transition shadow-md text-base">
-                Понятно
-            </button>
+            <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
+            <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold transition shadow-md text-base">Понятно</button>
         </div>
     </div>
 
-    <!-- Модальное окно погоды в стиле Apple Weather Liquid Glass -->
+    <!-- Погода -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl weather-3d-sun flex items-center justify-center text-white font-black text-lg shadow-lg">3D</div>
+                    <div class="w-12 h-12 rounded-2xl sun-icon-3d flex items-center justify-center text-xl shadow-lg">☀️</div>
                     <div>
-                        <h3 class="text-2xl font-extrabold">Погода в НСТ «Горняк»</h3>
-                        <p class="text-xs text-green-200 font-bold">Метеостанция 24/7 • Живое обновление</p>
+                        <h3 class="text-2xl font-black">Погода в НСТ «Горняк»</h3>
+                        <p class="text-xs text-green-200 font-bold">Метеостанция • Живое обновление</p>
                     </div>
                 </div>
-                <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <!-- Главный показатель -->
-            <div class="flex justify-between items-center bg-white/10 p-5 rounded-2xl border border-white/10">
+            <div class="flex justify-between items-center bg-white/10 p-5 rounded-2xl border border-white/10 shadow-inner">
                 <div>
-                    <div class="text-4xl font-extrabold">+10°C</div>
+                    <div class="text-4xl font-black tracking-tight">+10°C</div>
                     <div class="text-sm text-green-200 mt-1 font-bold">Солнечно (Ощущается +9°C)</div>
                 </div>
                 <div class="text-right">
                     <div class="text-sm font-black text-yellow-300">🌅 Закат в 17:16</div>
-                    <div class="text-xs text-gray-300 font-bold">Световой день: 10ч 42м</div>
+                    <div class="text-xs text-gray-300 font-bold mt-0.5">Световой день: 10ч 42м</div>
                 </div>
             </div>
 
-            <!-- Кнопки переключения режимов -->
             <div class="flex gap-2 bg-black/30 p-1.5 rounded-2xl border border-white/10">
                 <button onclick="switchWeatherTab('hours')" id="btnHours" class="flex-1 py-2.5 rounded-xl text-xs font-black bg-white/25 transition shadow">По часам</button>
                 <button onclick="switchWeatherTab('rain')" id="btnRain" class="flex-1 py-2.5 rounded-xl text-xs font-black hover:bg-white/10 transition">Дождь %</button>
                 <button onclick="switchWeatherTab('wind')" id="btnWind" class="flex-1 py-2.5 rounded-xl text-xs font-black hover:bg-white/10 transition">Ветер</button>
             </div>
 
-            <!-- Контент вкладок погоды -->
             <div id="weatherTabContent" class="bg-white/5 p-4 rounded-2xl border border-white/10 text-sm">
-                <!-- По умолчанию часовой прогноз -->
-                <div class="flex justify-between text-center">
-                    <div><span class="text-xs text-gray-300">Сейчас</span><br><i class="fa-solid fa-sun text-yellow-300 my-1"></i><br><b>+10°</b></div>
-                    <div><span class="text-xs text-gray-300">12:00</span><br><i class="fa-solid fa-cloud-sun text-yellow-300 my-1"></i><br><b>+11°</b></div>
-                    <div><span class="text-xs text-gray-300">15:00</span><br><i class="fa-solid fa-cloud text-gray-300 my-1"></i><br><b>+10°</b></div>
-                    <div><span class="text-xs text-gray-300">18:00</span><br><i class="fa-solid fa-moon text-indigo-200 my-1"></i><br><b>+7°</b></div>
-                    <div><span class="text-xs text-gray-300">21:00</span><br><i class="fa-solid fa-moon text-indigo-200 my-1"></i><br><b>+5°</b></div>
+                <div class="flex justify-between text-center font-bold">
+                    <div><span class="text-xs text-gray-300">Сейчас</span><br><span class="text-yellow-300 text-lg">☀️</span><br><b>+10°</b></div>
+                    <div><span class="text-xs text-gray-300">12:00</span><br><span class="text-yellow-300 text-lg">🌤️</span><br><b>+11°</b></div>
+                    <div><span class="text-xs text-gray-300">15:00</span><br><span class="text-gray-300 text-lg">☁️</span><br><b>+10°</b></div>
+                    <div><span class="text-xs text-gray-300">18:00</span><br><span class="text-indigo-200 text-lg">🌙</span><br><b>+7°</b></div>
+                    <div><span class="text-xs text-gray-300">21:00</span><br><span class="text-indigo-200 text-lg">🌙</span><br><b>+5°</b></div>
                 </div>
             </div>
 
-            <button onclick="closeWeatherModal()" class="w-full py-3.5 bg-white text-[#10331e] rounded-2xl font-black hover:bg-green-50 transition shadow-lg">
-                Закрыть погоду
-            </button>
+            <button onclick="closeWeatherModal()" class="w-full py-3.5 bg-white text-[#10331e] rounded-2xl font-black hover:bg-green-50 transition shadow-lg text-base">Закрыть погоду</button>
         </div>
     </div>
 
-    <!-- Модальное окно Транспорта со всеми 3 маршрутами и кнопками -->
+    <!-- Транспорт -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-2xl font-extrabold text-gray-900">🚌 Транспорт и расписание</h3>
-                <button onclick="closeTransportModal()" class="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <h3 class="text-2xl font-black text-gray-900">🚌 Транспорт и расписание</h3>
+                <button onclick="closeTransportModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="bg-emerald-100/80 border border-emerald-300 p-4 rounded-2xl text-emerald-950 font-extrabold flex items-center justify-between">
@@ -415,49 +411,43 @@
                 <span class="text-xs bg-emerald-700 text-white px-3 py-1 rounded-xl">Ближайший через 13 мин</span>
             </div>
 
-            <div class="flex flex-col gap-4 text-sm text-gray-800">
-                <!-- Маршрут 1 -->
-                <div class="bg-white/80 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between font-bold text-base text-[#236b43] mb-2">
+            <div class="flex flex-col gap-3 text-sm text-gray-800">
+                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 474: м. Котельники — СНТ «Горняк»</span>
-                        <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-xl text-gray-700 flex items-center gap-1">Раскрыть <i class="fa-solid fa-chevron-down"></i></button>
+                        <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-xl text-gray-800 flex items-center gap-1 font-bold">Раскрыть <i class="fa-solid fa-chevron-down"></i></button>
                     </div>
-                    <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-xs leading-relaxed text-gray-600">
-                        <b>Будни (отправление из СНТ):</b> 06:21, 06:52, 07:32, 08:12, 09:43, 14:48, 16:08, 18:48 (ближайший).<br>
-                        <b>Выходные:</b> 05:55, 06:27, 07:31, 09:13, 11:29, 14:01, 17:57, 19:39.
+                    <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-xs font-semibold text-gray-700 leading-relaxed">
+                        <b>Будни:</b> 06:21, 06:52, 07:32, 08:12, 09:43, 14:48, 16:08, 18:48.<br>
+                        <b>Выходные:</b> 05:55, 06:27, 07:31, 09:13, 11:29, 14:01, 17:57.
                     </div>
                 </div>
 
-                <!-- Маршрут 2 -->
-                <div class="bg-white/80 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between font-bold text-base text-[#236b43] mb-2">
+                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 26: Ст. Люберцы — СНТ «Горняк»</span>
-                        <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-xl text-gray-700 flex items-center gap-1">Раскрыть <i class="fa-solid fa-chevron-down"></i></button>
+                        <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-xl text-gray-800 flex items-center gap-1 font-bold">Раскрыть <i class="fa-solid fa-chevron-down"></i></button>
                     </div>
-                    <div id="route2" class="hidden mt-3 pt-3 border-t border-gray-100 text-xs leading-relaxed text-gray-600">
+                    <div id="route2" class="hidden mt-3 pt-3 border-t border-gray-100 text-xs font-semibold text-gray-700 leading-relaxed">
                         <b>Ежедневно:</b> 07:00, 09:30, 13:00, 16:30, 19:00.
                     </div>
                 </div>
 
-                <!-- Маршрут 3 -->
-                <div class="bg-white/80 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between font-bold text-base text-[#236b43] mb-2">
+                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № К1: Пл. Томилино — СНТ «Горняк»</span>
-                        <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-xl text-gray-700 flex items-center gap-1">Раскрыть <i class="fa-solid fa-chevron-down"></i></button>
+                        <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-xl text-gray-800 flex items-center gap-1 font-bold">Раскрыть <i class="fa-solid fa-chevron-down"></i></button>
                     </div>
-                    <div id="route3" class="hidden mt-3 pt-3 border-t border-gray-100 text-xs leading-relaxed text-gray-600">
+                    <div id="route3" class="hidden mt-3 pt-3 border-t border-gray-100 text-xs font-semibold text-gray-700 leading-relaxed">
                         <b>Ежедневно:</b> 08:00, 11:00, 15:00, 18:00, 21:00.
                     </div>
                 </div>
             </div>
 
-            <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#236b43] text-white rounded-2xl font-bold hover:bg-[#1a5233] transition">
-                Закрыть
-            </button>
+            <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold">Закрыть</button>
         </div>
     </div>
 
-    <!-- Скрипты взаимодействия -->
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchDropdown = document.getElementById('searchDropdown');
@@ -482,7 +472,6 @@
             document.getElementById('modalWindow').classList.add('flex');
             searchDropdown.classList.add('hidden');
         }
-
         function closeModal() {
             document.getElementById('modalWindow').classList.add('hidden');
             document.getElementById('modalWindow').classList.remove('flex');
@@ -515,6 +504,10 @@
             document.getElementById('notifModal').classList.remove('flex');
         }
 
+        function openNewsModal() {
+            openSection('Новости НСТ «Горняк»', '• 15-го числа состоится общее собрание членов НСТ.\n• Запланирована чистка центральной дороги грейдером.\n• Ремонт ЛЭП по ул. Лесная завершен.');
+        }
+
         function openCreateNewsModal() {
             document.getElementById('createNewsModal').classList.remove('hidden');
             document.getElementById('createNewsModal').classList.add('flex');
@@ -523,45 +516,14 @@
             document.getElementById('createNewsModal').classList.add('hidden');
             document.getElementById('createNewsModal').classList.remove('flex');
         }
-        function handlePublishNews(event) {
-            event.preventDefault();
-            alert('Новость успешно опубликована!');
+
+        function submitNews() {
+            const title = document.getElementById('newsTitleInput').value.trim();
+            if(!title) { alert('Пожалуйста, введите тему новости'); return; }
+            alert('Новость «' + title + '» успешно опубликована!');
+            document.getElementById('newsTitleInput').value = '';
+            document.getElementById('newsDescInput').value = '';
             closeCreateNewsModal();
-        }
-
-        function openCreateDocModal() {
-            document.getElementById('createDocModal').classList.remove('hidden');
-            document.getElementById('createDocModal').classList.add('flex');
-        }
-        function closeCreateDocModal() {
-            document.getElementById('createDocModal').classList.add('hidden');
-            document.getElementById('createDocModal').classList.remove('flex');
-        }
-        function handlePublishDoc(event) {
-            event.preventDefault();
-            alert('Документ успешно загружен!');
-            closeCreateDocModal();
-        }
-
-        function downloadFile(filename) {
-            const link = document.createElement('a');
-            const file = new Blob(['Официальный документ НСТ Горняк'], {type: 'text/plain'});
-            const url = URL.createObjectURL(file);
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }
-
-        function toggleRoute(id) {
-            const el = document.getElementById(id);
-            el.classList.toggle('hidden');
-        }
-
-        function openNewsModal() {
-            openSection('Новости НСТ', '• 15-го числа состоится общее собрание членов НСТ.\n• Запланирована чистка центральной дороги грейдером.\n• Внимание владельцам участков по ул. Лесная: ремонт ЛЭП.');
         }
 
         function openDocsModal() {
@@ -573,31 +535,62 @@
             document.getElementById('docsListModal').classList.remove('flex');
         }
 
+        function openCreateDocModal() {
+            document.getElementById('createDocModal').classList.remove('hidden');
+            document.getElementById('createDocModal').classList.add('flex');
+        }
+        function closeCreateDocModal() {
+            document.getElementById('createDocModal').classList.add('hidden');
+            document.getElementById('createDocModal').classList.remove('flex');
+        }
+
+        function submitDoc() {
+            const name = document.getElementById('docNameInput').value.trim();
+            if(!name) { alert('Пожалуйста, введите название документа'); return; }
+            alert('Документ «' + name + '» успешно загружен в базу!');
+            document.getElementById('docNameInput').value = '';
+            closeCreateDocModal();
+        }
+
+        function downloadFile(filename) {
+            const element = document.createElement('a');
+            const file = new Blob(["Официальный документ НСТ Горняк. Официальный реестр."], {type: 'text/plain;charset=utf-8'});
+            element.href = URL.createObjectURL(file);
+            element.download = filename;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function toggleRoute(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
         function switchWeatherTab(type) {
             const content = document.getElementById('weatherTabContent');
             if(type === 'hours') {
-                content.innerHTML = `<div class="flex justify-between text-center">
-                    <div><span class="text-xs text-gray-300">Сейчас</span><br><i class="fa-solid fa-sun text-yellow-300 my-1"></i><br><b>+10°</b></div>
-                    <div><span class="text-xs text-gray-300">12:00</span><br><i class="fa-solid fa-cloud-sun text-yellow-300 my-1"></i><br><b>+11°</b></div>
-                    <div><span class="text-xs text-gray-300">15:00</span><br><i class="fa-solid fa-cloud text-gray-300 my-1"></i><br><b>+10°</b></div>
-                    <div><span class="text-xs text-gray-300">18:00</span><br><i class="fa-solid fa-moon text-indigo-200 my-1"></i><br><b>+7°</b></div>
-                    <div><span class="text-xs text-gray-300">21:00</span><br><i class="fa-solid fa-moon text-indigo-200 my-1"></i><br><b>+5°</b></div>
+                content.innerHTML = `<div class="flex justify-between text-center font-bold">
+                    <div><span class="text-xs text-gray-300">Сейчас</span><br><span class="text-yellow-300 text-lg">☀️</span><br><b>+10°</b></div>
+                    <div><span class="text-xs text-gray-300">12:00</span><br><span class="text-yellow-300 text-lg">🌤️</span><br><b>+11°</b></div>
+                    <div><span class="text-xs text-gray-300">15:00</span><br><span class="text-gray-300 text-lg">☁️</span><br><b>+10°</b></div>
+                    <div><span class="text-xs text-gray-300">18:00</span><br><span class="text-indigo-200 text-lg">🌙</span><br><b>+7°</b></div>
+                    <div><span class="text-xs text-gray-300">21:00</span><br><span class="text-indigo-200 text-lg">🌙</span><br><b>+5°</b></div>
                 </div>`;
             } else if(type === 'rain') {
-                content.innerHTML = `<div class="flex justify-between text-center">
-                    <div><span class="text-xs text-gray-300">Сейчас</span><br><i class="fa-solid fa-droplet text-blue-300 my-1"></i><br><b>0%</b></div>
-                    <div><span class="text-xs text-gray-300">12:00</span><br><i class="fa-solid fa-droplet text-blue-300 my-1"></i><br><b>5%</b></div>
-                    <div><span class="text-xs text-gray-300">15:00</span><br><i class="fa-solid fa-cloud-rain text-blue-400 my-1"></i><br><b>40%</b></div>
-                    <div><span class="text-xs text-gray-300">18:00</span><br><i class="fa-solid fa-cloud-rain text-blue-400 my-1"></i><br><b>60%</b></div>
-                    <div><span class="text-xs text-gray-300">21:00</span><br><i class="fa-solid fa-droplet text-blue-300 my-1"></i><br><b>10%</b></div>
+                content.innerHTML = `<div class="flex justify-between text-center font-bold">
+                    <div><span class="text-xs text-gray-300">Сейчас</span><br><span class="text-blue-300 text-lg">💧</span><br><b>0%</b></div>
+                    <div><span class="text-xs text-gray-300">12:00</span><br><span class="text-blue-300 text-lg">💧</span><br><b>5%</b></div>
+                    <div><span class="text-xs text-gray-300">15:00</span><br><span class="text-blue-400 text-lg">🌧️</span><br><b>40%</b></div>
+                    <div><span class="text-xs text-gray-300">18:00</span><br><span class="text-blue-400 text-lg">🌧️</span><br><b>60%</b></div>
+                    <div><span class="text-xs text-gray-300">21:00</span><br><span class="text-blue-300 text-lg">💧</span><br><b>10%</b></div>
                 </div>`;
             } else if(type === 'wind') {
-                content.innerHTML = `<div class="flex justify-between text-center">
-                    <div><span class="text-xs text-gray-300">Сейчас</span><br><i class="fa-solid fa-wind text-teal-200 my-1"></i><br><b>2 м/с З</b></div>
-                    <div><span class="text-xs text-gray-300">12:00</span><br><i class="fa-solid fa-wind text-teal-200 my-1"></i><br><b>3 м/с С-З</b></div>
-                    <div><span class="text-xs text-gray-300">15:00</span><br><i class="fa-solid fa-wind text-teal-200 my-1"></i><br><b>5 м/с С</b></div>
-                    <div><span class="text-xs text-gray-300">18:00</span><br><i class="fa-solid fa-wind text-teal-200 my-1"></i><br><b>4 м/с С</b></div>
-                    <div><span class="text-xs text-gray-300">21:00</span><br><i class="fa-solid fa-wind text-teal-200 my-1"></i><br><b>2 м/с З</b></div>
+                content.innerHTML = `<div class="flex justify-between text-center font-bold">
+                    <div><span class="text-xs text-gray-300">Сейчас</span><br><span class="text-teal-200 text-lg">💨</span><br><b>2 м/с З</b></div>
+                    <div><span class="text-xs text-gray-300">12:00</span><br><span class="text-teal-200 text-lg">💨</span><br><b>3 м/с С-З</b></div>
+                    <div><span class="text-xs text-gray-300">15:00</span><br><span class="text-teal-200 text-lg">💨</span><br><b>5 м/с С</b></div>
+                    <div><span class="text-xs text-gray-300">18:00</span><br><span class="text-teal-200 text-lg">💨</span><br><b>4 м/с С</b></div>
+                    <div><span class="text-xs text-gray-300">21:00</span><br><span class="text-teal-200 text-lg">💨</span><br><b>2 м/с З</b></div>
                 </div>`;
             }
         }
