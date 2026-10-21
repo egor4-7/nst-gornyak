@@ -127,15 +127,14 @@
 
             <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
                 <div class="p-3 text-xs font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
-                <div id="searchResultsList" class="flex flex-col py-1">
-                    <!-- Динамические результаты поиска будут здесь -->
-                </div>
+                <div id="searchResultsList" class="flex flex-col py-1"></div>
             </div>
         </div>
 
-        <!-- 8 Карточек -->
+        <!-- Все 8 карточек в едином идеальном стиле -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             
+            <!-- 1. Транспорт -->
             <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bus"></i>
@@ -149,6 +148,7 @@
                 </div>
             </div>
 
+            <!-- 2. Тарифы -->
             <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bolt"></i>
@@ -159,6 +159,7 @@
                 </div>
             </div>
 
+            <!-- 3. Новости -->
             <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
@@ -179,6 +180,7 @@
                 </div>
             </div>
 
+            <!-- 4. Документы -->
             <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
@@ -199,6 +201,7 @@
                 </div>
             </div>
 
+            <!-- 5. Контакты (приведены к общему стилю с крупной иконкой) -->
             <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-address-book"></i>
@@ -209,6 +212,7 @@
                 </div>
             </div>
 
+            <!-- 6. Профиль (приведен к общему стилю с крупной иконкой) -->
             <div onclick="openSection('Профиль', 'Участок №42\nЛицевой счет: 883920\nСтатус: Задолженностей нет.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-user-gear"></i>
@@ -219,6 +223,7 @@
                 </div>
             </div>
 
+            <!-- 7. Взносы (приведены к общему стилю с крупной иконкой) -->
             <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-credit-card"></i>
@@ -229,6 +234,7 @@
                 </div>
             </div>
 
+            <!-- 8. О НСТ (приведены к общему стилю с крупной иконкой) -->
             <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-circle-info"></i>
@@ -337,7 +343,7 @@
         </div>
     </div>
 
-    <!-- ПОГОДА (Без эмодзи у слова Закат) -->
+    <!-- ПОГОДА -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
@@ -437,7 +443,6 @@
         const searchDropdown = document.getElementById('searchDropdown');
         const searchResultsList = document.getElementById('searchResultsList');
 
-        // База данных для умного живого поиска
         const searchDatabase = [
             { query: '474', title: 'Маршрут № 474: м. Котельники — СНТ «Горняк»', desc: 'Ближайший автобус через 13 мин (в 22:32)', action: openTransportModal },
             { query: '26', title: 'Маршрут № 26: Ст. Люберцы — СНТ «Горняк»', desc: 'Расписание: 07:00, 09:30, 13:00, 16:30, 19:00', action: openTransportModal },
