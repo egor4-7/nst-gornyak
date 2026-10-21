@@ -2,17 +2,15 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>НСТ «Горняк» — Садовое некоммерческое товарищество</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>НСТ «Горняк» — Официальный портал</title>
 
-<!-- Tailwind CSS -->
+<!-- Tailwind CSS и FontAwesome -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- FontAwesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <script>
 tailwind.config = {
@@ -20,19 +18,18 @@ tailwind.config = {
     extend: {
       colors: {
         gornyak: {
-          50: '#f0f7f2',
-          100: '#e1efe5',
-          200: '#c3dfcc',
-          600: '#1b7a3e',
-          700: '#156131',
-          800: '#124e28',
-          900: '#0e3e20',
+          50: '#f2f9f4',
+          100: '#e1f3e6',
+          200: '#c5e7cd',
+          600: '#1e7e43',
+          700: '#176334',
+          800: '#144f2b',
+          900: '#0f3d22',
         }
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         heading: ['Montserrat', 'sans-serif'],
-        handwrite: ['Caveat', 'cursive'],
       }
     }
   }
@@ -42,384 +39,305 @@ tailwind.config = {
 <style>
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f4f7f5;
-  color: #1e293b;
+  margin: 0;
+  padding: 0;
 }
-h1, h2, h3, h4 {
-  font-family: 'Montserrat', sans-serif;
-}
-.page-section {
-  display: none;
-}
-.page-section.active {
-  display: block;
-  animation: fadeIn 0.2s ease-in-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
 
-/* Баннер с фото природы как на референсе */
-.hero-father-bg {
-  background: linear-gradient(to right, rgba(14, 62, 32, 0.85) 0%, rgba(21, 97, 49, 0.4) 60%, rgba(0,0,0,0.1) 100%), 
+/* Управление переключением между интерфейсами */
+.portal-view { display: none; }
+.portal-view.active-portal { display: block; }
+
+/* Стили вашего интерфейса */
+.my-interface-body {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 50%, #81c784 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+.app-container {
+  width: 100%;
+  max-width: 100%;
+  min-height: calc(100vh - 16px);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 28px;
+  padding: 16px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.live-header {
+  background: linear-gradient(135deg, #144f2b 0%, #1e7e43 60%, #2e9152 100%);
+  border-radius: 24px;
+  padding: 18px 22px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.clouds-animation {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  opacity: 0.28;
+  animation: slowPan 45s linear infinite alternate;
+  z-index: 1;
+}
+@keyframes slowPan {
+  0% { transform: scale(1) translateX(0); }
+  100% { transform: scale(1.08) translateX(-20px); }
+}
+.bird {
+  position: absolute;
+  width: 12px; height: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  clip-path: polygon(0 50%, 50% 0, 100% 50%, 50% 20%);
+  animation: flyBird 14s linear infinite;
+  z-index: 2;
+}
+.bird-1 { top: 25%; left: -10%; animation-duration: 16s; }
+.bird-2 { top: 55%; left: -10%; animation-duration: 20s; animation-delay: 5s; }
+@keyframes flyBird {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(110vw, -25px); opacity: 0; }
+}
+.my-nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.my-nav-card {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 16px 12px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.my-nav-card:hover { transform: scale(1.03); background: rgba(255, 255, 255, 0.75); }
+.route-schedule-content {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, padding 0.3s ease;
+  opacity: 0; padding-top: 0; font-size: 12px; color: #1b4332;
+}
+.route-schedule-content.expanded { max-height: 300px; opacity: 1; padding-top: 10px; margin-top: 8px; border-top: 1px solid rgba(0,0,0,0.06); }
+.route-toggle-btn {
+  background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 50%; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.route-toggle-btn.rotated { transform: rotate(180deg); }
+
+/* Стили папиного интерфейса */
+.father-body { background-color: #ffffff; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+.father-hero {
+  background: linear-gradient(90deg, rgba(14,62,32,0.92) 0%, rgba(20,79,43,0.75) 50%, rgba(0,0,0,0.2) 100%),
               url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
 }
-
-/* Плавный аккордеон транспорта */
-.transport-collapse {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-  opacity: 0;
-}
-.transport-collapse.expanded {
-  max-height: 300px;
-  opacity: 1;
+.forest-footer {
+  background: linear-gradient(to top, #c5e7cd 0%, #e1f3e6 60%, rgba(255,255,255,0) 100%);
 }
 </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between antialiased">
+<body>
 
-<!-- 1. Верхнее белое меню шапки как на фото 12 -->
-<header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-  <div class="container mx-auto px-4 py-2.5 flex items-center justify-between">
-    <!-- Логотип -->
-    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2.5 group">
-      <div class="text-gornyak-700 text-2xl">
-        <i class="fa-solid fa-tree"></i><i class="fa-solid fa-house-chimney -ml-1 text-gornyak-600"></i>
+<!------------------------------------------------ -->
+<!-- 1. ВАШ ИНТЕРФЕЙС (Открывается по умолчанию)  -->
+<!------------------------------------------------ -->
+<div id="my-portal" class="portal-view active-portal my-interface-body">
+  <div class="app-container">
+    <header class="live-header">
+      <div class="clouds-animation"></div>
+      <div class="bird bird-1"></div>
+      <div class="bird bird-2"></div>
+
+      <div style="position:relative; z-index:3;">
+        <h1 style="font-size: 20px; font-weight: 700;">НСТ «Горняк»</h1>
+        <p style="font-size: 12px; opacity: 0.85;">Официальный портал</p>
       </div>
-      <div>
-        <span class="block text-lg font-extrabold text-gornyak-900 leading-none tracking-tight">НСТ «Горняк»</span>
-        <span class="text-[10px] text-slate-500 font-medium">Садовое некоммерческое товарищество</span>
+
+      <div style="display: flex; align-items: center; gap: 8px; position: relative; z-index: 3;">
+        <!-- КНОПКА ПЕРЕКЛЮЧЕНИЯ НА ПАПИН МАКЕТ -->
+        <button onclick="switchPortal('father')" style="background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 38px; height: 38px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Переключиться на макет папы">
+          <i class="fa-solid fa-shuffle"></i>
+        </button>
       </div>
-    </a>
+    </header>
 
-    <!-- Навигация с иконками как на картинке папы -->
-    <nav class="hidden xl:flex items-center gap-5 text-xs font-medium text-slate-700">
-      <button onclick="navigateTo('home')" class="flex flex-col items-center gap-0.5 text-gornyak-700 font-bold border-b-2 border-gornyak-700 pb-1">
-        <i class="fa-solid fa-house text-sm"></i> Главная
-      </button>
-      <button onclick="navigateTo('infrastructure')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-tree text-sm text-slate-500"></i> О СНТ
-      </button>
-      <button onclick="navigateTo('infrastructure')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-users text-sm text-slate-500"></i> Правление
-      </button>
-      <button onclick="navigateTo('announcements')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-bullhorn text-sm text-slate-500"></i> Новости
-      </button>
-      <button onclick="navigateTo('documents')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-coins text-sm text-slate-500"></i> Финансы
-      </button>
-      <button onclick="navigateTo('documents')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-folder-open text-sm text-slate-500"></i> Документы
-      </button>
-      <button onclick="navigateTo('announcements')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-gift text-sm text-slate-500"></i> Отдать даром
-      </button>
-      <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-phone text-sm text-slate-500"></i> Контакты
-      </button>
-      <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 hover:text-gornyak-700 transition pb-1">
-        <i class="fa-solid fa-comments text-sm text-slate-500"></i> Чат
-      </button>
-    </nav>
+    <div class="my-nav-grid">
+      <div class="my-nav-card" onclick="switchPortal('father')">
+        <div style="font-size: 20px; color: #176334;"><i class="fa-solid fa-house"></i></div>
+        <span style="font-size: 14px; font-weight: 600;">Папин макет сайта</span>
+      </div>
+    </div>
 
-    <!-- Иконка поиска -->
-    <div class="flex items-center gap-3">
-      <button class="text-slate-600 hover:text-gornyak-700 p-2 text-base"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <!-- Раздел транспорт с аккордеонами -->
+    <div style="background: rgba(255,255,255,0.55); padding: 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.85);">
+      <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #1b4332;">Расписание транспорта</h3>
+
+      <!-- Маршрут 474 -->
+      <div style="padding: 12px; background: rgba(255,255,255,0.7); border-radius: 14px; margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div><strong>Маршрут №474</strong><div style="font-size: 11px; opacity: 0.7;">Город — НСТ «Горняк»</div></div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; padding: 3px 8px; background: rgba(46,125,50,0.15); color: #2e7d32; border-radius: 10px; font-weight: 600;">На линии</span>
+            <button class="route-toggle-btn" id="btn-toggle-474" onclick="toggleRoute('474')"><i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+        </div>
+        <div id="schedule-474" class="route-schedule-content">
+          <p><strong>Из Города:</strong> 07:00, 08:00, 09:00, 11:00, 13:00, 15:00, 17:00, 19:00, 21:00</p>
+          <p style="margin-top: 4px;"><strong>Из НСТ «Горняк»:</strong> 07:45, 08:45, 09:45, 11:45, 13:45, 15:45, 17:45, 19:45, 21:45</p>
+        </div>
+      </div>
+
+      <!-- Маршрут 474к -->
+      <div style="padding: 12px; background: rgba(255,255,255,0.7); border-radius: 14px; margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div><strong>Маршрут №474к</strong><div style="font-size: 11px; opacity: 0.7;">Укороченный рейс</div></div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; padding: 3px 8px; background: rgba(46,125,50,0.15); color: #2e7d32; border-radius: 10px; font-weight: 600;">На линии</span>
+            <button class="route-toggle-btn" id="btn-toggle-474k" onclick="toggleRoute('474k')"><i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+        </div>
+        <div id="schedule-474k" class="route-schedule-content">
+          <p><strong>Утро:</strong> 06:30, 07:15, 08:15</p>
+          <p style="margin-top: 4px;"><strong>Вечер:</strong> 18:15, 19:15, 20:30</p>
+        </div>
+      </div>
+
+      <!-- Маршрут 26.К1 -->
+      <div style="padding: 12px; background: rgba(255,255,255,0.7); border-radius: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div><strong>Маршрут №26.К1</strong><div style="font-size: 11px; opacity: 0.7;">Сезонный (Пт-Вс)</div></div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; padding: 3px 8px; background: rgba(46,125,50,0.15); color: #2e7d32; border-radius: 10px; font-weight: 600;">На линии</span>
+            <button class="route-toggle-btn" id="btn-toggle-26k1" onclick="toggleRoute('26k1')"><i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+        </div>
+        <div id="schedule-26k1" class="route-schedule-content">
+          <p><strong>Пятница:</strong> 16:00, 18:30, 20:00</p>
+          <p style="margin-top: 4px;"><strong>Суббота и Воскресенье:</strong> 09:00, 12:00, 15:00, 18:00</p>
+        </div>
+      </div>
     </div>
   </div>
-</header>
+</div>
 
-<main class="flex-grow">
-  <!-- Главная страница Папиного Макета -->
-  <section id="page-home" class="page-section active">
-    
-    <!-- 2. Большой главный баннер в точности как на фото 12 -->
-    <div class="hero-father-bg text-white py-12 px-4 relative">
-      <div class="container mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+
+<!------------------------------------------------ -->
+<!-- 2. ПАПИН МАКЕТ (Открывается по кнопке)       -->
+<!------------------------------------------------ -->
+<div id="father-portal" class="portal-view father-body">
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+      <a href="javascript:void(0)" onclick="switchPortal('my')" class="flex items-center gap-2.5">
+        <div class="text-gornyak-700 text-2xl"><i class="fa-solid fa-tree"></i><i class="fa-solid fa-house -ml-1 text-gornyak-800"></i></div>
         <div>
-          <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-2 drop-shadow-md">
-            НСТ «Горняк»
-          </h1>
-          <p class="text-base sm:text-xl text-emerald-100 font-medium max-w-xl leading-relaxed drop-shadow">
-            Наше СНТ — это наш дом, наши соседи, наша ответственность!
-          </p>
+          <span class="block text-base font-extrabold text-gornyak-900 leading-none">НСТ «Горняк»</span>
+          <span class="text-[9px] text-slate-500 font-medium">Садовое некоммерческое товарищество</span>
         </div>
-
-        <!-- Виджет погоды + КНОПКА ПЕРЕКЛЮЧЕНИЯ НА ВАШ ИНТЕРФЕЙС -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <!-- Переключатель на ваш макет -->
-          <a href="gornyak.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 shadow-md transition" title="Переключиться на плиточный интерфейс">
-            <i class="fa-solid fa-shuffle text-yellow-300"></i> Мой интерфейс
-          </a>
-
-          <!-- Полупрозрачный блок погоды из макета папы -->
-          <div class="bg-white/90 backdrop-blur text-slate-800 px-5 py-3 rounded-2xl shadow-lg flex items-center gap-4 text-xs">
-            <i class="fa-solid fa-sun text-yellow-500 text-3xl"></i>
-            <div>
-              <div class="flex items-center gap-2 font-bold text-lg leading-none text-slate-900">
-                +18°C
-                <span class="text-[10px] font-normal text-slate-500">Московская область</span>
-              </div>
-              <div class="text-[11px] text-slate-600 mt-1 flex items-center gap-2">
-                <span>Ясно</span>
-                <span>•</span>
-                <span><i class="fa-solid fa-wind text-slate-400"></i> 3 м/с</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Рукописный слоган справа -->
-      <div class="hidden lg:block absolute right-12 bottom-4 text-white font-handwrite text-2xl rotate-[-4deg] opacity-90 drop-shadow">
-        Вместе делаем наше СНТ лучше!
-      </div>
+      </a>
+      <nav class="hidden lg:flex items-center gap-5 text-[11px] font-semibold text-slate-700">
+        <span class="text-gornyak-800 font-bold"><i class="fa-solid fa-house text-sm"></i> Главная</span>
+      </nav>
+      <button class="text-slate-600 hover:text-gornyak-700 p-2 text-lg"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
+  </header>
 
-    <!-- 3. Карточки разделов как на фото 12 -->
-    <div class="container mx-auto px-4 py-8 space-y-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <!-- О СНТ -->
-        <div onclick="navigateTo('infrastructure')" class="bg-[#eaf4ed] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-gornyak-700 text-3xl mb-3"><i class="fa-solid fa-house-chimney-window"></i></div>
-          <h3 class="font-extrabold text-gornyak-900 text-lg mb-1">О СНТ</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">История, территория, информация о товариществе</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-gornyak-700 group-hover:translate-x-1 transition-all"></i>
+  <main class="flex-grow">
+    <div class="father-hero text-white py-12 px-4 relative overflow-hidden">
+      <div class="container mx-auto relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-2 drop-shadow">НСТ «Горняк»</h1>
+          <p class="text-sm sm:text-base text-emerald-100 font-light max-w-xl drop-shadow">Наше СНТ — это наш дом, наши соседи, наша ответственность!</p>
         </div>
-
-        <!-- Правление -->
-        <div onclick="navigateTo('infrastructure')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-indigo-700 text-3xl mb-3"><i class="fa-solid fa-users"></i></div>
-          <h3 class="font-extrabold text-indigo-950 text-lg mb-1">Правление</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Состав, контакты, работа правления</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-indigo-700 group-hover:translate-x-1 transition-all"></i>
-        </div>
-
-        <!-- Новости -->
-        <div onclick="navigateTo('announcements')" class="bg-[#f0f3ff] p-6 rounded-2xl border border-blue-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-blue-700 text-3xl mb-3"><i class="fa-solid fa-newspaper"></i></div>
-          <h3 class="font-extrabold text-blue-950 text-lg mb-1">Новости</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Актуальные события и объявления</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-blue-700 group-hover:translate-x-1 transition-all"></i>
-        </div>
-
-        <!-- Финансы -->
-        <div onclick="navigateTo('documents')" class="bg-[#fffbeb] p-6 rounded-2xl border border-amber-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-amber-700 text-3xl mb-3"><i class="fa-solid fa-coins"></i></div>
-          <h3 class="font-extrabold text-amber-950 text-lg mb-1">Финансы</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Отчеты, сметы, платежи</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-amber-700 group-hover:translate-x-1 transition-all"></i>
-        </div>
-
-        <!-- Документы -->
-        <div onclick="navigateTo('documents')" class="bg-[#f0f9ff] p-6 rounded-2xl border border-sky-100 hover:shadow-md transition cursor-pointer group relative lg:col-span-1">
-          <div class="text-sky-700 text-3xl mb-3"><i class="fa-solid fa-folder"></i></div>
-          <h3 class="font-extrabold text-sky-950 text-lg mb-1">Документы</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Устав, сметы, договоры, другие документы</p>
-          <div class="mt-4 inline-flex items-center gap-1.5 px-3 py-1 bg-sky-100 text-sky-800 rounded-lg text-xs font-semibold">
-            <i class="fa-solid fa-file-lines"></i> Все разделы →
-          </div>
-        </div>
-
-        <!-- Колонка новостей (3 карточки) -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-3">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-              <i class="fa-solid fa-newspaper text-gornyak-700"></i> Колонка новостей
-            </h3>
-            <button onclick="navigateTo('announcements')" class="text-xs font-semibold text-gornyak-700 hover:underline">Все новости →</button>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="rounded-xl overflow-hidden border border-slate-100 bg-slate-50">
-              <img src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?auto=format&fit=crop&w=400&q=80" class="w-full h-24 object-cover">
-              <div class="p-3">
-                <span class="text-[10px] text-slate-400 font-mono">12.09.2025</span>
-                <h4 class="font-bold text-slate-800 text-xs mt-0.5">Проведены работы по благоустройству территории</h4>
-              </div>
-            </div>
-            <div class="rounded-xl overflow-hidden border border-slate-100 bg-slate-50">
-              <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80" class="w-full h-24 object-cover">
-              <div class="p-3">
-                <span class="text-[10px] text-slate-400 font-mono">08.09.2025</span>
-                <h4 class="font-bold text-slate-800 text-xs mt-0.5">Информация о взносах и платежах</h4>
-              </div>
-            </div>
-            <div class="rounded-xl overflow-hidden border border-slate-100 bg-slate-50">
-              <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=400&q=80" class="w-full h-24 object-cover">
-              <div class="p-3">
-                <span class="text-[10px] text-slate-400 font-mono">03.09.2025</span>
-                <h4 class="font-bold text-slate-800 text-xs mt-0.5">Важное: собрание правления 10 сентября</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Решения -->
-        <div onclick="navigateTo('documents')" class="bg-[#f0fdf4] p-6 rounded-2xl border border-emerald-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-emerald-700 text-3xl mb-3"><i class="fa-solid fa-clipboard-check"></i></div>
-          <h3 class="font-extrabold text-emerald-950 text-lg mb-1">Решения</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Общее собрание, решения правления</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all"></i>
-        </div>
-
-        <!-- Контакты -->
-        <div onclick="navigateTo('contacts')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-slate-700 text-3xl mb-3"><i class="fa-solid fa-phone-volume"></i></div>
-          <h3 class="font-extrabold text-slate-900 text-lg mb-1">Контакты</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Телефоны правления, службы, экстренные номера</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-slate-700 group-hover:translate-x-1 transition-all"></i>
-        </div>
-
-        <!-- Чат -->
-        <div onclick="navigateTo('contacts')" class="bg-[#faf5ff] p-6 rounded-2xl border border-purple-100 hover:shadow-md transition cursor-pointer group relative lg:col-span-2">
-          <div class="text-purple-700 text-3xl mb-3"><i class="fa-solid fa-comments"></i></div>
-          <h3 class="font-extrabold text-purple-950 text-lg mb-1">Чат соседей</h3>
-          <p class="text-slate-600 text-xs leading-relaxed">Общение с соседями, важная информация и оперативные вопросы</p>
-          <i class="fa-solid fa-arrow-right absolute right-5 bottom-5 text-slate-400 group-hover:text-purple-700 group-hover:translate-x-1 transition-all"></i>
-        </div>
-
-      </div>
-
-      <!-- 4. Зеленый Блок «ОТДАТЬ ДАРОМ» точь-в-точь как на картинке 12 -->
-      <div class="bg-[#f0f7f2] border border-gornyak-200 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl bg-gornyak-700 text-white flex items-center justify-center text-2xl shadow">
-            <i class="fa-solid fa-gift"></i>
-          </div>
-          <div>
-            <h3 class="text-2xl font-extrabold text-gornyak-900 tracking-tight">ОТДАТЬ ДАРОМ</h3>
-            <p class="text-xs text-slate-600 mt-0.5">Возможно, то, что не нужно вам, пригодится соседу.</p>
-          </div>
-        </div>
-
         <div class="flex items-center gap-3">
-          <button onclick="navigateTo('announcements')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow transition">
-            <i class="fa-solid fa-plus"></i> Отдать
+          <!-- КНОПКА ВОЗВРАТА НА ВАШ ИНТЕРФЕЙС -->
+          <button onclick="switchPortal('my')" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition">
+            <i class="fa-solid fa-shuffle text-yellow-300"></i> Мой интерфейс
           </button>
-          <button onclick="navigateTo('announcements')" class="bg-white hover:bg-slate-50 text-slate-800 font-bold px-5 py-2.5 rounded-xl text-xs border border-slate-300 flex items-center gap-2 shadow-sm transition">
-            <i class="fa-solid fa-magnifying-glass text-slate-500"></i> Нужно
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Интерактивный раздел Транспорт -->
-  <section id="page-transport" class="page-section py-8 px-4">
-    <div class="container mx-auto max-w-3xl">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-slate-900">Транспорт и маршруты</h2>
-        <button onclick="navigateTo('home')" class="bg-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-200">← Назад</button>
-      </div>
-
-      <div class="space-y-3">
-        <!-- Маршрут 474 -->
-        <div class="p-5 rounded-2xl bg-gornyak-50 border border-gornyak-100 shadow-sm">
-          <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-474')">
+          <div class="bg-white/95 backdrop-blur text-slate-800 px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+            <i class="fa-solid fa-sun text-yellow-500 text-2xl"></i>
             <div>
-              <h3 class="font-bold text-slate-900 text-base">Маршрут №474</h3>
-              <p class="text-xs text-slate-600 mt-0.5">Город — НСТ «Горняк». Интервал: каждый час с 07:00 до 21:00.</p>
+              <div class="flex items-center gap-2 font-bold text-base leading-none text-slate-900">+18°C <span class="text-[9px] font-normal text-slate-500">Московская область</span></div>
+              <div class="text-[10px] text-slate-500 mt-1">Ясно • 3 м/с</div>
             </div>
-            <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gornyak-100 text-gornyak-800 text-xs font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-gornyak-600 animate-pulse"></span> На линии
-              </span>
-              <i id="icon-route-474" class="fa-solid fa-chevron-down text-xs text-gornyak-700 transition-transform duration-300"></i>
-            </div>
-          </div>
-          <div id="route-474" class="transport-collapse mt-3 pt-3 border-t border-gornyak-200 text-xs text-slate-700 space-y-1">
-            <p><strong>Отправление из Города:</strong> 07:00, 08:00, 09:00, 11:00, 13:00, 15:00, 17:00, 19:00, 21:00</p>
-            <p><strong>Отправление из НСТ «Горняк»:</strong> 07:45, 08:45, 09:45, 11:45, 13:45, 15:45, 17:45, 19:45, 21:45</p>
-          </div>
-        </div>
-
-        <!-- Маршрут 474к -->
-        <div class="p-5 rounded-2xl bg-gornyak-50 border border-gornyak-100 shadow-sm">
-          <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-474k')">
-            <div>
-              <h3 class="font-bold text-slate-900 text-base">Маршрут №474к</h3>
-              <p class="text-xs text-slate-600 mt-0.5">Укороченный рейс (до поворота). Утренние и вечерние часы пик.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gornyak-100 text-gornyak-800 text-xs font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-gornyak-600 animate-pulse"></span> На линии
-              </span>
-              <i id="icon-route-474k" class="fa-solid fa-chevron-down text-xs text-gornyak-700 transition-transform duration-300"></i>
-            </div>
-          </div>
-          <div id="route-474k" class="transport-collapse mt-3 pt-3 border-t border-gornyak-200 text-xs text-slate-700 space-y-1">
-            <p><strong>Утренние рейсы:</strong> 06:30, 07:15, 08:15</p>
-            <p><strong>Вечерние рейсы:</strong> 18:15, 19:15, 20:30</p>
-          </div>
-        </div>
-
-        <!-- Маршрут 26.К1 -->
-        <div class="p-5 rounded-2xl bg-gornyak-50 border border-gornyak-100 shadow-sm">
-          <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-26')">
-            <div>
-              <h3 class="font-bold text-slate-900 text-base">Маршрут №26.К1</h3>
-              <p class="text-xs text-slate-600 mt-0.5">Сезонный дачный рейс. Пятница – Воскресенье по расписанию.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gornyak-100 text-gornyak-800 text-xs font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-gornyak-600 animate-pulse"></span> На линии
-              </span>
-              <i id="icon-route-26" class="fa-solid fa-chevron-down text-xs text-gornyak-700 transition-transform duration-300"></i>
-            </div>
-          </div>
-          <div id="route-26" class="transport-collapse mt-3 pt-3 border-t border-gornyak-200 text-xs text-slate-700 space-y-1">
-            <p><strong>Пятница:</strong> 16:00, 18:30, 20:00</p>
-            <p><strong>Суббота и Воскресенье:</strong> 09:00, 12:00, 15:00, 18:00</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Заглушки страниц -->
-  <section id="page-infrastructure" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">О СНТ и Правление</h2></div></section>
-  <section id="page-announcements" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">Новости и объявления</h2></div></section>
-  <section id="page-documents" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">Финансы и документы</h2></div></section>
-  <section id="page-contacts" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">Контакты</h2></div></section>
-</main>
+    <div class="container mx-auto px-4 py-8 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 shadow-sm">
+          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-tree"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">О СНТ</h3>
+          <p class="text-slate-500 text-xs">История, территория, информация</p>
+        </div>
+        <div class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 shadow-sm" onclick="switchPortal('my')" style="cursor: pointer;">
+          <div class="text-indigo-700 text-2xl mb-3"><i class="fa-solid fa-bus"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Транспорт</h3>
+          <p class="text-slate-500 text-xs">Открыть расписание в моем интерфейсе →</p>
+        </div>
+      </div>
+    </div>
+  </main>
 
-<!-- 5. Нижний лесной подвал в стиле папы -->
-<footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-600 mt-10">
-  <div class="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="font-handwrite text-2xl text-gornyak-800">
-      Вместе — мы сильнее! <i class="fa-solid fa-tree text-gornyak-600 ml-1"></i>
+  <footer class="forest-footer pt-10 pb-4 text-xs text-slate-700 border-t border-gornyak-200 mt-10">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="font-serif italic font-bold text-gornyak-900 text-base">Вместе — мы сильнее!</div>
+      <div><strong>НСТ «Горняк»</strong> Московская область</div>
     </div>
-    <div class="flex items-center gap-2 text-slate-500">
-      <i class="fa-solid fa-location-dot text-gornyak-700"></i>
-      <span><strong>НСТ «Горняк»</strong> Московская область</span>
-    </div>
-  </div>
-</footer>
+  </footer>
+</div>
 
 <script>
-function navigateTo(pageId) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById('page-' + pageId);
-  if (target) target.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toggleRoute(routeId) {
-  const content = document.getElementById(routeId);
-  const icon = document.getElementById('icon-' + routeId);
-  if (content.classList.contains('expanded')) {
-    content.classList.remove('expanded');
-    icon.style.transform = 'rotate(0deg)';
-  } else {
-    content.classList.add('expanded');
-    icon.style.transform = 'rotate(180deg)';
+  // Функция переключения между интерфейсами
+  function switchPortal(type) {
+    const fatherView = document.getElementById('father-portal');
+    const myView = document.getElementById('my-portal');
+    
+    if (type === 'father') {
+      myView.classList.remove('active-portal');
+      fatherView.classList.add('active-portal');
+      localStorage.setItem('active_portal', 'father');
+    } else {
+      fatherView.classList.remove('active-portal');
+      myView.classList.add('active-portal');
+      localStorage.setItem('active_portal', 'my');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-}
+
+  // Плавное раскрытие аккордеона транспорта
+  function toggleRoute(routeId) {
+    const content = document.getElementById('schedule-' + routeId);
+    const btn = document.getElementById('btn-toggle-' + routeId);
+    if (content && btn) {
+      content.classList.toggle('expanded');
+      btn.classList.toggle('rotated');
+    }
+  }
+
+  // Сохраняем выбор пользователя при перезагрузках
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('active_portal');
+    if (saved === 'father') {
+      switchPortal('father');
+    } else {
+      switchPortal('my');
+    }
+  });
 </script>
 </body>
 </html>
