@@ -117,21 +117,18 @@
             </div>
         </div>
 
-        <!-- Поиск -->
+        <!-- Умный поиск с живым фильтром -->
         <div class="relative w-full">
             <div class="relative flex items-center">
                 <i class="fa-solid fa-magnifying-glass absolute left-5 text-green-800 text-xl"></i>
-                <input type="text" id="searchInput" placeholder="Умный поиск по сайту, транспорту, документам..." 
+                <input type="text" id="searchInput" placeholder="Введите номер маршрута (например, 474), тарифы, документы..." 
                     class="w-full glass-panel border border-green-300/80 rounded-2xl py-4 pl-14 pr-4 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#1c5c38] transition text-base font-bold">
             </div>
 
             <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
                 <div class="p-3 text-xs font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
-                <div class="flex flex-col py-1">
-                    <button onclick="openTransportModal()" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-bus text-[#1c5c38]"></i> Транспорт и лайв-активность рейсов</button>
-                    <button onclick="openSection('Тарифы', 'Электроэнергия: 4.85 руб/кВт. Членские взносы: 1200 руб/сотка.')" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-bolt text-amber-500"></i> Тарифы на свет и взносы</button>
-                    <button onclick="openDocsModal()" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-folder-open text-[#1c5c38]"></i> Документы и реквизиты</button>
-                    <button onclick="openSection('История НСТ', 'НСТ «Горняк» основано в 1985 году. На территории 320 участков.')" class="px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex items-center gap-3 transition"><i class="fa-solid fa-book-open text-emerald-800"></i> Подробная история НСТ</button>
+                <div id="searchResultsList" class="flex flex-col py-1">
+                    <!-- Динамические результаты поиска будут здесь -->
                 </div>
             </div>
         </div>
@@ -340,7 +337,7 @@
         </div>
     </div>
 
-    <!-- Погода -->
+    <!-- ПОГОДА (Без эмодзи у слова Закат) -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
@@ -360,7 +357,7 @@
                     <div class="text-sm text-green-200 mt-1 font-bold">Солнечно (Ощущается +9°C)</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-black text-yellow-300">🌅 Закат в 17:16</div>
+                    <div class="text-sm font-black text-yellow-300">Закат в 17:16</div>
                     <div class="text-xs text-gray-300 font-bold mt-0.5">Световой день: 10ч 42м</div>
                 </div>
             </div>
@@ -385,7 +382,7 @@
         </div>
     </div>
 
-    <!-- ТРАНСПОРТ С КРУПНЫМИ, ОТЛИЧНО ЧИТАЕМЫМИ ЧАСАМИ РЕЙСОВ -->
+    <!-- ТРАНСПОРТ -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
@@ -404,7 +401,6 @@
                         <span>Маршрут № 474: м. Котельники — СНТ «Горняк»</span>
                         <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
                     </div>
-                    <!-- Крупные, четкие часы рейсов -->
                     <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
                         <span class="text-[#1c5c38]">Будни:</span> 06:21, 06:52, 07:32, 08:12, 09:43, 14:48, 16:08, 18:48.<br>
                         <span class="text-[#1c5c38]">Выходные:</span> 05:55, 06:27, 07:31, 09:13, 11:29, 14:01, 17:57.
@@ -439,13 +435,54 @@
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchDropdown = document.getElementById('searchDropdown');
+        const searchResultsList = document.getElementById('searchResultsList');
 
-        searchInput.addEventListener('focus', () => searchDropdown.classList.remove('hidden'));
+        // База данных для умного живого поиска
+        const searchDatabase = [
+            { query: '474', title: 'Маршрут № 474: м. Котельники — СНТ «Горняк»', desc: 'Ближайший автобус через 13 мин (в 22:32)', action: openTransportModal },
+            { query: '26', title: 'Маршрут № 26: Ст. Люберцы — СНТ «Горняк»', desc: 'Расписание: 07:00, 09:30, 13:00, 16:30, 19:00', action: openTransportModal },
+            { query: 'к1', title: 'Маршрут № К1: Пл. Томилино — СНТ «Горняк»', desc: 'Расписание: 08:00, 11:00, 15:00, 18:00, 21:00', action: openTransportModal },
+            { query: 'транспорт', title: 'Транспорт и лайв-активность рейсов', desc: 'Все 3 маршрута и расписание', action: openTransportModal },
+            { query: 'автобус', title: 'Расписание автобусов и маршруток', desc: 'Смотреть время отправления', action: openTransportModal },
+            { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт, взносы 1200 руб/сотка', action: () => openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год') },
+            { query: 'свет', title: 'Тарифы на электроэнергию', desc: '4.85 руб/кВт⋅ч', action: () => openSection('Тарифы', 'Электроэнергия: 4.85 руб/кВт⋅ч') },
+            { query: 'документы', title: 'Документы и реквизиты', desc: 'Устав НСТ, бланки, акты', action: openDocsModal },
+            { query: 'устав', title: 'Устав НСТ «Горняк»', desc: 'Скачать официальный PDF документ', action: openDocsModal },
+            { query: 'история', title: 'Подробная история НСТ', desc: 'Основано в 1985 году, 320 участков', action: () => openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков.') }
+        ];
+
+        searchInput.addEventListener('focus', () => renderSearch(searchInput.value));
         searchInput.addEventListener('input', (e) => {
-            if (e.target.value.trim().length > 0) {
-                searchDropdown.classList.remove('hidden');
-            }
+            renderSearch(e.target.value);
         });
+
+        function renderSearch(keyword) {
+            const term = keyword.trim().toLowerCase();
+            searchResultsList.innerHTML = '';
+            
+            let filtered = searchDatabase;
+            if (term.length > 0) {
+                filtered = searchDatabase.filter(item => 
+                    item.query.includes(term) || item.title.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
+                );
+            }
+
+            if (filtered.length === 0) {
+                searchResultsList.innerHTML = `<div class="px-5 py-3 text-sm text-gray-600 font-bold">Ничего не найдено по запросу «${keyword}»</div>`;
+            } else {
+                filtered.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.className = 'px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none';
+                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-xs text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
+                    btn.onclick = () => {
+                        searchDropdown.classList.add('hidden');
+                        item.action();
+                    };
+                    searchResultsList.appendChild(btn);
+                });
+            }
+            searchDropdown.classList.remove('hidden');
+        }
 
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
