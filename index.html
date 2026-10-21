@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">НСТ «Горняк» — Официальный портал</title>
+<title>НСТ «Горняк» — Персональный портал</title>
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -19,15 +19,14 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        emerald: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
-          950: '#052e16',
+        gornyak: {
+          50: '#f2f9f4',
+          100: '#e1f3e6',
+          200: '#c5e7cd',
+          600: '#1e7e43',
+          700: '#176334',
+          800: '#144f2b',
+          900: '#0f3d22',
         }
       },
       fontFamily: {
@@ -42,7 +41,7 @@ tailwind.config = {
 <style>
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f4f8f5;
+  background-color: #f8fafc;
   color: #1e293b;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -53,21 +52,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 .page-section.active {
   display: block;
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.25s ease-in-out;
 }
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.nav-link.active-link {
-  color: #15803d;
-  font-weight: 700;
-  border-bottom: 2px solid #15803d;
-}
 
-/* Живой баннер и анимация природы */
+/* Живой баннер в дачном стиле с фоном папы */
 .live-hero-bg {
-  background: linear-gradient(135deg, #133820 0%, #1e4d2e 50%, #2e7d32 100%);
+  background: linear-gradient(135deg, #144f2b 0%, #1e7e43 60%, #2e9152 100%);
   position: relative;
   overflow: hidden;
 }
@@ -75,12 +69,12 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-  opacity: 0.3;
+  opacity: 0.35;
   animation: slowPan 40s linear infinite alternate;
 }
 @keyframes slowPan {
   0% { transform: scale(1) translateX(0); }
-  100% { transform: scale(1.08) translateX(-25px); }
+  100% { transform: scale(1.08) translateX(-20px); }
 }
 
 /* Летящие птицы */
@@ -88,14 +82,14 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   width: 14px;
   height: 10px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   clip-path: polygon(0 50%, 50% 0, 100% 50%, 50% 20%);
   animation: flyBird 14s linear infinite;
   z-index: 2;
 }
-.bird-1 { top: 20%; left: -10%; animation-duration: 15s; animation-delay: 0s; }
-.bird-2 { top: 40%; left: -10%; animation-duration: 19s; animation-delay: 5s; transform: scale(0.7); }
-.bird-3 { top: 15%; left: -10%; animation-duration: 12s; animation-delay: 8s; transform: scale(0.5); }
+.bird-1 { top: 25%; left: -10%; animation-duration: 15s; animation-delay: 0s; }
+.bird-2 { top: 45%; left: -10%; animation-duration: 18s; animation-delay: 4s; transform: scale(0.7); }
+.bird-3 { top: 18%; left: -10%; animation-duration: 12s; animation-delay: 7s; transform: scale(0.5); }
 
 @keyframes flyBird {
   0% { transform: translate(0, 0) scale(var(--s, 1)); opacity: 0; }
@@ -104,26 +98,18 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translate(120vw, -30px) scale(var(--s, 1)); opacity: 0; }
 }
 
-/* Эффект жидкого стекла (Liquid Glass / Frosted Glass) */
+/* Жидкое стекло */
 .glass-btn {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   transition: all 0.2s ease;
 }
 .glass-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.28);
 }
 
-.glass-pill {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-}
-
-/* Плавный аккордеон для транспорта */
 .transport-collapse {
   max-height: 0;
   overflow: hidden;
@@ -136,263 +122,231 @@ h1, h2, h3, h4, h5, h6 {
 }
 </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-600 selection:text-white">
+<body class="min-h-screen flex flex-col justify-between antialiased">
 
-<!-- Верхняя плашка уведомлений -->
-<div id="topBanner" class="bg-emerald-900 text-emerald-100 text-sm py-2 px-4 flex justify-between items-center border-b border-emerald-800">
-  <div class="container mx-auto flex items-center justify-between text-xs sm:text-sm">
-    <span class="flex items-center gap-2">
-      <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      <i class="fa-solid fa-bullhorn text-emerald-300"></i>
-      <strong class="font-semibold hidden sm:inline">Объявление:</strong>
-      <span id="bannerText">Внимание! На этой неделе работает выездной терапевтический прием.</span>
-    </span>
-    <div class="flex items-center gap-3">
-      <div class="flex items-center gap-1 bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-700/50 text-xs font-semibold">
-        <button onclick="setLanguage('ru')" id="lang-ru" class="px-1.5 py-0.5 rounded transition text-white bg-emerald-700">RU</button>
-        <span class="text-emerald-500">|</span>
-        <button onclick="setLanguage('tr')" id="lang-tr" class="px-1.5 py-0.5 rounded transition text-emerald-300 hover:text-white">TR</button>
-      </div>
-      <button onclick="document.getElementById('topBanner').remove()" class="text-emerald-300 hover:text-white p-1">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Навигационная шапка -->
+<!-- Шапка -->
 <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-slate-100">
   <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-3 group">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform">
+    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gornyak-700 text-white flex items-center justify-center font-bold text-xl shadow-sm">
         <i class="fa-solid fa-tree"></i>
       </div>
       <div>
-        <span class="block text-lg font-extrabold text-emerald-950 tracking-tight leading-none">НСТ «Горняк»</span>
-        <span class="text-xs font-medium text-emerald-700 tracking-wider uppercase">Московская область</span>
+        <span class="block text-base font-extrabold text-gornyak-900 tracking-tight leading-none">НСТ «Горняк»</span>
+        <span class="text-[10px] font-semibold text-slate-500 tracking-wider uppercase">Садовое некоммерческое товарищество</span>
       </div>
     </a>
-    <!-- Десктопное меню -->
-    <nav class="hidden xl:flex items-center gap-5 font-medium text-slate-700 text-xs sm:text-sm">
-      <button onclick="navigateTo('home')" id="nav-home" class="nav-link py-1 hover:text-emerald-700 transition active-link">Главная</button>
-      <button onclick="navigateTo('infrastructure')" id="nav-infrastructure" class="nav-link py-1 hover:text-emerald-700 transition">О СНТ</button>
-      <button onclick="navigateTo('transport')" id="nav-transport" class="nav-link py-1 hover:text-emerald-700 transition">Транспорт</button>
-      <button onclick="navigateTo('announcements')" id="nav-announcements" class="nav-link py-1 hover:text-emerald-700 transition">Новости</button>
-      <button onclick="navigateTo('documents')" id="nav-documents" class="nav-link py-1 hover:text-emerald-700 transition">Финансы & Документы</button>
-      <button onclick="navigateTo('gallery')" id="nav-gallery" class="nav-link py-1 hover:text-emerald-700 transition">Галерея</button>
-      <button onclick="navigateTo('contacts')" id="nav-contacts" class="nav-link py-1 hover:text-emerald-700 transition">Контакты</button>
+    
+    <nav class="hidden lg:flex items-center gap-6 font-medium text-slate-700 text-xs">
+      <button onclick="navigateTo('home')" class="hover:text-gornyak-700 font-bold transition">Главная</button>
+      <button onclick="navigateTo('infrastructure')" class="hover:text-gornyak-700 transition">О СНТ</button>
+      <button onclick="navigateTo('transport')" class="hover:text-gornyak-700 transition">Транспорт</button>
+      <button onclick="navigateTo('announcements')" class="hover:text-gornyak-700 transition">Новости</button>
+      <button onclick="navigateTo('documents')" class="hover:text-gornyak-700 transition">Финансы</button>
+      <button onclick="navigateTo('contacts')" class="hover:text-gornyak-700 transition">Контакты</button>
     </nav>
-    <div class="hidden sm:flex items-center gap-3">
-      <button onclick="navigateTo('issue')" class="bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 px-3.5 py-2 rounded-lg font-semibold text-xs flex items-center gap-2 transition">
-        <i class="fa-solid fa-wrench text-emerald-600"></i> Заявка в правление
-      </button>
-    </div>
-    <button onclick="toggleMobileMenu()" class="xl:hidden p-2 text-slate-700 hover:text-emerald-700 text-xl focus:outline-none">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-  </div>
-
-  <!-- Мобильное меню -->
-  <div id="mobileMenu" class="hidden xl:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-2 font-medium text-slate-700 text-sm">
-    <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Главная</button>
-    <button onclick="navigateTo('infrastructure'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">О СНТ</button>
-    <button onclick="navigateTo('transport'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Транспорт и расписание</button>
-    <button onclick="navigateTo('announcements'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Новости и объявления</button>
-    <button onclick="navigateTo('documents'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Документы и финансы</button>
-    <button onclick="navigateTo('gallery'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Галерея</button>
-    <button onclick="navigateTo('contacts'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 hover:text-emerald-700">Контакты</button>
   </div>
 </header>
 
 <main class="flex-grow">
-  <!-- 1. ГЛАВНАЯ СТРАНИЦА (С ЖИВЫМ БАННЕРОМ, ПТИЦАМИ И НОВЫМ ВИДЖЕТОМ) -->
   <section id="page-home" class="page-section active">
-    <div class="live-hero-bg text-white py-12 lg:py-16">
+    <!-- Живой зеленый баннер с летящими птицами -->
+    <div class="live-hero-bg text-white py-12 px-4">
       <div class="clouds-animation"></div>
       <div class="bird bird-1"></div>
       <div class="bird bird-2"></div>
       <div class="bird bird-3"></div>
+      
+      <div class="container mx-auto relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3 drop-shadow">НСТ «Горняк»</h1>
+          <p class="text-emerald-100 text-sm sm:text-base font-light max-w-xl drop-shadow">
+            Наше СНТ — это наш дом, наши соседи, наша ответственность! Вместе делаем наше СНТ лучше!
+          </p>
+        </div>
 
-      <div class="container mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div class="lg:col-span-8">
-            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/20 backdrop-blur border border-white/20 text-emerald-100 text-xs sm:text-sm font-semibold uppercase tracking-wider mb-4">
-              <i class="fa-solid fa-house-chimney text-emerald-300"></i> Официальный портал товарищества
-            </span>
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 drop-shadow-md">
-              НСТ «Горняк»
-            </h1>
-            <p class="text-base sm:text-lg text-emerald-100 font-light mb-8 max-w-2xl leading-relaxed drop-shadow">
-              Наше СНТ — это наш дом, наши соседи, наша ответственность! Вместе делаем наше СНТ лучше!
-            </p>
-          </div>
+        <div class="flex items-center gap-3">
+          <!-- Кнопка перехода к интерфейсу Папы -->
+          <a href="index.html" class="glass-btn px-3.5 py-2.5 rounded-full flex items-center gap-2 text-white text-xs font-semibold shadow-lg" title="Переключиться на макет папы">
+            <i class="fa-solid fa-shuffle text-emerald-300"></i>
+            <span class="hidden sm:inline">Интерфейс папы</span>
+          </a>
 
-          <!-- Новый дизайн виджета в стиле "Жидкое стекло" (как на референсе) -->
-          <div class="lg:col-span-4 flex justify-lg-end items-center gap-3">
-            <!-- Кнопка уведомлений / почты -->
-            <button onclick="navigateTo('announcements')" class="glass-btn w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer" title="Уведомления">
-              <i class="fa-regular fa-envelope text-lg"></i>
-            </button>
-            <!-- Капсульный блок погоды -->
-            <div class="glass-pill px-5 py-2.5 rounded-full shadow-lg flex items-center gap-3 text-white">
-              <i class="fa-solid fa-sun text-yellow-300 text-2xl animate-spin" style="animation-duration: 20s;"></i>
-              <div>
-                <div class="text-lg font-bold leading-none">+18°C</div>
-                <div class="text-[11px] text-emerald-100 opacity-90 mt-0.5">Ясно</div>
-              </div>
+          <!-- Уведомления -->
+          <button onclick="navigateTo('announcements')" class="glass-btn w-11 h-11 rounded-full flex items-center justify-center text-white shadow-lg" title="Уведомления">
+            <i class="fa-regular fa-envelope text-base"></i>
+          </button>
+
+          <!-- Погода -->
+          <div class="glass-btn px-4 py-2 rounded-full shadow-lg flex items-center gap-3 text-white">
+            <i class="fa-solid fa-sun text-yellow-300 text-xl animate-spin" style="animation-duration: 20s;"></i>
+            <div>
+              <div class="text-sm font-bold leading-none">+18°C</div>
+              <div class="text-[10px] text-emerald-200 mt-0.5">Московская область • Ясно</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Карточки быстрого доступа -->
-    <div class="py-10 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div onclick="navigateTo('infrastructure')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
-            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-tree"></i>
-            </div>
-            <h3 class="font-bold text-slate-900 text-lg mb-1">О СНТ</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">История, территория, информация о товариществе.</p>
+    <!-- Карточки быстрых разделов -->
+    <div class="container mx-auto px-4 py-8 space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div onclick="navigateTo('infrastructure')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group">
+          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-tree"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">О СНТ <i class="fa-solid fa-arrow-right text-xs text-slate-400 float-right mt-1"></i></h3>
+          <p class="text-slate-500 text-xs">История, территория, информация о товариществе</p>
+        </div>
+        <div onclick="navigateTo('infrastructure')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group">
+          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-users"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Правление <i class="fa-solid fa-arrow-right text-xs text-slate-400 float-right mt-1"></i></h3>
+          <p class="text-slate-500 text-xs">Состав, контакты, работа правления</p>
+        </div>
+        <div onclick="navigateTo('announcements')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group">
+          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-bullhorn"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Новости <i class="fa-solid fa-arrow-right text-xs text-slate-400 float-right mt-1"></i></h3>
+          <p class="text-slate-500 text-xs">Актуальные события и объявления</p>
+        </div>
+        <div onclick="navigateTo('documents')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer group">
+          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-wallet"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Финансы <i class="fa-solid fa-arrow-right text-xs text-slate-400 float-right mt-1"></i></h3>
+          <p class="text-slate-500 text-xs">Отчеты, сметы, платежи</p>
+        </div>
+      </div>
+
+      <!-- Колонка новостей -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-newspaper text-gornyak-700"></i> Колонка новостей
+          </h3>
+          <button onclick="navigateTo('announcements')" class="text-xs font-semibold text-gornyak-700 hover:underline">Все новости →</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+            <span class="text-[10px] text-slate-400 font-mono">12.09.2025</span>
+            <h4 class="font-bold text-slate-800 text-xs mt-1 mb-1">Проведены работы по благоустройству территории</h4>
+            <p class="text-[11px] text-slate-600">Отремонтирована центральная дорога и отсыпаны обочины.</p>
           </div>
-          <div onclick="navigateTo('transport')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
-            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-bus"></i>
-            </div>
-            <h3 class="font-bold text-slate-900 text-lg mb-1">Транспорт</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">Маршруты №474, №474к, №26.К1 и контакты перевозчиков.</p>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+            <span class="text-[10px] text-slate-400 font-mono">08.09.2025</span>
+            <h4 class="font-bold text-slate-800 text-xs mt-1 mb-1">Информация о взносах и платежах</h4>
+            <p class="text-[11px] text-slate-600">Напоминаем о необходимости сдачи целевых взносов за сезон.</p>
           </div>
-          <div onclick="navigateTo('announcements')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
-            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-bullhorn"></i>
-            </div>
-            <h3 class="font-bold text-slate-900 text-lg mb-1">Новости</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">Актуальные события, объявления и собрания правления.</p>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+            <span class="text-[10px] text-slate-400 font-mono">03.09.2025</span>
+            <h4 class="font-bold text-slate-800 text-xs mt-1 mb-1">Важно: собрание правления 10 сентября</h4>
+            <p class="text-[11px] text-slate-600">Обсуждение подготовки к осенне-зимнему периоду.</p>
           </div>
-          <div onclick="navigateTo('documents')" class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-100 hover:shadow-lg transition cursor-pointer group">
-            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-folder-closed"></i>
-            </div>
-            <h3 class="font-bold text-slate-900 text-lg mb-1">Финансы & Сметы</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">Отчеты, взносы, сметы и регламенты товарищества.</p>
-          </div>
+        </div>
+      </div>
+
+      <!-- Блок «Отдать даром» -->
+      <div class="bg-gradient-to-r from-gornyak-800 to-gornyak-900 text-white p-6 rounded-2xl shadow flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-gift text-emerald-300"></i> ОТДАТЬ ДАРОМ</h3>
+          <p class="text-xs text-emerald-100 mt-1">Возможно то, что не нужно вам, пригодится соседу.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="navigateTo('announcements')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition">+ Отдать</button>
+          <button onclick="navigateTo('announcements')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2 rounded-xl text-xs border border-white/20 transition">🔍 Нужно</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 2. РАЗДЕЛ «ТРАНСПОРТ» С АНИМИРОВАННЫМИ ЧАСАМИ РЕЙСОВ -->
-  <section id="page-transport" class="page-section py-12 bg-white">
-    <div class="container mx-auto px-4 max-w-3xl">
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Маршруты</span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">Транспорт и расписание</h2>
-        </div>
-        <button onclick="navigateTo('home')" class="bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl text-xs font-bold text-slate-700">← Назад</button>
+  <!-- Интерактивный раздел Транспорт -->
+  <section id="page-transport" class="page-section py-8 px-4">
+    <div class="container mx-auto max-w-3xl">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-900">Транспорт и маршруты</h2>
+        <button onclick="navigateTo('home')" class="bg-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-200">← Назад</button>
       </div>
 
-      <div class="space-y-4">
+      <div class="space-y-3">
         <!-- Маршрут 474 -->
-        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 transition shadow-sm">
+        <div class="p-5 rounded-2xl bg-gornyak-50 border border-gornyak-100 shadow-sm">
           <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-474')">
             <div>
               <h3 class="font-bold text-slate-900 text-base">Маршрут №474</h3>
               <p class="text-xs text-slate-600 mt-0.5">Город — НСТ «Горняк». Интервал: каждый час с 07:00 до 21:00.</p>
             </div>
             <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> На линии
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gornyak-100 text-gornyak-800 text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-gornyak-600 animate-pulse"></span> На линии
               </span>
-              <i id="icon-route-474" class="fa-solid fa-chevron-down text-xs text-emerald-700 transition-transform duration-300"></i>
+              <i id="icon-route-474" class="fa-solid fa-chevron-down text-xs text-gornyak-700 transition-transform duration-300"></i>
             </div>
           </div>
-          <div id="route-474" class="transport-collapse mt-3 pt-3 border-t border-emerald-200/60 text-xs text-slate-700 space-y-1.5">
+          <div id="route-474" class="transport-collapse mt-3 pt-3 border-t border-gornyak-200 text-xs text-slate-700 space-y-1">
             <p><strong>Отправление из Города:</strong> 07:00, 08:00, 09:00, 11:00, 13:00, 15:00, 17:00, 19:00, 21:00</p>
             <p><strong>Отправление из НСТ «Горняк»:</strong> 07:45, 08:45, 09:45, 11:45, 13:45, 15:45, 17:45, 19:45, 21:45</p>
           </div>
         </div>
 
         <!-- Маршрут 474к -->
-        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 transition shadow-sm">
+        <div class="p-5 rounded-2xl bg-gornyak-50 border border-gornyak-100 shadow-sm">
           <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-474k')">
             <div>
               <h3 class="font-bold text-slate-900 text-base">Маршрут №474к</h3>
               <p class="text-xs text-slate-600 mt-0.5">Укороченный рейс (до поворота). Утренние и вечерние часы пик.</p>
             </div>
             <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> На линии
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gornyak-100 text-gornyak-800 text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-gornyak-600 animate-pulse"></span> На линии
               </span>
-              <i id="icon-route-474k" class="fa-solid fa-chevron-down text-xs text-emerald-700 transition-transform duration-300"></i>
+              <i id="icon-route-474k" class="fa-solid fa-chevron-down text-xs text-gornyak-700 transition-transform duration-300"></i>
             </div>
           </div>
-          <div id="route-474k" class="transport-collapse mt-3 pt-3 border-t border-emerald-200/60 text-xs text-slate-700 space-y-1.5">
-            <p><strong>Утренние рейсы (часы пик):</strong> 06:30, 07:15, 08:15</p>
-            <p><strong>Вечерние рейсы (часы пик):</strong> 18:15, 19:15, 20:30</p>
+          <div id="route-474k" class="transport-collapse mt-3 pt-3 border-t border-gornyak-200 text-xs text-slate-700 space-y-1">
+            <p><strong>Утренние рейсы:</strong> 06:30, 07:15, 08:15</p>
+            <p><strong>Вечерние рейсы:</strong> 18:15, 19:15, 20:30</p>
           </div>
         </div>
 
         <!-- Маршрут 26.К1 -->
-        <div class="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 transition shadow-sm">
+        <div class="p-5 rounded-2xl bg-gornyak-50 border border-gornyak-100 shadow-sm">
           <div class="flex items-center justify-between cursor-pointer" onclick="toggleRoute('route-26')">
             <div>
               <h3 class="font-bold text-slate-900 text-base">Маршрут №26.К1</h3>
               <p class="text-xs text-slate-600 mt-0.5">Сезонный дачный рейс. Пятница – Воскресенье по расписанию.</p>
             </div>
             <div class="flex items-center gap-3">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> На линии
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gornyak-100 text-gornyak-800 text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-gornyak-600 animate-pulse"></span> На линии
               </span>
-              <i id="icon-route-26" class="fa-solid fa-chevron-down text-xs text-emerald-700 transition-transform duration-300"></i>
+              <i id="icon-route-26" class="fa-solid fa-chevron-down text-xs text-gornyak-700 transition-transform duration-300"></i>
             </div>
           </div>
-          <div id="route-26" class="transport-collapse mt-3 pt-3 border-t border-emerald-200/60 text-xs text-slate-700 space-y-1.5">
+          <div id="route-26" class="transport-collapse mt-3 pt-3 border-t border-gornyak-200 text-xs text-slate-700 space-y-1">
             <p><strong>Пятница:</strong> 16:00, 18:30, 20:00</p>
             <p><strong>Суббота и Воскресенье:</strong> 09:00, 12:00, 15:00, 18:00</p>
           </div>
         </div>
       </div>
-
-      <!-- Контакты перевозчика -->
-      <div class="mt-8 p-6 rounded-2xl bg-slate-50 border border-slate-200">
-        <h3 class="font-bold text-slate-900 text-sm mb-3"><i class="fa-solid fa-phone text-emerald-700 mr-2"></i> Служебные номера перевозчика</h3>
-        <p class="text-xs text-slate-600 mb-2">ООО «БАЛАШИХА-ЭКСПРЕСС»:</p>
-        <div class="text-xs font-mono text-emerald-800 space-y-1">
-          <p>📞 +7 (495) 786-23-23</p>
-          <p>📞 +7 (985) 187-28-02</p>
-          <p>📞 +7 (495) 424-99-11</p>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Заглушки остальных страниц -->
-  <section id="page-infrastructure" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">О СНТ «Горняк»</h2><p class="text-sm mt-2 text-slate-600">Информация о товариществе.</p></div></section>
-  <section id="page-announcements" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Новости и объявления</h2><p class="text-sm mt-2 text-slate-600">Собрания и важные события.</p></div></section>
-  <section id="page-documents" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Документы и Финансы</h2><p class="text-sm mt-2 text-slate-600">Устав, сметы расходов.</p></div></section>
-  <section id="page-gallery" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Галерея</h2><p class="text-sm mt-2 text-slate-600">Фотографии нашего поселка.</p></div></section>
-  <section id="page-contacts" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Контакты правления</h2><p class="text-sm mt-2 text-slate-600">Экстренные службы.</p></div></section>
-  <section id="page-issue" class="page-section py-12 bg-white"><div class="container mx-auto px-4"><button onclick="navigateTo('home')" class="mb-4 bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold">← Назад</button><h2 class="text-2xl font-bold">Заявка в правление</h2><p class="text-sm mt-2 text-slate-600">Форма отправки обращений.</p></div></section>
+  <!-- Заглушки -->
+  <section id="page-infrastructure" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">О СНТ и Правление</h2></div></section>
+  <section id="page-announcements" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">Новости и объявления</h2></div></section>
+  <section id="page-documents" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">Финансы и документы</h2></div></section>
+  <section id="page-contacts" class="page-section py-10 px-4"><div class="container mx-auto"><button onclick="navigateTo('home')" class="mb-4 bg-white px-4 py-2 rounded-xl text-xs font-bold border">← Назад</button><h2 class="text-2xl font-bold">Контакты</h2></div></section>
 </main>
 
-<footer class="bg-emerald-950 text-emerald-100 py-6 text-xs text-center border-t border-emerald-900">
-  <p>© 2026 НСТ «Горняк» Московская область. Все права защищены.</p>
+<footer class="bg-gornyak-900 text-gornyak-100 py-6 text-xs text-center border-t border-gornyak-800 mt-10">
+  <div class="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p>© 2026 НСТ «Горняк» Московская область. Все права защищены.</p>
+    <p class="text-emerald-400 font-semibold">Вместе — мы сильнее!</p>
+  </div>
 </footer>
 
 <script>
 function navigateTo(pageId) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
   const target = document.getElementById('page-' + pageId);
   if (target) target.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toggleMobileMenu() {
-  document.getElementById('mobileMenu').classList.toggle('hidden');
 }
 
 function toggleRoute(routeId) {
@@ -405,11 +359,6 @@ function toggleRoute(routeId) {
     content.classList.add('expanded');
     icon.style.transform = 'rotate(180deg)';
   }
-}
-
-function setLanguage(lang) {
-  document.getElementById('lang-ru').className = lang === 'ru' ? 'px-1.5 py-0.5 rounded transition text-white bg-emerald-700' : 'px-1.5 py-0.5 rounded transition text-emerald-300 hover:text-white';
-  document.getElementById('lang-tr').className = lang === 'tr' ? 'px-1.5 py-0.5 rounded transition text-white bg-emerald-700' : 'px-1.5 py-0.5 rounded transition text-emerald-300 hover:text-white';
 }
 </script>
 </body>
