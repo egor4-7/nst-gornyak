@@ -9,6 +9,16 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
         
+        /* Блокировка выделения текста и подсветки */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #dceada;
@@ -121,7 +131,7 @@
         <div class="relative w-full">
             <div class="relative flex items-center">
                 <i class="fa-solid fa-magnifying-glass absolute left-5 text-green-800 text-xl"></i>
-                <input type="text" id="searchInput" placeholder="Введите номер маршрута (например, 474), тарифы, документы..." 
+                <input type="text" id="searchInput" placeholder="Введите номер маршрута (например, 474к), тарифы, документы..." 
                     class="w-full glass-panel border border-green-300/80 rounded-2xl py-4 pl-14 pr-4 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#1c5c38] transition text-base font-bold">
             </div>
 
@@ -134,7 +144,7 @@
         <!-- Все 8 карточек -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             
-            <!-- 1. Транспорт (Без Live-плашки) -->
+            <!-- 1. Транспорт -->
             <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bus"></i>
@@ -385,7 +395,7 @@
         </div>
     </div>
 
-    <!-- ТРАНСПОРТ (Без Live-активности внутри) -->
+    <!-- ТРАНСПОРТ (Актуальное расписание с остановок) -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
@@ -394,34 +404,39 @@
             </div>
 
             <div class="flex flex-col gap-3 text-sm text-gray-800">
+                <!-- Маршрут 474к -->
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
                     <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
-                        <span>Маршрут № 474: м. Котельники — СНТ «Горняк»</span>
+                        <span>Маршрут № 474к: от Карьера — Метро Котельники</span>
                         <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
                     </div>
                     <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
-                        <span class="text-[#1c5c38]">Будни:</span> 06:21, 06:52, 07:32, 08:12, 09:43, 14:48, 16:08, 18:48.<br>
-                        <span class="text-[#1c5c38]">Выходные:</span> 05:55, 06:27, 07:31, 09:13, 11:29, 14:01, 17:57.
+                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
+                        06:18, 07:01, 07:50, 08:33, 09:16, 14:14, 15:31, 16:14, 16:58, 17:46, 18:37.
                     </div>
                 </div>
 
+                <!-- Маршрут 1к -->
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
                     <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
-                        <span>Маршрут № 26: Ст. Люберцы — СНТ «Горняк»</span>
+                        <span>Маршрут № 1к: Остановка Карьер — Метро Котельники</span>
                         <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
                     </div>
                     <div id="route2" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
-                        <span class="text-[#1c5c38]">Ежедневно:</span> 07:00, 09:30, 13:00, 16:30, 19:00.
+                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
+                        06:15, 07:05, 07:56, 08:51, 09:41, 12:58, 13:51, 14:36, 16:25, 17:10, 18:04, 19:06.
                     </div>
                 </div>
 
+                <!-- Маршрут 26 -->
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
                     <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
-                        <span>Маршрут № К1: Пл. Томилино — СНТ «Горняк»</span>
+                        <span>Маршрут № 26: до Силиката (через Карьер)</span>
                         <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
                     </div>
                     <div id="route3" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
-                        <span class="text-[#1c5c38]">Ежедневно:</span> 08:00, 11:00, 15:00, 18:00, 21:00.
+                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
+                        06:20, 07:20, 07:52, 08:24, 08:56, 09:33, 10:05, 11:10, 12:15, 13:20, 14:25, 15:30.
                     </div>
                 </div>
             </div>
@@ -436,10 +451,10 @@
         const searchResultsList = document.getElementById('searchResultsList');
 
         const searchDatabase = [
-            { query: '474', title: 'Маршрут № 474: м. Котельники — СНТ «Горняк»', desc: 'Расписание автобусов', action: openTransportModal },
-            { query: '26', title: 'Маршрут № 26: Ст. Люберцы — СНТ «Горняк»', desc: 'Расписание: 07:00, 09:30, 13:00, 16:30, 19:00', action: openTransportModal },
-            { query: 'к1', title: 'Маршрут № К1: Пл. Томилино — СНТ «Горняк»', desc: 'Расписание: 08:00, 11:00, 15:00, 18:00, 21:00', action: openTransportModal },
-            { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все 3 маршрута', action: openTransportModal },
+            { query: '474', title: 'Маршрут № 474к: от Карьера — М. Котельники', desc: 'Расписание автобусов', action: openTransportModal },
+            { query: '1к', title: 'Маршрут № 1к: Карьер — М. Котельники', desc: 'Расписание автобусов', action: openTransportModal },
+            { query: '26', title: 'Маршрут № 26: до Силиката через Карьер', desc: 'Расписание автобусов', action: openTransportModal },
+            { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: openTransportModal },
             { query: 'автобус', title: 'Расписание автобусов и маршруток', desc: 'Смотреть время отправления', action: openTransportModal },
             { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт, взносы 1200 руб/сотка', action: () => openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год') },
             { query: 'свет', title: 'Тарифы на электроэнергию', desc: '4.85 руб/кВт⋅ч', action: () => openSection('Тарифы', 'Электроэнергия: 4.85 руб/кВт⋅ч') },
