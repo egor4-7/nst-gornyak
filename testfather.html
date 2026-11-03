@@ -56,18 +56,79 @@ h1, h2, h3, h4 {
   background: linear-gradient(to top, #c5e7cd 0%, #e1f3e6 60%, rgba(255,255,255,0) 100%);
 }
 
+/* Тактильные иконки погоды и жидкое стекло */
 .glass-weather {
-  background: rgba(15, 61, 34, 0.75);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(15, 61, 34, 0.85);
+  backdrop-filter: blur(25px) saturate(190%);
+  -webkit-backdrop-filter: blur(25px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .modal-glass {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   border: 1px solid rgba(220, 235, 225, 0.8);
+}
+
+/* 3D Glassmorphism Weather Icons */
+.weather-icon-box {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.g-sun {
+  width: 26px;
+  height: 26px;
+  background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 153, 0, 0.8);
+}
+.g-cloud {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  width: 32px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.g-cloud::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 6px;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+}
+.g-cloud::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 50%;
+}
+.g-rain {
+  position: absolute;
+  bottom: -4px;
+  left: 12px;
+  display: flex;
+  gap: 3px;
+}
+.g-rain span {
+  width: 3px;
+  height: 7px;
+  background: #38bdf8;
+  border-radius: 4px;
 }
 </style>
 </head>
@@ -86,20 +147,22 @@ h1, h2, h3, h4 {
       </div>
     </a>
 
-    <nav class="hidden lg:flex items-center gap-5 text-[11px] font-semibold text-slate-700">
+    <nav class="hidden lg:flex items-center gap-4 text-[11px] font-semibold text-slate-700">
       <button onclick="navigateTo('home')" class="flex flex-col items-center gap-0.5 text-gornyak-800 hover:text-gornyak-700 transition"><i class="fa-solid fa-house text-sm"></i> Главная</button>
       <button onclick="navigateTo('articles')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-book-open text-sm"></i> Статьи</button>
       <button onclick="navigateTo('announcements')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-bullhorn text-sm"></i> Новости</button>
       <button onclick="navigateTo('documents')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-folder text-sm"></i> Документы</button>
       <button onclick="navigateTo('estimates')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-coins text-sm"></i> Сметы</button>
-      <button onclick="navigateTo('contact')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-envelope text-sm"></i> Написать</button>
+      <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-phone text-sm"></i> Контакты</button>
+      <button onclick="navigateTo('contact-form')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-envelope text-sm"></i> Написать</button>
       <button onclick="navigateTo('chat')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-comments text-sm"></i> Чат</button>
       <button onclick="navigateTo('auth')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-user text-sm"></i> Войти</button>
+      <button onclick="navigateTo('register')" class="bg-gornyak-700 text-white px-3 py-1.5 rounded-xl font-bold hover:bg-gornyak-800 transition shadow-sm">Регистрация</button>
     </nav>
 
     <!-- Поиск по сайту -->
     <div class="relative flex items-center">
-      <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-36 sm:w-48 transition">
+      <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-32 sm:w-44 transition">
       <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-xs"></i>
       <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
     </div>
@@ -120,14 +183,17 @@ h1, h2, h3, h4 {
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <!-- Кнопка с текстом «Мобильная версия» -->
+          <!-- Кнопка переключения на мобильную версию -->
           <a href="index.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition">
             <i class="fa-solid fa-mobile-screen-button text-yellow-300"></i> Мобильная версия
           </a>
 
-          <!-- Интерактивный виджет погоды -->
-          <div onclick="openWeatherModal()" class="glass-weather text-white px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3 cursor-pointer hover:bg-emerald-900/85 transition">
-            <i class="fa-solid fa-sun text-yellow-400 text-2xl"></i>
+          <!-- Интерактивный виджет погоды с жидким стеклом -->
+          <div onclick="openWeatherModal()" class="glass-weather text-white px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3 cursor-pointer hover:bg-emerald-900/90 transition">
+            <div class="weather-icon-box">
+              <div class="g-sun"></div>
+              <div class="g-cloud"></div>
+            </div>
             <div>
               <div class="flex items-center gap-2 font-bold text-base leading-none">
                 +18°C
@@ -144,60 +210,52 @@ h1, h2, h3, h4 {
       </div>
     </div>
 
-    <!-- Полная сетка всех карточек -->
+    <!-- Полная сетка карточек с живыми данными -->
     <div class="container mx-auto px-4 py-8 space-y-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Статьи -->
         <div onclick="navigateTo('articles')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group">
           <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-book-open"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Статьи (с 2020 г.)</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Архив материалов, полезные советы и отчеты</p>
         </div>
 
-        <!-- Новости СНТ -->
         <div onclick="navigateTo('announcements')" class="bg-[#faf5ff] p-6 rounded-2xl border border-purple-100 hover:shadow-md transition cursor-pointer group">
           <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-newspaper"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Новости СНТ</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Актуальные события и объявления правления</p>
         </div>
 
-        <!-- Документы -->
         <div onclick="navigateTo('documents')" class="bg-[#f0f9ff] p-6 rounded-2xl border border-sky-100 hover:shadow-md transition cursor-pointer group">
           <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-folder-open"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Документы</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Устав, бланки, акты и регламенты с загрузкой</p>
         </div>
 
-        <!-- Сметы и Финансы -->
         <div onclick="navigateTo('estimates')" class="bg-[#fffbeb] p-6 rounded-2xl border border-amber-100 hover:shadow-md transition cursor-pointer group">
           <div class="text-amber-600 text-2xl mb-3"><i class="fa-solid fa-coins"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Сметы и Финансы</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Финансовые отчеты и сметы товарищества</p>
         </div>
 
-        <!-- О СНТ -->
-        <div onclick="openInfoModal('О СНТ «Горняк»', 'НСТ «Горняк» основано в 1985 году. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение.')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="openInfoModal('О СНТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group">
           <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-tree"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">О СНТ</h3>
           <p class="text-slate-500 text-xs leading-relaxed">История, территория, информация о товариществе</p>
         </div>
 
-        <!-- Правление -->
-        <div onclick="openInfoModal('Правление НСТ', 'Председатель: Иванов И.И.\nЭлектрик: Петров А.В.\nОхрана КПП: круглосуточно.\nТелефон правления: +7 (900) 123-45-67')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('contacts')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group">
           <div class="text-indigo-700 text-2xl mb-3"><i class="fa-solid fa-users"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Правление</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Состав, контакты, работа правления</p>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Контакты и Правление</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Телефоны служб, председателя и правления</p>
         </div>
 
-        <!-- Контакты -->
-        <div onclick="navigateTo('contact')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group">
-          <div class="text-slate-700 text-2xl mb-3"><i class="fa-solid fa-phone"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Контакты</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Телефоны правления, службы, экстренные номера</p>
+        <div onclick="navigateTo('contact-form')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group">
+          <div class="text-slate-700 text-2xl mb-3"><i class="fa-solid fa-envelope"></i></div>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Написать нам</h3>
+          <p class="text-slate-500 text-xs leading-relaxed">Форма обратной связи с администрацией</p>
         </div>
 
-        <!-- Чат -->
         <div onclick="navigateTo('chat')" class="bg-[#f3e8ff] p-6 rounded-2xl border border-purple-200 hover:shadow-md transition cursor-pointer group">
           <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-comments"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Чат</h3>
@@ -270,8 +328,35 @@ h1, h2, h3, h4 {
     <div id="estimatesList" class="space-y-3"></div>
   </section>
 
-  <!-- КОНТАКТЫ / НАПИСАТЬ НАМ -->
-  <section id="page-contact" class="page-section container mx-auto px-4 py-8 max-w-2xl">
+  <!-- РАЗДЕЛ КОНТАКТЫ -->
+  <section id="page-contacts" class="page-section container mx-auto px-4 py-8 max-w-2xl">
+    <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h2 class="text-2xl font-black text-slate-900">📞 Контакты служб и правления</h2>
+        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
+      </div>
+      <div class="space-y-4 text-sm text-slate-700">
+        <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-extrabold text-gornyak-900 text-base mb-1">Председатель правления</div>
+          <p class="text-xs text-slate-600 mb-2">Приемные часы: суббота с 11:00 до 14:00</p>
+          <a href="tel:+79001234567" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 123-45-67</a>
+        </div>
+        <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-extrabold text-gornyak-900 text-base mb-1">Электрик НСТ</div>
+          <p class="text-xs text-slate-600 mb-2">Аварийные отключения и подключение участков</p>
+          <a href="tel:+79007654321" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 765-43-21</a>
+        </div>
+        <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="font-extrabold text-gornyak-900 text-base mb-1">Охрана КПП</div>
+          <p class="text-xs text-slate-600 mb-2">Шлагбаум и пропускной режим (круглосуточно)</p>
+          <a href="tel:+79005550011" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 555-00-11</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- РАЗДЕЛ НАПИСАТЬ НАМ -->
+  <section id="page-contact-form" class="page-section container mx-auto px-4 py-8 max-w-2xl">
     <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-black text-slate-900">Написать нам</h2>
@@ -353,7 +438,7 @@ h1, h2, h3, h4 {
 
 </main>
 
-<!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА ИНФОРМАЦИИ КАРТОЧЕК -->
+<!-- МОДАЛЬНОЕ ОКНО ИНФОРМАЦИИ КАРТОЧЕК -->
 <div id="infoModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">
     <div class="flex justify-between items-center border-b pb-3">
@@ -365,12 +450,15 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- МОДАЛКА ПОГОДЫ НА НЕДЕЛЮ -->
-<div id="weatherModal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+<!-- ИНТЕРАКТИВНАЯ ПОГОДА НА НЕДЕЛЮ С ТАКТИЛЬНЫМ ДИЗАЙНОМ -->
+<div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="glass-weather text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
     <div class="flex justify-between items-center border-b border-white/15 pb-4">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-300/40 flex items-center justify-center text-xl">☀️</div>
+        <div class="weather-icon-box">
+          <div class="g-sun"></div>
+          <div class="g-cloud"></div>
+        </div>
         <div>
           <h3 class="text-xl font-black">Подробный прогноз погоды</h3>
           <p class="text-xs text-emerald-200">НСТ «Горняк» • Метеостанция online</p>
@@ -383,7 +471,7 @@ h1, h2, h3, h4 {
       <div><span class="text-emerald-200">Рассвет:</span> <b>06:20</b></div>
       <div><span class="text-emerald-200">Закат:</span> <b>18:45</b></div>
       <div><span class="text-emerald-200">Ветер:</span> <b>3 м/с (З)</b></div>
-      <div><span class="text-emerald-200">Вероятность дождя:</span> <b>0%</b></div>
+      <div><span class="text-emerald-200">Осадки:</span> <b>0% (Гололеда нет)</b></div>
     </div>
 
     <div>
@@ -395,7 +483,7 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- МОДАЛКИ ДОБАВЛЕНИЯ КОНТЕНТА -->
+<!-- МОДАЛКА ДОБАВЛЕНИЯ КОНТЕНТА -->
 <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
     <div class="flex justify-between items-center border-b pb-3">
@@ -416,7 +504,7 @@ h1, h2, h3, h4 {
         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото (необязательно)</label>
         <input type="file" id="itemFile" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gornyak-50 file:text-gornyak-700 hover:file:bg-gornyak-100">
       </div>
-      <button type="submit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Сохранить в облаке</button>
+      <button type="submit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Сохранить</button>
     </form>
   </div>
 </div>
@@ -466,8 +554,15 @@ function saveData() {
 
 function navigateTo(pageId) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById('page-' + pageId);
-  if (target) target.classList.add('active');
+  
+  if(pageId === 'register') {
+    switchAuthMode('register');
+    document.getElementById('page-auth').classList.add('active');
+  } else {
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+  }
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderAllSections();
 }
@@ -526,7 +621,6 @@ function renderAllSections() {
     </div>`).join('');
 }
 
-// Открытие модалок информации карточек
 function openInfoModal(title, text) {
   document.getElementById('infoModalTitle').innerText = title;
   document.getElementById('infoModalText').innerText = text;
