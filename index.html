@@ -99,7 +99,7 @@
 
     <div class="w-full max-w-6xl mx-auto flex flex-col gap-6">
 
-        <!-- Баннер с новой структурой -->
+        <!-- Баннер -->
         <div class="forest-banner w-full rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative flex flex-col items-center text-center gap-6 border border-white/20">
             <div class="flex flex-col gap-1">
                 <h1 class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
@@ -107,17 +107,27 @@
             </div>
             
             <div class="w-full max-w-xl bg-black/40 backdrop-blur-2xl p-5 rounded-3xl border border-white/20 shadow-xl flex flex-col gap-4">
-                <!-- Блок рассвета и заката в одну строчку -->
-<div class="flex items-center justify-between gap-3 text-xs text-green-100 font-semibold bg-white/10 px-3 py-2 rounded-xl border border-white/10 w-full">
-    <div class="flex items-center gap-1.5">
-        <i class="fa-solid fa-sunrise text-yellow-300"></i>
-        <span>Рассвет: <span class="font-bold text-white">07:24</span></span>
-    </div>
-    <div class="flex items-center gap-1.5">
-        <i class="fa-solid fa-sunset text-amber-400"></i>
-        <span>Закат: <span class="font-bold text-white">17:16</span></span>
-    </div>
-</div>
+                <!-- Верхняя часть виджета: погода сегодня, завтра, рассвет/закат в одну строчку -->
+                <div onclick="openWeatherModal()" class="flex flex-col sm:flex-row justify-between items-center gap-4 cursor-pointer hover:opacity-95 transition pb-3 border-b border-white/15">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full sun-icon-3d flex items-center justify-center text-white text-xl">☀️</div>
+                        <div class="flex flex-col text-left leading-tight">
+                            <span class="text-white font-extrabold text-xl">+10°C</span>
+                            <span class="text-xs text-green-200 font-bold">Сегодня: Солнечно</span>
+                            <span class="text-[11px] text-yellow-300 font-semibold mt-0.5">Завтра: переменная облачность, +12°</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs text-green-100 font-semibold bg-white/10 px-3 py-2 rounded-xl border border-white/10 w-full sm:w-auto">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-sunrise text-yellow-300"></i>
+                            <span>Рассвет: <span class="font-bold text-white">07:24</span></span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-sunset text-amber-400"></i>
+                            <span>Закат: <span class="font-bold text-white">17:16</span></span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Нижняя часть: две функциональные кнопки -->
                 <div class="flex items-center gap-3 w-full">
