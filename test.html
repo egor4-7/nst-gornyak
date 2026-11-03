@@ -169,16 +169,16 @@
                     </div>
                 </div>
 
-                <!-- Кнопки управления (Компьютерная версия + Регистрация) -->
+                <!-- Кнопки управления (Компьютерная версия + Синяя кнопка Профиль) -->
                 <div class="flex items-center gap-3 w-full">
                     <a href="father.html" class="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-desktop"></i>
                         <span>Компьютерная версия</span>
                     </a>
 
-                    <button onclick="openRegisterModal()" class="py-3 px-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-emerald-500 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-user-plus"></i>
-                        <span>Регистрация</span>
+                    <button onclick="openProfileAuthModal()" class="py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-blue-400 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Профиль</span>
                     </button>
 
                     <button onclick="openNotifModal()" class="relative w-12 h-12 rounded-2xl bg-white/15 hover:bg-white/25 flex items-center justify-center transition text-white border border-white/20 shrink-0">
@@ -276,7 +276,7 @@
                 </div>
             </div>
 
-            <!-- ОБЩЕНИЕ (вместо профиля) -->
+            <!-- ОБЩЕНИЕ -->
             <div onclick="openSection('Общение садоводов', 'Раздел для связи с соседями, обсуждения насущных вопросов товарищества и обмена опытом.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-comments"></i>
@@ -311,7 +311,33 @@
 
     </div>
 
-    <!-- Кастомное модальное окно регистрации -->
+    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ / ВХОДА -->
+    <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-extrabold text-gray-900">🔐 Вход в личный кабинет</h3>
+                <button onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
+                    <input type="email" id="loginEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Пароль</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                </div>
+                
+                <div class="flex items-center justify-between pt-2">
+                    <button type="button" onclick="openRegisterModal()" class="text-xs text-blue-600 font-extrabold hover:underline">Регистрация</button>
+                    <button type="button" onclick="forgotPassword()" class="text-xs text-gray-600 hover:underline">Забыли пароль?</button>
+                    <button type="submit" class="py-2.5 px-5 bg-[#1c5c38] text-white font-extrabold rounded-xl shadow hover:opacity-95 transition text-xs">Войти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО РЕГИСТРАЦИИ -->
     <div id="registerModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -320,23 +346,52 @@
             </div>
             <form onsubmit="handleRegisterSubmit(event)" class="space-y-3">
                 <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">ФИО / Номер участка</label>
-                    <input type="text" id="regName" required placeholder="Иванов И.И. (уч. 42)" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта *</label>
                     <input type="email" id="regEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Пароль</label>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Пароль *</label>
                     <input type="password" id="regPassword" required placeholder="••••••••" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow-lg hover:opacity-95 transition">Зарегистрироваться</button>
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">ФИО (необязательно)</label>
+                    <input type="text" id="regName" placeholder="Иванов Иван Иванович" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Участок (необязательно)</label>
+                    <input type="text" id="regPlot" placeholder="№ 42" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold">
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-blue-600 text-white font-extrabold rounded-2xl shadow-lg hover:bg-blue-700 transition">Зарегистрироваться</button>
             </form>
         </div>
     </div>
 
-    <!-- Кастомная модалка добавления новости -->
+    <!-- МОДАЛЬНОЕ ОКНО ПРОФИЛЯ -->
+    <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-extrabold text-gray-900">👤 Личный кабинет</h3>
+                <button onclick="closeProfileModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-3 text-sm font-semibold text-gray-800">
+                <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
+                    <span class="text-xs text-gray-500 block">Электронная почта:</span>
+                    <b id="profEmail" class="text-gray-900">...</b>
+                </div>
+                <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
+                    <span class="text-xs text-gray-500 block">ФИО:</span>
+                    <b id="profName" class="text-gray-900">Не указано</b>
+                </div>
+                <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
+                    <span class="text-xs text-gray-500 block">Участок:</span>
+                    <b id="profPlot" class="text-gray-900">Не указан</b>
+                </div>
+            </div>
+            <button onclick="logout()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl shadow transition">Выйти из аккаунта</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ НОВОСТИ -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -361,7 +416,7 @@
         </div>
     </div>
 
-    <!-- Кастомная модалка загрузки документа -->
+    <!-- МОДАЛКА ЗАГРУЗКИ ДОКУМЕНТА -->
     <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -382,7 +437,7 @@
         </div>
     </div>
 
-    <!-- Модалка уведомлений -->
+    <!-- МОДАЛКА УВЕДОМЛЕНИЙ -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3">
@@ -401,7 +456,7 @@
         </div>
     </div>
 
-    <!-- Общее модальное окно информации -->
+    <!-- ОБЩЕЕ МОДАЛЬНОЕ ОКНО -->
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3">
@@ -607,13 +662,69 @@
         function openNotifModal() { document.getElementById('notifModal').classList.remove('hidden'); document.getElementById('notifModal').classList.add('flex'); }
         function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
 
-        function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); document.getElementById('registerModal').classList.add('flex'); }
+        // Логика авторизации, регистрации и профиля
+        function openProfileAuthModal() {
+            const currentUser = localStorage.getItem('gornyak_user');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                document.getElementById('profEmail').innerText = user.email;
+                document.getElementById('profName').innerText = user.name || 'Не указано';
+                document.getElementById('profPlot').innerText = user.plot || 'Не указан';
+                document.getElementById('profileModal').classList.remove('hidden');
+                document.getElementById('profileModal').classList.add('flex');
+            } else {
+                document.getElementById('authModal').classList.remove('hidden');
+                document.getElementById('authModal').classList.add('flex');
+            }
+        }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('authModal').classList.remove('flex'); }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+            if(!email || !pass) {
+                alert('Пожалуйста, заполните почту и пароль!');
+                return;
+            }
+            const userData = { email, name: '', plot: '' };
+            localStorage.setItem('gornyak_user', JSON.stringify(userData));
+            closeAuthModal();
+            openProfileAuthModal();
+        }
+
+        function forgotPassword() {
+            const email = prompt('Введите вашу электронную почту для восстановления пароля:');
+            if(email) alert('Инструкция по восстановлению пароля отправлена на ' + email);
+        }
+
+        function openRegisterModal() {
+            closeAuthModal();
+            document.getElementById('registerModal').classList.remove('hidden');
+            document.getElementById('registerModal').classList.add('flex');
+        }
         function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); document.getElementById('registerModal').classList.remove('flex'); }
-        
+
         function handleRegisterSubmit(e) {
             e.preventDefault();
-            alert('Регистрация успешно завершена!');
+            const email = document.getElementById('regEmail').value.trim();
+            const name = document.getElementById('regName').value.trim();
+            const plot = document.getElementById('regPlot').value.trim();
+            if(!email) { alert('Укажите почту!'); return; }
+
+            const userData = { email, name, plot };
+            localStorage.setItem('gornyak_user', JSON.stringify(userData));
             closeRegisterModal();
+            alert('Регистрация успешна!');
+            openProfileAuthModal();
+        }
+
+        function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); document.getElementById('profileModal').classList.remove('flex'); }
+
+        function logout() {
+            localStorage.removeItem('gornyak_user');
+            closeProfileModal();
+            alert('Вы вышли из личного кабинета.');
         }
 
         function openNewsModal() { openSection('Новости НСТ «Горняк»', '• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.'); }
