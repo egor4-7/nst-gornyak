@@ -124,22 +124,28 @@ h1, h2, h3, h4 {
       <button onclick="navigateTo('auth')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-user text-sm"></i> Войти</button>
     </nav>
 
-    <!-- Поиск и кнопка Регистрация рядом -->
+    <!-- Поиск, Регистрация и Колокольчик уведомлений -->
     <div class="flex items-center gap-2">
       <div class="relative flex items-center">
-        <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-28 sm:w-40 transition">
+        <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-28 sm:w-36 transition">
         <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-xs"></i>
         <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
       </div>
-      <button onclick="navigateTo('register')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3.5 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
+      <button onclick="navigateTo('register')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
+      
+      <!-- КОЛОКОЛЬЧИК С СЧЕТЧИКОМ В ШАПКЕ -->
+      <button onclick="openNotifModal()" class="relative p-2 text-slate-600 hover:text-gornyak-700 text-lg transition">
+        <i class="fa-solid fa-bell"></i>
+        <span id="headerNotifBadge" class="hidden absolute top-1 right-1 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+      </button>
     </div>
   </div>
 </header>
 
 <main class="flex-grow">
-
-  <!-- ГЛАВНАЯ СТРАНИЦА -->
   <section id="page-home" class="page-section active">
+    
+    <!-- Главный баннер -->
     <div class="father-hero text-white py-12 px-4 relative overflow-hidden">
       <div class="container mx-auto relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
         <div>
@@ -149,20 +155,20 @@ h1, h2, h3, h4 {
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3">
-          <a href="index.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition">
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition" title="Переключиться на мобильную версию">
             <i class="fa-solid fa-mobile-screen-button text-yellow-300"></i> Мобильная версия
           </a>
 
-          <!-- Живой погодный виджет -->
-          <div onclick="openWeatherModal()" class="glass-weather text-white px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3 cursor-pointer hover:bg-emerald-900/90 transition">
+          <!-- Погода -->
+          <div onclick="openWeatherModal()" class="glass-weather text-white px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3 cursor-pointer hover:bg-emerald-900/85 transition">
             <div class="weather-icon-box">
               <div class="g-sun"></div>
               <div class="g-cloud"></div>
             </div>
             <div>
               <div class="flex items-center gap-2 font-bold text-base leading-none">
-                <span id="widgetTemp">Загрузка...</span>
+                <span id="widgetTemp">+18°C</span>
                 <span class="text-[9px] font-normal text-emerald-200">Котельники</span>
               </div>
               <div class="text-[10px] text-emerald-200 mt-1 flex items-center gap-1.5" id="widgetDesc">
@@ -175,54 +181,54 @@ h1, h2, h3, h4 {
     </div>
 
     <!-- Сетка карточек -->
-    <div class="container mx-auto px-4 py-8 space-y-6">
+    <div class="container mx-auto px-4 py-8 space-y-4">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div onclick="navigateTo('articles')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('articles')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group relative">
           <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-book-open"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Статьи (с 2020 г.)</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Архив материалов, полезные советы и отчеты</p>
         </div>
 
-        <div onclick="navigateTo('announcements')" class="bg-[#faf5ff] p-6 rounded-2xl border border-purple-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('announcements')" class="bg-[#faf5ff] p-6 rounded-2xl border border-purple-100 hover:shadow-md transition cursor-pointer group relative">
           <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-newspaper"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Новости СНТ</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Актуальные события и объявления правления</p>
         </div>
 
-        <div onclick="navigateTo('documents')" class="bg-[#f0f9ff] p-6 rounded-2xl border border-sky-100 hover:shadow-md transition cursor-pointer group">
-          <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-folder-open"></i></div>
+        <div onclick="navigateTo('documents')" class="bg-[#f0f9ff] p-6 rounded-2xl border border-sky-100 hover:shadow-md transition cursor-pointer group relative">
+          <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-folder"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Документы</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Устав, бланки, акты и регламенты с загрузкой</p>
+          <p class="text-slate-500 text-xs leading-relaxed">Устав, сметы, договоры, другие документы</p>
         </div>
 
-        <div onclick="navigateTo('estimates')" class="bg-[#fffbeb] p-6 rounded-2xl border border-amber-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('estimates')" class="bg-[#fffbeb] p-6 rounded-2xl border border-amber-100 hover:shadow-md transition cursor-pointer group relative">
           <div class="text-amber-600 text-2xl mb-3"><i class="fa-solid fa-coins"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Сметы и Финансы</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Финансовые отчеты и сметы товарищества</p>
+          <p class="text-slate-500 text-xs leading-relaxed">Отчеты, сметы, платежи товарищества</p>
         </div>
 
-        <div onclick="openInfoModal('О СНТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="openInfoModal('О СНТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group relative">
           <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-tree"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">О СНТ</h3>
           <p class="text-slate-500 text-xs leading-relaxed">История, территория, информация о товариществе</p>
         </div>
 
-        <div onclick="navigateTo('contacts')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('contacts')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group relative">
           <div class="text-indigo-700 text-2xl mb-3"><i class="fa-solid fa-users"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Контакты и Правление</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Телефоны служб, председателя и правления</p>
+          <p class="text-slate-500 text-xs leading-relaxed">Состав, контакты, работа правления</p>
         </div>
 
-        <div onclick="navigateTo('contact-form')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('contact-form')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group relative">
           <div class="text-slate-700 text-2xl mb-3"><i class="fa-solid fa-envelope"></i></div>
           <h3 class="font-bold text-slate-900 text-base mb-1">Написать нам</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Форма обратной связи с администрацией</p>
         </div>
 
-        <div onclick="navigateTo('chat')" class="bg-[#f3e8ff] p-6 rounded-2xl border border-purple-200 hover:shadow-md transition cursor-pointer group">
+        <div onclick="navigateTo('chat')" class="bg-[#f3e8ff] p-6 rounded-2xl border border-purple-200 hover:shadow-md transition cursor-pointer group relative lg:col-span-1">
           <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-comments"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Чат</h3>
+          <h3 class="font-bold text-slate-900 text-base mb-1">Чат садоводов</h3>
           <p class="text-slate-500 text-xs leading-relaxed">Общение с соседями, важная информация</p>
         </div>
 
@@ -244,7 +250,7 @@ h1, h2, h3, h4 {
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-black text-gornyak-900">📰 Новости и объявления</h2>
       <div class="flex gap-2">
-        <button onclick="openAddNewsModal()" class="bg-gornyak-700 hover:bg-gornyak-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить новость</button>
+        <button onclick="openAddModal('news')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить новость</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
       </div>
     </div>
@@ -256,7 +262,7 @@ h1, h2, h3, h4 {
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-black text-gornyak-900">📂 Официальные документы</h2>
       <div class="flex gap-2">
-        <button onclick="openAddDocModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Загрузить документ</button>
+        <button onclick="openAddModal('documents')" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Загрузить документ</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
       </div>
     </div>
@@ -268,7 +274,7 @@ h1, h2, h3, h4 {
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-black text-gornyak-900">📊 Сметы и финансовые отчеты</h2>
       <div class="flex gap-2">
-        <button onclick="openAddEstimateModal()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить смету</button>
+        <button onclick="openAddModal('estimates')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить смету</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
       </div>
     </div>
@@ -285,51 +291,13 @@ h1, h2, h3, h4 {
       <div class="space-y-4 text-sm text-slate-700">
         <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div class="font-extrabold text-gornyak-900 text-base mb-1">Председатель правления</div>
-          <p class="text-xs text-slate-600 mb-2">Приемные часы: суббота с 11:00 до 14:00</p>
           <a href="tel:+79001234567" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 123-45-67</a>
         </div>
         <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div class="font-extrabold text-gornyak-900 text-base mb-1">Электрик НСТ</div>
-          <p class="text-xs text-slate-600 mb-2">Аварийные отключения и подключение участков</p>
           <a href="tel:+79007654321" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 765-43-21</a>
         </div>
-        <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="font-extrabold text-gornyak-900 text-base mb-1">Охрана КПП</div>
-          <p class="text-xs text-slate-600 mb-2">Шлагбаум и пропускной режим (круглосуточно)</p>
-          <a href="tel:+79005550011" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 555-00-11</a>
-        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- НАПИСАТЬ НАМ -->
-  <section id="page-contact-form" class="page-section container mx-auto px-4 py-8 max-w-2xl">
-    <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-black text-slate-900">Написать нам</h2>
-        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
-      </div>
-      <p class="text-xs text-slate-600 mb-6">Если у Вас есть какие-либо вопросы или предложения, то заполните поля контактной формы и свяжитесь с нами. Спасибо.</p>
-      
-      <form onsubmit="submitContactForm(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Ваше имя</label>
-          <input type="text" id="contactName" required class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-gornyak-700 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Ваш email</label>
-          <input type="email" id="contactEmail" required class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-gornyak-700 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Тема сообщения</label>
-          <input type="text" id="contactSubject" required class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-gornyak-700 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Текст сообщения</label>
-          <textarea id="contactText" rows="4" required class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-gornyak-700 outline-none"></textarea>
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow transition">Оправить</button>
-      </form>
     </div>
   </section>
 
@@ -338,10 +306,7 @@ h1, h2, h3, h4 {
     <div class="modal-glass p-6 rounded-3xl shadow-xl border border-slate-200 flex flex-col h-[70vh]">
       <div class="border-b pb-3 mb-4 flex justify-between items-center">
         <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-comments text-gornyak-700"></i> Общий чат садоводов</h2>
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2.5 py-1 rounded-full">● Онлайн</span>
-          <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
-        </div>
+        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
       </div>
       <div id="chatMessages" class="flex-grow overflow-y-auto space-y-3 pr-2 mb-4"></div>
       <form onsubmit="sendChatMessage(event)" class="flex gap-2">
@@ -351,20 +316,14 @@ h1, h2, h3, h4 {
     </div>
   </section>
 
-  <!-- АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ -->
+  <!-- АВТОРИЗАЦИЯ -->
   <section id="page-auth" class="page-section container mx-auto px-4 py-12 max-w-md">
     <div class="modal-glass p-8 rounded-3xl shadow-2xl border border-slate-200">
       <div class="flex justify-between items-center mb-2">
         <h2 id="authTitle" class="text-2xl font-black text-slate-900">Войти</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
       </div>
-      <p id="authSubtitle" class="text-xs text-slate-600 mb-6">Заполните для входа в личный кабинет садовода:</p>
-
       <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-        <div id="nameFieldContainer" class="hidden">
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">ФИО / Номер участка</label>
-          <input type="text" id="authName" placeholder="Иванов И.И. (уч. 42)" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
-        </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label>
           <input type="email" id="authEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
@@ -375,17 +334,29 @@ h1, h2, h3, h4 {
         </div>
         <button type="submit" id="authSubmitBtn" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow transition">Войти</button>
       </form>
-
-      <div class="mt-6 text-xs text-slate-600 space-y-2 border-t pt-4">
-        <p id="toggleRegisterText">Если Вы новый пользователь, то можете <a href="javascript:void(0)" onclick="switchAuthMode('register')" class="text-gornyak-700 font-bold underline">зарегистрироваться</a>.</p>
-        <p><a href="javascript:void(0)" onclick="resetPassword()" class="text-gornyak-700 underline">Забыли пароль? Сбросить по почте</a></p>
-      </div>
     </div>
   </section>
 
 </main>
 
-<!-- МОДАЛЬНОЕ ОКНО ИНФОРМАЦИИ КАРТОЧЕК -->
+<!-- МОДАЛКА УВЕДОМЛЕНИЙ ОБ ОБНОВЛЕНИЯХ САЙТА -->
+<div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
+    <div class="flex justify-between items-center border-b pb-3">
+      <h3 class="text-lg font-black text-slate-900 flex items-center gap-2"><i class="fa-solid fa-bell text-gornyak-700"></i> Уведомления об обновлениях</h3>
+      <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    </div>
+    <div id="notifContainer" class="flex flex-col gap-2 max-h-60 overflow-y-auto text-xs">
+      <div class="text-center py-4 text-slate-400">Нет новых уведомлений</div>
+    </div>
+    <div class="flex gap-2 pt-2">
+      <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 text-red-800 font-bold rounded-xl text-xs">Очистить</button>
+      <button onclick="closeNotifModal()" class="flex-1 py-2.5 bg-gornyak-700 text-white font-bold rounded-xl text-xs">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалки и Инфо -->
 <div id="infoModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">
     <div class="flex justify-between items-center border-b pb-3">
@@ -397,15 +368,11 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- ИНТЕРАКТИВНАЯ ПОГОДА (Живой API Open-Meteo) -->
 <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="glass-weather text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
     <div class="flex justify-between items-center border-b border-white/15 pb-4">
       <div class="flex items-center gap-3">
-        <div class="weather-icon-box">
-          <div class="g-sun"></div>
-          <div class="g-cloud"></div>
-        </div>
+        <div class="weather-icon-box"><div class="g-sun"></div><div class="g-cloud"></div></div>
         <div>
           <h3 class="text-xl font-black">Котельники • Погода online</h3>
           <p class="text-xs text-emerald-200">Метеостанция НСТ «Горняк»</p>
@@ -413,24 +380,16 @@ h1, h2, h3, h4 {
       </div>
       <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
     </div>
-
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/10 p-4 rounded-2xl border border-white/10 text-xs">
       <div><span class="text-emerald-200">Температура:</span> <b id="modalTemp">...</b></div>
       <div><span class="text-emerald-200">Ветер:</span> <b id="modalWind">...</b></div>
       <div><span class="text-emerald-200">Влажность:</span> <b id="modalHum">...</b></div>
-      <div><span class="text-emerald-200">Осадки:</span> <b id="modalPrecip">0%</b></div>
+      <div><span class="text-emerald-200">Осадки:</span> <b>0%</b></div>
     </div>
-
-    <div>
-      <h4 class="text-xs font-bold uppercase text-emerald-200 mb-3">Прогноз на ближайшие дни</h4>
-      <div id="weatherWeekList" class="grid grid-cols-2 sm:grid-cols-7 gap-2 text-center text-xs"></div>
-    </div>
-
-    <button onclick="closeWeatherModal()" class="w-full py-3 bg-white text-gornyak-900 rounded-xl font-extrabold shadow hover:bg-emerald-50 transition">Закрыть</button>
+    <button onclick="closeWeatherModal()" class="w-full py-3 bg-white text-gornyak-900 rounded-xl font-extrabold shadow">Закрыть</button>
   </div>
 </div>
 
-<!-- МОДАЛКА ДОБАВЛЕНИЯ -->
 <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
     <div class="flex justify-between items-center border-b pb-3">
@@ -441,15 +400,15 @@ h1, h2, h3, h4 {
       <input type="hidden" id="modalType">
       <div>
         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Заголовок / Тема</label>
-        <input type="text" id="itemTitle" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
+        <input type="text" id="itemTitle" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Описание / Текст</label>
-        <textarea id="itemDesc" rows="3" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700"></textarea>
+        <textarea id="itemDesc" rows="3" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none"></textarea>
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото</label>
-        <input type="file" id="itemFile" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gornyak-50 file:text-gornyak-700">
+        <input type="file" id="itemFile" class="w-full text-xs text-slate-500">
       </div>
       <button type="submit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Сохранить</button>
     </form>
@@ -461,44 +420,79 @@ h1, h2, h3, h4 {
     <div class="font-serif italic font-bold text-gornyak-900 text-base">Вместе — мы сильнее!</div>
     <div class="flex items-center gap-2 text-slate-600"><i class="fa-solid fa-location-dot text-gornyak-700"></i><span><strong>НСТ «Горняк»</strong> Московская область</span></div>
   </div>
-  <div class="text-center text-[10px] text-slate-400 mt-6">© 2026 НСТ «Горняк». Все права защищены. Powered by Cloud Storage.</div>
+  <div class="text-center text-[10px] text-slate-400 mt-6">© 2026 НСТ «Горняк». Все права защищены.</div>
 </footer>
 
 <script>
 let dbData = {
   articles: JSON.parse(localStorage.getItem('gornyak_articles')) || [
-    { id: 1, date: '15.08.2025', title: 'Итоги летнего сезона и подготовка к зиме', text: 'Подробный отчет правления по расходу воды, электроэнергии и обслуживанию дорог в НСТ Горняк.' },
-    { id: 2, date: '10.07.2023', title: 'Правила пожарной безопасности на участках', text: 'Напоминаем требования МЧС по содержанию земельных участков и разведению открытого огня.' },
-    { id: 3, date: '22.05.2020', title: 'Открытие летнего водопровода', text: 'График подачи воды по линиям товарищества в сезоне 2020 года.' }
+    { id: 1, date: '15.08.2025', title: 'Итоги летнего сезона и подготовка к зиме', text: 'Подробный отчет правления по расходу воды, электроэнергии и обслуживанию дорог в НСТ Горняк.' }
   ],
   news: JSON.parse(localStorage.getItem('gornyak_news')) || [
-    { id: 1, date: '02.11.2026', title: 'Общее собрание членов НСТ', text: 'Состоится очно-заочное голосование по вопросам утверждения сметы и ремонта КПП.' },
-    { id: 2, date: '12.09.2025', title: 'Проведены работы по благоустройству территории', text: 'Завершена отсыпка центральной дороги щебнем.' }
+    { id: 1, date: '02.11.2026', title: 'Общее собрание членов НСТ', text: 'Состоится очно-заочное голосование по вопросам утверждения сметы и ремонта КПП.' }
   ],
   documents: JSON.parse(localStorage.getItem('gornyak_docs')) || [
-    { id: 1, title: 'Устав НСТ «Горняк» (ред. 2024)', desc: 'Официальный учредительный документ товарищества.', file: 'Ustav_2024.pdf' },
-    { id: 2, title: 'Бланк заявления на подключение электричества', desc: 'Заявление установленного образца для новых абонентов.', file: 'Zayavlenie_electro.docx' }
+    { id: 1, title: 'Устав НСТ «Горняк» (ред. 2024)', desc: 'Официальный учредительный документ.', file: 'Ustav_2024.pdf' }
   ],
   estimates: JSON.parse(localStorage.getItem('gornyak_estimates')) || [
-    { id: 1, title: 'Смета доходов и расходов на 2026 год', desc: 'Утверждена общим собранием садоводов.', file: 'Smeta_2026.pdf' },
-    { id: 2, title: 'Финансовый отчет ревизионной комиссии за 2025 г.', desc: 'Проверка целевого использования членских взносов.', file: 'Otchet_2025.pdf' }
+    { id: 1, title: 'Смета доходов и расходов на 2026 год', desc: 'Утверждена общим собранием.', file: 'Smeta_2026.pdf' }
   ],
   chat: JSON.parse(localStorage.getItem('gornyak_chat')) || [
-    { user: 'Правление НСТ', text: 'Уважаемые садоводы! Напоминаем о своевременной передаче показаний счетчиков.', time: '10:15' },
-    { user: 'Алексей (уч. 12)', text: 'Здравствуйте! А где можно посмотреть устав?', time: '10:22' }
+    { user: 'Правление НСТ', text: 'Уважаемые садоводы! Напоминаем о передаче показаний счетчиков.', time: '10:15' }
   ]
 };
 
-let currentAuthMode = 'login';
-let liveWeatherData = null;
+// --- УВЕДОМЛЕНИЯ ОБ ОБНОВЛЕНИЯХ ---
+function addNotification(text) {
+  let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
+  notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+  localStorage.setItem('gornyak_notifications', JSON.stringify(notifs));
+  updateNotifBadge();
+}
 
-// Загрузка реальной погоды через Open-Meteo API (Котельники, Московская область)
+function updateNotifBadge() {
+  const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
+  // Создаем или находим бейдж в шапке
+  let badge = document.getElementById('headerNotifBadge');
+  if (!badge) {
+    // Если в текущей разметке шапки отца не было бейджа, добавляем кнопку колокольчика
+    return;
+  }
+  if (notifs.length > 0) {
+    badge.innerText = notifs.length;
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+
+function openNotifModal() {
+  const container = document.getElementById('notifContainer');
+  const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
+  if (notifs.length === 0) {
+    container.innerHTML = `<div class="text-center py-4 text-slate-400">Нет новых уведомлений</div>`;
+  } else {
+    container.innerHTML = notifs.map(n => `
+      <div class="bg-green-50 p-3 rounded-xl border border-green-200">
+        <div class="text-[9px] font-bold text-emerald-800">${n.time}</div>
+        <div class="font-bold text-slate-800 text-xs mt-0.5">${n.text}</div>
+      </div>`).join('');
+  }
+  document.getElementById('notifModal').classList.remove('hidden');
+  document.getElementById('notifModal').classList.add('flex');
+}
+function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
+
+function clearNotifications() {
+  localStorage.removeItem('gornyak_notifications');
+  updateNotifBadge();
+  openNotifModal();
+}
+
 async function fetchLiveWeather() {
   try {
-    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow');
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=Europe/Moscow');
     const data = await res.json();
-    liveWeatherData = data;
-    
     const temp = Math.round(data.current.temperature_2m);
     const wind = Math.round(data.current.wind_speed_10m);
     document.getElementById('widgetTemp').innerText = (temp > 0 ? '+' : '') + temp + '°C';
@@ -519,15 +513,8 @@ function saveData() {
 
 function navigateTo(pageId) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  
-  if(pageId === 'register') {
-    switchAuthMode('register');
-    document.getElementById('page-auth').classList.add('active');
-  } else {
-    const target = document.getElementById('page-' + pageId);
-    if (target) target.classList.add('active');
-  }
-  
+  const target = document.getElementById('page-' + pageId);
+  if (target) target.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderAllSections();
 }
@@ -549,39 +536,23 @@ function renderAllSections() {
         <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${n.title}</h3>
         <p class="text-xs text-slate-600 leading-relaxed">${n.text}</p>
       </div>
-      <button onclick="deleteItem('news', ${n.id})" class="mt-4 text-xs text-red-500 hover:underline text-left">Удалить</button>
     </div>`).join('');
 
   document.getElementById('documentsList').innerHTML = dbData.documents.map(d => `
     <div class="modal-glass p-4 rounded-2xl border border-slate-200 flex justify-between items-center shadow-sm">
-      <div>
-        <h4 class="font-bold text-slate-900 text-sm">${d.title}</h4>
-        <p class="text-xs text-slate-500">${d.desc}</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="downloadDoc('${d.title}')" class="px-3.5 py-2 bg-sky-100 hover:bg-sky-200 text-sky-900 rounded-xl font-bold text-xs">Скачать</button>
-        <button onclick="deleteItem('documents', ${d.id})" class="text-xs text-red-500 px-2">✕</button>
-      </div>
+      <div><h4 class="font-bold text-slate-900 text-sm">${d.title}</h4><p class="text-xs text-slate-500">${d.desc || ''}</p></div>
+      <button onclick="alert('Скачивание: ${d.title}')" class="px-3 py-1.5 bg-sky-100 text-sky-900 rounded-xl font-bold text-xs">Скачать</button>
     </div>`).join('');
 
   document.getElementById('estimatesList').innerHTML = dbData.estimates.map(e => `
     <div class="modal-glass p-4 rounded-2xl border border-slate-200 flex justify-between items-center shadow-sm">
-      <div>
-        <h4 class="font-bold text-slate-900 text-sm">${e.title}</h4>
-        <p class="text-xs text-slate-500">${e.desc}</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="downloadDoc('${e.title}')" class="px-3.5 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl font-bold text-xs">Скачать</button>
-        <button onclick="deleteItem('estimates', ${e.id})" class="text-xs text-red-500 px-2">✕</button>
-      </div>
+      <div><h4 class="font-bold text-slate-900 text-sm">${e.title}</h4><p class="text-xs text-slate-500">${e.desc || ''}</p></div>
+      <button onclick="alert('Скачивание: ${e.title}')" class="px-3.5 py-2 bg-amber-100 text-amber-900 rounded-xl font-bold text-xs">Скачать</button>
     </div>`).join('');
 
   document.getElementById('chatMessages').innerHTML = dbData.chat.map(c => `
     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-      <div class="flex justify-between font-bold text-gornyak-800 mb-0.5">
-        <span>${c.user}</span>
-        <span class="text-[9px] text-slate-400 font-normal">${c.time}</span>
-      </div>
+      <div class="flex justify-between font-bold text-gornyak-800 mb-0.5"><span>${c.user}</span><span class="text-[9px] text-slate-400">${c.time}</span></div>
       <div class="text-slate-700">${c.text}</div>
     </div>`).join('');
 }
@@ -592,46 +563,38 @@ function openInfoModal(title, text) {
   document.getElementById('infoModal').classList.remove('hidden');
   document.getElementById('infoModal').classList.add('flex');
 }
-function closeInfoModal() {
-  document.getElementById('infoModal').classList.add('hidden');
-  document.getElementById('infoModal').classList.remove('flex');
-}
+function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); document.getElementById('infoModal').classList.remove('flex'); }
 
 let activeAddType = '';
-function openAddNewsModal() { activeAddType = 'news'; document.getElementById('modalTitle').innerText = 'Добавить новость'; document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex'); }
-function openAddDocModal() { activeAddType = 'documents'; document.getElementById('modalTitle').innerText = 'Загрузить документ'; document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex'); }
-function openAddEstimateModal() { activeAddType = 'estimates'; document.getElementById('modalTitle').innerText = 'Добавить смету'; document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex'); }
+function openAddModal(type) {
+  activeAddType = type;
+  document.getElementById('modalTitle').innerText = type === 'news' ? 'Добавить новость' : (type === 'documents' ? 'Загрузить документ' : 'Добавить смету');
+  document.getElementById('addModal').classList.remove('hidden');
+  document.getElementById('addModal').classList.add('flex');
+}
 function closeAddModal() { document.getElementById('addModal').classList.add('hidden'); document.getElementById('addModal').classList.remove('flex'); }
 
 function handleModalSubmit(e) {
   e.preventDefault();
   const title = document.getElementById('itemTitle').value;
   const desc = document.getElementById('itemDesc').value;
-  const fileInput = document.getElementById('itemFile');
-  const fileName = fileInput.files[0] ? fileInput.files[0].name : 'document.pdf';
-
-  const newItem = { id: Date.now(), title, text: desc, desc, file: fileName, date: new Date().toLocaleDateString() };
-  dbData[activeAddType].push(newItem);
+  const newItem = { id: Date.now(), title, text: desc, desc, date: new Date().toLocaleDateString() };
+  
+  if (activeAddType === 'news') {
+    dbData.news.push(newItem);
+    addNotification('Опубликована новая новость: ' + title);
+  } else if (activeAddType === 'documents') {
+    dbData.documents.push(newItem);
+    addNotification('Загружен новый документ: ' + title);
+  } else if (activeAddType === 'estimates') {
+    dbData.estimates.push(newItem);
+    addNotification('Добавлена новая смета: ' + title);
+  }
+  
   saveData();
   closeAddModal();
   renderAllSections();
   alert('Успешно сохранено!');
-}
-
-function deleteItem(type, id) {
-  dbData[type] = dbData[type].filter(item => item.id !== id);
-  saveData();
-  renderAllSections();
-}
-
-function downloadDoc(title) {
-  alert('Загрузка файла: ' + title);
-}
-
-function submitContactForm(e) {
-  e.preventDefault();
-  alert('Ваше сообщение отправлено в правление НСТ «Горняк». Спасибо!');
-  e.target.reset();
 }
 
 function sendChatMessage(e) {
@@ -640,101 +603,24 @@ function sendChatMessage(e) {
   if(!input.value.trim()) return;
   dbData.chat.push({ user: 'Садовод', text: input.value, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
   saveData();
+  addNotification('Новое сообщение в общем чате');
   input.value = '';
   renderAllSections();
 }
 
-function switchAuthMode(mode) {
-  currentAuthMode = mode;
-  const title = document.getElementById('authTitle');
-  const subtitle = document.getElementById('authSubtitle');
-  const nameCont = document.getElementById('nameFieldContainer');
-  const btn = document.getElementById('authSubmitBtn');
-  const toggleText = document.getElementById('toggleRegisterText');
-
-  if(mode === 'register') {
-    title.innerText = 'Регистрация';
-    subtitle.innerText = 'Создайте аккаунт садовода:';
-    nameCont.classList.remove('hidden');
-    btn.innerText = 'Зарегистрироваться';
-    toggleText.innerHTML = `Уже есть аккаунт? <a href="javascript:void(0)" onclick="switchAuthMode('login')" class="text-gornyak-700 font-bold underline">Войти</a>`;
-  } else {
-    title.innerText = 'Войти';
-    subtitle.innerText = 'Заполните для входа:';
-    nameCont.classList.add('hidden');
-    btn.innerText = 'Войти';
-    toggleText.innerHTML = `Если Вы новый пользователь, то можете <a href="javascript:void(0)" onclick="switchAuthMode('register')" class="text-gornyak-700 font-bold underline">зарегистрироваться</a>.`;
-  }
-}
-
-function handleAuthSubmit(e) {
-  e.preventDefault();
-  const email = document.getElementById('authEmail').value;
-  if(currentAuthMode === 'register') {
-    alert('Регистрация успешна! Данные сохранены.');
-  } else {
-    alert('Успешный вход в личный кабинет садовода (' + email + ')');
-  }
-  navigateTo('home');
-}
-
-function resetPassword() {
-  const email = prompt('Введите вашу электронную почту для сброса пароля:');
-  if(email) alert('Инструкция по сбросу пароля отправлена на ' + email);
-}
-
-function openWeatherModal() {
-  document.getElementById('weatherModal').classList.remove('hidden');
-  document.getElementById('weatherModal').classList.add('flex');
-  
-  if (liveWeatherData && liveWeatherData.current) {
-    document.getElementById('modalTemp').innerText = Math.round(liveWeatherData.current.temperature_2m) + '°C';
-    document.getElementById('modalWind').innerText = Math.round(liveWeatherData.current.wind_speed_10m) + ' м/с';
-    document.getElementById('modalHum').innerText = liveWeatherData.current.relative_humidity_2m + '%';
-  }
-
-  const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-  const icons = ['☀️', '🌤️', '☁️', '🌧️', '☀️', '🌤️', '☀️'];
-  
-  if (liveWeatherData && liveWeatherData.daily) {
-    document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => {
-      const maxT = Math.round(liveWeatherData.daily.temperature_2m_max[i] || 15);
-      return `
-        <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
-          <div class="text-emerald-200 font-bold">${d}</div>
-          <div class="text-lg my-1">${icons[i]}</div>
-          <div class="font-black">+${maxT}°</div>
-        </div>`;
-    }).join('');
-  }
-}
-
+function openWeatherModal() { document.getElementById('weatherModal').classList.remove('hidden'); document.getElementById('weatherModal').classList.add('flex'); }
 function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
 
 function handleSearch(query) {
   const resBox = document.getElementById('searchResults');
   if(!query.trim()) { resBox.classList.add('hidden'); return; }
-  
-  const q = query.toLowerCase();
-  let results = [];
-  dbData.articles.forEach(a => { if(a.title.toLowerCase().includes(q)) results.push({title: a.title, type: 'Статья', page: 'articles'}); });
-  dbData.news.forEach(n => { if(n.title.toLowerCase().includes(q)) results.push({title: n.title, type: 'Новость', page: 'announcements'}); });
-  dbData.documents.forEach(d => { if(d.title.toLowerCase().includes(q)) results.push({title: d.title, type: 'Документ', page: 'documents'}); });
-
-  if(results.length === 0) {
-    resBox.innerHTML = `<div class="p-3 text-xs text-slate-500">Ничего не найдено</div>`;
-  } else {
-    resBox.innerHTML = results.map(r => `
-      <div onclick="navigateTo('${r.page}'); document.getElementById('searchResults').classList.add('hidden');" class="p-2.5 hover:bg-slate-100 rounded-xl cursor-pointer text-xs">
-        <span class="text-[9px] bg-gornyak-100 text-gornyak-800 px-1.5 py-0.5 rounded font-bold">${r.type}</span>
-        <div class="font-bold text-slate-800 mt-1">${r.title}</div>
-      </div>`).join('');
-  }
+  resBox.innerHTML = `<div class="p-2 text-xs text-slate-600 font-bold">Поиск: ${query}</div>`;
   resBox.classList.remove('hidden');
 }
 
 fetchLiveWeather();
 renderAllSections();
+updateNotifBadge();
 </script>
 </body>
 </html>
