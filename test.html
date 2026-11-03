@@ -276,13 +276,14 @@
                 </div>
             </div>
 
-            <div onclick="openSection('Общение садоводов', 'Раздел для связи с соседями, обсуждения насущных вопросов товарищества и обмена опытом.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+            <!-- НАСТОЯЩИЙ ЧАТ ОБЩЕНИЯ -->
+            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-comments"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
                     <h3 class="font-extrabold text-gray-900 text-lg truncate">Общение</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Чаты и обсуждения</p>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Живой чат соседей с файлами</p>
                 </div>
             </div>
 
@@ -308,6 +309,40 @@
 
         </div>
 
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО РЕАЛЬНОГО ЧАТА -->
+    <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200">
+            <div class="flex justify-between items-center border-b pb-3 mb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-[#1c5c38] text-xl"></i>
+                    <h3 class="text-lg font-extrabold text-gray-900">Общение садоводов</h3>
+                </div>
+                <button onclick="closeChatModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Список сообщений -->
+            <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-3 pr-1 text-sm"></div>
+
+            <!-- Форма отправки сообщения и файлов -->
+            <form onsubmit="sendChatMessage(event)" class="mt-3 pt-3 border-t border-gray-200 flex flex-col gap-2">
+                <div id="filePreview" class="hidden text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl flex items-center justify-between">
+                    <span id="fileNamePreview" class="truncate font-bold"></span>
+                    <button type="button" onclick="removeAttachedFile()" class="text-red-500 font-bold ml-2">✕</button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="cursor-pointer w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl flex items-center justify-center shrink-0 transition">
+                        <i class="fa-solid fa-paperclip"></i>
+                        <input type="file" id="chatFileInput" onchange="handleFileSelect(event)" class="hidden">
+                    </label>
+                    <input type="text" id="chatInputText" placeholder="Написать сообщение соседям..." class="flex-grow p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <button type="submit" class="py-3 px-5 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow transition shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ / ВХОДА -->
@@ -390,7 +425,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ НОВОСТИ -->
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ НОВОСТИ -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -415,7 +450,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ЗАГРУЗКИ ДОКУМЕНТА -->
+    <!-- МОДАЛКА ЗАГРУЗКИ ДОКУМЕНТА -->
     <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -512,7 +547,6 @@
                 <button onclick="closeTransportModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- ВСТРОЕННАЯ ЯНДЕКС.КАРТА НСТ ГОРНЯК -->
             <div class="w-full h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative">
                 <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
@@ -558,6 +592,7 @@
 
     <script>
         let liveWeatherData = null;
+        let attachedFile = null;
 
         async function fetchLiveWeather() {
             try {
@@ -590,6 +625,7 @@
             { query: '26', title: 'Маршрут № 26: до Силиката через Карьер', desc: 'Расписание автобусов', action: openTransportModal },
             { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: openTransportModal },
             { query: 'карта', title: 'Яндекс.Карта НСТ «Горняк»', desc: 'Смотреть расположение на карте', action: openTransportModal },
+            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей с файлами', action: openChatModal },
             { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт, взносы 1200 руб/сотка', action: () => openSection('Тарифы', 'Электричество: 4.85 руб/кВт⋅ч') }
         ];
 
@@ -666,7 +702,79 @@
         function openNotifModal() { document.getElementById('notifModal').classList.remove('hidden'); document.getElementById('notifModal').classList.add('flex'); }
         function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
 
-        // Логика профиля и авторизации
+        // --- ЛОГИКА РЕАЛЬНОГО ЧАТА ---
+        function openChatModal() {
+            document.getElementById('chatModal').classList.remove('hidden');
+            document.getElementById('chatModal').classList.add('flex');
+            renderChatMessages();
+        }
+        function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                attachedFile = { name: file.name, size: (file.size / 1024).toFixed(1) + ' KB' };
+                document.getElementById('fileNamePreview').innerText = `📎 ${file.name} (${attachedFile.size})`;
+                document.getElementById('filePreview').classList.remove('hidden');
+            }
+        }
+        function removeAttachedFile() {
+            attachedFile = null;
+            document.getElementById('chatFileInput').value = '';
+            document.getElementById('filePreview').classList.add('hidden');
+        }
+
+        function renderChatMessages() {
+            const container = document.getElementById('chatMessagesContainer');
+            const messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
+
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-500 font-semibold text-xs">В чате пока нет сообщений. Напишите первое!</div>`;
+                return;
+            }
+
+            container.innerHTML = messages.map(m => `
+                <div class="bg-white/90 p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-black text-[#1c5c38]"><i class="fa-solid fa-user-circle mr-1"></i>${m.author}</span>
+                        <span class="text-gray-400 text-[10px] font-semibold">${m.time}</span>
+                    </div>
+                    <div class="text-gray-800 text-sm font-medium mt-0.5">${m.text}</div>
+                    ${m.file ? `<div class="mt-1.5 p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs flex items-center gap-2 text-emerald-800 font-bold"><i class="fa-solid fa-file-arrow-down"></i> ${m.file}</div>` : ''}
+                </div>`).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const textInput = document.getElementById('chatInputText');
+            const text = textInput.value.trim();
+            if (!text && !attachedFile) return;
+
+            const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
+            let author = 'Садовод (Гость)';
+            if (currentUser) {
+                author = currentUser.name ? `${currentUser.name} (${currentUser.email}${currentUser.plot ? ', уч. ' + currentUser.plot : ''})` : currentUser.email;
+            }
+
+            const newMessage = {
+                id: Date.now(),
+                author: author,
+                text: text || '(Вложенный файл)',
+                file: attachedFile ? attachedFile.name : null,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
+            messages.push(newMessage);
+            localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
+
+            textInput.value = '';
+            removeAttachedFile();
+            renderChatMessages();
+        }
+
+        // --- ЛОГИКА ПРОФИЛЯ И АВТОРИЗАЦИИ ---
         function openProfileAuthModal() {
             const currentUser = localStorage.getItem('gornyak_user');
             if (currentUser) {
