@@ -169,7 +169,7 @@
                     </div>
                 </div>
 
-                <!-- Кнопки управления (включая Регистрацию и Компьютерную версию) -->
+                <!-- Кнопки управления -->
                 <div class="flex items-center gap-3 w-full">
                     <a href="father.html" class="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-desktop"></i>
@@ -183,7 +183,7 @@
 
                     <button onclick="openNotifModal()" class="relative w-12 h-12 rounded-2xl bg-white/15 hover:bg-white/25 flex items-center justify-center transition text-white border border-white/20 shrink-0">
                         <i class="fa-solid fa-bell text-lg"></i>
-                        <span id="notifBadge" class="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-[#10331e]">1</span>
+                        <span id="notifBadge" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-[#10331e]">0</span>
                     </button>
                 </div>
             </div>
@@ -335,7 +335,7 @@
         </div>
     </div>
 
-    <!-- Модалка уведомлений -->
+    <!-- Модалка уведомлений (пустая без багов) -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b border-gray-200 pb-3">
@@ -349,18 +349,10 @@
             </div>
             
             <div id="notifContainer" class="flex flex-col gap-3 py-2 max-h-[50vh] overflow-y-auto">
-                <div class="bg-green-50/80 p-3.5 rounded-2xl border border-green-200">
-                    <div class="text-xs font-bold text-emerald-800">10 минут назад</div>
-                    <div class="text-sm font-bold text-gray-800 mt-1">Оплачен членский взнос по участку №42</div>
-                </div>
+                <div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>
             </div>
 
-            <div class="flex gap-2 pt-2 border-t border-gray-200">
-                <button onclick="clearAllNotifications()" class="flex-1 py-3 bg-[#1c5c38] text-white rounded-2xl font-bold shadow-md hover:opacity-95 transition text-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-trash-can"></i> Очистить все
-                </button>
-                <button onclick="closeNotifModal()" class="px-5 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-2xl font-bold transition text-sm">Закрыть</button>
-            </div>
+            <button onclick="closeNotifModal()" class="w-full py-3 bg-[#1c5c38] text-white rounded-2xl font-bold shadow-md">Закрыть</button>
         </div>
     </div>
 
@@ -375,7 +367,7 @@
         </div>
     </div>
 
-    <!-- ПОГОДА МОДАЛКА -->
+    <!-- ПОГОДА МОДАЛКА (с полным прогнозом на неделю) -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
@@ -385,8 +377,8 @@
                         <div class="glass-cloud"></div>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-black">Погода • Котельники</h3>
-                        <p class="text-xs text-green-200 font-bold">Метеостанция online</p>
+                        <h3 class="text-2xl font-black">Погода в Котельниках</h3>
+                        <p class="text-xs text-green-200 font-bold">Метеостанция online • Open-Meteo</p>
                     </div>
                 </div>
                 <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -395,12 +387,17 @@
             <div class="flex justify-between items-center bg-white/10 p-5 rounded-2xl border border-white/10 shadow-inner">
                 <div>
                     <div class="text-4xl font-black tracking-tight" id="modalTemp">...</div>
-                    <div class="text-sm text-green-200 mt-1 font-bold" id="modalDesc">Метеостанция НСТ «Горняк»</div>
+                    <div class="text-sm text-green-200 mt-1 font-bold" id="modalWind">Ветер: загрузка...</div>
                 </div>
                 <div class="text-right">
                     <div class="text-sm font-black text-yellow-300">Закат в 18:45</div>
                     <div class="text-xs text-gray-300 font-bold mt-0.5">Восход: 06:20</div>
                 </div>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-bold uppercase text-green-200 mb-3">Прогноз на 7 дней</h4>
+                <div id="weatherWeekList" class="grid grid-cols-2 sm:grid-cols-7 gap-2 text-center text-xs"></div>
             </div>
 
             <button onclick="closeWeatherModal()" class="w-full py-3.5 bg-white text-[#10331e] rounded-2xl font-black hover:bg-green-50 transition shadow-lg text-base">Закрыть</button>
@@ -455,11 +452,14 @@
     </div>
 
     <script>
-        // Живой запрос погоды Open-Meteo
+        let liveWeatherData = null;
+
         async function fetchLiveWeather() {
             try {
-                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,weather_code,wind_speed_10m&timezone=Europe/Moscow');
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow');
                 const data = await res.json();
+                liveWeatherData = data;
+                
                 const temp = Math.round(data.current.temperature_2m);
                 const wind = Math.round(data.current.wind_speed_10m);
                 const tempStr = (temp > 0 ? '+' : '') + temp + '°C';
@@ -467,6 +467,7 @@
                 document.getElementById('widgetTemp').innerText = tempStr;
                 document.getElementById('widgetDesc').innerText = `Ветер ${wind} м/с • Онлайн`;
                 document.getElementById('modalTemp').innerText = tempStr;
+                document.getElementById('modalWind').innerText = `Ветер: ${wind} м/с`;
             } catch(e) {
                 document.getElementById('widgetTemp').innerText = '+3°C';
                 document.getElementById('widgetDesc').innerText = 'Котельники • Онлайн';
@@ -483,6 +484,7 @@
             { query: '1к', title: 'Маршрут № 1к: Карьер — М. Котельники', desc: 'Расписание автобусов', action: openTransportModal },
             { query: '26', title: 'Маршрут № 26: до Силиката через Карьер', desc: 'Расписание автобусов', action: openTransportModal },
             { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: openTransportModal },
+            { query: 'автобус', title: 'Расписание автобусов и маршруток', desc: 'Смотреть время отправления', action: openTransportModal },
             { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт, взносы 1200 руб/сотка', action: () => openSection('Тарифы', 'Электричество: 4.85 руб/кВт⋅ч') }
         ];
 
@@ -532,7 +534,25 @@
         }
         function closeModal() { document.getElementById('modalWindow').classList.add('hidden'); document.getElementById('modalWindow').classList.remove('flex'); }
 
-        function openWeatherModal() { document.getElementById('weatherModal').classList.remove('hidden'); document.getElementById('weatherModal').classList.add('flex'); }
+        function openWeatherModal() {
+            document.getElementById('weatherModal').classList.remove('hidden');
+            document.getElementById('weatherModal').classList.add('flex');
+            
+            const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const icons = ['☀️', '🌤️', '☁️', '🌧️', '☀️', '🌤️', '☀️'];
+            
+            if (liveWeatherData && liveWeatherData.daily) {
+                document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => {
+                    const maxT = Math.round(liveWeatherData.daily.temperature_2m_max[i] || 15);
+                    return `
+                        <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
+                          <div class="text-green-200 font-bold">${d}</div>
+                          <div class="text-lg my-1">${icons[i]}</div>
+                          <div class="font-black">+${maxT}°</div>
+                        </div>`;
+                }).join('');
+            }
+        }
         function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
 
         function openTransportModal() { document.getElementById('transportModal').classList.remove('hidden'); document.getElementById('transportModal').classList.add('flex'); }
@@ -541,20 +561,7 @@
         function openNotifModal() { document.getElementById('notifModal').classList.remove('hidden'); document.getElementById('notifModal').classList.add('flex'); }
         function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
 
-        function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); document.getElementById('registerModal').classList.add('flex'); }
-        function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); document.getElementById('registerModal').classList.remove('flex'); }
-
-        function handleRegisterSubmit(e) {
-            e.preventDefault();
-            alert('Регистрация успешно завершена!');
-            closeRegisterModal();
-        }
-
-        function clearAllNotifications() {
-            document.getElementById('notifContainer').innerHTML = `<div class="text-center py-4 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>`;
-            const badge = document.getElementById('notifBadge');
-            if (badge) badge.style.display = 'none';
-        }
+        function openRegisterModal() { alert('Открытие формы регистрации садовода'); }
 
         function openNewsModal() { openSection('Новости НСТ «Горняк»', '• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.'); }
         function openCreateNewsModal() { alert('Открытие формы добавления новости'); }
