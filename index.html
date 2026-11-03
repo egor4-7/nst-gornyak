@@ -1,44 +1,142 @@
-<!-- Верхняя карточка (обложка) с погодой и кнопкой перехода -->
-<div class="bg-emerald-900 text-white rounded-3xl p-5 shadow-xl mb-6 relative overflow-hidden">
-  <!-- Заголовок портала внутри карточки -->
-  <div class="mb-4">
-    <h1 class="text-xl font-extrabold tracking-tight">НСТ «Горняк»</h1>
-    <p class="text-xs text-emerald-200">Информационный портал для садовод</p>
-  </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>НСТ «Горняк» — Упрощенная версия</title>
 
-  <!-- Виджет погоды -->
-  <div class="bg-emerald-800/60 backdrop-blur rounded-2xl p-4 mb-4 border border-emerald-700/50">
-    <div class="flex items-center justify-between mb-2">
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-sun text-yellow-400 text-3xl"></i>
-        <div>
-          <div class="text-2xl font-bold">+10°C</div>
-          <div class="text-xs text-emerald-200">Сегодня: Солнечно</div>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        gornyak: {
+          50: '#f2f9f4',
+          100: '#e1f3e6',
+          200: '#c5e7cd',
+          700: '#176334',
+          800: '#144f2b',
+          900: '#0f3d22',
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        heading: ['Montserrat', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
+
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+}
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased p-4 sm:p-6">
+
+<div class="max-w-md mx-auto w-full space-y-4">
+
+  <!-- Верхняя карточка (обложка) с погодой и кнопкой перехода -->
+  <div class="bg-emerald-900 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden">
+    <!-- Заголовок портала -->
+    <div class="mb-4">
+      <h1 class="text-xl font-extrabold tracking-tight">НСТ «Горняк»</h1>
+      <p class="text-xs text-emerald-200">Информационный портал для садовод</p>
+    </div>
+
+    <!-- Виджет погоды -->
+    <div class="bg-emerald-800/60 backdrop-blur rounded-2xl p-4 mb-4 border border-emerald-700/50">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-sun text-yellow-400 text-3xl"></i>
+          <div>
+            <div class="text-2xl font-bold">+10°C</div>
+            <div class="text-xs text-emerald-200">Сегодня: Солнечно</div>
+          </div>
         </div>
       </div>
+      <div class="text-[11px] text-emerald-300 mb-3">
+        Завтра: переменная облачность, +12°
+      </div>
+      <!-- Рассвет / Закат -->
+      <div class="flex items-center justify-between pt-2 border-t border-emerald-700/40 text-xs text-emerald-200">
+        <span>Рассвет: 07:24</span>
+        <span>Закат: 17:16</span>
+      </div>
     </div>
-    <div class="text-[11px] text-emerald-300 mb-3">
-      Завтра: переменная облачность, +12°
-    </div>
-    <!-- Рассвет / Закат -->
-    <div class="flex items-center justify-between pt-2 border-t border-emerald-700/40 text-xs text-emerald-200">
-      <span>Рассвет: 07:24</span>
-      <span>Закат: 17:16</span>
+
+    <!-- Кнопки управления внизу карточки -->
+    <div class="flex items-center gap-3">
+      <!-- РАБОЧАЯ КНОПКА ПЕРЕКЛЮЧЕНИЯ НА ПОЛНОЦЕННУЮ ВЕРСИЮ -->
+      <a href="father.html" class="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition">
+        <i class="fa-solid fa-desktop"></i>
+        <span>Полноценная версия</span>
+      </a>
+      
+      <!-- Кнопка уведомлений -->
+      <button onclick="alert('Уведомлений пока нет')" class="w-12 h-12 rounded-2xl bg-emerald-800/80 hover:bg-emerald-700 border border-emerald-700/50 flex items-center justify-center text-white relative shadow transition">
+        <i class="fa-solid fa-bell text-base"></i>
+        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-emerald-900">1</span>
+      </button>
     </div>
   </div>
 
-  <!-- Кнопка перехода на полноценную версию -->
-  <div class="flex items-center gap-3">
-    <a href="father.html" class="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition">
-      <i class="fa-solid fa-desktop"></i>
-      <span>Полноценная версия</span>
-    </a>
-    
-    <!-- Кнопка колокольчика (уведомления) -->
-    <button onclick="openNotifModal()" class="w-12 h-12 rounded-2xl bg-emerald-800/80 hover:bg-emerald-700 border border-emerald-700/50 flex items-center justify-center text-white relative shadow transition">
-      <i class="fa-solid fa-bell text-base"></i>
-      <!-- Live счетчик -->
-      <span id="notifBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-emerald-900">1</span>
-    </button>
+  <!-- Поиск по маршруту -->
+  <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
+    <input type="text" placeholder="Введите номер маршрута (например...)" class="w-full text-xs text-slate-700 bg-transparent outline-none px-2 py-1">
   </div>
+
+  <!-- Карточка: Транспорт -->
+  <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4 hover:border-emerald-200 transition cursor-pointer">
+    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl">
+      <i class="fa-solid fa-bus"></i>
+    </div>
+    <div>
+      <h3 class="font-bold text-slate-900 text-sm">Транспорт</h3>
+      <p class="text-xs text-slate-500">3 маршрута • Расписание</p>
+    </div>
+  </div>
+
+  <!-- Карточка: Тарифы -->
+  <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4 hover:border-amber-200 transition cursor-pointer">
+    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+      <i class="fa-solid fa-bolt"></i>
+    </div>
+    <div>
+      <h3 class="font-bold text-slate-900 text-sm">Тарифы</h3>
+      <p class="text-xs text-slate-500">Свет, вода, услуги</p>
+    </div>
+  </div>
+
+  <!-- Карточка: Новости -->
+  <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4 hover:border-purple-200 transition cursor-pointer">
+    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+      <i class="fa-solid fa-newspaper"></i>
+    </div>
+    <div>
+      <h3 class="font-bold text-slate-900 text-sm">Новости</h3>
+      <p class="text-xs text-slate-500">Объявления правления</p>
+    </div>
+  </div>
+
 </div>
+
+<footer class="text-center text-[10px] text-slate-400 mt-8">
+  © 2026 НСТ «Горняк»
+</footer>
+
+</body>
+</html>
