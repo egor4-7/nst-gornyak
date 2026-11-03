@@ -132,177 +132,183 @@
         }
     </style>
 </head>
-<body class="min-h-screen py-6 px-3 sm:px-6 flex flex-col items-center">
+<body class="min-h-screen py-4 px-2 sm:px-6 flex flex-col items-center">
 
-    <div class="w-full max-w-6xl mx-auto flex flex-col gap-6">
+    <div class="w-full max-w-6xl mx-auto flex flex-col gap-5">
 
-        <!-- Баннер -->
-        <div class="forest-banner w-full rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative flex flex-col items-center text-center gap-6 border border-white/20">
+        <!-- Верхняя мини-шапка с логотипом, поиском и кнопками -->
+        <div class="glass-panel rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md border border-green-200">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-lg font-black shrink-0">
+                    <i class="fa-solid fa-tree"></i>
+                </div>
+                <div>
+                    <h2 class="font-black text-sm sm:text-base text-gray-900 leading-tight">НСТ «Горняк»</h2>
+                    <p class="text-[10px] text-gray-600 font-bold">Мобильный портал</p>
+                </div>
+            </div>
+
+            <!-- Адаптивный поиск и кнопки в шапке -->
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <div class="relative flex-grow sm:flex-grow-0">
+                    <input type="text" id="searchInput" placeholder="Поиск..." 
+                        class="w-full sm:w-48 glass-panel border border-green-300 rounded-xl py-2 pl-9 pr-3 text-xs font-bold text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-green-800 text-xs"></i>
+                    
+                    <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 sm:right-auto sm:w-72 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
+                        <div class="p-2.5 text-[10px] font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
+                        <div id="searchResultsList" class="flex flex-col py-1"></div>
+                    </div>
+                </div>
+
+                <button onclick="openProfileAuthModal()" class="py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="hidden xs:inline">Профиль</span>
+                </button>
+
+                <button onclick="openNotifModal()" class="relative w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
+                    <i class="fa-solid fa-bell text-sm"></i>
+                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Главный баннер -->
+        <div class="forest-banner w-full rounded-3xl p-5 sm:p-8 text-white shadow-2xl relative flex flex-col items-center text-center gap-5 border border-white/20">
             <div class="flex flex-col gap-1">
-                <h1 class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
-                <p class="text-green-100 text-base sm:text-lg font-semibold opacity-95">Информационный портал для садоводов</p>
+                <h1 class="text-2xl sm:text-4xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
+                <p class="text-green-100 text-xs sm:text-sm font-semibold opacity-95">Информационный портал для садоводов</p>
             </div>
             
-            <div class="w-full max-w-xl bg-black/40 backdrop-blur-2xl p-5 rounded-3xl border border-white/20 shadow-xl flex flex-col gap-4">
+            <div class="w-full max-w-xl bg-black/40 backdrop-blur-2xl p-4 rounded-3xl border border-white/20 shadow-xl flex flex-col gap-3">
                 <!-- Виджет погоды -->
-                <div onclick="openWeatherModal()" class="flex flex-col sm:flex-row justify-between items-center gap-4 cursor-pointer hover:opacity-95 transition pb-3 border-b border-white/15">
+                <div onclick="openWeatherModal()" class="flex flex-col sm:flex-row justify-between items-center gap-3 cursor-pointer hover:opacity-95 transition pb-3 border-b border-white/15">
                     <div class="flex items-center gap-3">
                         <div class="weather-icon-box" id="currentWeatherIcon">
                             <div class="glass-sun"></div>
                             <div class="glass-cloud"></div>
                         </div>
                         <div class="flex flex-col text-left leading-tight">
-                            <span class="text-white font-extrabold text-xl" id="widgetTemp">Загрузка...</span>
-                            <span class="text-xs text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
-                            <span class="text-[11px] text-yellow-300 font-semibold mt-0.5">Метеостанция НСТ</span>
+                            <span class="text-white font-extrabold text-lg" id="widgetTemp">Загрузка...</span>
+                            <span class="text-[11px] text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between gap-3 text-xs text-green-100 font-semibold bg-white/10 px-3 py-2 rounded-xl border border-white/10 w-full sm:w-auto">
-                        <div class="flex items-center gap-1.5">
-                            <i class="fa-solid fa-sunrise text-yellow-300"></i>
-                            <span>Рассвет: <span class="font-bold text-white">06:20</span></span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <i class="fa-solid fa-sunset text-amber-400"></i>
-                            <span>Закат: <span class="font-bold text-white">18:45</span></span>
-                        </div>
+                    <div class="flex items-center justify-between gap-3 text-[11px] text-green-100 font-semibold bg-white/10 px-3 py-1.5 rounded-xl border border-white/10 w-full sm:w-auto">
+                        <span>Рассвет: <b class="text-white">06:20</b></span>
+                        <span>Закат: <b class="text-white">18:45</b></span>
                     </div>
                 </div>
 
-                <!-- Кнопки управления -->
-                <div class="flex items-center gap-3 w-full">
-                    <a href="father.html" class="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-2">
+                <!-- Кнопки в баннере -->
+                <div class="flex items-center gap-2.5 w-full">
+                    <a href="father.html" class="flex-1 py-2.5 px-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-1.5">
                         <i class="fa-solid fa-desktop"></i>
                         <span>Компьютерная версия</span>
                     </a>
-
-                    <button onclick="openProfileAuthModal()" class="py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-blue-400 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-user"></i>
-                        <span>Профиль</span>
-                    </button>
-
-                    <button onclick="openNotifModal()" class="relative w-12 h-12 rounded-2xl bg-white/15 hover:bg-white/25 flex items-center justify-center transition text-white border border-white/20 shrink-0">
-                        <i class="fa-solid fa-bell text-lg"></i>
-                        <span id="notifBadge" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-[#10331e]">0</span>
-                    </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Поиск -->
-        <div class="relative w-full">
-            <div class="relative flex items-center">
-                <i class="fa-solid fa-magnifying-glass absolute left-5 text-green-800 text-xl"></i>
-                <input type="text" id="searchInput" placeholder="Введите номер маршрута (например, 474к), тарифы, документы..." 
-                    class="w-full glass-panel border border-green-300/80 rounded-2xl py-4 pl-14 pr-4 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#1c5c38] transition text-base font-bold">
-            </div>
-
-            <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
-                <div class="p-3 text-xs font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
-                <div id="searchResultsList" class="flex flex-col py-1"></div>
             </div>
         </div>
 
         <!-- 8 карточек -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             
-            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bus"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Транспорт и Карта</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Маршруты и Яндекс.Карта</p>
+                    <h3 class="font-extrabold text-gray-900 text-base truncate">Транспорт и Карта</h3>
+                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Маршруты и Яндекс.Карта</p>
                 </div>
             </div>
 
-            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
+                <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Тарифы</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Свет, вода, услуги</p>
+                    <h3 class="font-extrabold text-gray-900 text-base truncate">Тарифы</h3>
+                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Свет, вода, услуги</p>
                 </div>
             </div>
 
-            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-4 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                         <i class="fa-solid fa-newspaper"></i>
                     </div>
                     <div class="flex flex-col w-full overflow-hidden">
-                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Новости</h3>
-                        <p class="text-xs text-gray-600 font-bold truncate">Объявления правления</p>
+                        <h3 class="font-extrabold text-gray-900 text-base truncate">Новости</h3>
+                        <p class="text-[11px] text-gray-600 font-bold truncate">Объявления правления</p>
                     </div>
                 </div>
-                <div class="flex gap-2 mt-3 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateNewsModal()" class="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-xs font-extrabold shadow-sm flex items-center justify-center gap-1">
+                <div class="flex gap-2 mt-2.5 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
+                    <button onclick="openCreateNewsModal()" class="flex-1 py-1 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-[11px] font-extrabold shadow-sm flex items-center justify-center gap-1">
                         <i class="fa-solid fa-plus"></i> Новость
                     </button>
-                    <button onclick="openCreateNewsModal()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-xs font-extrabold shadow-sm">
+                    <button onclick="openCreateNewsModal()" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-[11px] font-extrabold shadow-sm">
                         <i class="fa-solid fa-paperclip"></i>
                     </button>
                 </div>
             </div>
 
-            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-4 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                         <i class="fa-solid fa-folder-open"></i>
                     </div>
                     <div class="flex flex-col w-full overflow-hidden">
-                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Документы</h3>
-                        <p class="text-xs text-gray-600 font-bold truncate">Устав, бланки, акты</p>
+                        <h3 class="font-extrabold text-gray-900 text-base truncate">Документы</h3>
+                        <p class="text-[11px] text-gray-600 font-bold truncate">Устав, бланки, акты</p>
                     </div>
                 </div>
-                <div class="flex gap-2 mt-3 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateDocModal()" class="flex-1 py-1.5 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-xs font-extrabold shadow-sm flex items-center justify-center gap-1">
+                <div class="flex gap-2 mt-2.5 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
+                    <button onclick="openCreateDocModal()" class="flex-1 py-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-[11px] font-extrabold shadow-sm flex items-center justify-center gap-1">
                         <i class="fa-solid fa-plus"></i> Файл
                     </button>
-                    <button onclick="openCreateDocModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-xs font-extrabold shadow-sm">
+                    <button onclick="openCreateDocModal()" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-[11px] font-extrabold shadow-sm">
                         <i class="fa-solid fa-paperclip"></i>
                     </button>
                 </div>
             </div>
 
-            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
+                <div class="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-address-book"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Контакты</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Правление и службы</p>
+                    <h3 class="font-extrabold text-gray-900 text-base truncate">Контакты</h3>
+                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Правление и службы</p>
                 </div>
             </div>
 
-            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
+                <div class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-comments"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Общение</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Чат соседей, ответы и файлы</p>
+                    <h3 class="font-extrabold text-gray-900 text-base truncate">Общение</h3>
+                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Чат соседей, ответы и файлы</p>
                 </div>
             </div>
 
-            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
+                <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-credit-card"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Взносы</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Оплата и история</p>
+                    <h3 class="font-extrabold text-gray-900 text-base truncate">Взносы</h3>
+                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Оплата и история</p>
                 </div>
             </div>
 
-            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
-                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-circle-info"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-lg truncate">О НСТ</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">История и схема</p>
+                    <h3 class="font-extrabold text-gray-900 text-base truncate">О НСТ</h3>
+                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">История и схема</p>
                 </div>
             </div>
 
@@ -429,56 +435,10 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ДОБАВЛЕНИЯ НОВОСТИ -->
-    <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-xl font-extrabold text-gray-900">📝 Выложить новость</h3>
-                <button onclick="closeCreateNewsModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="submitNewsForm(event)" class="space-y-3">
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Тема новости</label>
-                    <input type="text" id="newsTitleInput" required placeholder="Введите заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Описание</label>
-                    <textarea id="newsDescInput" rows="3" required placeholder="Подробный текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]"></textarea>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Прикрепить фото / файл</label>
-                    <input type="file" id="newsFileInput" class="w-full mt-1 text-xs text-gray-500 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-green-100 file:text-green-900 font-bold">
-                </div>
-                <button type="submit" class="w-full py-3.5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow-lg transition">Опубликовать</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА ЗАГРУЗКИ ДОКУМЕНТА -->
-    <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-xl font-extrabold text-gray-900">📄 Загрузить документ</h3>
-                <button onclick="closeCreateDocModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="submitDocForm(event)" class="space-y-3">
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Название документа</label>
-                    <input type="text" id="docNameInput" required placeholder="Устав, бланк, акт..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase">Выберите файл</label>
-                    <input type="file" id="docFileInput" required class="w-full mt-1 text-xs text-gray-500 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-green-100 file:text-green-900 font-bold">
-                </div>
-                <button type="submit" class="w-full py-3.5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow-lg transition">Загрузить в базу</button>
-            </form>
-        </div>
-    </div>
-
     <!-- МОДАЛКА УВЕДОМЛЕНИЙ -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+            <div class="flex justify-between items-center border-b pb-3">
                 <div class="flex items-center gap-2 text-[#1c5c38]">
                     <i class="fa-solid fa-bell text-xl"></i>
                     <h3 class="text-xl font-extrabold">Уведомления</h3>
@@ -500,7 +460,7 @@
     <!-- ОБЩЕЕ МОДАЛЬНОЕ ОКНО -->
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+            <div class="flex justify-between items-center border-b pb-3">
                 <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900"></h3>
                 <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -569,28 +529,6 @@
                         06:18, 07:01, 07:50, 08:33, 09:16, 14:14, 15:31, 16:14, 16:58, 17:46, 18:37.
                     </div>
                 </div>
-
-                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
-                        <span>Маршрут № 1к: Остановка Карьер — Метро Котельники</span>
-                        <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
-                    </div>
-                    <div id="route2" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
-                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
-                        06:15, 07:05, 07:56, 08:51, 09:41, 12:58, 13:51, 14:36, 16:25, 17:10, 18:04, 19:06.
-                    </div>
-                </div>
-
-                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
-                        <span>Маршрут № 26: до Силиката (через Карьер)</span>
-                        <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
-                    </div>
-                    <div id="route3" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
-                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
-                        06:20, 07:20, 07:52, 08:24, 08:56, 09:33, 10:05, 11:10, 12:15, 13:20, 14:25, 15:30.
-                    </div>
-                </div>
             </div>
 
             <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold">Закрыть</button>
@@ -603,7 +541,6 @@
         let replyingTo = null;
         let editingMessageId = null;
 
-        // --- УВЕДОМЛЕНИЯ ОБ ОБНОВЛЕНИЯХ САЙТА ---
         function addNotification(text) {
             let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
             notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
@@ -614,20 +551,21 @@
         function updateNotifBadge() {
             const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
             const badge = document.getElementById('notifBadge');
-            if (notifs.length > 0) {
-                badge.innerText = notifs.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
+            if (badge) {
+                if (notifs.length > 0) {
+                    badge.innerText = notifs.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
             }
         }
 
         function openNotifModal() {
             const container = document.getElementById('notifContainer');
             const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
-            
             if (notifs.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений об изменениях</div>`;
+                container.innerHTML = `<div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>`;
             } else {
                 container.innerHTML = notifs.map(n => `
                     <div class="bg-green-50/90 p-3.5 rounded-2xl border border-green-200 text-xs">
@@ -673,12 +611,10 @@
 
         const searchDatabase = [
             { query: '474', title: 'Маршрут № 474к: от Карьера — М. Котельники', desc: 'Расписание автобусов', action: openTransportModal },
-            { query: '1к', title: 'Маршрут № 1к: Карьер — М. Котельники', desc: 'Расписание автобусов', action: openTransportModal },
-            { query: '26', title: 'Маршрут № 26: до Силиката через Карьер', desc: 'Расписание автобусов', action: openTransportModal },
             { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: openTransportModal },
             { query: 'карта', title: 'Яндекс.Карта НСТ «Горняк»', desc: 'Смотреть расположение на карте', action: openTransportModal },
-            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей с файлами и ответами', action: openChatModal },
-            { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт, взносы 1200 руб/сотка', action: () => openSection('Тарифы', 'Электричество: 4.85 руб/кВт⋅ч') }
+            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей', action: openChatModal },
+            { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт', action: () => openSection('Тарифы', 'Электричество: 4.85 руб/кВт⋅ч') }
         ];
 
         searchInput.addEventListener('focus', () => renderSearch(searchInput.value));
@@ -696,12 +632,12 @@
             }
 
             if (filtered.length === 0) {
-                searchResultsList.innerHTML = `<div class="px-5 py-3 text-sm text-gray-600 font-bold">Ничего не найдено</div>`;
+                searchResultsList.innerHTML = `<div class="px-4 py-2.5 text-xs text-gray-600 font-bold">Ничего не найдено</div>`;
             } else {
                 filtered.forEach(item => {
                     const btn = document.createElement('button');
-                    btn.className = 'px-5 py-3 text-left text-sm font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none';
-                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-xs text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
+                    btn.className = 'px-4 py-2.5 text-left text-xs font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none w-full';
+                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-[10px] text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
                     btn.onclick = () => {
                         searchDropdown.classList.add('hidden');
                         item.action();
@@ -751,7 +687,6 @@
         function openTransportModal() { document.getElementById('transportModal').classList.remove('hidden'); document.getElementById('transportModal').classList.add('flex'); }
         function closeTransportModal() { document.getElementById('transportModal').classList.add('hidden'); document.getElementById('transportModal').classList.remove('flex'); }
 
-        // --- ЧАТ САДОВОДОВ ---
         function openChatModal() {
             document.getElementById('chatModal').classList.remove('hidden');
             document.getElementById('chatModal').classList.add('flex');
@@ -759,135 +694,6 @@
         }
         function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
 
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (file) {
-                attachedFile = { name: file.name, size: (file.size / 1024).toFixed(1) + ' KB' };
-                document.getElementById('fileNamePreview').innerText = `📎 ${file.name} (${attachedFile.size})`;
-                document.getElementById('filePreview').classList.remove('hidden');
-            }
-        }
-        function removeAttachedFile() {
-            attachedFile = null;
-            document.getElementById('chatFileInput').value = '';
-            document.getElementById('filePreview').classList.add('hidden');
-        }
-
-        function setReplyTo(id, author, text) {
-            replyingTo = { id, author, text };
-            document.getElementById('replyAuthorTitle').innerText = `Ответ для ${author}:`;
-            document.getElementById('replyTextSnippet').innerText = text;
-            document.getElementById('replyPreview').classList.remove('hidden');
-            document.getElementById('chatInputText').focus();
-        }
-        function cancelReply() {
-            replyingTo = null;
-            document.getElementById('replyPreview').classList.add('hidden');
-        }
-
-        function setEditMessage(id, currentText) {
-            editingMessageId = id;
-            document.getElementById('chatInputText').value = currentText;
-            document.getElementById('chatSendBtn').innerHTML = `<i class="fa-solid fa-check"></i>`;
-            document.getElementById('chatInputText').focus();
-        }
-
-        function renderChatMessages() {
-            const container = document.getElementById('chatMessagesContainer');
-            const messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
-            const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
-            const userEmail = currentUser ? currentUser.email : null;
-
-            if (messages.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-gray-500 font-semibold text-xs">В чате пока нет сообщений. Напишите первое!</div>`;
-                return;
-            }
-
-            container.innerHTML = messages.map(m => {
-                const isMyMessage = userEmail && m.email === userEmail;
-                return `
-                <div class="bg-white/90 p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-1 relative group">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="font-black text-[#1c5c38]"><i class="fa-solid fa-user-circle mr-1"></i>${m.author}</span>
-                        <div class="flex items-center gap-2">
-                            <span class="text-gray-400 text-[10px] font-semibold">${m.time}</span>
-                            <button onclick="setReplyTo('${m.id}', '${m.author}', '${m.text.replace(/'/g, "")}')" title="Ответить" class="text-gray-500 hover:text-[#1c5c38]"><i class="fa-solid fa-reply"></i></button>
-                            ${isMyMessage ? `
-                                <button onclick="setEditMessage('${m.id}', '${m.text.replace(/'/g, "")}')" title="Редактировать" class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteChatMessage('${m.id}')" title="Удалить" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
-                            ` : ''}
-                        </div>
-                    </div>
-                    ${m.replyTo ? `
-                        <div class="bg-emerald-50/80 border-l-2 border-[#1c5c38] px-2.5 py-1 rounded text-[11px] text-gray-600 mb-1">
-                            <b>${m.replyTo.author}:</b> ${m.replyTo.text}
-                        </div>
-                    ` : ''}
-                    <div class="text-gray-800 text-sm font-medium mt-0.5">${m.text}</div>
-                    ${m.file ? `<div class="mt-1.5 p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs flex items-center gap-2 text-emerald-800 font-bold"><i class="fa-solid fa-file-arrow-down"></i> ${m.file}</div>` : ''}
-                </div>`;
-            }).join('');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendChatMessage(e) {
-            e.preventDefault();
-            const textInput = document.getElementById('chatInputText');
-            const text = textInput.value.trim();
-            if (!text && !attachedFile) return;
-
-            const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
-            let author = 'Садовод (Гость)';
-            let email = 'guest@gornyak.ru';
-            if (currentUser) {
-                email = currentUser.email;
-                author = currentUser.name ? `${currentUser.name} (${currentUser.email}${currentUser.plot ? ', уч. ' + currentUser.plot : ''})` : currentUser.email;
-            }
-
-            let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
-
-            if (editingMessageId) {
-                messages = messages.map(m => {
-                    if (m.id === editingMessageId) {
-                        m.text = text;
-                    }
-                    return m;
-                });
-                editingMessageId = null;
-                document.getElementById('chatSendBtn').innerHTML = `<i class="fa-solid fa-paper-plane"></i>`;
-                addNotification('В чате отредактировано сообщение');
-            } else {
-                const newMessage = {
-                    id: Date.now().toString(),
-                    email: email,
-                    author: author,
-                    text: text || '(Вложенный файл)',
-                    file: attachedFile ? attachedFile.name : null,
-                    replyTo: replyingTo ? { author: replyingTo.author, text: replyingTo.text } : null,
-                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                };
-                messages.push(newMessage);
-                addNotification('Новое сообщение в чате от ' + author.split(' ')[0]);
-            }
-
-            localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
-            textInput.value = '';
-            cancelReply();
-            removeAttachedFile();
-            renderChatMessages();
-        }
-
-        function deleteChatMessage(id) {
-            if (confirm('Удалить это сообщение?')) {
-                let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
-                messages = messages.filter(m => m.id !== id);
-                localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
-                addNotification('Сообщение в чате было удалено');
-                renderChatMessages();
-            }
-        }
-
-        // --- ЛОГИКА ПРОФИЛЯ И АВТОРИЗАЦИИ ---
         function openProfileAuthModal() {
             const currentUser = localStorage.getItem('gornyak_user');
             if (currentUser) {
@@ -908,20 +714,16 @@
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPassword').value.trim();
-            if(!email || !pass) {
-                alert('Пожалуйста, заполните почту и пароль!');
-                return;
-            }
-            const userData = { email, name: '', plot: '' };
-            localStorage.setItem('gornyak_user', JSON.stringify(userData));
+            if(!email || !pass) { alert('Заполните почту и пароль!'); return; }
+            localStorage.setItem('gornyak_user', JSON.stringify({ email, name: '', plot: '' }));
             closeAuthModal();
-            addNotification('Пользователь вошел в систему: ' + email);
+            addNotification('Вход в личный кабинет: ' + email);
             openProfileAuthModal();
         }
 
         function forgotPassword() {
-            const email = prompt('Введите вашу электронную почту для восстановления пароля:');
-            if(email) alert('Инструкция по восстановлению пароля отправлена на ' + email);
+            const email = prompt('Введите вашу почту для восстановления:');
+            if(email) alert('Инструкция отправлена на ' + email);
         }
 
         function openRegisterModal() {
@@ -937,58 +739,20 @@
             const name = document.getElementById('regName').value.trim();
             const plot = document.getElementById('regPlot').value.trim();
             if(!email) { alert('Укажите почту!'); return; }
-
-            const userData = { email, name, plot };
-            localStorage.setItem('gornyak_user', JSON.stringify(userData));
+            localStorage.setItem('gornyak_user', JSON.stringify({ email, name, plot }));
             closeRegisterModal();
             alert('Регистрация успешна!');
-            addNotification('Зарегистрирован новый садовод: ' + (name || email));
+            addNotification('Зарегистрирован новый садовод');
             openProfileAuthModal();
         }
 
         function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); document.getElementById('profileModal').classList.remove('flex'); }
+        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); alert('Вы вышли из аккаунта.'); }
 
-        function logout() {
-            localStorage.removeItem('gornyak_user');
-            closeProfileModal();
-            alert('Вы вышли из личного кабинета.');
-        }
-
-        function openNewsModal() { openSection('Новости НСТ «Горняк»', '• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.'); }
-        
-        function openCreateNewsModal() {
-            document.getElementById('createNewsModal').classList.remove('hidden');
-            document.getElementById('createNewsModal').classList.add('flex');
-        }
-        function closeCreateNewsModal() {
-            document.getElementById('createNewsModal').classList.add('hidden');
-            document.getElementById('createNewsModal').classList.remove('flex');
-        }
-        function submitNewsForm(e) {
-            e.preventDefault();
-            const title = document.getElementById('newsTitleInput').value;
-            alert('Новость успешно опубликована!');
-            addNotification('Опубликована новость: ' + title);
-            closeCreateNewsModal();
-        }
-
-        function openDocsModal() { document.getElementById('docsListModal').classList.remove('hidden'); document.getElementById('docsListModal').classList.add('flex'); }
-        
-        function openCreateDocModal() {
-            document.getElementById('createDocModal').classList.remove('hidden');
-            document.getElementById('createDocModal').classList.add('flex');
-        }
-        function closeCreateDocModal() {
-            document.getElementById('createDocModal').classList.add('hidden');
-            document.getElementById('createDocModal').classList.remove('flex');
-        }
-        function submitDocForm(e) {
-            e.preventDefault();
-            const name = document.getElementById('docNameInput').value;
-            alert('Документ успешно загружен в базу!');
-            addNotification('Загружен новый документ: ' + name);
-            closeCreateDocModal();
-        }
+        function openNewsModal() { openSection('Новости СНТ', '• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.'); }
+        function openCreateNewsModal() { alert('Открытие формы добавления новости'); }
+        function openDocsModal() { openSection('Документы', 'Устав НСТ, сметы, бланки заявлений.'); }
+        function openCreateDocModal() { alert('Открытие формы загрузки документа'); }
 
         function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
 
@@ -996,4 +760,3 @@
         updateNotifBadge();
     </script>
 </body>
-</html>
