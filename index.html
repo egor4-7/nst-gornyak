@@ -106,7 +106,7 @@
                 <p class="text-green-100 text-base sm:text-lg font-semibold opacity-95">Информационный портал для садоводов</p>
             </div>
             
-            <div class="flex items-center gap-3 bg-black/40 backdrop-blur-2xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
+            <div class="flex flex-wrap items-center justify-center gap-3 bg-black/40 backdrop-blur-2xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
                 <!-- Погода -->
                 <div onclick="openWeatherModal()" class="flex items-center gap-3 pr-3 border-r border-white/20 cursor-pointer hover:opacity-90 transition">
                     <div class="w-10 h-10 rounded-full sun-icon-3d flex items-center justify-center text-white text-lg">☀️</div>
@@ -115,6 +115,13 @@
                         <span class="text-[11px] text-green-200 font-bold">Солнечно</span>
                     </div>
                 </div>
+
+                <!-- Кнопка «Полноценная версия» -->
+                <a href="index.html" title="Перейти на полноценную версию сайта" 
+                   class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs sm:text-sm transition active:scale-95 shadow border border-amber-200 flex items-center gap-2">
+                    <i class="fa-solid fa-desktop"></i>
+                    <span>Полноценная версия</span>
+                </a>
 
                 <a href="father.html" title="Перейти на портал ЖК Fortuna" 
                    class="w-11 h-11 rounded-xl bg-white/20 hover:bg-white/30 flex items-center justify-center transition active:scale-95 text-white shadow border border-white/20">
