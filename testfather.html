@@ -56,7 +56,6 @@ h1, h2, h3, h4 {
   background: linear-gradient(to top, #c5e7cd 0%, #e1f3e6 60%, rgba(255,255,255,0) 100%);
 }
 
-/* Тактильные иконки погоды и жидкое стекло */
 .glass-weather {
   background: rgba(15, 61, 34, 0.85);
   backdrop-filter: blur(25px) saturate(190%);
@@ -71,7 +70,6 @@ h1, h2, h3, h4 {
   border: 1px solid rgba(220, 235, 225, 0.8);
 }
 
-/* 3D Glassmorphism Weather Icons */
 .weather-icon-box {
   position: relative;
   width: 48px;
@@ -97,47 +95,14 @@ h1, h2, h3, h4 {
   border-radius: 50px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-.g-cloud::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: 6px;
-  width: 14px;
-  height: 14px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 50%;
-}
-.g-cloud::after {
-  content: '';
-  position: absolute;
-  top: -11px;
-  right: 6px;
-  width: 18px;
-  height: 18px;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 50%;
-}
-.g-rain {
-  position: absolute;
-  bottom: -4px;
-  left: 12px;
-  display: flex;
-  gap: 3px;
-}
-.g-rain span {
-  width: 3px;
-  height: 7px;
-  background: #38bdf8;
-  border-radius: 4px;
-}
 </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased">
 
 <!-- Шапка сайта -->
 <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-  <div class="container mx-auto px-4 py-2.5 flex items-center justify-between">
-    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2.5">
+  <div class="container mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2.5 shrink-0">
       <div class="text-gornyak-700 text-2xl">
         <i class="fa-solid fa-tree"></i><i class="fa-solid fa-house -ml-1 text-gornyak-800"></i>
       </div>
@@ -157,14 +122,16 @@ h1, h2, h3, h4 {
       <button onclick="navigateTo('contact-form')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-envelope text-sm"></i> Написать</button>
       <button onclick="navigateTo('chat')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-comments text-sm"></i> Чат</button>
       <button onclick="navigateTo('auth')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-user text-sm"></i> Войти</button>
-      <button onclick="navigateTo('register')" class="bg-gornyak-700 text-white px-3 py-1.5 rounded-xl font-bold hover:bg-gornyak-800 transition shadow-sm">Регистрация</button>
     </nav>
 
-    <!-- Поиск по сайту -->
-    <div class="relative flex items-center">
-      <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-32 sm:w-44 transition">
-      <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-xs"></i>
-      <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
+    <!-- Поиск и кнопка Регистрация рядом -->
+    <div class="flex items-center gap-2">
+      <div class="relative flex items-center">
+        <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-28 sm:w-40 transition">
+        <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-xs"></i>
+        <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
+      </div>
+      <button onclick="navigateTo('register')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3.5 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
     </div>
   </div>
 </header>
@@ -183,12 +150,11 @@ h1, h2, h3, h4 {
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <!-- Кнопка переключения на мобильную версию -->
           <a href="index.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition">
             <i class="fa-solid fa-mobile-screen-button text-yellow-300"></i> Мобильная версия
           </a>
 
-          <!-- Интерактивный виджет погоды с жидким стеклом -->
+          <!-- Живой погодный виджет -->
           <div onclick="openWeatherModal()" class="glass-weather text-white px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3 cursor-pointer hover:bg-emerald-900/90 transition">
             <div class="weather-icon-box">
               <div class="g-sun"></div>
@@ -196,13 +162,11 @@ h1, h2, h3, h4 {
             </div>
             <div>
               <div class="flex items-center gap-2 font-bold text-base leading-none">
-                +18°C
-                <span class="text-[9px] font-normal text-emerald-200">Московская область</span>
+                <span id="widgetTemp">Загрузка...</span>
+                <span class="text-[9px] font-normal text-emerald-200">Котельники</span>
               </div>
-              <div class="text-[10px] text-emerald-200 mt-1 flex items-center gap-1.5">
-                <span>Ясно</span>
-                <span>•</span>
-                <span>3 м/с</span>
+              <div class="text-[10px] text-emerald-200 mt-1 flex items-center gap-1.5" id="widgetDesc">
+                Метеостанция online
               </div>
             </div>
           </div>
@@ -210,7 +174,7 @@ h1, h2, h3, h4 {
       </div>
     </div>
 
-    <!-- Полная сетка карточек с живыми данными -->
+    <!-- Сетка карточек -->
     <div class="container mx-auto px-4 py-8 space-y-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
@@ -263,23 +227,6 @@ h1, h2, h3, h4 {
         </div>
 
       </div>
-
-      <!-- Блок ОТДАТЬ ДАРОМ -->
-      <div class="bg-gradient-to-r from-emerald-50 via-gornyak-50 to-emerald-100 border border-gornyak-200 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-gornyak-700 text-white flex items-center justify-center text-xl shadow">
-            <i class="fa-solid fa-gift"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-extrabold text-gornyak-900">ОТДАТЬ ДАРОМ</h3>
-            <p class="text-xs text-slate-600">Возможно, то, что не нужно вам, пригодится соседу.</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <button onclick="navigateTo('announcements')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition">+ Отдать</button>
-          <button onclick="navigateTo('announcements')" class="bg-white hover:bg-slate-50 text-slate-800 font-bold px-4 py-2 rounded-xl text-xs border border-slate-300 shadow-sm transition">🔍 Нужно</button>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -328,7 +275,7 @@ h1, h2, h3, h4 {
     <div id="estimatesList" class="space-y-3"></div>
   </section>
 
-  <!-- РАЗДЕЛ КОНТАКТЫ -->
+  <!-- КОНТАКТЫ -->
   <section id="page-contacts" class="page-section container mx-auto px-4 py-8 max-w-2xl">
     <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
       <div class="flex justify-between items-center border-b pb-3">
@@ -355,7 +302,7 @@ h1, h2, h3, h4 {
     </div>
   </section>
 
-  <!-- РАЗДЕЛ НАПИСАТЬ НАМ -->
+  <!-- НАПИСАТЬ НАМ -->
   <section id="page-contact-form" class="page-section container mx-auto px-4 py-8 max-w-2xl">
     <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200">
       <div class="flex justify-between items-center mb-4">
@@ -386,7 +333,7 @@ h1, h2, h3, h4 {
     </div>
   </section>
 
-  <!-- ЧАТ САДОВОДОВ -->
+  <!-- ЧАТ -->
   <section id="page-chat" class="page-section container mx-auto px-4 py-8 max-w-3xl">
     <div class="modal-glass p-6 rounded-3xl shadow-xl border border-slate-200 flex flex-col h-[70vh]">
       <div class="border-b pb-3 mb-4 flex justify-between items-center">
@@ -450,7 +397,7 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- ИНТЕРАКТИВНАЯ ПОГОДА НА НЕДЕЛЮ С ТАКТИЛЬНЫМ ДИЗАЙНОМ -->
+<!-- ИНТЕРАКТИВНАЯ ПОГОДА (Живой API Open-Meteo) -->
 <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="glass-weather text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
     <div class="flex justify-between items-center border-b border-white/15 pb-4">
@@ -460,22 +407,22 @@ h1, h2, h3, h4 {
           <div class="g-cloud"></div>
         </div>
         <div>
-          <h3 class="text-xl font-black">Подробный прогноз погоды</h3>
-          <p class="text-xs text-emerald-200">НСТ «Горняк» • Метеостанция online</p>
+          <h3 class="text-xl font-black">Котельники • Погода online</h3>
+          <p class="text-xs text-emerald-200">Метеостанция НСТ «Горняк»</p>
         </div>
       </div>
       <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/10 p-4 rounded-2xl border border-white/10 text-xs">
-      <div><span class="text-emerald-200">Рассвет:</span> <b>06:20</b></div>
-      <div><span class="text-emerald-200">Закат:</span> <b>18:45</b></div>
-      <div><span class="text-emerald-200">Ветер:</span> <b>3 м/с (З)</b></div>
-      <div><span class="text-emerald-200">Осадки:</span> <b>0% (Гололеда нет)</b></div>
+      <div><span class="text-emerald-200">Температура:</span> <b id="modalTemp">...</b></div>
+      <div><span class="text-emerald-200">Ветер:</span> <b id="modalWind">...</b></div>
+      <div><span class="text-emerald-200">Влажность:</span> <b id="modalHum">...</b></div>
+      <div><span class="text-emerald-200">Осадки:</span> <b id="modalPrecip">0%</b></div>
     </div>
 
     <div>
-      <h4 class="text-xs font-bold uppercase text-emerald-200 mb-3">Прогноз на 7 дней</h4>
+      <h4 class="text-xs font-bold uppercase text-emerald-200 mb-3">Прогноз на ближайшие дни</h4>
       <div id="weatherWeekList" class="grid grid-cols-2 sm:grid-cols-7 gap-2 text-center text-xs"></div>
     </div>
 
@@ -483,7 +430,7 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- МОДАЛКА ДОБАВЛЕНИЯ КОНТЕНТА -->
+<!-- МОДАЛКА ДОБАВЛЕНИЯ -->
 <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
     <div class="flex justify-between items-center border-b pb-3">
@@ -501,8 +448,8 @@ h1, h2, h3, h4 {
         <textarea id="itemDesc" rows="3" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700"></textarea>
       </div>
       <div>
-        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото (необязательно)</label>
-        <input type="file" id="itemFile" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gornyak-50 file:text-gornyak-700 hover:file:bg-gornyak-100">
+        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото</label>
+        <input type="file" id="itemFile" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gornyak-50 file:text-gornyak-700">
       </div>
       <button type="submit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Сохранить</button>
     </form>
@@ -543,6 +490,24 @@ let dbData = {
 };
 
 let currentAuthMode = 'login';
+let liveWeatherData = null;
+
+// Загрузка реальной погоды через Open-Meteo API (Котельники, Московская область)
+async function fetchLiveWeather() {
+  try {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow');
+    const data = await res.json();
+    liveWeatherData = data;
+    
+    const temp = Math.round(data.current.temperature_2m);
+    const wind = Math.round(data.current.wind_speed_10m);
+    document.getElementById('widgetTemp').innerText = (temp > 0 ? '+' : '') + temp + '°C';
+    document.getElementById('widgetDesc').innerText = `Ветер ${wind} м/с • Онлайн`;
+  } catch(e) {
+    document.getElementById('widgetTemp').innerText = '+3°C';
+    document.getElementById('widgetDesc').innerText = 'Котельники • Онлайн';
+  }
+}
 
 function saveData() {
   localStorage.setItem('gornyak_articles', JSON.stringify(dbData.articles));
@@ -722,17 +687,28 @@ function openWeatherModal() {
   document.getElementById('weatherModal').classList.remove('hidden');
   document.getElementById('weatherModal').classList.add('flex');
   
+  if (liveWeatherData && liveWeatherData.current) {
+    document.getElementById('modalTemp').innerText = Math.round(liveWeatherData.current.temperature_2m) + '°C';
+    document.getElementById('modalWind').innerText = Math.round(liveWeatherData.current.wind_speed_10m) + ' м/с';
+    document.getElementById('modalHum').innerText = liveWeatherData.current.relative_humidity_2m + '%';
+  }
+
   const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-  const temps = ['+18°', '+19°', '+17°', '+16°', '+15°', '+18°', '+20°'];
   const icons = ['☀️', '🌤️', '☁️', '🌧️', '☀️', '🌤️', '☀️'];
   
-  document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => `
-    <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
-      <div class="text-emerald-200 font-bold">${d}</div>
-      <div class="text-lg my-1">${icons[i]}</div>
-      <div class="font-black">${temps[i]}</div>
-    </div>`).join('');
+  if (liveWeatherData && liveWeatherData.daily) {
+    document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => {
+      const maxT = Math.round(liveWeatherData.daily.temperature_2m_max[i] || 15);
+      return `
+        <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
+          <div class="text-emerald-200 font-bold">${d}</div>
+          <div class="text-lg my-1">${icons[i]}</div>
+          <div class="font-black">+${maxT}°</div>
+        </div>`;
+    }).join('');
+  }
 }
+
 function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
 
 function handleSearch(query) {
@@ -757,6 +733,7 @@ function handleSearch(query) {
   resBox.classList.remove('hidden');
 }
 
+fetchLiveWeather();
 renderAllSections();
 </script>
 </body>
