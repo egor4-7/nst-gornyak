@@ -132,42 +132,41 @@
         }
     </style>
 </head>
-<body class="min-h-screen py-4 px-2 sm:px-6 flex flex-col items-center">
+<body class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
-    <div class="w-full max-w-6xl mx-auto flex flex-col gap-5">
+    <div class="w-full max-w-6xl mx-auto flex flex-col gap-4">
 
-        <!-- Верхняя мини-шапка с логотипом, поиском и кнопками -->
-        <div class="glass-panel rounded-3xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md border border-green-200">
+        <!-- Верхняя шапка (как на первом фото) -->
+        <div class="glass-panel rounded-3xl p-3 sm:p-4 flex items-center justify-between gap-3 shadow-md border border-green-200">
             <div class="flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-lg font-black shrink-0">
                     <i class="fa-solid fa-tree"></i>
                 </div>
                 <div>
-                    <h2 class="font-black text-sm sm:text-base text-gray-900 leading-tight">НСТ «Горняк»</h2>
-                    <p class="text-[10px] text-gray-600 font-bold">Мобильный портал</p>
+                    <h2 class="font-black text-xs sm:text-sm text-gray-900 leading-tight">НСТ «Горняк»</h2>
+                    <p class="text-[9px] text-gray-600 font-bold">Мобильный портал</p>
                 </div>
             </div>
 
-            <!-- Адаптивный поиск и кнопки в шапке -->
-            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <div class="relative flex-grow sm:flex-grow-0">
+            <!-- Поиск и кнопки справа -->
+            <div class="flex items-center gap-2">
+                <div class="relative">
                     <input type="text" id="searchInput" placeholder="Поиск..." 
-                        class="w-full sm:w-48 glass-panel border border-green-300 rounded-xl py-2 pl-9 pr-3 text-xs font-bold text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-green-800 text-xs"></i>
+                        class="w-32 sm:w-48 glass-panel border border-green-300 rounded-xl py-2 pl-8 pr-3 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
                     
-                    <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 sm:right-auto sm:w-72 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
+                    <div id="searchDropdown" class="hidden absolute top-full right-0 mt-2 w-72 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
                         <div class="p-2.5 text-[10px] font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
                         <div id="searchResultsList" class="flex flex-col py-1"></div>
                     </div>
                 </div>
 
-                <button onclick="openProfileAuthModal()" class="py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
-                    <i class="fa-solid fa-user"></i>
-                    <span class="hidden xs:inline">Профиль</span>
+                <button onclick="openProfileAuthModal()" class="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition shadow shrink-0">
+                    <i class="fa-solid fa-user text-xs"></i>
                 </button>
 
                 <button onclick="openNotifModal()" class="relative w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
-                    <i class="fa-solid fa-bell text-sm"></i>
+                    <i class="fa-solid fa-bell text-xs"></i>
                     <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
             </div>
@@ -199,7 +198,7 @@
                     </div>
                 </div>
 
-                <!-- Кнопки в баннере -->
+                <!-- Кнопка Компьютерная версия -->
                 <div class="flex items-center gap-2.5 w-full">
                     <a href="father.html" class="flex-1 py-2.5 px-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-1.5">
                         <i class="fa-solid fa-desktop"></i>
@@ -316,7 +315,7 @@
 
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ЧАТА -->
+    <!-- Модальные окна (Чат, Авторизация, Погода, Транспорт и т.д.) -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200">
             <div class="flex justify-between items-center border-b pb-3 mb-3">
@@ -326,36 +325,15 @@
                 </div>
                 <button onclick="closeChatModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
             <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-3 pr-1 text-sm"></div>
-
-            <div id="replyPreview" class="hidden bg-emerald-50 border-l-4 border-[#1c5c38] p-2 rounded-xl text-xs flex justify-between items-center mt-2">
-                <div>
-                    <span class="font-bold text-[#1c5c38] block" id="replyAuthorTitle">Ответ на сообщение:</span>
-                    <span id="replyTextSnippet" class="text-gray-600 truncate"></span>
-                </div>
-                <button type="button" onclick="cancelReply()" class="text-red-500 font-bold px-2">✕</button>
-            </div>
-
-            <div id="filePreview" class="hidden text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl flex items-center justify-between mt-2">
-                <span id="fileNamePreview" class="truncate font-bold"></span>
-                <button type="button" onclick="removeAttachedFile()" class="text-red-500 font-bold ml-2">✕</button>
-            </div>
-
             <form onsubmit="sendChatMessage(event)" class="mt-2 pt-2 border-t border-gray-200 flex items-center gap-2">
-                <label class="cursor-pointer w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl flex items-center justify-center shrink-0 transition">
-                    <i class="fa-solid fa-paperclip"></i>
-                    <input type="file" id="chatFileInput" onchange="handleFileSelect(event)" class="hidden">
-                </label>
                 <input type="text" id="chatInputText" placeholder="Написать сообщение соседям..." class="flex-grow p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                <button type="submit" id="chatSendBtn" class="py-3 px-5 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow transition shrink-0">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+                <button type="submit" class="py-3 px-5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Отправить</button>
             </form>
         </div>
     </div>
 
-    <!-- МОДАЛКА АВТОРИЗАЦИИ -->
+    <!-- Модалка авторизации -->
     <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -365,23 +343,22 @@
             <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
-                    <input type="email" id="loginEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <input type="email" id="loginEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Пароль</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
-                
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" onclick="openRegisterModal()" class="text-xs text-blue-600 font-extrabold hover:underline">Регистрация</button>
                     <button type="button" onclick="forgotPassword()" class="text-xs text-gray-600 hover:underline">Забыли пароль?</button>
-                    <button type="submit" class="py-2.5 px-5 bg-[#1c5c38] text-white font-extrabold rounded-xl shadow hover:opacity-95 transition text-xs">Войти</button>
+                    <button type="submit" class="py-2.5 px-5 bg-[#1c5c38] text-white font-extrabold rounded-xl text-xs">Войти</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- МОДАЛКА РЕГИСТРАЦИИ -->
+    <!-- Модалка регистрации -->
     <div id="registerModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -391,11 +368,11 @@
             <form onsubmit="handleRegisterSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта *</label>
-                    <input type="email" id="regEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <input type="email" id="regEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Пароль *</label>
-                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">ФИО (необязательно)</label>
@@ -405,12 +382,12 @@
                     <label class="text-xs font-bold text-gray-600 uppercase">Участок (необязательно)</label>
                     <input type="text" id="regPlot" placeholder="№ 42" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-blue-600 text-white font-extrabold rounded-2xl shadow-lg hover:bg-blue-700 transition">Зарегистрироваться</button>
+                <button type="submit" class="w-full py-3.5 bg-blue-600 text-white font-extrabold rounded-2xl shadow-lg">Зарегистрироваться</button>
             </form>
         </div>
     </div>
 
-    <!-- МОДАЛКА ПРОФИЛЯ -->
+    <!-- Модалка профиля -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -431,11 +408,11 @@
                     <b id="profPlot" class="text-gray-900">Не указан</b>
                 </div>
             </div>
-            <button onclick="logout()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl shadow transition">Выйти из аккаунта</button>
+            <button onclick="logout()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl shadow">Выйти из аккаунта</button>
         </div>
     </div>
 
-    <!-- МОДАЛКА УВЕДОМЛЕНИЙ -->
+    <!-- Модалка уведомлений -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
@@ -443,103 +420,73 @@
                     <i class="fa-solid fa-bell text-xl"></i>
                     <h3 class="text-xl font-extrabold">Уведомления</h3>
                 </div>
-                <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
             <div id="notifContainer" class="flex flex-col gap-3 py-2 max-h-[50vh] overflow-y-auto">
                 <div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>
             </div>
-
             <div class="flex gap-2">
-                <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 hover:bg-red-200 text-red-800 rounded-xl font-bold text-xs">Очистить</button>
+                <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 text-red-800 rounded-xl font-bold text-xs">Очистить</button>
                 <button onclick="closeNotifModal()" class="flex-1 py-2.5 bg-[#1c5c38] text-white rounded-xl font-bold text-xs">Закрыть</button>
             </div>
         </div>
     </div>
 
-    <!-- ОБЩЕЕ МОДАЛЬНОЕ ОКНО -->
+    <!-- Общее модальное окно -->
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900"></h3>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
-            <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold transition shadow-md text-base">Понятно</button>
+            <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold shadow-md">Понятно</button>
         </div>
     </div>
 
-    <!-- ПОГОДА МОДАЛКА -->
+    <!-- Модалка погоды -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="weather-icon-box" id="modalWeatherIcon">
-                        <div class="glass-sun"></div>
-                        <div class="glass-cloud"></div>
-                    </div>
+                    <div class="weather-icon-box"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
                     <div>
                         <h3 class="text-2xl font-black">Погода в Котельниках</h3>
                         <p class="text-xs text-green-200 font-bold">Метеостанция online • Open-Meteo</p>
                     </div>
                 </div>
-                <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
             <div class="flex justify-between items-center bg-white/10 p-5 rounded-2xl border border-white/10 shadow-inner">
                 <div>
                     <div class="text-4xl font-black tracking-tight" id="modalTemp">...</div>
                     <div class="text-sm text-green-200 mt-1 font-bold" id="modalWind">Ветер: загрузка...</div>
                 </div>
-                <div class="text-right">
-                    <div class="text-sm font-black text-yellow-300">Закат в 18:45</div>
-                    <div class="text-xs text-gray-300 font-bold mt-0.5">Восход: 06:20</div>
-                </div>
             </div>
-
             <div>
                 <h4 class="text-xs font-bold uppercase text-green-200 mb-3">Прогноз на 7 дней</h4>
                 <div id="weatherWeekList" class="grid grid-cols-2 sm:grid-cols-7 gap-2 text-center text-xs"></div>
             </div>
-
-            <button onclick="closeWeatherModal()" class="w-full py-3.5 bg-white text-[#10331e] rounded-2xl font-black hover:bg-green-50 transition shadow-lg text-base">Закрыть</button>
+            <button onclick="closeWeatherModal()" class="w-full py-3.5 bg-white text-[#10331e] rounded-2xl font-black shadow-lg">Закрыть</button>
         </div>
     </div>
 
-    <!-- ТРАНСПОРТ И ЯНДЕКС.КАРТА -->
+    <!-- Модалка транспорта -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-2xl font-black text-gray-900">🚌 Транспорт и Яндекс.Карта</h3>
                 <button onclick="closeTransportModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
             <div class="w-full h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative">
                 <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
-
-            <div class="flex flex-col gap-3 text-sm text-gray-800 mt-2">
-                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
-                        <span>Маршрут № 474к: от Карьера — Метро Котельники</span>
-                        <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 flex items-center gap-1.5 font-bold shrink-0">Раскрыть <i class="fa-solid fa-chevron-down text-[10px]"></i></button>
-                    </div>
-                    <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
-                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
-                        06:18, 07:01, 07:50, 08:33, 09:16, 14:14, 15:31, 16:14, 16:58, 17:46, 18:37.
-                    </div>
-                </div>
-            </div>
-
             <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold">Закрыть</button>
         </div>
     </div>
 
     <script>
         let liveWeatherData = null;
-        let attachedFile = null;
-        let replyingTo = null;
-        let editingMessageId = null;
 
         function addNotification(text) {
             let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
@@ -694,6 +641,44 @@
         }
         function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
 
+        function renderChatMessages() {
+            const container = document.getElementById('chatMessagesContainer');
+            const messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-500 font-semibold text-xs">В чате пока нет сообщений. Напишите первое!</div>`;
+                return;
+            }
+            container.innerHTML = messages.map(m => `
+                <div class="bg-white/90 p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-black text-[#1c5c38]"><i class="fa-solid fa-user-circle mr-1"></i>${m.author}</span>
+                        <span class="text-gray-400 text-[10px] font-semibold">${m.time}</span>
+                    </div>
+                    <div class="text-gray-800 text-sm font-medium mt-0.5">${m.text}</div>
+                </div>`).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const textInput = document.getElementById('chatInputText');
+            const text = textInput.value.trim();
+            if (!text) return;
+            const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
+            let author = currentUser ? (currentUser.name || currentUser.email) : 'Садовод (Гость)';
+            let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
+            messages.push({
+                id: Date.now().toString(),
+                author: author,
+                text: text,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
+            textInput.value = '';
+            renderChatMessages();
+            addNotification('Новое сообщение в чате');
+        }
+
         function openProfileAuthModal() {
             const currentUser = localStorage.getItem('gornyak_user');
             if (currentUser) {
@@ -753,8 +738,6 @@
         function openCreateNewsModal() { alert('Открытие формы добавления новости'); }
         function openDocsModal() { openSection('Документы', 'Устав НСТ, сметы, бланки заявлений.'); }
         function openCreateDocModal() { alert('Открытие формы загрузки документа'); }
-
-        function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
 
         fetchLiveWeather();
         updateNotifBadge();
