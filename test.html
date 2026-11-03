@@ -276,14 +276,14 @@
                 </div>
             </div>
 
-            <!-- НАСТОЯЩИЙ ЧАТ ОБЩЕНИЯ -->
+            <!-- НАСТОЯЩИЙ ЧАТ ОБЩЕНИЯ С ОТВЕТАМИ, РЕДАКТИРОВАНИЕМ И УДАЛЕНИЕМ -->
             <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
                 <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
                     <i class="fa-solid fa-comments"></i>
                 </div>
                 <div class="flex flex-col w-full overflow-hidden">
                     <h3 class="font-extrabold text-gray-900 text-lg truncate">Общение</h3>
-                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Живой чат соседей с файлами</p>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Чат соседей, ответы и файлы</p>
                 </div>
             </div>
 
@@ -311,7 +311,7 @@
 
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО РЕАЛЬНОГО ЧАТА -->
+    <!-- МОДАЛЬНОЕ ОКНО РЕАЛЬНОГО ЧАТА (С ОТВЕТАМИ, ПРАВКОЙ И УДАЛЕНИЕМ) -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200">
             <div class="flex justify-between items-center border-b pb-3 mb-3">
@@ -325,22 +325,31 @@
             <!-- Список сообщений -->
             <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-3 pr-1 text-sm"></div>
 
-            <!-- Форма отправки сообщения и файлов -->
-            <form onsubmit="sendChatMessage(event)" class="mt-3 pt-3 border-t border-gray-200 flex flex-col gap-2">
-                <div id="filePreview" class="hidden text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl flex items-center justify-between">
-                    <span id="fileNamePreview" class="truncate font-bold"></span>
-                    <button type="button" onclick="removeAttachedFile()" class="text-red-500 font-bold ml-2">✕</button>
+            <!-- Блок цитирования/ответа -->
+            <div id="replyPreview" class="hidden bg-emerald-50 border-l-4 border-[#1c5c38] p-2 rounded-xl text-xs flex justify-between items-center mt-2">
+                <div>
+                    <span class="font-bold text-[#1c5c38] block" id="replyAuthorTitle">Ответ на сообщение:</span>
+                    <span id="replyTextSnippet" class="text-gray-600 truncate"></span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <label class="cursor-pointer w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl flex items-center justify-center shrink-0 transition">
-                        <i class="fa-solid fa-paperclip"></i>
-                        <input type="file" id="chatFileInput" onchange="handleFileSelect(event)" class="hidden">
-                    </label>
-                    <input type="text" id="chatInputText" placeholder="Написать сообщение соседям..." class="flex-grow p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                    <button type="submit" class="py-3 px-5 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow transition shrink-0">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
+                <button type="button" onclick="cancelReply()" class="text-red-500 font-bold px-2">✕</button>
+            </div>
+
+            <!-- Блок прикрепленного файла -->
+            <div id="filePreview" class="hidden text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl flex items-center justify-between mt-2">
+                <span id="fileNamePreview" class="truncate font-bold"></span>
+                <button type="button" onclick="removeAttachedFile()" class="text-red-500 font-bold ml-2">✕</button>
+            </div>
+
+            <!-- Поле ввода сообщения -->
+            <form onsubmit="sendChatMessage(event)" class="mt-2 pt-2 border-t border-gray-200 flex items-center gap-2">
+                <label class="cursor-pointer w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl flex items-center justify-center shrink-0 transition">
+                    <i class="fa-solid fa-paperclip"></i>
+                    <input type="file" id="chatFileInput" onchange="handleFileSelect(event)" class="hidden">
+                </label>
+                <input type="text" id="chatInputText" placeholder="Написать сообщение соседям..." class="flex-grow p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                <button type="submit" id="chatSendBtn" class="py-3 px-5 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow transition shrink-0">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </form>
         </div>
     </div>
@@ -593,6 +602,8 @@
     <script>
         let liveWeatherData = null;
         let attachedFile = null;
+        let replyingTo = null;
+        let editingMessageId = null;
 
         async function fetchLiveWeather() {
             try {
@@ -625,7 +636,7 @@
             { query: '26', title: 'Маршрут № 26: до Силиката через Карьер', desc: 'Расписание автобусов', action: openTransportModal },
             { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: openTransportModal },
             { query: 'карта', title: 'Яндекс.Карта НСТ «Горняк»', desc: 'Смотреть расположение на карте', action: openTransportModal },
-            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей с файлами', action: openChatModal },
+            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей с файлами и ответами', action: openChatModal },
             { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт, взносы 1200 руб/сотка', action: () => openSection('Тарифы', 'Электричество: 4.85 руб/кВт⋅ч') }
         ];
 
@@ -702,7 +713,7 @@
         function openNotifModal() { document.getElementById('notifModal').classList.remove('hidden'); document.getElementById('notifModal').classList.add('flex'); }
         function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
 
-        // --- ЛОГИКА РЕАЛЬНОГО ЧАТА ---
+        // --- ЛОГИКА НАСТОЯЩЕГО ЧАТА (ОТВЕТЫ, РЕДАКТИРОВАНИЕ, УДАЛЕНИЕ) ---
         function openChatModal() {
             document.getElementById('chatModal').classList.remove('hidden');
             document.getElementById('chatModal').classList.add('flex');
@@ -724,24 +735,60 @@
             document.getElementById('filePreview').classList.add('hidden');
         }
 
+        function setReplyTo(id, author, text) {
+            replyingTo = { id, author, text };
+            document.getElementById('replyAuthorTitle').innerText = `Ответ для ${author}:`;
+            document.getElementById('replyTextSnippet').innerText = text;
+            document.getElementById('replyPreview').classList.remove('hidden');
+            document.getElementById('chatInputText').focus();
+        }
+        function cancelReply() {
+            replyingTo = null;
+            document.getElementById('replyPreview').classList.add('hidden');
+        }
+
+        function setEditMessage(id, currentText) {
+            editingMessageId = id;
+            document.getElementById('chatInputText').value = currentText;
+            document.getElementById('chatSendBtn').innerHTML = `<i class="fa-solid fa-check"></i>`;
+            document.getElementById('chatInputText').focus();
+        }
+
         function renderChatMessages() {
             const container = document.getElementById('chatMessagesContainer');
             const messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
+            const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
+            const userEmail = currentUser ? currentUser.email : null;
 
             if (messages.length === 0) {
                 container.innerHTML = `<div class="text-center py-10 text-gray-500 font-semibold text-xs">В чате пока нет сообщений. Напишите первое!</div>`;
                 return;
             }
 
-            container.innerHTML = messages.map(m => `
-                <div class="bg-white/90 p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-1">
+            container.innerHTML = messages.map(m => {
+                const isMyMessage = userEmail && m.email === userEmail;
+                return `
+                <div class="bg-white/90 p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-1 relative group">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-black text-[#1c5c38]"><i class="fa-solid fa-user-circle mr-1"></i>${m.author}</span>
-                        <span class="text-gray-400 text-[10px] font-semibold">${m.time}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-400 text-[10px] font-semibold">${m.time}</span>
+                            <button onclick="setReplyTo('${m.id}', '${m.author}', '${m.text.replace(/'/g, "")}')" title="Ответить" class="text-gray-500 hover:text-[#1c5c38]"><i class="fa-solid fa-reply"></i></button>
+                            ${isMyMessage ? `
+                                <button onclick="setEditMessage('${m.id}', '${m.text.replace(/'/g, "")}')" title="Редактировать" class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteChatMessage('${m.id}')" title="Удалить" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                            ` : ''}
+                        </div>
                     </div>
+                    ${m.replyTo ? `
+                        <div class="bg-emerald-50/80 border-l-2 border-[#1c5c38] px-2.5 py-1 rounded text-[11px] text-gray-600 mb-1">
+                            <b>${m.replyTo.author}:</b> ${m.replyTo.text}
+                        </div>
+                    ` : ''}
                     <div class="text-gray-800 text-sm font-medium mt-0.5">${m.text}</div>
                     ${m.file ? `<div class="mt-1.5 p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs flex items-center gap-2 text-emerald-800 font-bold"><i class="fa-solid fa-file-arrow-down"></i> ${m.file}</div>` : ''}
-                </div>`).join('');
+                </div>`;
+            }).join('');
             container.scrollTop = container.scrollHeight;
         }
 
@@ -753,25 +800,51 @@
 
             const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
             let author = 'Садовод (Гость)';
+            let email = 'guest@gornyak.ru';
             if (currentUser) {
+                email = currentUser.email;
                 author = currentUser.name ? `${currentUser.name} (${currentUser.email}${currentUser.plot ? ', уч. ' + currentUser.plot : ''})` : currentUser.email;
             }
 
-            const newMessage = {
-                id: Date.now(),
-                author: author,
-                text: text || '(Вложенный файл)',
-                file: attachedFile ? attachedFile.name : null,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            };
-
             let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
-            messages.push(newMessage);
+
+            if (editingMessageId) {
+                messages = messages.map(m => {
+                    if (m.id === editingMessageId) {
+                        m.text = text;
+                    }
+                    return m;
+                });
+                editingMessageId = null;
+                document.getElementById('chatSendBtn').innerHTML = `<i class="fa-solid fa-paper-plane"></i>`;
+            } else {
+                const newMessage = {
+                    id: Date.now().toString(),
+                    email: email,
+                    author: author,
+                    text: text || '(Вложенный файл)',
+                    file: attachedFile ? attachedFile.name : null,
+                    replyTo: replyingTo ? { author: replyingTo.author, text: replyingTo.text } : null,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+                messages.push(newMessage);
+            }
+
             localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
 
             textInput.value = '';
+            cancelReply();
             removeAttachedFile();
             renderChatMessages();
+        }
+
+        function deleteChatMessage(id) {
+            if (confirm('Удалить это сообщение?')) {
+                let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
+                messages = messages.filter(m => m.id !== id);
+                localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
+                renderChatMessages();
+            }
         }
 
         // --- ЛОГИКА ПРОФИЛЯ И АВТОРИЗАЦИИ ---
