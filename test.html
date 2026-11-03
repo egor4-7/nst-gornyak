@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>НСТ «Горняк» — Информационный портал</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+        
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #dceada;
+            color: #0f2417;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px rgba(0, 40, 20, 0.08);
+        }
+
+        .glass-dark {
+            background: rgba(15, 42, 28, 0.92);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .forest-banner {
+            background: linear-gradient(135deg, rgba(16, 51, 30, 0.92), rgba(28, 92, 56, 0.85)), 
+                        url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .portal-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .portal-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(28, 92, 56, 0.25);
+        }
+        .portal-card::after {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -60%;
+            width: 220%;
+            height: 220%;
+            background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+            transform: rotate(25deg) translateX(-120%);
+            transition: transform 1.2s ease-in-out;
+        }
+        .portal-card:hover::after {
+            transform: rotate(25deg) translateX(120%);
+        }
+
+        .modal-animate {
+            animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.92) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .sun-icon-3d {
+            background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900, #e65c00);
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-3 sm:px-6 flex flex-col items-center">
+
+    <div class="w-full max-w-6xl mx-auto flex flex-col gap-6">
+
+        <!-- Баннер -->
+        <div class="forest-banner w-full rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative flex flex-col md:flex-row justify-between items-center gap-6 border border-white/20">
+            <div class="flex flex-col gap-1 text-center md:text-left">
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
+                <p class="text-green-100 text-base sm:text-lg font-semibold opacity-95">Информационный портал для садоводов</p>
+            </div>
+            
+            <div class="flex items-center gap-3 bg-black/40 backdrop-blur-2xl px-5 py-3 rounded-2xl border border-white/20 shadow-xl">
+                <!-- Погода -->
+                <div onclick="openWeatherModal()" class="flex items-center gap-3 pr-3 border-r border-white/20 cursor-pointer hover:opacity-90 transition">
+                    <div class="w-10 h-10 rounded-full sun-icon-3d flex items-center justify-center text-white text-lg">☀️</div>
+                    <div class="flex flex-col text-left leading-tight">
+                        <span class="text-white font-extrabold text-lg">+10°C</span>
+                        <span class="text-[11px] text-green-200 font-bold">Солнечно</span>
+                    </div>
+                </div>
+
+                <!-- Кнопка перехода на полноценную версию -->
+                <a href="father.html" title="Полноценная версия" 
+                   class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-xs flex items-center gap-2 shadow transition">
+                    <i class="fa-solid fa-desktop text-sm"></i>
+                    <span>Полноценная версия</span>
+                </a>
+
+                <button onclick="openNotifModal()" class="w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-white border border-white/10 relative">
+                    <i class="fa-solid fa-bell text-lg"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">1</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Умный поиск с живым фильтром -->
+        <div class="relative w-full">
+            <div class="relative flex items-center">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 text-green-800 text-xl"></i>
+                <input type="text" id="searchInput" placeholder="Введите номер маршрута (например, 474к), тарифы, документы..." 
+                    class="w-full glass-panel border border-green-300/80 rounded-2xl py-4 pl-14 pr-4 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#1c5c38] transition text-base font-bold">
+            </div>
+
+            <div id="searchDropdown" class="hidden absolute top-full left-0 right-0 mt-2 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
+                <div class="p-3 text-xs font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
+                <div id="searchResultsList" class="flex flex-col py-1"></div>
+            </div>
+        </div>
+
+        <!-- Карточки -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            
+            <!-- 1. Транспорт -->
+            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+                    <i class="fa-solid fa-bus"></i>
+                </div>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Транспорт</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">3 маршрута • Расписание</p>
+                </div>
+            </div>
+
+            <!-- 2. Тарифы -->
+            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-6 flex items-center gap-4 border border-green-200">
+                <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="flex flex-col w-full overflow-hidden">
+                    <h3 class="font-extrabold text-gray-900 text-lg truncate">Тарифы</h3>
+                    <p class="text-xs text-gray-600 font-bold mt-0.5 truncate">Свет, вода, услуги</p>
+                </div>
+            </div>
+
+            <!-- 3. Новости -->
+            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Новости</h3>
+                        <p class="text-xs text-gray-600 font-bold truncate">Объявления правления</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Документы -->
+            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-2xl shrink-0 shadow-md font-black">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-lg truncate">Документы</h3>
+                        <p class="text-xs text-gray-600 font-bold truncate">Устав, бланки, акты</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Модальные окна и скрипты оставляем на месте -->
+    <script>
+        // Базовые обработчики для модалок
+        function openSection(title, text) { alert(title + '\n' + text); }
+        function openWeatherModal() {}
+        function openTransportModal() {}
+        function openNotifModal() {}
+        function openNewsModal() {}
+        function openDocsModal() {}
+    </script>
+</body>
+</html>
