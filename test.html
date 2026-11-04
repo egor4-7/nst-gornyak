@@ -70,7 +70,7 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Разноцветные стеклянные иконки в стиле фото 1 */
+        /* Обновленные цвета иконок по вашему запросу */
         .icon-box {
             position: relative;
             display: flex;
@@ -82,19 +82,19 @@
         }
         .icon-transport { background: linear-gradient(135deg, rgba(110,231,183,0.8), rgba(16,185,129,0.9)); color: #064e3b; }
         .icon-tarif { background: linear-gradient(135deg, rgba(253,230,138,0.9), rgba(245,158,11,0.9)); color: #78350f; }
-        .icon-news { background: linear-gradient(135deg, rgba(191,219,254,0.9), rgba(59,130,246,0.9)); color: #1e3a8a; }
-        .icon-docs { background: linear-gradient(135deg, rgba(167,243,208,0.9), rgba(5,150,105,0.9)); color: #022c22; }
+        .icon-news { background: linear-gradient(135deg, rgba(209,213,219,0.9), rgba(107,114,128,0.9)); color: #111827; } /* Темно-серый */
+        .icon-docs { background: linear-gradient(135deg, rgba(254,215,170,0.9), rgba(249,115,22,0.9)); color: #7c2d12; } /* Оранжевый */
         .icon-contacts { background: linear-gradient(135deg, rgba(233,213,255,0.9), rgba(168,85,247,0.9)); color: #581c87; }
         .icon-chat { background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(14,165,233,0.9)); color: #0369a1; }
         .icon-money { background: linear-gradient(135deg, rgba(254,205,211,0.9), rgba(244,63,94,0.9)); color: #881337; }
-        .icon-info { background: linear-gradient(135deg, rgba(209,250,229,0.9), rgba(52,211,153,0.9)); color: #064e3b; }
+        .icon-info { background: linear-gradient(135deg, rgba(147,197,253,0.9), rgba(30,58,138,0.9)); color: #eff6ff; } /* Темно-синий */
     </style>
 </head>
 <body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
     <div class="w-full max-w-6xl mx-auto flex flex-col gap-4">
 
-        <!-- Шапка: Поиск, Профиль, Колокольчик, Настройки -->
+        <!-- Шапка -->
         <div class="glass-panel rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-sm font-black shrink-0">
@@ -102,7 +102,7 @@
                 </div>
                 <div>
                     <h2 class="font-black text-xs text-gray-900 leading-tight">НСТ «Горняк»</h2>
-                    <p class="text-[8px] text-gray-600 font-bold">Мобильный портал</p>
+                    <p class="text-[8px] text-gray-600 font-bold">Мобильная версия</p>
                 </div>
             </div>
 
@@ -123,14 +123,12 @@
                     <span class="hidden xs:inline">Профиль</span>
                 </button>
 
-                <!-- Колокольчик -->
                 <button onclick="openNotifModal()" class="relative w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
                     <i class="fa-solid fa-bell text-xs"></i>
                     <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
 
-                <!-- Иконка настроек (серая) -->
-                <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки интерфейса">
+                <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки">
                     <i class="fa-solid fa-gear text-xs"></i>
                 </button>
             </div>
@@ -167,7 +165,7 @@
             </div>
         </div>
 
-        <!-- 8 карточек одинакового размера с разноцветными иконками -->
+        <!-- 8 карточек -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
@@ -186,7 +184,7 @@
                 </div>
             </div>
 
-            <!-- Новости с полупрозрачными кнопками-скрепками в едином стиле -->
+            <!-- Новости (темно-серый) -->
             <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 flex flex-col justify-between border border-green-200">
                 <div class="flex items-center gap-2.5">
                     <div class="icon-box icon-news w-11 h-11 text-base font-black"><i class="fa-solid fa-newspaper"></i></div>
@@ -196,16 +194,16 @@
                     </div>
                 </div>
                 <div class="flex gap-1.5 mt-2 pt-1.5 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateNewsModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-blue-900 text-[10px] font-extrabold shadow-sm border border-blue-200 flex items-center justify-center gap-1 backdrop-blur-md">
+                    <button onclick="openCreateNewsModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-gray-900 text-[10px] font-extrabold shadow-sm border border-gray-300 flex items-center justify-center gap-1 backdrop-blur-md">
                         <i class="fa-solid fa-plus text-[9px]"></i> Новость
                     </button>
-                    <button onclick="openCreateNewsModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-blue-900 text-[10px] font-extrabold shadow-sm border border-blue-200 backdrop-blur-md">
+                    <button onclick="openCreateNewsModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-gray-900 text-[10px] font-extrabold shadow-sm border border-gray-300 backdrop-blur-md">
                         <i class="fa-solid fa-paperclip text-[9px]"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Документы с полупрозрачными кнопками-скрепками -->
+            <!-- Документы (оранжевый) -->
             <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 flex flex-col justify-between border border-green-200">
                 <div class="flex items-center gap-2.5">
                     <div class="icon-box icon-docs w-11 h-11 text-base font-black"><i class="fa-solid fa-folder-open"></i></div>
@@ -215,10 +213,10 @@
                     </div>
                 </div>
                 <div class="flex gap-1.5 mt-2 pt-1.5 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateDocModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-emerald-900 text-[10px] font-extrabold shadow-sm border border-emerald-200 flex items-center justify-center gap-1 backdrop-blur-md">
+                    <button onclick="openCreateDocModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-orange-900 text-[10px] font-extrabold shadow-sm border border-orange-300 flex items-center justify-center gap-1 backdrop-blur-md">
                         <i class="fa-solid fa-plus text-[9px]"></i> Файл
                     </button>
-                    <button onclick="openCreateDocModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-emerald-900 text-[10px] font-extrabold shadow-sm border border-emerald-200 backdrop-blur-md">
+                    <button onclick="openCreateDocModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-orange-900 text-[10px] font-extrabold shadow-sm border border-orange-300 backdrop-blur-md">
                         <i class="fa-solid fa-paperclip text-[9px]"></i>
                     </button>
                 </div>
@@ -248,6 +246,7 @@
                 </div>
             </div>
 
+            <!-- О НСТ (темно-синий) -->
             <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
                 <div class="icon-box icon-info w-12 h-12 text-lg font-black"><i class="fa-solid fa-circle-info"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
@@ -260,7 +259,7 @@
 
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК (Шрифт, Иконки, Блюр) -->
+    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
     <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 border border-green-200 relative">
             <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700">
@@ -298,13 +297,11 @@
 
     <!-- МОДАЛЬНОЕ ОКНО ЧАТА -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3 mb-3">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-comments text-[#1c5c38] text-xl"></i>
-                    <h3 class="text-lg font-extrabold text-gray-900">Общение садоводов</h3>
-                </div>
-                <button onclick="closeChatModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+        <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200 relative">
+            <button onclick="closeChatModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 border-b pb-3 mb-3">
+                <i class="fa-solid fa-comments text-[#1c5c38] text-xl"></i>
+                <h3 class="text-lg font-extrabold text-gray-900">Общение садоводов</h3>
             </div>
             <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-3 pr-1 text-sm"></div>
             <form onsubmit="sendChatMessage(event)" class="mt-2 pt-2 border-t border-gray-200 flex items-center gap-2">
@@ -399,7 +396,7 @@
                 <div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>
             </div>
             <div class="flex gap-2">
-                <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 text-red-800 rounded-xl font-bold text-xs">Очистить</button>
+                <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 hover:bg-red-200 text-red-800 rounded-xl font-bold text-xs">Очистить</button>
                 <button onclick="closeNotifModal()" class="flex-1 py-2.5 bg-[#1c5c38] text-white rounded-xl font-bold text-xs">Закрыть</button>
             </div>
         </div>
@@ -455,7 +452,6 @@
     <script>
         let liveWeatherData = null;
 
-        // --- УВЕДОМЛЕНИЯ ---
         function addNotification(text) {
             let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
             notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
@@ -499,7 +495,6 @@
             openNotifModal();
         }
 
-        // --- НАСТРОЙКИ ИНТЕРФЕЙСА ---
         function openSettingsModal() {
             document.getElementById('settingsModal').classList.remove('hidden');
             document.getElementById('settingsModal').classList.add('flex');
@@ -524,7 +519,6 @@
             addNotification('Настройки интерфейса обновлены');
         }
 
-        // Загрузка сохраненных настроек
         window.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('gornyak_settings');
             if (saved) {
