@@ -39,6 +39,7 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: #ffffff;
   color: #1e293b;
+  transition: font-size 0.2s ease;
 }
 h1, h2, h3, h4 {
   font-family: 'Montserrat', sans-serif;
@@ -58,15 +59,15 @@ h1, h2, h3, h4 {
 
 .glass-weather {
   background: rgba(15, 61, 34, 0.85);
-  backdrop-filter: blur(25px) saturate(190%);
-  -webkit-backdrop-filter: blur(25px) saturate(190%);
+  backdrop-filter: blur(var(--blur-val, 25px)) saturate(190%);
+  -webkit-backdrop-filter: blur(var(--blur-val, 25px)) saturate(190%);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .modal-glass {
   background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(var(--blur-val, 25px));
+  -webkit-backdrop-filter: blur(var(--blur-val, 25px));
   border: 1px solid rgba(220, 235, 225, 0.8);
 }
 
@@ -97,7 +98,7 @@ h1, h2, h3, h4 {
 }
 </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between antialiased">
+<body id="mainBody" class="min-h-screen flex flex-col justify-between antialiased">
 
 <!-- Шапка сайта -->
 <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
@@ -121,10 +122,10 @@ h1, h2, h3, h4 {
       <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-phone text-sm"></i> Контакты</button>
       <button onclick="navigateTo('contact-form')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-envelope text-sm"></i> Написать</button>
       <button onclick="navigateTo('chat')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-comments text-sm"></i> Чат</button>
-      <button onclick="navigateTo('auth')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-user text-sm"></i> Войти</button>
+      <button onclick="navigateTo('auth')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-user text-sm"></i> Профиль</button>
     </nav>
 
-    <!-- Поиск, Регистрация и Колокольчик уведомлений -->
+    <!-- Поиск, Регистрация, Колокольчик и Настройки -->
     <div class="flex items-center gap-2">
       <div class="relative flex items-center">
         <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-28 sm:w-36 transition">
@@ -133,10 +134,15 @@ h1, h2, h3, h4 {
       </div>
       <button onclick="navigateTo('register')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
       
-      <!-- КОЛОКОЛЬЧИК С СЧЕТЧИКОМ В ШАПКЕ -->
+      <!-- Колокольчик уведомлений -->
       <button onclick="openNotifModal()" class="relative p-2 text-slate-600 hover:text-gornyak-700 text-lg transition">
         <i class="fa-solid fa-bell"></i>
         <span id="headerNotifBadge" class="hidden absolute top-1 right-1 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+      </button>
+
+      <!-- Иконка настроек рядом с колокольчиком -->
+      <button onclick="openSettingsModal()" class="p-2 text-slate-600 hover:text-gornyak-700 text-lg transition" title="Настройки интерфейса">
+        <i class="fa-solid fa-gear"></i>
       </button>
     </div>
   </div>
@@ -316,35 +322,29 @@ h1, h2, h3, h4 {
     </div>
   </section>
 
-  <!-- АВТОРИЗАЦИЯ -->
+  <!-- АВТОРИЗАЦИЯ И ПРОФИЛЬ -->
   <section id="page-auth" class="page-section container mx-auto px-4 py-12 max-w-md">
     <div class="modal-glass p-8 rounded-3xl shadow-2xl border border-slate-200">
       <div class="flex justify-between items-center mb-2">
-        <h2 id="authTitle" class="text-2xl font-black text-slate-900">Войти</h2>
+        <h2 id="authTitle" class="text-2xl font-black text-slate-900">Личный кабинет</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
       </div>
-      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label>
-          <input type="email" id="authEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Пароль</label>
-          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
-        </div>
-        <button type="submit" id="authSubmitBtn" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow transition">Войти</button>
-      </form>
+
+      <div id="authContentArea">
+        <!-- Динамически заменяется: форма входа или данные профиля -->
+      </div>
     </div>
   </section>
 
 </main>
 
-<!-- МОДАЛКА УВЕДОМЛЕНИЙ ОБ ОБНОВЛЕНИЯХ САЙТА -->
+<!-- МОДАЛКА УВЕДОМЛЕНИЙ -->
 <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
-    <div class="flex justify-between items-center border-b pb-3">
-      <h3 class="text-lg font-black text-slate-900 flex items-center gap-2"><i class="fa-solid fa-bell text-gornyak-700"></i> Уведомления об обновлениях</h3>
-      <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
+    <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <div class="flex items-center gap-2 text-gornyak-900 border-b pb-2">
+      <i class="fa-solid fa-bell text-xl"></i>
+      <h3 class="text-lg font-black">Уведомления</h3>
     </div>
     <div id="notifContainer" class="flex flex-col gap-2 max-h-60 overflow-y-auto text-xs">
       <div class="text-center py-4 text-slate-400">Нет новых уведомлений</div>
@@ -356,48 +356,40 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- Модалки и Инфо -->
-<div id="infoModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-  <div class="modal-glass rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4">
-    <div class="flex justify-between items-center border-b pb-3">
-      <h3 id="infoModalTitle" class="text-lg font-black text-slate-900">Инфо</h3>
-      <button onclick="closeInfoModal()" class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
-    </div>
-    <div id="infoModalText" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></div>
-    <button onclick="closeInfoModal()" class="w-full py-3 bg-gornyak-700 text-white font-bold rounded-xl shadow">Понятно</button>
-  </div>
-</div>
+<!-- МОДАЛКА НАСТРОЕК -->
+<div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+  <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 relative">
+    <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <h3 class="text-lg font-black text-slate-900 border-b pb-2">⚙️ Настройки интерфейса</h3>
 
-<div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-  <div class="glass-weather text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
-    <div class="flex justify-between items-center border-b border-white/15 pb-4">
-      <div class="flex items-center gap-3">
-        <div class="weather-icon-box"><div class="g-sun"></div><div class="g-cloud"></div></div>
-        <div>
-          <h3 class="text-xl font-black">Котельники • Погода online</h3>
-          <p class="text-xs text-emerald-200">Метеостанция НСТ «Горняк»</p>
-        </div>
+    <div class="flex flex-col gap-4 text-xs font-bold text-slate-700">
+      <div>
+        <label class="block mb-1">Размер шрифта:</label>
+        <input type="range" id="fontSizeRange" min="12" max="18" value="14" class="w-full accent-gornyak-700" oninput="previewFontSize(this.value)">
       </div>
-      <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
+      <div>
+        <label class="block mb-1">Интенсивность блюра (стекло):</label>
+        <input type="range" id="blurRange" min="5" max="40" value="25" class="w-full accent-gornyak-700" oninput="previewBlur(this.value)">
+      </div>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/10 p-4 rounded-2xl border border-white/10 text-xs">
-      <div><span class="text-emerald-200">Температура:</span> <b id="modalTemp">...</b></div>
-      <div><span class="text-emerald-200">Ветер:</span> <b id="modalWind">...</b></div>
-      <div><span class="text-emerald-200">Влажность:</span> <b id="modalHum">...</b></div>
-      <div><span class="text-emerald-200">Осадки:</span> <b>0%</b></div>
+
+    <div class="flex justify-center pt-2">
+      <button onclick="applySettings()" class="py-3 px-8 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow transition text-xs">Применить</button>
     </div>
-    <button onclick="closeWeatherModal()" class="w-full py-3 bg-white text-gornyak-900 rounded-xl font-extrabold shadow">Закрыть</button>
   </div>
 </div>
 
+<!-- МОДАЛКА ДОБАВЛЕНИЯ ЗАПИСИ (С ПРОВЕРКОЙ ПРОФИЛЯ) -->
 <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4">
-    <div class="flex justify-between items-center border-b pb-3">
-      <h3 id="modalTitle" class="text-lg font-black text-slate-900">Добавить запись</h3>
-      <button onclick="closeAddModal()" class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
+    <button onclick="closeAddModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <h3 id="modalTitle" class="text-lg font-black text-slate-900 border-b pb-2">Добавить запись</h3>
+    
+    <div id="authWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
+      ⚠️ Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
     </div>
+
     <form onsubmit="handleModalSubmit(event)" class="space-y-3">
-      <input type="hidden" id="modalType">
       <div>
         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Заголовок / Тема</label>
         <input type="text" id="itemTitle" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
@@ -412,6 +404,51 @@ h1, h2, h3, h4 {
       </div>
       <button type="submit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Сохранить</button>
     </form>
+  </div>
+</div>
+
+<!-- МОДАЛКА ВОССТАНОВЛЕНИЯ ПАРОЛЯ -->
+<div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
+    <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <h3 class="text-xl font-black text-slate-900 border-b pb-2">🔑 Восстановление пароля</h3>
+    <p class="text-xs text-slate-600">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
+    <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
+      <div>
+        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label>
+        <input type="email" id="forgotEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
+      </div>
+      <button type="submit" class="w-full py-3.5 bg-gornyak-700 text-white font-extrabold rounded-xl shadow">Отправить инструкцию</button>
+    </form>
+  </div>
+</div>
+
+<div id="infoModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+  <div class="modal-glass rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 relative">
+    <button onclick="closeInfoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <h3 id="infoModalTitle" class="text-lg font-black text-slate-900 border-b pb-2">Инфо</h3>
+    <div id="infoModalText" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></div>
+    <button onclick="closeInfoModal()" class="w-full py-3 bg-gornyak-700 text-white font-bold rounded-xl shadow">Понятно</button>
+  </div>
+</div>
+
+<div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+  <div class="glass-weather text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
+    <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white">✕</button>
+    <div class="flex items-center gap-3 border-b border-white/15 pb-4">
+      <div class="weather-icon-box"><div class="g-sun"></div><div class="g-cloud"></div></div>
+      <div>
+        <h3 class="text-xl font-black">Котельники • Погода online</h3>
+        <p class="text-xs text-emerald-200">Метеостанция НСТ «Горняк»</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/10 p-4 rounded-2xl border border-white/10 text-xs">
+      <div><span class="text-emerald-200">Температура:</span> <b id="modalTemp">...</b></div>
+      <div><span class="text-emerald-200">Ветер:</span> <b id="modalWind">...</b></div>
+      <div><span class="text-emerald-200">Влажность:</span> <b id="modalHum">...</b></div>
+      <div><span class="text-emerald-200">Осадки:</span> <b>0%</b></div>
+    </div>
+    <button onclick="closeWeatherModal()" class="w-full py-3 bg-white text-gornyak-900 rounded-xl font-extrabold shadow">Закрыть</button>
   </div>
 </div>
 
@@ -442,7 +479,7 @@ let dbData = {
   ]
 };
 
-// --- УВЕДОМЛЕНИЯ ОБ ОБНОВЛЕНИЯХ ---
+// --- УВЕДОМЛЕНИЯ ---
 function addNotification(text) {
   let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
   notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
@@ -452,17 +489,14 @@ function addNotification(text) {
 
 function updateNotifBadge() {
   const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
-  // Создаем или находим бейдж в шапке
   let badge = document.getElementById('headerNotifBadge');
-  if (!badge) {
-    // Если в текущей разметке шапки отца не было бейджа, добавляем кнопку колокольчика
-    return;
-  }
-  if (notifs.length > 0) {
-    badge.innerText = notifs.length;
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
+  if (badge) {
+    if (notifs.length > 0) {
+      badge.innerText = notifs.length;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
   }
 }
 
@@ -478,8 +512,8 @@ function openNotifModal() {
         <div class="font-bold text-slate-800 text-xs mt-0.5">${n.text}</div>
       </div>`).join('');
   }
-  document.getElementById('notifModal').classList.remove('hidden');
   document.getElementById('notifModal').classList.add('flex');
+  document.getElementById('notifModal').classList.remove('hidden');
 }
 function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
 
@@ -488,6 +522,38 @@ function clearNotifications() {
   updateNotifBadge();
   openNotifModal();
 }
+
+// --- НАСТРОЙКИ ---
+function openSettingsModal() {
+  document.getElementById('settingsModal').classList.add('flex');
+  document.getElementById('settingsModal').classList.remove('hidden');
+}
+function closeSettingsModal() {
+  document.getElementById('settingsModal').classList.add('hidden');
+  document.getElementById('settingsModal').classList.remove('flex');
+}
+function previewFontSize(val) { document.body.style.fontSize = val + 'px'; }
+function previewBlur(val) { document.documentElement.style.setProperty('--blur-val', val + 'px'); }
+function applySettings() {
+  const fontSize = document.getElementById('fontSizeRange').value;
+  const blurVal = document.getElementById('blurRange').value;
+  localStorage.setItem('gornyak_settings', JSON.stringify({ fontSize, blurVal }));
+  closeSettingsModal();
+  addNotification('Настройки интерфейса применены');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('gornyak_settings');
+  if (saved) {
+    const s = JSON.parse(saved);
+    document.body.style.fontSize = s.fontSize + 'px';
+    document.documentElement.style.setProperty('--blur-val', s.blurVal + 'px');
+    document.getElementById('fontSizeRange').value = s.fontSize;
+    document.getElementById('blurRange').value = s.blurVal;
+  }
+  renderAuthArea();
+  updateNotifBadge();
+});
 
 async function fetchLiveWeather() {
   try {
@@ -517,6 +583,7 @@ function navigateTo(pageId) {
   if (target) target.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderAllSections();
+  if(pageId === 'auth') renderAuthArea();
 }
 
 function renderAllSections() {
@@ -560,17 +627,24 @@ function renderAllSections() {
 function openInfoModal(title, text) {
   document.getElementById('infoModalTitle').innerText = title;
   document.getElementById('infoModalText').innerText = text;
-  document.getElementById('infoModal').classList.remove('hidden');
   document.getElementById('infoModal').classList.add('flex');
+  document.getElementById('infoModal').classList.remove('hidden');
 }
 function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); document.getElementById('infoModal').classList.remove('flex'); }
 
 let activeAddType = '';
 function openAddModal(type) {
   activeAddType = type;
+  const user = localStorage.getItem('gornyak_user');
+  const warning = document.getElementById('authWarning');
+  if (!user) {
+    warning.classList.remove('hidden');
+  } else {
+    warning.classList.add('hidden');
+  }
   document.getElementById('modalTitle').innerText = type === 'news' ? 'Добавить новость' : (type === 'documents' ? 'Загрузить документ' : 'Добавить смету');
-  document.getElementById('addModal').classList.remove('hidden');
   document.getElementById('addModal').classList.add('flex');
+  document.getElementById('addModal').classList.remove('hidden');
 }
 function closeAddModal() { document.getElementById('addModal').classList.add('hidden'); document.getElementById('addModal').classList.remove('flex'); }
 
@@ -578,23 +652,96 @@ function handleModalSubmit(e) {
   e.preventDefault();
   const title = document.getElementById('itemTitle').value;
   const desc = document.getElementById('itemDesc').value;
-  const newItem = { id: Date.now(), title, text: desc, desc, date: new Date().toLocaleDateString() };
+  const user = localStorage.getItem('gornyak_user');
+  const newItem = { id: Date.now(), title, text: desc, desc, date: new Date().toLocaleDateString(), author: user ? JSON.parse(user).email : 'Гость' };
   
   if (activeAddType === 'news') {
-    dbData.news.push(newItem);
+    dbData.news.unshift(newItem);
     addNotification('Опубликована новая новость: ' + title);
   } else if (activeAddType === 'documents') {
-    dbData.documents.push(newItem);
+    dbData.documents.unshift(newItem);
     addNotification('Загружен новый документ: ' + title);
   } else if (activeAddType === 'estimates') {
-    dbData.estimates.push(newItem);
+    dbData.estimates.unshift(newItem);
     addNotification('Добавлена новая смета: ' + title);
   }
   
   saveData();
   closeAddModal();
   renderAllSections();
-  alert('Успешно сохранено!');
+  alert(user ? 'Успешно сохранено!' : 'Данные сохранены локально. Войдите в профиль для постоянной синхронизации.');
+}
+
+// --- АВТОРИЗАЦИЯ, ПРОФИЛЬ И УДАЛЕНИЕ АККАУНТА ---
+function renderAuthArea() {
+  const area = document.getElementById('authContentArea');
+  const user = localStorage.getItem('gornyak_user');
+
+  if (user) {
+    const u = JSON.parse(user);
+    area.innerHTML = `
+      <div class="space-y-4 text-sm text-slate-700">
+        <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+          <div><span class="text-xs text-slate-400 block">Электронная почта:</span><b class="text-slate-900">${u.email}</b></div>
+          <div><span class="text-xs text-slate-400 block">ФИО:</span><b class="text-slate-900">${u.name || 'Не указано'}</b></div>
+          <div><span class="text-xs text-slate-400 block">Участок:</span><b class="text-slate-900">${u.plot || 'Не указан'}</b></div>
+        </div>
+        <button onclick="logout()" class="w-full py-3 bg-slate-200 text-slate-800 font-bold rounded-xl shadow">Выйти из аккаунта</button>
+        <button onclick="deleteAccount()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow">Удалить аккаунт</button>
+      </div>`;
+  } else {
+    area.innerHTML = `
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label>
+          <input type="email" id="loginEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Пароль</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Войти</button>
+        <div class="flex justify-between text-xs pt-2">
+          <button type="button" onclick="navigateTo('register')" class="text-gornyak-700 font-bold underline">Регистрация</button>
+          <button type="button" onclick="openForgotModal()" class="text-slate-600 underline">Забыли пароль?</button>
+        </div>
+      </form>`;
+  }
+}
+
+function handleLoginSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  localStorage.setItem('gornyak_user', JSON.stringify({ email, name: '', plot: '' }));
+  addNotification('Вход в личный кабинет: ' + email);
+  navigateTo('auth');
+}
+
+function logout() {
+  localStorage.removeItem('gornyak_user');
+  addNotification('Выход из личного кабинета');
+  navigateTo('auth');
+}
+
+function deleteAccount() {
+  if (confirm('Вы действительно хотите полностью удалить аккаунт и связанные данные?')) {
+    localStorage.removeItem('gornyak_user');
+    addNotification('Аккаунт был удален');
+    alert('Аккаунт успешно удален.');
+    navigateTo('home');
+  }
+}
+
+function openForgotModal() {
+  document.getElementById('forgotModal').classList.add('flex');
+  document.getElementById('forgotModal').classList.remove('hidden');
+}
+function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
+function handleForgotSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('forgotEmail').value.trim();
+  alert('Инструкция по восстановлению пароля отправлена на ' + email);
+  closeForgotModal();
 }
 
 function sendChatMessage(e) {
@@ -608,7 +755,7 @@ function sendChatMessage(e) {
   renderAllSections();
 }
 
-function openWeatherModal() { document.getElementById('weatherModal').classList.remove('hidden'); document.getElementById('weatherModal').classList.add('flex'); }
+function openWeatherModal() { document.getElementById('weatherModal').classList.add('flex'); document.getElementById('weatherModal').classList.remove('hidden'); }
 function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
 
 function handleSearch(query) {
