@@ -147,8 +147,8 @@
 
     <div class="w-full max-w-5xl mx-auto flex flex-col gap-4">
 
-        <!-- Шапка -->
-        <div class="glass-panel rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
+        <!-- Шапка: z-40 — выше баннера и плиток, но ниже модалок (z-50) -->
+        <div class="glass-panel relative z-40 rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-sm font-black shrink-0">
                     <i class="fa-solid fa-tree"></i>
@@ -160,19 +160,19 @@
             </div>
 
             <div class="flex items-center gap-1.5">
-                <!-- Поиск с экстремально высоким z-index, чтобы выпадающий список был поверх всего -->
-                <div class="relative z-[99999]">
+                <!-- Поиск -->
+                <div class="relative z-10">
                     <input type="text" id="searchInput" placeholder="Поиск..." 
                         class="w-28 sm:w-40 glass-panel border border-green-300 rounded-xl py-2 pl-8 pr-3 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
                     
-                    <div id="searchDropdown" class="hidden absolute top-full right-0 mt-2 w-72 glass-panel rounded-2xl shadow-2xl border border-green-200 z-[99999] overflow-hidden">
-                        <div class="p-2 text-[9px] font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
+                    <div id="searchDropdown" style="background:#ffffff" class="hidden absolute top-full right-0 mt-2 w-72 rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
+                        <div class="p-2 text-[9px] font-black text-gray-500 uppercase bg-green-100 border-b border-green-200">Результаты поиска</div>
                         <div id="searchResultsList" class="flex flex-col py-1"></div>
                     </div>
                 </div>
 
-                <!-- Увеличенная кнопка профиля -->
+                <!-- Кнопка профиля -->
                 <button onclick="openProfileAuthModal()" class="py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
                     <i class="fa-solid fa-user text-xs"></i>
                     <span>Профиль</span>
@@ -190,7 +190,7 @@
         </div>
 
         <!-- Баннер с живой анимированной иконкой погоды -->
-        <div class="forest-banner w-full rounded-3xl p-4 sm:p-6 text-white shadow-xl relative flex flex-col items-center text-center gap-4 border border-white/20">
+        <div class="forest-banner relative z-0 w-full rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col items-center text-center gap-4 border border-white/20">
             <div class="flex flex-col gap-0.5">
                 <h1 class="text-xl sm:text-3xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
                 <p class="text-green-100 text-[11px] sm:text-xs font-semibold opacity-95">Информационный портал для садоводов</p>
@@ -221,7 +221,7 @@
         </div>
 
         <!-- Контейнер карточек с поддержкой iOS-режима редактирования -->
-        <div id="cardsContainer" class="flex flex-col gap-3"></div>
+        <div id="cardsContainer" class="relative z-0 flex flex-col gap-3"></div>
 
         <!-- Кнопка «Готово» для режима редактирования -->
         <div id="editModeBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-4">
