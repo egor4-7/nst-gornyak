@@ -22,8 +22,7 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #dceada;
             color: #0f2417;
-            font-size: var(--base-font-size, 14px) !important;
-            transition: font-size 0.2s ease;
+            
         }
 
         .glass-panel {
@@ -141,6 +140,16 @@
         .icon-chat { background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(14,165,233,0.9)); color: #0369a1; }
         .icon-money { background: linear-gradient(135deg, rgba(254,205,211,0.9), rgba(244,63,94,0.9)); color: #881337; }
         .icon-info { background: linear-gradient(135deg, rgba(147,197,253,0.9), rgba(30,58,138,0.9)); color: #eff6ff; }
+    
+        html { font-size: calc(var(--fs, 14) / 14 * 16px); -webkit-text-size-adjust: 100%; }
+        input, textarea { -webkit-user-select: text; user-select: text; }
+        .cards-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; grid-auto-rows: var(--u, 52px); grid-auto-flow: row dense; }
+        .cards-grid > .portal-card { min-height: 0; }
+        .resize-handle { position: absolute; right: 8px; bottom: 8px; width: 26px; height: 26px; border-right: 5px solid #1c5c38; border-bottom: 5px solid #1c5c38; border-radius: 0 0 12px 0; touch-action: none; cursor: nwse-resize; z-index: 30; }
+        .is-editing.resizing { animation: none; }
+        .tb { min-width: 36px; height: 36px; border-radius: 9999px; background: rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 800; color: #fff; padding: 0 10px; }
+        .tb-ok { background: #1c5c38; padding: 0 16px; }
+        .chat-act { font-size: .6875rem; font-weight: 800; padding: .25rem .6rem; border-radius: 9999px; background: rgba(0,0,0,.07); }
     </style>
 </head>
 <body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
@@ -155,7 +164,7 @@
                 </div>
                 <div>
                     <h2 class="font-black text-xs text-gray-900 leading-tight">НСТ «Горняк»</h2>
-                    <p class="text-[8px] text-gray-600 font-bold">Мобильная версия</p>
+                    <p class="text-[0.5rem] text-gray-600 font-bold">Мобильная версия</p>
                 </div>
             </div>
 
@@ -167,7 +176,7 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
                     
                     <div id="searchDropdown" style="background:#ffffff" class="hidden absolute top-full right-0 mt-2 w-72 rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
-                        <div class="p-2 text-[9px] font-black text-gray-500 uppercase bg-green-100 border-b border-green-200">Результаты поиска</div>
+                        <div class="p-2 text-[0.5625rem] font-black text-gray-500 uppercase bg-green-100 border-b border-green-200">Результаты поиска</div>
                         <div id="searchResultsList" class="flex flex-col py-1"></div>
                     </div>
                 </div>
@@ -180,7 +189,7 @@
 
                 <button onclick="openNotifModal()" class="relative w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
                     <i class="fa-solid fa-bell text-xs"></i>
-                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
+                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[0.5rem] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
 
                 <button onclick="openSettingsModal()" class="w-9 h-9 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки">
@@ -193,7 +202,7 @@
         <div class="forest-banner relative z-0 w-full rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col items-center text-center gap-4 border border-white/20">
             <div class="flex flex-col gap-0.5">
                 <h1 class="text-xl sm:text-3xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
-                <p class="text-green-100 text-[11px] sm:text-xs font-semibold opacity-95">Информационный портал для садоводов</p>
+                <p class="text-green-100 text-[0.6875rem] sm:text-xs font-semibold opacity-95">Информационный портал для садоводов</p>
             </div>
             
             <div class="w-full max-w-md bg-black/40 backdrop-blur-2xl p-3.5 rounded-2xl border border-white/20 shadow-lg flex flex-col gap-2.5">
@@ -205,28 +214,33 @@
                         </div>
                         <div class="flex flex-col text-left leading-tight">
                             <span class="text-white font-extrabold text-base" id="widgetTemp">Загрузка...</span>
-                            <span class="text-[10px] text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
+                            <span class="text-[0.625rem] text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
                         </div>
                     </div>
-                    <div class="text-[10px] text-green-100 font-semibold bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
-                        🌅 06:20 | 🌇 18:45
+                    <div class="text-[0.625rem] text-green-100 font-semibold bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
+                        <i class="fa-solid fa-sun text-amber-300"></i> <span id="sunriseTxt">06:20</span> &nbsp;|&nbsp; <i class="fa-solid fa-moon text-sky-200"></i> <span id="sunsetTxt">18:45</span>
                     </div>
                 </div>
 
-                <a href="father.html" class="w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[11px] transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-desktop text-[10px]"></i>
+                <a href="father.html" class="w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[0.6875rem] transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-desktop text-[0.625rem]"></i>
                     <span>Компьютерная версия</span>
                 </a>
             </div>
         </div>
 
         <!-- Контейнер карточек с поддержкой iOS-режима редактирования -->
-        <div id="cardsContainer" class="relative z-0 flex flex-col gap-3"></div>
+        <div id="cardsContainer" class="relative z-0 cards-grid pb-24"></div>
 
         <!-- Кнопка «Готово» для режима редактирования -->
-        <div id="editModeBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-4">
-            <span class="text-xs font-bold">Режим настройки плиток</span>
-            <button onclick="exitEditMode()" class="bg-[#1c5c38] hover:bg-[#144f2b] text-white px-4 py-1.5 rounded-full text-xs font-extrabold shadow">Готово</button>
+        <div id="editModeBar" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md px-2.5 py-2 rounded-full shadow-2xl z-50 items-center gap-1.5 max-w-[96vw]">
+            <button class="tb" onclick="moveSelected(-1)" title="Выше"><i class="fa-solid fa-arrow-up"></i></button>
+            <button class="tb" onclick="moveSelected(1)" title="Ниже"><i class="fa-solid fa-arrow-down"></i></button>
+            <button class="tb" onclick="presetSelected('S')" title="Малый квадрат">S</button>
+            <button class="tb" onclick="presetSelected('M')" title="Средний квадрат">M</button>
+            <button class="tb" onclick="presetSelected('L')" title="Большой квадрат">L</button>
+            <button class="tb" onclick="presetSelected('A')" title="Сбросить размер">Авто</button>
+            <button class="tb tb-ok" onclick="exitEditMode()">Готово</button>
         </div>
 
     </div>
@@ -237,7 +251,7 @@
             <button onclick="closeCreateNewsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Добавить новость</h3>
             <div id="newsWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
-                Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
+                Вы не вошли в профиль: запись будет опубликована от имени гостя. Войдите в личный кабинет, чтобы подписать её.
             </div>
             <form onsubmit="submitNewsForm(event)" class="space-y-3">
                 <div>
@@ -258,7 +272,7 @@
             <button onclick="closeCreateDocModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Загрузить документ</h3>
             <div id="docWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
-                Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
+                Вы не вошли в профиль: запись будет опубликована от имени гостя. Войдите в личный кабинет, чтобы подписать её.
             </div>
             <form onsubmit="submitDocForm(event)" class="space-y-3">
                 <div>
@@ -286,9 +300,9 @@
                 <div>
                     <label class="block mb-2">Адаптация размера иконок:</label>
                     <div class="flex items-center justify-around gap-2 bg-green-50 p-3 rounded-2xl border border-green-200">
-                        <div onclick="setIconSizeMode('small')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeSmall"><div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-bus"></i></div><span class="text-[10px]">Мелкий</span></div>
-                        <div onclick="setIconSizeMode('medium')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition bg-white shadow-sm" id="modeMedium"><div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-base"><i class="fa-solid fa-bus"></i></div><span class="text-[10px]">Средний</span></div>
-                        <div onclick="setIconSizeMode('large')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeLarge"><div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-bus"></i></div><span class="text-[10px]">Крупный</span></div>
+                        <div onclick="setIconSizeMode('small')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeSmall"><div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-bus"></i></div><span class="text-[0.625rem]">Мелкий</span></div>
+                        <div onclick="setIconSizeMode('medium')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition bg-white shadow-sm" id="modeMedium"><div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-base"><i class="fa-solid fa-bus"></i></div><span class="text-[0.625rem]">Средний</span></div>
+                        <div onclick="setIconSizeMode('large')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeLarge"><div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-bus"></i></div><span class="text-[0.625rem]">Крупный</span></div>
                     </div>
                 </div>
                 <div>
@@ -304,17 +318,24 @@
 
     <!-- Модалка чата -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200 relative">
-            <button onclick="closeChatModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <div class="flex items-center gap-2 border-b pb-3 mb-3">
-                <i class="fa-solid fa-comments text-[#1c5c38] text-xl"></i>
-                <h3 class="text-lg font-extrabold text-gray-900">Общение садоводов</h3>
+        <div class="glass-panel modal-animate rounded-3xl max-w-3xl w-full shadow-2xl flex flex-col h-[88vh] border border-green-200 relative overflow-hidden">
+            <div class="flex items-center gap-2 border-b border-gray-200 px-4 py-3">
+                <i class="fa-solid fa-comments text-[#1c5c38] text-lg"></i>
+                <h3 class="text-base font-extrabold text-gray-900 flex-grow">Общение садоводов</h3>
+                <button onclick="closeChatModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-3 pr-1 text-sm"></div>
-            <form onsubmit="sendChatMessage(event)" class="mt-2 pt-2 border-t border-gray-200 flex items-center gap-2">
-                <input type="text" id="chatInputText" placeholder="Написать сообщение соседям..." class="flex-grow p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                <button type="submit" class="py-3 px-5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Отправить</button>
-            </form>
+            <div class="flex flex-grow min-h-0">
+                <div id="chatNicks" class="w-[30%] shrink-0 border-r border-gray-200 overflow-y-auto bg-white/50"></div>
+                <div class="flex flex-col flex-grow min-w-0">
+                    <div id="chatTitle" class="px-3 py-2 text-xs font-black text-[#1c5c38] border-b border-gray-200 truncate"></div>
+                    <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-2 p-3 text-sm"></div>
+                    <div id="chatBar" class="hidden px-3 py-1.5 bg-green-100/80 text-[0.6875rem] font-bold text-gray-700 items-center gap-2 border-t border-green-200"><span id="chatBarText" class="flex-grow truncate"></span><button type="button" onclick="cancelChatMode()" class="text-gray-600"><i class="fa-solid fa-xmark"></i></button></div>
+                    <form onsubmit="sendChatMessage(event)" class="p-2 border-t border-gray-200 flex items-center gap-2">
+                        <input type="text" id="chatInputText" autocomplete="off" placeholder="Сообщение..." class="flex-grow min-w-0 p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                        <button type="submit" class="w-11 h-11 shrink-0 bg-[#1c5c38] text-white rounded-2xl shadow"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -410,8 +431,7 @@
         </div>
     </div>
 
-    <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+    <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">\n        <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2"></h3>
             <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
@@ -435,8 +455,8 @@
                     <div class="text-sm text-green-200 mt-1 font-bold" id="modalWind">Ветер: загрузка...</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-black text-yellow-300">Закат в 18:45</div>
-                    <div class="text-xs text-gray-300 font-bold mt-0.5">Восход: 06:20</div>
+                    <div class="text-sm font-black text-yellow-300">Закат в <span id="sunsetModal">18:45</span></div>
+                    <div class="text-xs text-gray-300 font-bold mt-0.5">Восход: <span id="sunriseModal">06:20</span></div>
                 </div>
             </div>
             <div>
@@ -451,8 +471,9 @@
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
             <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-2xl font-black text-gray-900 border-b pb-2">Транспорт и расписание</h3>
+            <div class="text-xs font-bold text-gray-700"><i class="fa-solid fa-location-dot text-red-600"></i> Правление: Центральная улица, дом 247 · <a href="https://yandex.ru/maps/?pt=37.884565,55.642572&z=17&l=map" target="_blank" class="text-blue-700 underline">открыть в Яндекс.Картах</a></div>
             <div class="w-full h-56 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative mb-2">
-                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=37.884565%2C55.642572&z=16&pt=37.884565%2C55.642572%2Cpm2rdm&l=map" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
             <div class="flex flex-col gap-3 text-sm text-gray-800">
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
@@ -505,6 +526,25 @@
         </div>
     </div>
 
+    <div id="confirmModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-[70]">
+        <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
+            <p id="confirmText" class="text-sm font-bold text-gray-900 leading-relaxed"></p>
+            <div class="flex gap-2">
+                <button id="confirmNo" class="flex-1 py-3 bg-gray-200 text-gray-800 rounded-2xl font-extrabold text-xs">Отмена</button>
+                <button id="confirmYes" class="flex-1 py-3 bg-red-600 text-white rounded-2xl font-extrabold text-xs">Да</button>
+            </div>
+        </div>
+    </div>
+    <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[80] bg-[#10331e] text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl max-w-[92vw] text-center"></div>
+    <div id="aboutModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeAboutModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Редактировать «О НСТ»</h3>
+            <textarea id="aboutText" rows="9" class="w-full p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold"></textarea>
+            <button onclick="saveAbout()" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Сохранить</button>
+        </div>
+    </div>
+
     <script>
         let liveWeatherData = null;
         let selectedIconSize = 'medium';
@@ -523,20 +563,24 @@
         let isEditingMode = false;
         let pressTimer = null;
 
+        let selectedCardId = null;
+        let resizing = null;
+        const GRID_GAP = 8, GRID_COLS = 6, GRID_MAX_ROWS = 8;
+
         function getStoredCards() {
-            const user = localStorage.getItem('gornyak_user');
-            const key = user ? `gornyak_cards_${JSON.parse(user).email}` : 'gornyak_cards_guest';
-            const saved = localStorage.getItem(key);
-            if (saved) {
-                try { return JSON.parse(saved); } catch(e) { return defaultCards; }
-            }
-            return defaultCards;
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem('gornyak_cards')); } catch (e) {}
+            const out = [];
+            if (Array.isArray(saved)) saved.forEach(c => {
+                const d = defaultCards.find(x => x.id === c.id);
+                if (d) out.push({ ...d, cw: Math.min(GRID_COLS, Math.max(1, c.cw || GRID_COLS)), ch: Math.min(GRID_MAX_ROWS, Math.max(1, c.ch || 2)) });
+            });
+            defaultCards.forEach(d => { if (!out.find(c => c.id === d.id)) out.push({ ...d, cw: GRID_COLS, ch: 2 }); });
+            return out;
         }
 
         function saveStoredCards(cards) {
-            const user = localStorage.getItem('gornyak_user');
-            const key = user ? `gornyak_cards_${JSON.parse(user).email}` : 'gornyak_cards_guest';
-            localStorage.setItem(key, JSON.stringify(cards));
+            localStorage.setItem('gornyak_cards', JSON.stringify(cards.map(c => ({ id: c.id, cw: c.cw, ch: c.ch }))));
         }
 
         function executeCardAction(actionName) {
@@ -544,134 +588,124 @@
             else if (actionName === 'openTarifModal') openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год');
             else if (actionName === 'openNewsModal') openNewsModal();
             else if (actionName === 'openDocsModal') openDocsModal();
-            else if (actionName === 'openContactsModal') openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11');
+            else if (actionName === 'openContactsModal') openContactsModal();
             else if (actionName === 'openChatModal') openChatModal();
             else if (actionName === 'openMoneyModal') openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.');
-            else if (actionName === 'openInfoModalMain') openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.');
+            else if (actionName === 'openInfoModalMain') openAbout();
+        }
+
+        function gridUnit() {
+            const box = document.getElementById('cardsContainer');
+            return (box.clientWidth - GRID_GAP * (GRID_COLS - 1)) / GRID_COLS;
         }
 
         function renderCards() {
-            const container = document.getElementById('cardsContainer');
+            const box = document.getElementById('cardsContainer');
+            box.style.setProperty('--u', gridUnit() + 'px');
             const cards = getStoredCards();
-            container.innerHTML = cards.map((c, index) => {
-                let extraButtons = '';
-                if (c.hasButtons && c.type === 'news') {
-                    extraButtons = `
-                        <div class="flex gap-2 w-full sm:w-auto shrink-0 mt-2 sm:mt-0" onclick="event.stopPropagation()">
-                            <button onclick="openCreateNewsModal()" class="flex-1 sm:flex-none py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-gray-900 text-[11px] font-extrabold shadow-sm border border-gray-300 flex items-center justify-center gap-1.5 backdrop-blur-md transition">
-                                <i class="fa-solid fa-plus text-[10px]"></i> Новость
-                            </button>
-                            <button onclick="openCreateNewsModal()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-gray-900 text-[11px] font-extrabold shadow-sm border border-gray-300 backdrop-blur-md transition">
-                                <i class="fa-solid fa-paperclip text-[10px]"></i>
-                            </button>
-                        </div>`;
-                } else if (c.hasButtons && c.type === 'docs') {
-                    extraButtons = `
-                        <div class="flex gap-2 w-full sm:w-auto shrink-0 mt-2 sm:mt-0" onclick="event.stopPropagation()">
-                            <button onclick="openCreateDocModal()" class="flex-1 sm:flex-none py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-orange-900 text-[11px] font-extrabold shadow-sm border border-orange-300 flex items-center justify-center gap-1.5 backdrop-blur-md transition">
-                                <i class="fa-solid fa-plus text-[10px]"></i> Файл
-                            </button>
-                            <button onclick="openCreateDocModal()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-orange-900 text-[11px] font-extrabold shadow-sm border border-orange-300 backdrop-blur-md transition">
-                                <i class="fa-solid fa-paperclip text-[10px]"></i>
-                            </button>
-                        </div>`;
-                } else if (c.hasEditButtons) {
-                    extraButtons = `
-                        <div class="flex gap-2 w-full sm:w-auto shrink-0 mt-2 sm:mt-0" onclick="event.stopPropagation()">
-                            <button onclick="openCreateDocModal()" class="flex-1 sm:flex-none py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-blue-900 text-[11px] font-extrabold shadow-sm border border-blue-300 flex items-center justify-center gap-1.5 backdrop-blur-md transition">
-                                <i class="fa-solid fa-pen text-[10px]"></i> Редактировать
-                            </button>
-                            <button onclick="openCreateDocModal()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-blue-900 text-[11px] font-extrabold shadow-sm border border-blue-300 backdrop-blur-md transition">
-                                <i class="fa-solid fa-paperclip text-[10px]"></i>
-                            </button>
-                        </div>`;
-                }
-
-                let editControls = '';
-                if (isEditingMode) {
-                    editControls = `
-                        <div class="absolute -top-2 -left-2 z-35 bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md cursor-pointer hover:bg-red-700" onclick="event.stopPropagation(); removeCard('${c.id}')" title="Скрыть">
-                            <i class="fa-solid fa-minus text-xs"></i>
-                        </div>
-                        <div class="absolute top-2 right-2 flex items-center gap-1 z-30 bg-black/80 p-1 rounded-full text-white text-xs">
-                            <button onclick="event.stopPropagation(); moveCard(${index}, -1)" class="w-6 h-6 flex items-center justify-center hover:bg-white/20 rounded-full" title="Выше"><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
-                            <button onclick="event.stopPropagation(); moveCard(${index}, 1)" class="w-6 h-6 flex items-center justify-center hover:bg-white/20 rounded-full" title="Ниже"><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
-                            <button onclick="event.stopPropagation(); toggleCardSize(${index})" class="px-2 py-0.5 bg-[#1c5c38] rounded-full text-[10px] font-bold">${c.size === 'compact' ? 'Полная' : 'Компактная'}</button>
-                        </div>`;
-                }
-
-                const cardPadding = c.size === 'compact' ? 'p-2.5 sm:p-3' : 'p-3.5 sm:p-4';
-
-                return `
-                <div class="portal-card glass-panel rounded-2xl ${cardPadding} flex flex-col sm:flex-row items-center justify-between gap-3 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
-                     data-card-id="${c.id}"
-                     onmousedown="startLongPress(event)"
-                     ontouchstart="startLongPress(event)"
-                     onmouseup="cancelLongPress()"
-                     ontouchend="cancelLongPress()"
-                     onclick="if(!isEditingMode) { executeCardAction('${c.actionName}'); }">
-                    ${editControls}
-                    <div class="flex items-center gap-3 w-full">
-                        <div class="icon-box ${c.color} dynamic-icon"><i class="fa-solid ${c.icon}"></i></div>
-                        <div class="flex flex-col w-full overflow-hidden">
-                            <h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3>
-                            <p class="text-[10px] text-gray-600 font-bold truncate">${c.desc}</p>
-                        </div>
-                    </div>
-                    ${extraButtons}
+            box.innerHTML = cards.map(c => {
+                const narrow = c.cw <= 3;
+                const tiny = c.cw <= 2 && c.ch <= 2;
+                const sel = isEditingMode && selectedCardId === c.id;
+                const style = `grid-column:span ${c.cw};grid-row:span ${c.ch};` + (sel ? 'outline:3px solid #2563eb;outline-offset:2px;' : '');
+                const mk = (fn, icon, label, cls) => `<button onclick="${fn}()" class="${narrow ? '' : 'flex-1 sm:flex-none '}py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border flex items-center justify-center gap-1.5 backdrop-blur-md transition"><i class="fa-solid ${icon} text-[0.625rem]"></i>${narrow ? '' : ' ' + label}</button>`;
+                const clip = (fn, cls) => narrow ? '' : `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border backdrop-blur-md transition"><i class="fa-solid fa-paperclip text-[0.625rem]"></i></button>`;
+                let btns = '';
+                if (c.type === 'news') btns = mk('openCreateNewsModal', 'fa-plus', 'Новость', 'text-gray-900 border-gray-300') + clip('openCreateNewsModal', 'text-gray-900 border-gray-300');
+                else if (c.type === 'docs') btns = mk('openCreateDocModal', 'fa-plus', 'Файл', 'text-orange-900 border-orange-300') + clip('openCreateDocModal', 'text-orange-900 border-orange-300');
+                else if (c.hasEditButtons) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
+                const extra = (btns && !tiny)
+                    ? `<div class="flex gap-2 ${narrow ? 'w-full justify-center' : 'w-full sm:w-auto shrink-0'}${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
+                const icon = `<div class="icon-box ${c.color} dynamic-icon"><i class="fa-solid ${c.icon}"></i></div>`;
+                const body = narrow
+                    ? `<div class="flex flex-col items-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 text-xs leading-tight">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
+                    : `<div class="flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
+                return `<div class="portal-card glass-panel rounded-2xl p-3 ${narrow ? 'flex-col' : 'flex-col sm:flex-row'} items-center justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
+                     style="${style}" data-card-id="${c.id}"
+                     onmousedown="startLongPress(event)" ontouchstart="startLongPress(event)" ontouchmove="cancelLongPress()"
+                     onmouseup="cancelLongPress()" ontouchend="cancelLongPress()" onclick="cardClick('${c.id}')">
+                    ${body}${extra}${isEditingMode ? `<div class="resize-handle" onpointerdown="startResize(event,'${c.id}')"></div>` : ''}
                 </div>`;
             }).join('');
-            
-            if (typeof applyIconSize === 'function' && selectedIconSize) {
-                applyIconSize(selectedIconSize);
-            }
+            if (typeof applyIconSize === 'function' && selectedIconSize) applyIconSize(selectedIconSize);
+        }
+
+        window.addEventListener('resize', () => { if (!resizing) renderCards(); });
+
+        function cardClick(id) {
+            if (isEditingMode) { selectedCardId = id; renderCards(); return; }
+            const c = getStoredCards().find(x => x.id === id);
+            if (c) executeCardAction(c.actionName);
         }
 
         function startLongPress(e) {
-            const user = localStorage.getItem('gornyak_user');
+            if (isEditingMode) return;
+            cancelLongPress();
             pressTimer = setTimeout(() => {
-                if (!user) {
-                    openProfileAuthModal();
-                    return;
-                }
+                if (!currentUser()) { openProfileAuthModal(); return; }
                 isEditingMode = true;
-                document.getElementById('editModeBar').classList.remove('hidden');
+                const bar = document.getElementById('editModeBar');
+                bar.classList.remove('hidden'); bar.classList.add('flex');
                 renderCards();
+                showToast('Нажмите плитку и тяните её правый нижний угол');
             }, 600);
         }
-
-        function cancelLongPress() {
-            if (pressTimer) clearTimeout(pressTimer);
-        }
+        function cancelLongPress() { if (pressTimer) clearTimeout(pressTimer); }
 
         function exitEditMode() {
-            isEditingMode = false;
-            document.getElementById('editModeBar').classList.add('hidden');
+            isEditingMode = false; selectedCardId = null;
+            const bar = document.getElementById('editModeBar');
+            bar.classList.add('hidden'); bar.classList.remove('flex');
             renderCards();
         }
 
-        function moveCard(index, direction) {
-            let cards = getStoredCards();
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= cards.length) return;
-            const temp = cards[index];
-            cards[index] = cards[newIndex];
-            cards[newIndex] = temp;
-            saveStoredCards(cards);
-            renderCards();
+        function selectedOrWarn(cards) {
+            const i = cards.findIndex(c => c.id === selectedCardId);
+            if (i < 0) showToast('Сначала нажмите на плитку');
+            return i;
+        }
+        function moveSelected(dir) {
+            const cards = getStoredCards(); const i = selectedOrWarn(cards); if (i < 0) return;
+            const j = i + dir; if (j < 0 || j >= cards.length) return;
+            [cards[i], cards[j]] = [cards[j], cards[i]];
+            saveStoredCards(cards); renderCards();
+        }
+        function presetSelected(kind) {
+            const cards = getStoredCards(); const i = selectedOrWarn(cards); if (i < 0) return;
+            const p = { S: [2, 2], M: [4, 4], L: [6, 6], A: [6, 2] }[kind];
+            cards[i].cw = p[0]; cards[i].ch = p[1];
+            saveStoredCards(cards); renderCards();
         }
 
-        function toggleCardSize(index) {
-            let cards = getStoredCards();
-            cards[index].size = cards[index].size === 'compact' ? 'normal' : 'compact';
-            saveStoredCards(cards);
-            renderCards();
+        function startResize(e, id) {
+            e.stopPropagation(); e.preventDefault();
+            const card = e.target.closest('.portal-card');
+            resizing = { id, card, x: e.clientX, y: e.clientY, w: card.offsetWidth, h: card.offsetHeight, u: gridUnit() };
+            selectedCardId = id;
+            card.classList.add('resizing');
+            try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
+            window.addEventListener('pointermove', onResize);
+            window.addEventListener('pointerup', endResize);
+            window.addEventListener('pointercancel', endResize);
         }
-
-        function removeCard(id) {
-            let cards = getStoredCards();
-            cards = cards.filter(c => c.id !== id);
-            saveStoredCards(cards);
+        function onResize(e) {
+            if (!resizing) return;
+            const r = resizing, step = r.u + GRID_GAP;
+            r.cw = Math.min(GRID_COLS, Math.max(1, Math.round((r.w + e.clientX - r.x + GRID_GAP) / step)));
+            r.ch = Math.min(GRID_MAX_ROWS, Math.max(1, Math.round((r.h + e.clientY - r.y + GRID_GAP) / step)));
+            r.card.style.gridColumn = 'span ' + r.cw;
+            r.card.style.gridRow = 'span ' + r.ch;
+        }
+        function endResize() {
+            window.removeEventListener('pointermove', onResize);
+            window.removeEventListener('pointerup', endResize);
+            window.removeEventListener('pointercancel', endResize);
+            if (!resizing) return;
+            const r = resizing; resizing = null;
+            if (r.cw) {
+                const cards = getStoredCards(); const c = cards.find(x => x.id === r.id);
+                if (c) { c.cw = r.cw; c.ch = r.ch; saveStoredCards(cards); }
+            }
             renderCards();
         }
 
@@ -704,7 +738,7 @@
             } else {
                 container.innerHTML = notifs.map(n => `
                     <div class="bg-green-50/90 p-3.5 rounded-2xl border border-green-200 text-xs">
-                        <div class="text-[10px] font-bold text-emerald-800 mb-0.5">${n.time}</div>
+                        <div class="text-[0.625rem] font-bold text-emerald-800 mb-0.5">${n.time}</div>
                         <div class="font-bold text-gray-800">${n.text}</div>
                     </div>`).join('');
             }
@@ -728,10 +762,7 @@
             document.getElementById('settingsModal').classList.add('hidden');
             document.getElementById('settingsModal').classList.remove('flex');
         }
-        function previewFontSize(val) { 
-            document.documentElement.style.setProperty('--base-font-size', val + 'px');
-            document.body.style.fontSize = val + 'px'; 
-        }
+        function previewFontSize(val) { document.documentElement.style.setProperty('--fs', val); }
         function previewBlur(val) { document.documentElement.style.setProperty('--blur-val', val + 'px'); }
 
         function setIconSizeMode(mode) {
@@ -772,8 +803,7 @@
             const saved = localStorage.getItem('gornyak_settings');
             if (saved) {
                 const s = JSON.parse(saved);
-                document.documentElement.style.setProperty('--base-font-size', s.fontSize + 'px');
-                document.body.style.fontSize = s.fontSize + 'px';
+                document.documentElement.style.setProperty('--fs', s.fontSize);
                 document.documentElement.style.setProperty('--blur-val', s.blurVal + 'px');
                 document.getElementById('fontSizeRange').value = s.fontSize;
                 document.getElementById('blurRange').value = s.blurVal;
@@ -784,24 +814,28 @@
             updateNotifBadge();
         });
 
+        const WX_ICON = c => c === 0 ? 'fa-sun' : c <= 2 ? 'fa-cloud-sun' : c === 3 ? 'fa-cloud' : c <= 48 ? 'fa-smog' : (c <= 67 || (c >= 80 && c <= 82)) ? 'fa-cloud-rain' : (c <= 77 || c === 85 || c === 86) ? 'fa-snowflake' : 'fa-cloud-bolt';
+        const hm = iso => (iso || '').slice(11, 16);
+
         async function fetchLiveWeather() {
             try {
-                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow');
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.642572&longitude=37.884565&current=temperature_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&wind_speed_unit=ms&timezone=Europe/Moscow');
                 const data = await res.json();
                 liveWeatherData = data;
-                
-                const temp = Math.round(data.current.temperature_2m);
+                const t = Math.round(data.current.temperature_2m);
                 const wind = Math.round(data.current.wind_speed_10m);
-                const tempStr = (temp > 0 ? '+' : '') + temp + '°C';
-                
+                const tempStr = (t > 0 ? '+' : '') + t + '°C';
                 document.getElementById('widgetTemp').innerText = tempStr;
                 document.getElementById('widgetDesc').innerText = `Ветер ${wind} м/с • Онлайн`;
                 document.getElementById('modalTemp').innerText = tempStr;
                 document.getElementById('modalWind').innerText = `Ветер: ${wind} м/с`;
-            } catch(e) {
-                document.getElementById('widgetTemp').innerText = '+3°C';
-                document.getElementById('widgetDesc').innerText = 'Котельники • Онлайн';
-                document.getElementById('modalTemp').innerText = '+3°C';
+                const sr = hm(data.daily.sunrise[0]), ss = hm(data.daily.sunset[0]);
+                ['sunriseTxt', 'sunriseModal'].forEach(id => document.getElementById(id).innerText = sr);
+                ['sunsetTxt', 'sunsetModal'].forEach(id => document.getElementById(id).innerText = ss);
+            } catch (e) {
+                document.getElementById('widgetTemp').innerText = '—';
+                document.getElementById('widgetDesc').innerText = 'Нет связи с метеосервисом';
+                document.getElementById('modalTemp').innerText = '—';
             }
         }
 
@@ -835,7 +869,7 @@
                 filtered.forEach(item => {
                     const btn = document.createElement('button');
                     btn.className = 'px-4 py-2.5 text-left text-xs font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none w-full';
-                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-[10px] text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
+                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-[0.625rem] text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
                     btn.onclick = () => { searchDropdown.classList.add('hidden'); item.action(); };
                     searchResultsList.appendChild(btn);
                 });
@@ -861,13 +895,17 @@
         function openWeatherModal() {
             document.getElementById('weatherModal').classList.add('flex');
             document.getElementById('weatherModal').classList.remove('hidden');
-            const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-            const icons = ['☀️', '🌤️', '☁️', '🌧️', '☀️', '🌤️', '☀️'];
-            document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => `
+            const d = liveWeatherData && liveWeatherData.daily;
+            const box = document.getElementById('weatherWeekList');
+            if (!d) { box.innerHTML = '<div class="col-span-full text-green-200 font-bold">Нет данных</div>'; return; }
+            const wd = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+            const f = v => (v > 0 ? '+' : '') + v + '°';
+            box.innerHTML = d.time.map((day, i) => `
                 <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
-                  <div class="text-green-200 font-bold">${d}</div>
-                  <div class="text-lg my-1">${icons[i]}</div>
-                  <div class="font-black">+${15 + i}°</div>
+                  <div class="text-green-200 font-bold">${wd[new Date(day + 'T12:00:00').getDay()]}</div>
+                  <div class="text-lg my-1"><i class="fa-solid ${WX_ICON(d.weather_code[i])} text-amber-200"></i></div>
+                  <div class="font-black">${f(Math.round(d.temperature_2m_max[i]))}</div>
+                  <div class="text-green-200 font-semibold">${f(Math.round(d.temperature_2m_min[i]))}</div>
                 </div>`).join('');
         }
         function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
@@ -877,60 +915,149 @@
 
         function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
 
-        function openChatModal() {
-            document.getElementById('chatModal').classList.add('flex');
-            document.getElementById('chatModal').classList.remove('hidden');
-            renderChatMessages();
-        }
-        function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
+        const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+        const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { showToast('Не хватает места на устройстве'); return false; } };
+        function loadProfiles() { return lsGet('gornyak_profiles', {}); }
+        function saveProfiles(p) { lsSet('gornyak_profiles', p); }
+        function currentUser() { return lsGet('gornyak_user', null); }
+        function myUid() { const u = currentUser(); return u ? u.email : 'guest'; }
+        function myNick() { const u = currentUser(); return u ? (u.name || u.email.split('@')[0]) : 'Гость'; }
 
-        function renderChatMessages() {
-            const container = document.getElementById('chatMessagesContainer');
-            const messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
-            if (messages.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-gray-500 font-semibold text-xs">В чате пока нет сообщений. Напишите первое!</div>`;
-                return;
-            }
-            container.innerHTML = messages.map(m => `
-                <div class="bg-white/90 p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-1">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="font-black text-[#1c5c38]"><i class="fa-solid fa-user-circle mr-1"></i>${m.author}</span>
-                        <span class="text-gray-400 text-[10px] font-semibold">${m.time}</span>
-                    </div>
-                    <div class="text-gray-800 text-sm font-medium mt-0.5">${m.text}</div>
-                </div>`).join('');
-            container.scrollTop = container.scrollHeight;
+        const chatState = { peer: 'general', replyTo: null, editId: null, menuId: null };
+        const roomKey = peer => peer === 'general' ? 'general' : [myUid(), peer].sort().join('|');
+        const loadChat = () => lsGet('gornyak_real_chat', []);
+        const saveChat = m => lsSet('gornyak_real_chat', m);
+
+        function chatPeers() {
+            const map = {};
+            const pr = loadProfiles();
+            Object.keys(pr).forEach(e => { map[e] = pr[e].name || e.split('@')[0]; });
+            loadChat().forEach(m => { map[m.uid || m.author] = m.author; });
+            delete map[myUid()];
+            return Object.keys(map).map(u => ({ uid: u, nick: map[u] })).sort((a, b) => a.nick.localeCompare(b.nick, 'ru'));
         }
+        function nickOf(uid) { const p = chatPeers().find(x => x.uid === uid); return p ? p.nick : uid; }
+
+        function renderChatNicks() {
+            const item = (uid, nick, icon) => `<button data-peer="${esc(uid)}" class="w-full text-left px-3 py-3 text-xs font-extrabold border-b border-gray-100 flex items-center gap-2 ${chatState.peer === uid ? 'bg-green-100 text-[#1c5c38]' : 'text-gray-800'}"><i class="fa-solid ${icon} text-[0.6875rem]"></i><span class="truncate">${esc(nick)}</span></button>`;
+            const peers = chatPeers();
+            document.getElementById('chatNicks').innerHTML = item('general', 'Общий чат', 'fa-users') + peers.map(p => item(p.uid, p.nick, 'fa-user')).join('')
+                + (peers.length ? '' : '<div class="p-3 text-[0.625rem] text-gray-500 font-bold leading-snug">Здесь появятся садоводы, когда зарегистрируются или напишут в чат.</div>');
+        }
+
+        function updateChatBar() {
+            const bar = document.getElementById('chatBar');
+            let txt = '';
+            if (chatState.editId) txt = 'Редактирование сообщения';
+            else if (chatState.replyTo) { const m = loadChat().find(x => x.id === chatState.replyTo); txt = m ? 'Ответ для ' + m.author + ': ' + m.text : ''; }
+            document.getElementById('chatBarText').textContent = txt;
+            bar.classList.toggle('hidden', !txt); bar.classList.toggle('flex', !!txt);
+        }
+        function cancelChatMode() {
+            chatState.replyTo = null; chatState.editId = null;
+            document.getElementById('chatInputText').value = '';
+            updateChatBar();
+        }
+        function selectChatPeer(uid) {
+            chatState.peer = uid; chatState.menuId = null; cancelChatMode();
+            renderChatNicks(); renderChatMessages(true);
+        }
+
+        function renderChatMessages(stick) {
+            const box = document.getElementById('chatMessagesContainer');
+            const keep = box.scrollTop;
+            const all = loadChat();
+            const room = roomKey(chatState.peer);
+            const msgs = all.filter(m => (m.room || 'general') === room);
+            document.getElementById('chatTitle').textContent = chatState.peer === 'general' ? 'Общий чат садоводов' : 'Диалог: ' + nickOf(chatState.peer);
+            if (!msgs.length) { box.innerHTML = '<div class="text-center py-10 text-gray-500 font-semibold text-xs">Сообщений пока нет. Напишите первое!</div>'; return; }
+            box.innerHTML = msgs.map(m => {
+                const mine = (m.uid || m.author) === myUid();
+                const rep = m.replyTo ? all.find(x => x.id === m.replyTo) : null;
+                const quote = m.replyTo ? `<div class="border-l-4 border-[#1c5c38] bg-black/5 rounded-lg px-2 py-1 mb-1 text-[0.6875rem] text-gray-600 font-semibold truncate">${rep ? esc(rep.author) + ': ' + esc(rep.text) : 'Сообщение удалено'}</div>` : '';
+                const menu = chatState.menuId === m.id ? `<div class="flex gap-1.5 mt-1.5 flex-wrap"><button data-act="reply" class="chat-act">Ответить</button>${mine ? '<button data-act="edit" class="chat-act">Изменить</button><button data-act="del" class="chat-act text-red-700">Удалить</button>' : ''}</div>` : '';
+                return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div data-mid="${m.id}" class="max-w-[88%] rounded-2xl px-3 py-2 shadow-sm border ${mine ? 'bg-emerald-100 border-emerald-200' : 'bg-white/95 border-gray-200'}"><div class="text-[0.625rem] font-black text-[#1c5c38]">${esc(m.author)}</div>${quote}<div class="text-sm font-medium text-gray-800 break-words whitespace-pre-wrap">${esc(m.text)}</div><div class="text-[0.625rem] text-gray-400 font-semibold mt-0.5">${esc(m.time)}${m.edited ? ' · изменено' : ''}</div>${menu}</div></div>`;
+            }).join('');
+            box.scrollTop = stick ? box.scrollHeight : keep;
+        }
+
+        document.getElementById('chatNicks').addEventListener('click', e => {
+            const b = e.target.closest('[data-peer]'); if (b) selectChatPeer(b.dataset.peer);
+        });
+        document.getElementById('chatMessagesContainer').addEventListener('click', async e => {
+            const bubble = e.target.closest('[data-mid]'); if (!bubble) return;
+            const id = bubble.dataset.mid, act = e.target.closest('[data-act]');
+            if (!act) { chatState.menuId = chatState.menuId === id ? null : id; renderChatMessages(); return; }
+            const all = loadChat(), m = all.find(x => x.id === id); if (!m) return;
+            const inp = document.getElementById('chatInputText');
+            chatState.menuId = null;
+            if (act.dataset.act === 'reply') { chatState.replyTo = id; chatState.editId = null; inp.value = ''; updateChatBar(); inp.focus(); }
+            else if (act.dataset.act === 'edit') { chatState.editId = id; chatState.replyTo = null; inp.value = m.text; updateChatBar(); inp.focus(); }
+            else if (act.dataset.act === 'del') {
+                if (await askConfirm('Удалить сообщение?', 'Удалить')) { saveChat(all.filter(x => x.id !== id)); if (chatState.replyTo === id) cancelChatMode(); }
+            }
+            renderChatMessages();
+        });
 
         function sendChatMessage(e) {
             e.preventDefault();
-            const textInput = document.getElementById('chatInputText');
-            const text = textInput.value.trim();
-            if (!text) return;
-            const currentUser = JSON.parse(localStorage.getItem('gornyak_user'));
-            let author = currentUser ? (currentUser.name || currentUser.email) : 'Садовод (Гость)';
-            let messages = JSON.parse(localStorage.getItem('gornyak_real_chat')) || [];
-            messages.push({
-                id: Date.now().toString(),
-                author: author,
-                text: text,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            });
-            localStorage.setItem('gornyak_real_chat', JSON.stringify(messages));
-            textInput.value = '';
-            renderChatMessages();
-            addNotification('Новое сообщение в чате');
+            const inp = document.getElementById('chatInputText');
+            const text = inp.value.trim(); if (!text) return;
+            const all = loadChat();
+            if (chatState.editId) {
+                const m = all.find(x => x.id === chatState.editId);
+                if (m && (m.uid || m.author) === myUid()) { m.text = text; m.edited = true; }
+            } else {
+                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), replyTo: chatState.replyTo || null, time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
+            }
+            saveChat(all);
+            chatState.replyTo = null; chatState.editId = null; inp.value = '';
+            updateChatBar(); renderChatNicks(); renderChatMessages(true);
         }
 
-        // --- ДОБАВЛЕНИЕ НОВОСТЕЙ И ДОКУМЕНТОВ ---
+        function openChatModal() {
+            document.getElementById('chatModal').classList.add('flex');
+            document.getElementById('chatModal').classList.remove('hidden');
+            chatState.menuId = null; updateChatBar();
+            renderChatNicks(); renderChatMessages(true);
+        }
+        function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
+
+        // --- Системные окна (вместо alert/confirm) ---
+        let toastTimer = null;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.remove('hidden');
+            clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('hidden'), 3500);
+        }
+        function askConfirm(msg, yesText) {
+            return new Promise(res => {
+                const m = document.getElementById('confirmModal');
+                document.getElementById('confirmText').textContent = msg;
+                document.getElementById('confirmYes').textContent = yesText || 'Да';
+                const done = v => { m.classList.add('hidden'); m.classList.remove('flex'); res(v); };
+                document.getElementById('confirmYes').onclick = () => done(true);
+                document.getElementById('confirmNo').onclick = () => done(false);
+                m.classList.remove('hidden'); m.classList.add('flex');
+            });
+        }
+
+        // --- НОВОСТИ, ДОКУМЕНТЫ, О НСТ, КОНТАКТЫ (хранятся на устройстве, не зависят от входа в профиль) ---
+        function openRichSection(title, html) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalWindow').classList.add('flex');
+            document.getElementById('modalWindow').classList.remove('hidden');
+            searchDropdown.classList.add('hidden');
+        }
+        document.getElementById('modalContent').addEventListener('click', e => {
+            const d = e.target.closest('[data-doc]'); if (d) downloadDoc(d.dataset.doc);
+            if (e.target.closest('[data-goto="map"]')) { closeModal(); openTransportModal(); }
+        });
+
         function openCreateNewsModal() {
-            const user = localStorage.getItem('gornyak_user');
-            const warning = document.getElementById('newsWarning');
-            if (!user) {
-                warning.classList.remove('hidden');
-            } else {
-                warning.classList.add('hidden');
-            }
+            document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
             document.getElementById('createNewsModal').classList.add('flex');
             document.getElementById('createNewsModal').classList.remove('hidden');
         }
@@ -938,27 +1065,26 @@
 
         function submitNewsForm(e) {
             e.preventDefault();
+            const form = e.target;
             const title = document.getElementById('newsTitleInput').value.trim();
             const desc = document.getElementById('newsDescInput').value.trim();
-            const user = localStorage.getItem('gornyak_user');
-            
-            let newsList = JSON.parse(localStorage.getItem('gornyak_news_db')) || [];
-            newsList.unshift({ title, desc, date: new Date().toLocaleDateString(), author: user ? JSON.parse(user).email : 'Гость' });
-            localStorage.setItem('gornyak_news_db', JSON.stringify(newsList));
-
-            openSection('Новости СНТ (Ваша запись)', `${title}\n\n${desc}`);
+            const list = lsGet('gornyak_news_db', []);
+            list.unshift({ id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
+            if (!lsSet('gornyak_news_db', list)) return;
+            form.reset(); closeCreateNewsModal();
             addNotification('Опубликована новость: ' + title);
-            closeCreateNewsModal();
+            openNewsModal();
+        }
+        function openNewsModal() {
+            const list = lsGet('gornyak_news_db', []);
+            const base = ['Общее собрание членов НСТ.', 'Чистка центральной дороги грейдером.'];
+            openRichSection('Новости СНТ',
+                list.map(n => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="text-[0.625rem] font-bold text-gray-500">${esc(n.date)} · ${esc(n.author)}</div><div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div><div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div></div>`).join('')
+                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join(''));
         }
 
         function openCreateDocModal() {
-            const user = localStorage.getItem('gornyak_user');
-            const warning = document.getElementById('docWarning');
-            if (!user) {
-                warning.classList.remove('hidden');
-            } else {
-                warning.classList.add('hidden');
-            }
+            document.getElementById('docWarning').classList.toggle('hidden', !!currentUser());
             document.getElementById('createDocModal').classList.add('flex');
             document.getElementById('createDocModal').classList.remove('hidden');
         }
@@ -966,34 +1092,74 @@
 
         function submitDocForm(e) {
             e.preventDefault();
+            const form = e.target;
             const name = document.getElementById('docNameInput').value.trim();
-            const user = localStorage.getItem('gornyak_user');
-
-            let docsList = JSON.parse(localStorage.getItem('gornyak_docs_db')) || [];
-            docsList.unshift({ name, date: new Date().toLocaleDateString(), author: user ? JSON.parse(user).email : 'Гость' });
-            localStorage.setItem('gornyak_docs_db', JSON.stringify(docsList));
-
-            openSection('Документы (Загружено)', `Документ «${name}» успешно добавлен в базу данных НСТ.`);
-            addNotification('Загружен документ: ' + name);
-            closeCreateDocModal();
+            const file = document.getElementById('docFileInput').files[0];
+            if (!file) return;
+            if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+            const rd = new FileReader();
+            rd.onload = () => {
+                const list = lsGet('gornyak_docs_db', []);
+                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
+                if (!lsSet('gornyak_docs_db', list)) return;
+                form.reset(); closeCreateDocModal();
+                addNotification('Загружен документ: ' + name);
+                openDocsModal();
+            };
+            rd.readAsDataURL(file);
+        }
+        function openDocsModal() {
+            const list = lsGet('gornyak_docs_db', []);
+            const base = ['Устав НСТ «Горняк»', 'Бланки заявлений'];
+            openRichSection('Документы',
+                list.map(d => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900 truncate">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(d.date)} · ${Math.max(1, Math.round(d.size / 1024))} КБ</div></div><button data-doc="${d.id}" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-download"></i></button></div>`).join('')
+                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join(''));
+        }
+        function downloadDoc(id) {
+            const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
+            const a = document.createElement('a'); a.href = d.data; a.download = d.fileName || d.name; document.body.appendChild(a); a.click(); a.remove();
         }
 
-        function openNewsModal() { 
-            const savedNews = JSON.parse(localStorage.getItem('gornyak_news_db')) || [];
-            let content = "• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.\n";
-            if (savedNews.length > 0) {
-                content = savedNews.map(n => `• ${n.title}: ${n.desc} (${n.date})`).join('\n') + "\n" + content;
-            }
-            openSection('Новости СНТ', content); 
+        const ABOUT_DEFAULT = 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.';
+        function openAbout() { openSection('О НСТ «Горняк»', localStorage.getItem('gornyak_about') || ABOUT_DEFAULT); }
+        function openAboutEdit() {
+            if (!currentUser()) { showToast('Войдите в профиль, чтобы редактировать'); openProfileAuthModal(); return; }
+            document.getElementById('aboutText').value = localStorage.getItem('gornyak_about') || ABOUT_DEFAULT;
+            document.getElementById('aboutModal').classList.add('flex');
+            document.getElementById('aboutModal').classList.remove('hidden');
         }
-        
-        function openDocsModal() { 
-            const savedDocs = JSON.parse(localStorage.getItem('gornyak_docs_db')) || [];
-            let content = "• Устав НСТ «Горняк»\n• Бланки заявлений\n";
-            if (savedDocs.length > 0) {
-                content = savedDocs.map(d => `• Загруженный файл: ${d.name} (${d.date})`).join('\n') + "\n" + content;
-            }
-            openSection('Документы', content); 
+        function closeAboutModal() { document.getElementById('aboutModal').classList.add('hidden'); document.getElementById('aboutModal').classList.remove('flex'); }
+        function saveAbout() {
+            const t = document.getElementById('aboutText').value.trim();
+            if (!t) { showToast('Текст не может быть пустым'); return; }
+            localStorage.setItem('gornyak_about', t); closeAboutModal(); showToast('Сохранено'); addNotification('Обновлено описание «О НСТ»');
+        }
+
+        const BOARD = [
+            ['Макарова Ольга Михайловна', 'Председатель правления', '8916-710-74-18'],
+            ['Сафонова Ирина Викторовна', 'Главный бухгалтер', '8916-222-06-38'],
+            ['Красенькова Наталья Борисовна', 'Бухгалтер', '8916-104-01-85'],
+            ['Вахрушев Константин Михайлович', 'Главный энергетик', '8926-958-52-51'],
+            ['Тимошилов Антон Андреевич', 'Электрик', '8925-000-47-11'],
+            ['Горицкая Нина Александровна', 'Дворник', '8909-657-06-31'],
+            ['Муминов Омонуло Абдулхалимович', 'Хозяйственный работник', '8903-667-84-81'],
+            ['Асланов Телман Магомед Оглы', 'Член правления', '8929-664-58-06'],
+            ['Зеновкина Александра Владимировна', 'Член правления', '8977-488-26-63'],
+            ['Князева Ирина Вениаминовна', 'Член правления', '8925-008-21-22'],
+            ['Личманова Евгения Александровна', 'Член правления', '8917-532-39-12'],
+            ['Мичкасов Валентин Васильевич', 'Член правления', '8903-156-75-25'],
+            ['Черкесс Игорь Викторович', 'Член правления', '8926-361-50-61']
+        ];
+        function openContactsModal() {
+            const tel = p => '+7' + p.replace(/\D/g, '').slice(1);
+            const row = (n, r, p) => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900">${esc(n)}</div><div class="text-[0.6875rem] text-gray-600 font-bold">${esc(r)}</div></div><a href="tel:${tel(p)}" class="shrink-0 text-xs font-extrabold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl px-2.5 py-1.5">${esc(p)}</a></div>`;
+            const h = t => `<div class="text-[0.625rem] font-black uppercase text-gray-500 mt-3 mb-1.5">${t}</div>`;
+            openRichSection('Контакты',
+                h('Адрес правления')
+                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="font-extrabold text-sm text-gray-900">Центральная улица, дом 247</div><button data-goto="map" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-map-location-dot"></i></button></div>`
+                + h('Правление и службы') + BOARD.map(b => row(...b)).join('')
+                + h('Участковый по НСТ «Горняк»') + row('Сырчин Кирилл Владимирович', 'Участковый', '8985-131-14-84')
+                + h('Полиция г. Котельники') + row('Дежурная часть', 'Круглосуточно', '8926-777-57-84'));
         }
 
         // --- ПРОФИЛЬ И АВТОРИЗАЦИЯ ---
@@ -1017,8 +1183,8 @@
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPassword').value.trim();
-            if(!email || !pass) { alert('Заполните почту и пароль!'); return; }
-            localStorage.setItem('gornyak_user', JSON.stringify({ email, name: '', plot: '' }));
+            if(!email || !pass) { showToast('Заполните почту и пароль'); return; }
+            const prf = loadProfiles()[email] || {}; localStorage.setItem('gornyak_user', JSON.stringify({ email, name: prf.name || '', plot: prf.plot || '' }));
             closeAuthModal();
             addNotification('Вход в личный кабинет: ' + email);
             openProfileAuthModal();
@@ -1033,7 +1199,7 @@
         function handleForgotSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('forgotEmail').value.trim();
-            alert('Инструкция по восстановлению пароля отправлена на ' + email);
+            showToast('Восстановление по почте пока недоступно: для отправки писем нужен серверный модуль.');
             closeForgotModal();
         }
 
@@ -1049,23 +1215,22 @@
             const email = document.getElementById('regEmail').value.trim();
             const name = document.getElementById('regName').value.trim();
             const plot = document.getElementById('regPlot').value.trim();
-            if(!email) { alert('Укажите почту!'); return; }
-            localStorage.setItem('gornyak_user', JSON.stringify({ email, name, plot }));
+            if(!email) { showToast('Укажите почту'); return; }
+            localStorage.setItem('gornyak_user', JSON.stringify({ email, name, plot })); const prs = loadProfiles(); prs[email] = { name, plot }; saveProfiles(prs);
             closeRegisterModal();
-            alert('Регистрация успешна!');
+            showToast('Регистрация успешна');
             addNotification('Зарегистрирован новый садовод');
             openProfileAuthModal();
         }
 
         function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); document.getElementById('profileModal').classList.remove('flex'); }
-        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); alert('Вы вышли из аккаунта.'); }
-        function deleteAccount() {
-            if (confirm('Вы действительно хотите удалить аккаунт?')) {
-                localStorage.removeItem('gornyak_user');
-                closeProfileModal();
-                alert('Аккаунт успешно удален.');
-                addNotification('Аккаунт садовода удален');
-            }
+        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); showToast('Вы вышли из аккаунта. Данные сохранены на этом устройстве.'); }
+        async function deleteAccount() {
+            if (!(await askConfirm('Вы действительно хотите удалить аккаунт?', 'Удалить'))) return;
+            const u = currentUser();
+            if (u) { const pr = loadProfiles(); delete pr[u.email]; saveProfiles(pr); }
+            localStorage.removeItem('gornyak_user'); closeProfileModal();
+            showToast('Аккаунт удалён'); addNotification('Аккаунт садовода удален');
         }
     </script>
 </body>
