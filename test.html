@@ -77,6 +77,9 @@
             flex-shrink: 0;
             border-radius: 16px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            width: var(--icon-w, 44px);
+            height: var(--icon-h, 44px);
+            font-size: var(--icon-f, 16px);
         }
         .icon-transport { background: linear-gradient(135deg, rgba(110,231,183,0.8), rgba(16,185,129,0.9)); color: #064e3b; }
         .icon-tarif { background: linear-gradient(135deg, rgba(253,230,138,0.9), rgba(245,158,11,0.9)); color: #78350f; }
@@ -152,7 +155,7 @@
                         </div>
                     </div>
                     <div class="text-[10px] text-green-100 font-semibold bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
-                        🌅 06:20 | 🌇 18:45
+                        Рассвет: 06:20 | Закат: 18:45
                     </div>
                 </div>
 
@@ -168,7 +171,7 @@
             
             <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
                 <div class="flex items-center gap-3 w-full">
-                    <div class="icon-box icon-transport w-11 h-11 text-base font-black"><i class="fa-solid fa-bus"></i></div>
+                    <div class="icon-box icon-transport dynamic-icon"><i class="fa-solid fa-bus"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Транспорт и Карта</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Маршруты и Яндекс.Карта</p>
@@ -178,7 +181,7 @@
 
             <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
                 <div class="flex items-center gap-3 w-full">
-                    <div class="icon-box icon-tarif w-11 h-11 text-base font-black"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="icon-box icon-tarif dynamic-icon"><i class="fa-solid fa-bolt"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Тарифы</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Свет, вода, услуги</p>
@@ -189,7 +192,7 @@
             <!-- Новости -->
             <div class="portal-card glass-panel rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 border border-green-200">
                 <div onclick="openNewsModal()" class="flex items-center gap-3 w-full cursor-pointer">
-                    <div class="icon-box icon-news w-11 h-11 text-base font-black"><i class="fa-solid fa-newspaper"></i></div>
+                    <div class="icon-box icon-news dynamic-icon"><i class="fa-solid fa-newspaper"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Новости</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Объявления правления</p>
@@ -208,7 +211,7 @@
             <!-- Документы -->
             <div class="portal-card glass-panel rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 border border-green-200">
                 <div onclick="openDocsModal()" class="flex items-center gap-3 w-full cursor-pointer">
-                    <div class="icon-box icon-docs w-11 h-11 text-base font-black"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="icon-box icon-docs dynamic-icon"><i class="fa-solid fa-folder-open"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Документы</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Устав, бланки, акты</p>
@@ -226,7 +229,7 @@
 
             <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
                 <div class="flex items-center gap-3 w-full">
-                    <div class="icon-box icon-contacts w-11 h-11 text-base font-black"><i class="fa-solid fa-address-book"></i></div>
+                    <div class="icon-box icon-contacts dynamic-icon"><i class="fa-solid fa-address-book"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Контакты</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Правление и службы</p>
@@ -236,7 +239,7 @@
 
             <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
                 <div class="flex items-center gap-3 w-full">
-                    <div class="icon-box icon-chat w-11 h-11 text-base font-black"><i class="fa-solid fa-comments"></i></div>
+                    <div class="icon-box icon-chat dynamic-icon"><i class="fa-solid fa-comments"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Общение</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Чат соседей, ответы и файлы</p>
@@ -246,7 +249,7 @@
 
             <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
                 <div class="flex items-center gap-3 w-full">
-                    <div class="icon-box icon-money w-11 h-11 text-base font-black"><i class="fa-solid fa-credit-card"></i></div>
+                    <div class="icon-box icon-money dynamic-icon"><i class="fa-solid fa-credit-card"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Взносы</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Оплата и история</p>
@@ -256,7 +259,7 @@
 
             <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
                 <div class="flex items-center gap-3 w-full">
-                    <div class="icon-box icon-info w-11 h-11 text-base font-black"><i class="fa-solid fa-circle-info"></i></div>
+                    <div class="icon-box icon-info dynamic-icon"><i class="fa-solid fa-circle-info"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">О НСТ</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">История и схема</p>
@@ -268,14 +271,14 @@
 
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ НОВОСТИ (С ПРОВЕРКОЙ ПРОФИЛЯ) -->
+    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ НОВОСТИ -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeCreateNewsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📝 Добавить новость</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Добавить новость</h3>
             
             <div id="newsWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
-                ⚠️ Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
+                Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
             </div>
 
             <form onsubmit="submitNewsForm(event)" class="space-y-3">
@@ -292,14 +295,14 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДОКУМЕНТА (С ПРОВЕРКОЙ ПРОФИЛЯ) -->
+    <!-- МОДАЛЬНОЕ ОКНО ДОКУМЕНТА -->
     <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeCreateDocModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📄 Загрузить документ</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Загрузить документ</h3>
             
             <div id="docWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
-                ⚠️ Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
+                Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
             </div>
 
             <form onsubmit="submitDocForm(event)" class="space-y-3">
@@ -316,13 +319,13 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
+    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК (С ИЛЛЮСТРАЦИЯМИ РАЗМЕРА ИКОНОК) -->
     <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 border border-green-200 relative">
             <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <h3 class="text-lg font-extrabold text-gray-900 border-b pb-2">⚙️ Настройки интерфейса</h3>
+            <h3 class="text-lg font-extrabold text-gray-900 border-b pb-2">Настройки интерфейса</h3>
 
             <div class="flex flex-col gap-4 text-xs font-bold text-gray-700">
                 <div>
@@ -331,7 +334,7 @@
                 </div>
 
                 <div>
-                    <label class="block mb-2">Адаптация размера иконок:</label>
+                    <label class="block mb-2">Адаптация размера иконок с иллюстрацией:</label>
                     <div class="flex items-center justify-around gap-2 bg-green-50 p-3 rounded-2xl border border-green-200">
                         <div onclick="setIconSizeMode('small')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeSmall">
                             <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-bus"></i></div>
@@ -380,7 +383,7 @@
     <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">🔐 Вход в личный кабинет</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Вход в личный кабинет</h3>
             <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
@@ -403,7 +406,7 @@
     <div id="registerModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📝 Регистрация садовода</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Регистрация садовода</h3>
             <form onsubmit="handleRegisterSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта *</label>
@@ -430,7 +433,7 @@
     <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">👤 Личный кабинет</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Личный кабинет</h3>
             <div class="space-y-3 text-sm font-semibold text-gray-800">
                 <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
                     <span class="text-xs text-gray-500 block">Электронная почта:</span>
@@ -461,7 +464,7 @@
                 <div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>
             </div>
             <div class="flex gap-2">
-                <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 hover:bg-red-200 text-red-800 rounded-xl font-bold text-xs">Очистить</button>
+                <button onclick="clearNotifications()" class="flex-1 py-2.5 bg-red-100 text-red-800 rounded-xl font-bold text-xs">Очистить</button>
                 <button onclick="closeNotifModal()" class="flex-1 py-2.5 bg-[#1c5c38] text-white rounded-xl font-bold text-xs">Закрыть</button>
             </div>
         </div>
@@ -506,15 +509,52 @@
         </div>
     </div>
 
-    <!-- Модалка транспорта -->
+    <!-- Модалка транспорта и расписания автобусов -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
             <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-2xl font-black text-gray-900 border-b pb-2">🚌 Транспорт и Яндекс.Карта</h3>
-            <div class="w-full h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative">
+            <h3 class="text-2xl font-black text-gray-900 border-b pb-2">Транспорт и расписание</h3>
+            
+            <div class="w-full h-56 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative mb-2">
                 <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
-            <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold">Закрыть</button>
+
+            <div class="flex flex-col gap-3 text-sm text-gray-800">
+                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
+                        <span>Маршрут № 474к: от Карьера — Метро Котельники</span>
+                        <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold">Раскрыть</button>
+                    </div>
+                    <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
+                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
+                        06:18, 07:01, 07:50, 08:33, 09:16, 14:14, 15:31, 16:14, 16:58, 17:46, 18:37.
+                    </div>
+                </div>
+
+                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
+                        <span>Маршрут № 1к: Остановка Карьер — Метро Котельники</span>
+                        <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold">Раскрыть</button>
+                    </div>
+                    <div id="route2" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
+                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
+                        06:15, 07:05, 07:56, 08:51, 09:41, 12:58, 13:51, 14:36, 16:25, 17:10, 18:04, 19:06.
+                    </div>
+                </div>
+
+                <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
+                        <span>Маршрут № 26: до Силиката (через Карьер)</span>
+                        <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold">Раскрыть</button>
+                    </div>
+                    <div id="route3" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
+                        <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
+                        06:20, 07:20, 07:52, 08:24, 08:56, 09:33, 10:05, 11:10, 12:15, 13:20, 14:25, 15:30.
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold mt-2">Закрыть</button>
         </div>
     </div>
 
@@ -522,7 +562,7 @@
     <div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">🔑 Восстановление пароля</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Восстановление пароля</h3>
             <p id="forgotMessage" class="text-xs text-gray-700 font-semibold leading-relaxed">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
             <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
                 <div>
@@ -570,7 +610,6 @@
                         <div class="font-bold text-gray-800">${n.text}</div>
                     </div>`).join('');
             }
-            document.getElementById('notifModalclassList')?.remove('hidden');
             document.getElementById('notifModal').classList.add('flex');
             document.getElementById('notifModal').classList.remove('hidden');
         }
@@ -617,11 +656,11 @@
             const boxes = document.querySelectorAll('.icon-box');
             boxes.forEach(b => {
                 if(size === 'small') {
-                    b.style.width = '36px'; b.style.height = '36px'; b.style.fontSize = '14px';
+                    b.style.setProperty('--icon-w', '36px'); b.style.setProperty('--icon-h', '36px'); b.style.setProperty('--icon-f', '14px');
                 } else if(size === 'large') {
-                    b.style.width = '54px'; b.style.height = '54px'; b.style.fontSize = '20px';
+                    b.style.setProperty('--icon-w', '56px'); b.style.setProperty('--icon-h', '56px'); b.style.setProperty('--icon-f', '20px');
                 } else {
-                    b.style.width = '44px'; b.style.height = '44px'; b.style.fontSize = '16px';
+                    b.style.setProperty('--icon-w', '44px'); b.style.setProperty('--icon-h', '44px'); b.style.setProperty('--icon-f', '16px');
                 }
             });
         }
@@ -731,6 +770,8 @@
         function openTransportModal() { document.getElementById('transportModal').classList.add('flex'); document.getElementById('transportModal').classList.remove('hidden'); }
         function closeTransportModal() { document.getElementById('transportModal').classList.add('hidden'); document.getElementById('transportModal').classList.remove('flex'); }
 
+        function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
+
         function openChatModal() {
             document.getElementById('chatModal').classList.add('flex');
             document.getElementById('chatModal').classList.remove('hidden');
@@ -776,7 +817,7 @@
             addNotification('Новое сообщение в чате');
         }
 
-        // --- ДОБАВЛЕНИЕ НОВОСТЕЙ И ДОКУМЕНТОВ (С ПРОВЕРКОЙ ПРОФИЛЯ) ---
+        // --- ДОБАВЛЕНИЕ НОВОСТЕЙ И ДОКУМЕНТОВ ---
         function openCreateNewsModal() {
             const user = localStorage.getItem('gornyak_user');
             const warning = document.getElementById('newsWarning');
@@ -903,4 +944,3 @@
     </script>
 </body>
 </html>
-
