@@ -978,3 +978,6 @@
                 const quote = m.replyTo ? `<div class="border-l-4 border-[#1c5c38] bg-black/5 rounded-lg px-2 py-1 mb-1 text-[0.6875rem] text-gray-600 font-semibold truncate">${rep ? esc(rep.author) + ': ' + esc(rep.text) : 'Сообщение удалено'}</div>` : '';
                 const menu = chatState.menuId === m.id ? `<div class="flex gap-1.5 mt-1.5 flex-wrap"><button data-act="reply" class="chat-act">Ответить</button>${mine ? '<button data-act="edit" class="chat-act">Изменить</button><button data-act="del" class="chat-act text-red-700">Удалить</button>' : ''}</div>` : '';
                 return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div data-mid="${m.id}" class="max-w-[88%] rounded-2xl px-3 py-2 shadow-sm border ${mine ? 'bg-emerald-100 border-emerald-200' : 'bg-white/95 border-gray-200'}"><div class="text-[0.625rem] font-black text-[#1c5c38]">${esc(m.author)}</div>${quote}<div class="text-sm font-medium text-gray-800 break-words whitespace-pre-wrap">${esc(m.text)}</div><div class="text-[0.625rem] text-gray-400 font-semibold mt-0.5">${esc(m.time)}${m.edited ? ' · изменено' : ''}</div>${menu}</div></div>`;
+            }).join('');
+            box.scrollTop = stick ? box.scrollHeight : keep;
+        }
