@@ -612,19 +612,19 @@
                 const tiny = c.cw <= 2 && c.ch <= 2;
                 const sel = isEditingMode && selectedCardId === c.id;
                 const style = `grid-column:span ${c.cw};grid-row:span ${c.ch};` + (sel ? 'outline:3px solid #2563eb;outline-offset:2px;' : '');
-                const mk = (fn, icon, label, cls) => `<button onclick="${fn}()" class="${narrow ? '' : 'flex-1 sm:flex-none '}py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border flex items-center justify-center gap-1.5 backdrop-blur-md transition"><i class="fa-solid ${icon} text-[0.625rem]"></i>${narrow ? '' : ' ' + label}</button>`;
-                const clip = (fn, cls) => narrow ? '' : `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border backdrop-blur-md transition"><i class="fa-solid fa-paperclip text-[0.625rem]"></i></button>`;
+                const mk = (fn, icon, label, cls) => `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border flex items-center justify-center gap-1.5 backdrop-blur-md transition shrink-0"><i class="fa-solid ${icon} text-[0.625rem]"></i>${narrow ? '' : ' ' + label}</button>`;
+                const clip = (fn, cls) => narrow ? '' : `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border backdrop-blur-md transition shrink-0"><i class="fa-solid fa-paperclip text-[0.625rem]"></i></button>`;
                 let btns = '';
                 if (c.type === 'news') btns = mk('openCreateNewsModal', 'fa-plus', 'Новость', 'text-gray-900 border-gray-300') + clip('openCreateNewsModal', 'text-gray-900 border-gray-300');
                 else if (c.type === 'docs') btns = mk('openCreateDocModal', 'fa-plus', 'Файл', 'text-orange-900 border-orange-300') + clip('openCreateDocModal', 'text-orange-900 border-orange-300');
                 else if (c.hasEditButtons) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
                 const extra = (btns && !tiny)
-                    ? `<div class="flex gap-2 ${narrow ? 'w-full justify-center' : 'w-full sm:w-auto shrink-0'}${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
+                    ? `<div class="flex gap-2 justify-end shrink-0 ml-auto${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
                 const icon = `<div class="icon-box ${c.color} dynamic-icon"><i class="fa-solid ${c.icon}"></i></div>`;
                 const body = narrow
                     ? `<div class="flex flex-col items-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 text-xs leading-tight">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
-                    : `<div class="flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
-                return `<div class="portal-card glass-panel rounded-2xl p-3 ${narrow ? 'flex-col' : 'flex-col sm:flex-row'} items-center justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
+                    : `<div class="flex items-center gap-3 w-full min-w-0">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
+                return `<div class="portal-card glass-panel rounded-2xl p-3 flex flex-row items-center justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
                      style="${style}" data-card-id="${c.id}"
                      onmousedown="startLongPress(event)" ontouchstart="startLongPress(event)" ontouchmove="cancelLongPress()"
                      onmouseup="cancelLongPress()" ontouchend="cancelLongPress()" onclick="cardClick('${c.id}')">
