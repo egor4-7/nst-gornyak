@@ -22,12 +22,13 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #dceada;
             color: #0f2417;
+            transition: font-size 0.2s ease;
         }
 
         .glass-panel {
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            backdrop-filter: blur(var(--blur-val, 25px)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--blur-val, 25px)) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 20px 40px rgba(0, 40, 20, 0.08);
         }
@@ -51,24 +52,14 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 95px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .portal-card:hover {
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 20px 40px -10px rgba(28, 92, 56, 0.25);
-        }
-        .portal-card::after {
-            content: '';
-            position: absolute;
-            top: -60%;
-            left: -60%;
-            width: 220%;
-            height: 220%;
-            background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
-            transform: rotate(25deg) translateX(-120%);
-            transition: transform 1.2s ease-in-out;
-        }
-        .portal-card:hover::after {
-            transform: rotate(25deg) translateX(120%);
         }
 
         .modal-animate {
@@ -79,235 +70,189 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .weather-icon-box {
+        /* Разноцветные стеклянные иконки в стиле фото 1 */
+        .icon-box {
             position: relative;
-            width: 52px;
-            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
-        .glass-cloud {
-            position: absolute;
-            width: 40px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            bottom: 4px;
-            left: 4px;
-        }
-        .glass-cloud::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 8px;
-            width: 18px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-        }
-        .glass-cloud::after {
-            content: '';
-            position: absolute;
-            top: -14px;
-            right: 8px;
-            width: 22px;
-            height: 22px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 50%;
-        }
-        .glass-sun {
-            position: absolute;
-            top: 2px;
-            right: 4px;
-            width: 22px;
-            height: 22px;
-            background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 153, 0, 0.8);
-        }
+        .icon-transport { background: linear-gradient(135deg, rgba(110,231,183,0.8), rgba(16,185,129,0.9)); color: #064e3b; }
+        .icon-tarif { background: linear-gradient(135deg, rgba(253,230,138,0.9), rgba(245,158,11,0.9)); color: #78350f; }
+        .icon-news { background: linear-gradient(135deg, rgba(191,219,254,0.9), rgba(59,130,246,0.9)); color: #1e3a8a; }
+        .icon-docs { background: linear-gradient(135deg, rgba(167,243,208,0.9), rgba(5,150,105,0.9)); color: #022c22; }
+        .icon-contacts { background: linear-gradient(135deg, rgba(233,213,255,0.9), rgba(168,85,247,0.9)); color: #581c87; }
+        .icon-chat { background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(14,165,233,0.9)); color: #0369a1; }
+        .icon-money { background: linear-gradient(135deg, rgba(254,205,211,0.9), rgba(244,63,94,0.9)); color: #881337; }
+        .icon-info { background: linear-gradient(135deg, rgba(209,250,229,0.9), rgba(52,211,153,0.9)); color: #064e3b; }
     </style>
 </head>
-<body class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
+<body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
     <div class="w-full max-w-6xl mx-auto flex flex-col gap-4">
 
-        <!-- Верхняя шапка (как на первом фото) -->
-        <div class="glass-panel rounded-3xl p-3 sm:p-4 flex items-center justify-between gap-3 shadow-md border border-green-200">
-            <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-lg font-black shrink-0">
+        <!-- Шапка: Поиск, Профиль, Колокольчик, Настройки -->
+        <div class="glass-panel rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-sm font-black shrink-0">
                     <i class="fa-solid fa-tree"></i>
                 </div>
                 <div>
-                    <h2 class="font-black text-xs sm:text-sm text-gray-900 leading-tight">НСТ «Горняк»</h2>
-                    <p class="text-[9px] text-gray-600 font-bold">Мобильный портал</p>
+                    <h2 class="font-black text-xs text-gray-900 leading-tight">НСТ «Горняк»</h2>
+                    <p class="text-[8px] text-gray-600 font-bold">Мобильный портал</p>
                 </div>
             </div>
 
-            <!-- Поиск и кнопки справа -->
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
                 <div class="relative">
                     <input type="text" id="searchInput" placeholder="Поиск..." 
-                        class="w-32 sm:w-48 glass-panel border border-green-300 rounded-xl py-2 pl-8 pr-3 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
+                        class="w-24 sm:w-36 glass-panel border border-green-300 rounded-xl py-1.5 pl-7 pr-2 text-[11px] font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-green-800 text-[10px]"></i>
                     
-                    <div id="searchDropdown" class="hidden absolute top-full right-0 mt-2 w-72 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
-                        <div class="p-2.5 text-[10px] font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
+                    <div id="searchDropdown" class="hidden absolute top-full right-0 mt-2 w-64 glass-panel rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
+                        <div class="p-2 text-[9px] font-black text-gray-500 uppercase bg-green-100/70 border-b border-green-200">Результаты поиска</div>
                         <div id="searchResultsList" class="flex flex-col py-1"></div>
                     </div>
                 </div>
 
-                <button onclick="openProfileAuthModal()" class="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition shadow shrink-0">
-                    <i class="fa-solid fa-user text-xs"></i>
+                <button onclick="openProfileAuthModal()" class="py-1.5 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] shadow transition shrink-0 flex items-center gap-1">
+                    <i class="fa-solid fa-user text-[10px]"></i>
+                    <span class="hidden xs:inline">Профиль</span>
                 </button>
 
-                <button onclick="openNotifModal()" class="relative w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
+                <!-- Колокольчик -->
+                <button onclick="openNotifModal()" class="relative w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
                     <i class="fa-solid fa-bell text-xs"></i>
-                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+
+                <!-- Иконка настроек (серая) -->
+                <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки интерфейса">
+                    <i class="fa-solid fa-gear text-xs"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Главный баннер -->
-        <div class="forest-banner w-full rounded-3xl p-5 sm:p-8 text-white shadow-2xl relative flex flex-col items-center text-center gap-5 border border-white/20">
-            <div class="flex flex-col gap-1">
-                <h1 class="text-2xl sm:text-4xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
-                <p class="text-green-100 text-xs sm:text-sm font-semibold opacity-95">Информационный портал для садоводов</p>
+        <!-- Баннер -->
+        <div class="forest-banner w-full rounded-3xl p-4 sm:p-6 text-white shadow-xl relative flex flex-col items-center text-center gap-4 border border-white/20">
+            <div class="flex flex-col gap-0.5">
+                <h1 class="text-xl sm:text-3xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
+                <p class="text-green-100 text-[11px] sm:text-xs font-semibold opacity-95">Информационный портал для садоводов</p>
             </div>
             
-            <div class="w-full max-w-xl bg-black/40 backdrop-blur-2xl p-4 rounded-3xl border border-white/20 shadow-xl flex flex-col gap-3">
-                <!-- Виджет погоды -->
-                <div onclick="openWeatherModal()" class="flex flex-col sm:flex-row justify-between items-center gap-3 cursor-pointer hover:opacity-95 transition pb-3 border-b border-white/15">
-                    <div class="flex items-center gap-3">
-                        <div class="weather-icon-box" id="currentWeatherIcon">
+            <div class="w-full max-w-md bg-black/40 backdrop-blur-2xl p-3.5 rounded-2xl border border-white/20 shadow-lg flex flex-col gap-2.5">
+                <div onclick="openWeatherModal()" class="flex justify-between items-center gap-2 cursor-pointer hover:opacity-95 transition pb-2 border-b border-white/15">
+                    <div class="flex items-center gap-2.5">
+                        <div class="weather-icon-box">
                             <div class="glass-sun"></div>
                             <div class="glass-cloud"></div>
                         </div>
                         <div class="flex flex-col text-left leading-tight">
-                            <span class="text-white font-extrabold text-lg" id="widgetTemp">Загрузка...</span>
-                            <span class="text-[11px] text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
+                            <span class="text-white font-extrabold text-base" id="widgetTemp">Загрузка...</span>
+                            <span class="text-[10px] text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between gap-3 text-[11px] text-green-100 font-semibold bg-white/10 px-3 py-1.5 rounded-xl border border-white/10 w-full sm:w-auto">
-                        <span>Рассвет: <b class="text-white">06:20</b></span>
-                        <span>Закат: <b class="text-white">18:45</b></span>
+                    <div class="text-[10px] text-green-100 font-semibold bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
+                        🌅 06:20 | 🌇 18:45
                     </div>
                 </div>
 
-                <!-- Кнопка Компьютерная версия -->
-                <div class="flex items-center gap-2.5 w-full">
-                    <a href="father.html" class="flex-1 py-2.5 px-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-desktop"></i>
-                        <span>Компьютерная версия</span>
-                    </a>
-                </div>
+                <a href="father.html" class="w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-[11px] transition active:scale-95 shadow border border-amber-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-desktop text-[10px]"></i>
+                    <span>Компьютерная версия</span>
+                </a>
             </div>
         </div>
 
-        <!-- 8 карточек -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        <!-- 8 карточек одинакового размера с разноцветными иконками -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
-            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                    <i class="fa-solid fa-bus"></i>
-                </div>
+            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
+                <div class="icon-box icon-transport w-12 h-12 text-lg font-black"><i class="fa-solid fa-bus"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-base truncate">Транспорт и Карта</h3>
-                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Маршруты и Яндекс.Карта</p>
+                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Транспорт и Карта</h3>
+                    <p class="text-[10px] text-gray-600 font-bold truncate">Маршруты и Яндекс.Карта</p>
                 </div>
             </div>
 
-            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
-                <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
+            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
+                <div class="icon-box icon-tarif w-12 h-12 text-lg font-black"><i class="fa-solid fa-bolt"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-base truncate">Тарифы</h3>
-                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Свет, вода, услуги</p>
+                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Тарифы</h3>
+                    <p class="text-[10px] text-gray-600 font-bold truncate">Свет, вода, услуги</p>
                 </div>
             </div>
 
-            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-4 flex flex-col justify-between border border-green-200">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                        <i class="fa-solid fa-newspaper"></i>
-                    </div>
+            <!-- Новости с полупрозрачными кнопками-скрепками в едином стиле -->
+            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-2.5">
+                    <div class="icon-box icon-news w-11 h-11 text-base font-black"><i class="fa-solid fa-newspaper"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
-                        <h3 class="font-extrabold text-gray-900 text-base truncate">Новости</h3>
-                        <p class="text-[11px] text-gray-600 font-bold truncate">Объявления правления</p>
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Новости</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Объявления правления</p>
                     </div>
                 </div>
-                <div class="flex gap-2 mt-2.5 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateNewsModal()" class="flex-1 py-1 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-[11px] font-extrabold shadow-sm flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Новость
+                <div class="flex gap-1.5 mt-2 pt-1.5 border-t border-gray-200/60" onclick="event.stopPropagation()">
+                    <button onclick="openCreateNewsModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-blue-900 text-[10px] font-extrabold shadow-sm border border-blue-200 flex items-center justify-center gap-1 backdrop-blur-md">
+                        <i class="fa-solid fa-plus text-[9px]"></i> Новость
                     </button>
-                    <button onclick="openCreateNewsModal()" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 rounded-xl text-blue-800 text-[11px] font-extrabold shadow-sm">
-                        <i class="fa-solid fa-paperclip"></i>
+                    <button onclick="openCreateNewsModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-blue-900 text-[10px] font-extrabold shadow-sm border border-blue-200 backdrop-blur-md">
+                        <i class="fa-solid fa-paperclip text-[9px]"></i>
                     </button>
                 </div>
             </div>
 
-            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-4 flex flex-col justify-between border border-green-200">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                        <i class="fa-solid fa-folder-open"></i>
-                    </div>
+            <!-- Документы с полупрозрачными кнопками-скрепками -->
+            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 flex flex-col justify-between border border-green-200">
+                <div class="flex items-center gap-2.5">
+                    <div class="icon-box icon-docs w-11 h-11 text-base font-black"><i class="fa-solid fa-folder-open"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
-                        <h3 class="font-extrabold text-gray-900 text-base truncate">Документы</h3>
-                        <p class="text-[11px] text-gray-600 font-bold truncate">Устав, бланки, акты</p>
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Документы</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Устав, бланки, акты</p>
                     </div>
                 </div>
-                <div class="flex gap-2 mt-2.5 pt-2 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateDocModal()" class="flex-1 py-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-[11px] font-extrabold shadow-sm flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Файл
+                <div class="flex gap-1.5 mt-2 pt-1.5 border-t border-gray-200/60" onclick="event.stopPropagation()">
+                    <button onclick="openCreateDocModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-emerald-900 text-[10px] font-extrabold shadow-sm border border-emerald-200 flex items-center justify-center gap-1 backdrop-blur-md">
+                        <i class="fa-solid fa-plus text-[9px]"></i> Файл
                     </button>
-                    <button onclick="openCreateDocModal()" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-emerald-900 text-[11px] font-extrabold shadow-sm">
-                        <i class="fa-solid fa-paperclip"></i>
+                    <button onclick="openCreateDocModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-emerald-900 text-[10px] font-extrabold shadow-sm border border-emerald-200 backdrop-blur-md">
+                        <i class="fa-solid fa-paperclip text-[9px]"></i>
                     </button>
                 </div>
             </div>
 
-            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
-                <div class="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                    <i class="fa-solid fa-address-book"></i>
-                </div>
+            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
+                <div class="icon-box icon-contacts w-12 h-12 text-lg font-black"><i class="fa-solid fa-address-book"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-base truncate">Контакты</h3>
-                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Правление и службы</p>
+                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Контакты</h3>
+                    <p class="text-[10px] text-gray-600 font-bold truncate">Правление и службы</p>
                 </div>
             </div>
 
-            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
-                <div class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                    <i class="fa-solid fa-comments"></i>
-                </div>
+            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
+                <div class="icon-box icon-chat w-12 h-12 text-lg font-black"><i class="fa-solid fa-comments"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-base truncate">Общение</h3>
-                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Чат соседей, ответы и файлы</p>
+                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Общение</h3>
+                    <p class="text-[10px] text-gray-600 font-bold truncate">Чат соседей, ответы и файлы</p>
                 </div>
             </div>
 
-            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
-                <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                    <i class="fa-solid fa-credit-card"></i>
-                </div>
+            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
+                <div class="icon-box icon-money w-12 h-12 text-lg font-black"><i class="fa-solid fa-credit-card"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-base truncate">Взносы</h3>
-                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">Оплата и история</p>
+                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Взносы</h3>
+                    <p class="text-[10px] text-gray-600 font-bold truncate">Оплата и история</p>
                 </div>
             </div>
 
-            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-3xl p-5 flex items-center gap-4 border border-green-200">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-xl shrink-0 shadow-md font-black">
-                    <i class="fa-solid fa-circle-info"></i>
-                </div>
+            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
+                <div class="icon-box icon-info w-12 h-12 text-lg font-black"><i class="fa-solid fa-circle-info"></i></div>
                 <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-base truncate">О НСТ</h3>
-                    <p class="text-[11px] text-gray-600 font-bold mt-0.5 truncate">История и схема</p>
+                    <h3 class="font-extrabold text-gray-900 text-sm truncate">О НСТ</h3>
+                    <p class="text-[10px] text-gray-600 font-bold truncate">История и схема</p>
                 </div>
             </div>
 
@@ -315,7 +260,43 @@
 
     </div>
 
-    <!-- Модальные окна (Чат, Авторизация, Погода, Транспорт и т.д.) -->
+    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК (Шрифт, Иконки, Блюр) -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 border border-green-200 relative">
+            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-extrabold text-gray-900 border-b pb-2">⚙️ Настройки интерфейса</h3>
+
+            <div class="flex flex-col gap-4 text-xs font-bold text-gray-700">
+                <div>
+                    <label class="block mb-1">Размер шрифта:</label>
+                    <input type="range" id="fontSizeRange" min="12" max="18" value="14" class="w-full accent-[#1c5c38]" oninput="previewFontSize(this.value)">
+                </div>
+
+                <div>
+                    <label class="block mb-1">Адаптация размера иконок:</label>
+                    <select id="iconSizeSelect" class="w-full p-2.5 rounded-xl border border-gray-300 bg-white text-xs font-bold">
+                        <option value="small">Мелкий</option>
+                        <option value="medium" selected>Средний</option>
+                        <option value="large">Крупный</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-1">Интенсивность блюра (стекло):</label>
+                    <input type="range" id="blurRange" min="5" max="40" value="25" class="w-full accent-[#1c5c38]" oninput="previewBlur(this.value)">
+                </div>
+            </div>
+
+            <!-- Кнопка «Применить» посередине внизу -->
+            <div class="flex justify-center pt-2">
+                <button onclick="applySettings()" class="py-3 px-8 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow-lg transition text-xs">Применить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ЧАТА -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200">
             <div class="flex justify-between items-center border-b pb-3 mb-3">
@@ -335,11 +316,9 @@
 
     <!-- Модалка авторизации -->
     <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-xl font-extrabold text-gray-900">🔐 Вход в личный кабинет</h3>
-                <button onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">🔐 Вход в личный кабинет</h3>
             <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
@@ -360,11 +339,9 @@
 
     <!-- Модалка регистрации -->
     <div id="registerModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-xl font-extrabold text-gray-900">📝 Регистрация садовода</h3>
-                <button onclick="closeRegisterModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📝 Регистрация садовода</h3>
             <form onsubmit="handleRegisterSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта *</label>
@@ -389,11 +366,9 @@
 
     <!-- Модалка профиля -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-xl font-extrabold text-gray-900">👤 Личный кабинет</h3>
-                <button onclick="closeProfileModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">👤 Личный кабинет</h3>
             <div class="space-y-3 text-sm font-semibold text-gray-800">
                 <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
                     <span class="text-xs text-gray-500 block">Электронная почта:</span>
@@ -414,13 +389,11 @@
 
     <!-- Модалка уведомлений -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <div class="flex items-center gap-2 text-[#1c5c38]">
-                    <i class="fa-solid fa-bell text-xl"></i>
-                    <h3 class="text-xl font-extrabold">Уведомления</h3>
-                </div>
-                <button onclick="closeNotifModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 text-[#1c5c38] border-b pb-2">
+                <i class="fa-solid fa-bell text-xl"></i>
+                <h3 class="text-xl font-extrabold">Уведомления</h3>
             </div>
             <div id="notifContainer" class="flex flex-col gap-3 py-2 max-h-[50vh] overflow-y-auto">
                 <div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>
@@ -434,11 +407,9 @@
 
     <!-- Общее модальное окно -->
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900"></h3>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+        <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2"></h3>
             <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
             <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold shadow-md">Понятно</button>
         </div>
@@ -447,15 +418,13 @@
     <!-- Модалка погоды -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
-            <div class="flex justify-between items-center border-b border-white/10 pb-4">
-                <div class="flex items-center gap-3">
-                    <div class="weather-icon-box"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
-                    <div>
-                        <h3 class="text-2xl font-black">Погода в Котельниках</h3>
-                        <p class="text-xs text-green-200 font-bold">Метеостанция online • Open-Meteo</p>
-                    </div>
+            <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-3 border-b border-white/10 pb-4">
+                <div class="weather-icon-box"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
+                <div>
+                    <h3 class="text-2xl font-black">Погода в Котельниках</h3>
+                    <p class="text-xs text-green-200 font-bold">Метеостанция online • Open-Meteo</p>
                 </div>
-                <button onclick="closeWeatherModal()" class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="flex justify-between items-center bg-white/10 p-5 rounded-2xl border border-white/10 shadow-inner">
                 <div>
@@ -473,11 +442,9 @@
 
     <!-- Модалка транспорта -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-2xl font-black text-gray-900">🚌 Транспорт и Яндекс.Карта</h3>
-                <button onclick="closeTransportModal()" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+        <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
+            <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black text-gray-900 border-b pb-2">🚌 Транспорт и Яндекс.Карта</h3>
             <div class="w-full h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative">
                 <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
@@ -488,6 +455,7 @@
     <script>
         let liveWeatherData = null;
 
+        // --- УВЕДОМЛЕНИЯ ---
         function addNotification(text) {
             let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
             notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
@@ -530,6 +498,44 @@
             updateNotifBadge();
             openNotifModal();
         }
+
+        // --- НАСТРОЙКИ ИНТЕРФЕЙСА ---
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+            document.getElementById('settingsModal').classList.add('flex');
+        }
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+            document.getElementById('settingsModal').classList.remove('flex');
+        }
+        function previewFontSize(val) {
+            document.body.style.fontSize = val + 'px';
+        }
+        function previewBlur(val) {
+            document.documentElement.style.setProperty('--blur-val', val + 'px');
+        }
+        function applySettings() {
+            const fontSize = document.getElementById('fontSizeRange').value;
+            const iconSize = document.getElementById('iconSizeSelect').value;
+            const blurVal = document.getElementById('blurRange').value;
+
+            localStorage.setItem('gornyak_settings', JSON.stringify({ fontSize, iconSize, blurVal }));
+            closeSettingsModal();
+            addNotification('Настройки интерфейса обновлены');
+        }
+
+        // Загрузка сохраненных настроек
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('gornyak_settings');
+            if (saved) {
+                const s = JSON.parse(saved);
+                document.body.style.fontSize = s.fontSize + 'px';
+                document.documentElement.style.setProperty('--blur-val', s.blurVal + 'px');
+                document.getElementById('fontSizeRange').value = s.fontSize;
+                document.getElementById('blurRange').value = s.blurVal;
+                document.getElementById('iconSizeSelect').value = s.iconSize;
+            }
+        });
 
         async function fetchLiveWeather() {
             try {
@@ -613,21 +619,6 @@
         function openWeatherModal() {
             document.getElementById('weatherModal').classList.remove('hidden');
             document.getElementById('weatherModal').classList.add('flex');
-            
-            const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-            const icons = ['☀️', '🌤️', '☁️', '🌧️', '☀️', '🌤️', '☀️'];
-            
-            if (liveWeatherData && liveWeatherData.daily) {
-                document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => {
-                    const maxT = Math.round(liveWeatherData.daily.temperature_2m_max[i] || 15);
-                    return `
-                        <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
-                          <div class="text-green-200 font-bold">${d}</div>
-                          <div class="text-lg my-1">${icons[i]}</div>
-                          <div class="font-black">+${maxT}°</div>
-                        </div>`;
-                }).join('');
-            }
         }
         function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
 
