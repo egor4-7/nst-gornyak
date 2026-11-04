@@ -52,14 +52,13 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            min-height: 95px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
         }
         .portal-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px -10px rgba(28, 92, 56, 0.25);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(28, 92, 56, 0.2);
         }
 
         .modal-animate {
@@ -70,29 +69,28 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Обновленные цвета иконок по вашему запросу */
         .icon-box {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            border-radius: 18px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         }
         .icon-transport { background: linear-gradient(135deg, rgba(110,231,183,0.8), rgba(16,185,129,0.9)); color: #064e3b; }
         .icon-tarif { background: linear-gradient(135deg, rgba(253,230,138,0.9), rgba(245,158,11,0.9)); color: #78350f; }
-        .icon-news { background: linear-gradient(135deg, rgba(209,213,219,0.9), rgba(107,114,128,0.9)); color: #111827; } /* Темно-серый */
-        .icon-docs { background: linear-gradient(135deg, rgba(254,215,170,0.9), rgba(249,115,22,0.9)); color: #7c2d12; } /* Оранжевый */
+        .icon-news { background: linear-gradient(135deg, rgba(209,213,219,0.9), rgba(107,114,128,0.9)); color: #111827; }
+        .icon-docs { background: linear-gradient(135deg, rgba(254,215,170,0.9), rgba(249,115,22,0.9)); color: #7c2d12; }
         .icon-contacts { background: linear-gradient(135deg, rgba(233,213,255,0.9), rgba(168,85,247,0.9)); color: #581c87; }
         .icon-chat { background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(14,165,233,0.9)); color: #0369a1; }
         .icon-money { background: linear-gradient(135deg, rgba(254,205,211,0.9), rgba(244,63,94,0.9)); color: #881337; }
-        .icon-info { background: linear-gradient(135deg, rgba(147,197,253,0.9), rgba(30,58,138,0.9)); color: #eff6ff; } /* Темно-синий */
+        .icon-info { background: linear-gradient(135deg, rgba(147,197,253,0.9), rgba(30,58,138,0.9)); color: #eff6ff; }
     </style>
 </head>
 <body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
-    <div class="w-full max-w-6xl mx-auto flex flex-col gap-4">
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-4">
 
         <!-- Шапка -->
         <div class="glass-panel rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
@@ -166,97 +164,156 @@
         </div>
 
         <!-- 8 карточек -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="flex flex-col gap-3">
             
-            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
-                <div class="icon-box icon-transport w-12 h-12 text-lg font-black"><i class="fa-solid fa-bus"></i></div>
-                <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Транспорт и Карта</h3>
-                    <p class="text-[10px] text-gray-600 font-bold truncate">Маршруты и Яндекс.Карта</p>
+            <div onclick="openTransportModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
+                <div class="flex items-center gap-3 w-full">
+                    <div class="icon-box icon-transport w-11 h-11 text-base font-black"><i class="fa-solid fa-bus"></i></div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Транспорт и Карта</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Маршруты и Яндекс.Карта</p>
+                    </div>
                 </div>
             </div>
 
-            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
-                <div class="icon-box icon-tarif w-12 h-12 text-lg font-black"><i class="fa-solid fa-bolt"></i></div>
-                <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Тарифы</h3>
-                    <p class="text-[10px] text-gray-600 font-bold truncate">Свет, вода, услуги</p>
+            <div onclick="openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
+                <div class="flex items-center gap-3 w-full">
+                    <div class="icon-box icon-tarif w-11 h-11 text-base font-black"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Тарифы</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Свет, вода, услуги</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Новости (темно-серый) -->
-            <div onclick="openNewsModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 flex flex-col justify-between border border-green-200">
-                <div class="flex items-center gap-2.5">
+            <!-- Новости -->
+            <div class="portal-card glass-panel rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 border border-green-200">
+                <div onclick="openNewsModal()" class="flex items-center gap-3 w-full cursor-pointer">
                     <div class="icon-box icon-news w-11 h-11 text-base font-black"><i class="fa-solid fa-newspaper"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Новости</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Объявления правления</p>
                     </div>
                 </div>
-                <div class="flex gap-1.5 mt-2 pt-1.5 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateNewsModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-gray-900 text-[10px] font-extrabold shadow-sm border border-gray-300 flex items-center justify-center gap-1 backdrop-blur-md">
-                        <i class="fa-solid fa-plus text-[9px]"></i> Новость
+                <div class="flex gap-2 w-full sm:w-auto shrink-0" onclick="event.stopPropagation()">
+                    <button onclick="openCreateNewsModal()" class="flex-1 sm:flex-none py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-gray-900 text-[11px] font-extrabold shadow-sm border border-gray-300 flex items-center justify-center gap-1.5 backdrop-blur-md transition">
+                        <i class="fa-solid fa-plus text-[10px]"></i> Новость
                     </button>
-                    <button onclick="openCreateNewsModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-gray-900 text-[10px] font-extrabold shadow-sm border border-gray-300 backdrop-blur-md">
-                        <i class="fa-solid fa-paperclip text-[9px]"></i>
+                    <button onclick="openCreateNewsModal()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-gray-900 text-[11px] font-extrabold shadow-sm border border-gray-300 backdrop-blur-md transition">
+                        <i class="fa-solid fa-paperclip text-[10px]"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Документы (оранжевый) -->
-            <div onclick="openDocsModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 flex flex-col justify-between border border-green-200">
-                <div class="flex items-center gap-2.5">
+            <!-- Документы -->
+            <div class="portal-card glass-panel rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 border border-green-200">
+                <div onclick="openDocsModal()" class="flex items-center gap-3 w-full cursor-pointer">
                     <div class="icon-box icon-docs w-11 h-11 text-base font-black"><i class="fa-solid fa-folder-open"></i></div>
                     <div class="flex flex-col w-full overflow-hidden">
                         <h3 class="font-extrabold text-gray-900 text-sm truncate">Документы</h3>
                         <p class="text-[10px] text-gray-600 font-bold truncate">Устав, бланки, акты</p>
                     </div>
                 </div>
-                <div class="flex gap-1.5 mt-2 pt-1.5 border-t border-gray-200/60" onclick="event.stopPropagation()">
-                    <button onclick="openCreateDocModal()" class="flex-1 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-orange-900 text-[10px] font-extrabold shadow-sm border border-orange-300 flex items-center justify-center gap-1 backdrop-blur-md">
-                        <i class="fa-solid fa-plus text-[9px]"></i> Файл
+                <div class="flex gap-2 w-full sm:w-auto shrink-0" onclick="event.stopPropagation()">
+                    <button onclick="openCreateDocModal()" class="flex-1 sm:flex-none py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-orange-900 text-[11px] font-extrabold shadow-sm border border-orange-300 flex items-center justify-center gap-1.5 backdrop-blur-md transition">
+                        <i class="fa-solid fa-plus text-[10px]"></i> Файл
                     </button>
-                    <button onclick="openCreateDocModal()" class="px-2.5 py-1 bg-white/50 hover:bg-white/80 rounded-lg text-orange-900 text-[10px] font-extrabold shadow-sm border border-orange-300 backdrop-blur-md">
-                        <i class="fa-solid fa-paperclip text-[9px]"></i>
+                    <button onclick="openCreateDocModal()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl text-orange-900 text-[11px] font-extrabold shadow-sm border border-orange-300 backdrop-blur-md transition">
+                        <i class="fa-solid fa-paperclip text-[10px]"></i>
                     </button>
                 </div>
             </div>
 
-            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
-                <div class="icon-box icon-contacts w-12 h-12 text-lg font-black"><i class="fa-solid fa-address-book"></i></div>
-                <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Контакты</h3>
-                    <p class="text-[10px] text-gray-600 font-bold truncate">Правление и службы</p>
+            <div onclick="openSection('Контакты', 'Телефоны служб:\n• Председатель: +7 (900) 123-45-67\n• Электрик: +7 (900) 765-43-21\n• Охрана КПП: +7 (900) 555-00-11')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
+                <div class="flex items-center gap-3 w-full">
+                    <div class="icon-box icon-contacts w-11 h-11 text-base font-black"><i class="fa-solid fa-address-book"></i></div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Контакты</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Правление и службы</p>
+                    </div>
                 </div>
             </div>
 
-            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
-                <div class="icon-box icon-chat w-12 h-12 text-lg font-black"><i class="fa-solid fa-comments"></i></div>
-                <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Общение</h3>
-                    <p class="text-[10px] text-gray-600 font-bold truncate">Чат соседей, ответы и файлы</p>
+            <div onclick="openChatModal()" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
+                <div class="flex items-center gap-3 w-full">
+                    <div class="icon-box icon-chat w-11 h-11 text-base font-black"><i class="fa-solid fa-comments"></i></div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Общение</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Чат соседей, ответы и файлы</p>
+                    </div>
                 </div>
             </div>
 
-            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
-                <div class="icon-box icon-money w-12 h-12 text-lg font-black"><i class="fa-solid fa-credit-card"></i></div>
-                <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-sm truncate">Взносы</h3>
-                    <p class="text-[10px] text-gray-600 font-bold truncate">Оплата и история</p>
+            <div onclick="openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
+                <div class="flex items-center gap-3 w-full">
+                    <div class="icon-box icon-money w-11 h-11 text-base font-black"><i class="fa-solid fa-credit-card"></i></div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">Взносы</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">Оплата и история</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- О НСТ (темно-синий) -->
-            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-4 flex items-center gap-3 border border-green-200">
-                <div class="icon-box icon-info w-12 h-12 text-lg font-black"><i class="fa-solid fa-circle-info"></i></div>
-                <div class="flex flex-col w-full overflow-hidden">
-                    <h3 class="font-extrabold text-gray-900 text-sm truncate">О НСТ</h3>
-                    <p class="text-[10px] text-gray-600 font-bold truncate">История и схема</p>
+            <div onclick="openSection('История НСТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="portal-card cursor-pointer glass-panel rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 border border-green-200">
+                <div class="flex items-center gap-3 w-full">
+                    <div class="icon-box icon-info w-11 h-11 text-base font-black"><i class="fa-solid fa-circle-info"></i></div>
+                    <div class="flex flex-col w-full overflow-hidden">
+                        <h3 class="font-extrabold text-gray-900 text-sm truncate">О НСТ</h3>
+                        <p class="text-[10px] text-gray-600 font-bold truncate">История и схема</p>
+                    </div>
                 </div>
             </div>
 
         </div>
 
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ НОВОСТИ (С ПРОВЕРКОЙ ПРОФИЛЯ) -->
+    <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeCreateNewsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📝 Добавить новость</h3>
+            
+            <div id="newsWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
+                ⚠️ Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
+            </div>
+
+            <form onsubmit="submitNewsForm(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Тема новости</label>
+                    <input type="text" id="newsTitleInput" required placeholder="Введите заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Описание</label>
+                    <textarea id="newsDescInput" rows="3" required placeholder="Текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДОКУМЕНТА (С ПРОВЕРКОЙ ПРОФИЛЯ) -->
+    <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeCreateDocModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📄 Загрузить документ</h3>
+            
+            <div id="docWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
+                ⚠️ Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
+            </div>
+
+            <form onsubmit="submitDocForm(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Название документа</label>
+                    <input type="text" id="docNameInput" required placeholder="Устав, бланк, акт..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Файл</label>
+                    <input type="file" id="docFileInput" required class="w-full mt-1 text-xs text-gray-500">
+                </div>
+                <button type="submit" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Загрузить в базу</button>
+            </form>
+        </div>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
@@ -274,12 +331,21 @@
                 </div>
 
                 <div>
-                    <label class="block mb-1">Адаптация размера иконок:</label>
-                    <select id="iconSizeSelect" class="w-full p-2.5 rounded-xl border border-gray-300 bg-white text-xs font-bold">
-                        <option value="small">Мелкий</option>
-                        <option value="medium" selected>Средний</option>
-                        <option value="large">Крупный</option>
-                    </select>
+                    <label class="block mb-2">Адаптация размера иконок:</label>
+                    <div class="flex items-center justify-around gap-2 bg-green-50 p-3 rounded-2xl border border-green-200">
+                        <div onclick="setIconSizeMode('small')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeSmall">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-bus"></i></div>
+                            <span class="text-[10px]">Мелкий</span>
+                        </div>
+                        <div onclick="setIconSizeMode('medium')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition bg-white shadow-sm" id="modeMedium">
+                            <div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-base"><i class="fa-solid fa-bus"></i></div>
+                            <span class="text-[10px]">Средний</span>
+                        </div>
+                        <div onclick="setIconSizeMode('large')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeLarge">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-bus"></i></div>
+                            <span class="text-[10px]">Крупный</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -288,7 +354,6 @@
                 </div>
             </div>
 
-            <!-- Кнопка «Применить» посередине внизу -->
             <div class="flex justify-center pt-2">
                 <button onclick="applySettings()" class="py-3 px-8 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow-lg transition text-xs">Применить</button>
             </div>
@@ -314,7 +379,7 @@
     <!-- Модалка авторизации -->
     <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">🔐 Вход в личный кабинет</h3>
             <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
                 <div>
@@ -337,7 +402,7 @@
     <!-- Модалка регистрации -->
     <div id="registerModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">📝 Регистрация садовода</h3>
             <form onsubmit="handleRegisterSubmit(event)" class="space-y-3">
                 <div>
@@ -364,7 +429,7 @@
     <!-- Модалка профиля -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">👤 Личный кабинет</h3>
             <div class="space-y-3 text-sm font-semibold text-gray-800">
                 <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
@@ -387,7 +452,7 @@
     <!-- Модалка уведомлений -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <div class="flex items-center gap-2 text-[#1c5c38] border-b pb-2">
                 <i class="fa-solid fa-bell text-xl"></i>
                 <h3 class="text-xl font-extrabold">Уведомления</h3>
@@ -412,7 +477,7 @@
         </div>
     </div>
 
-    <!-- Модалка погоды -->
+    <!-- Модалка погоды (С полной детализацией на 7 дней) -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
@@ -428,6 +493,10 @@
                     <div class="text-4xl font-black tracking-tight" id="modalTemp">...</div>
                     <div class="text-sm text-green-200 mt-1 font-bold" id="modalWind">Ветер: загрузка...</div>
                 </div>
+                <div class="text-right">
+                    <div class="text-sm font-black text-yellow-300">Закат в 18:45</div>
+                    <div class="text-xs text-gray-300 font-bold mt-0.5">Восход: 06:20</div>
+                </div>
             </div>
             <div>
                 <h4 class="text-xs font-bold uppercase text-green-200 mb-3">Прогноз на 7 дней</h4>
@@ -440,7 +509,7 @@
     <!-- Модалка транспорта -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
-            <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-2xl font-black text-gray-900 border-b pb-2">🚌 Транспорт и Яндекс.Карта</h3>
             <div class="w-full h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative">
                 <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
@@ -449,8 +518,25 @@
         </div>
     </div>
 
+    <!-- Модальное окно сброса пароля -->
+    <div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">🔑 Восстановление пароля</h3>
+            <p id="forgotMessage" class="text-xs text-gray-700 font-semibold leading-relaxed">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
+            <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
+                    <input type="email" id="forgotEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Отправить</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         let liveWeatherData = null;
+        let selectedIconSize = 'medium';
 
         function addNotification(text) {
             let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
@@ -484,8 +570,9 @@
                         <div class="font-bold text-gray-800">${n.text}</div>
                     </div>`).join('');
             }
-            document.getElementById('notifModal').classList.remove('hidden');
+            document.getElementById('notifModalclassList')?.remove('hidden');
             document.getElementById('notifModal').classList.add('flex');
+            document.getElementById('notifModal').classList.remove('hidden');
         }
         function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
 
@@ -495,28 +582,48 @@
             openNotifModal();
         }
 
+        // --- НАСТРОЙКИ ---
         function openSettingsModal() {
-            document.getElementById('settingsModal').classList.remove('hidden');
             document.getElementById('settingsModal').classList.add('flex');
+            document.getElementById('settingsModal').classList.remove('hidden');
         }
         function closeSettingsModal() {
             document.getElementById('settingsModal').classList.add('hidden');
             document.getElementById('settingsModal').classList.remove('flex');
         }
-        function previewFontSize(val) {
-            document.body.style.fontSize = val + 'px';
+        function previewFontSize(val) { document.body.style.fontSize = val + 'px'; }
+        function previewBlur(val) { document.documentElement.style.setProperty('--blur-val', val + 'px'); }
+
+        function setIconSizeMode(mode) {
+            selectedIconSize = mode;
+            ['small', 'medium', 'large'].forEach(m => {
+                const el = document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1));
+                if(el) el.className = 'cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition';
+            });
+            const activeEl = document.getElementById('mode' + mode.charAt(0).toUpperCase() + mode.slice(1));
+            if(activeEl) activeEl.className = 'cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl bg-white shadow-sm';
         }
-        function previewBlur(val) {
-            document.documentElement.style.setProperty('--blur-val', val + 'px');
-        }
+
         function applySettings() {
             const fontSize = document.getElementById('fontSizeRange').value;
-            const iconSize = document.getElementById('iconSizeSelect').value;
             const blurVal = document.getElementById('blurRange').value;
-
-            localStorage.setItem('gornyak_settings', JSON.stringify({ fontSize, iconSize, blurVal }));
+            localStorage.setItem('gornyak_settings', JSON.stringify({ fontSize, iconSize: selectedIconSize, blurVal }));
+            applyIconSize(selectedIconSize);
             closeSettingsModal();
-            addNotification('Настройки интерфейса обновлены');
+            addNotification('Настройки интерфейса применены');
+        }
+
+        function applyIconSize(size) {
+            const boxes = document.querySelectorAll('.icon-box');
+            boxes.forEach(b => {
+                if(size === 'small') {
+                    b.style.width = '36px'; b.style.height = '36px'; b.style.fontSize = '14px';
+                } else if(size === 'large') {
+                    b.style.width = '54px'; b.style.height = '54px'; b.style.fontSize = '20px';
+                } else {
+                    b.style.width = '44px'; b.style.height = '44px'; b.style.fontSize = '16px';
+                }
+            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -527,10 +634,11 @@
                 document.documentElement.style.setProperty('--blur-val', s.blurVal + 'px');
                 document.getElementById('fontSizeRange').value = s.fontSize;
                 document.getElementById('blurRange').value = s.blurVal;
-                document.getElementById('iconSizeSelect').value = s.iconSize;
+                if(s.iconSize) { setIconSizeMode(s.iconSize); applyIconSize(s.iconSize); }
             }
         });
 
+        // --- ПОГОДА ---
         async function fetchLiveWeather() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow');
@@ -552,6 +660,7 @@
             }
         }
 
+        // --- ПОИСК ---
         const searchInput = document.getElementById('searchInput');
         const searchDropdown = document.getElementById('searchDropdown');
         const searchResultsList = document.getElementById('searchResultsList');
@@ -570,14 +679,12 @@
         function renderSearch(keyword) {
             const term = keyword.trim().toLowerCase();
             searchResultsList.innerHTML = '';
-            
             let filtered = searchDatabase;
             if (term.length > 0) {
                 filtered = searchDatabase.filter(item => 
                     item.query.includes(term) || item.title.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
                 );
             }
-
             if (filtered.length === 0) {
                 searchResultsList.innerHTML = `<div class="px-4 py-2.5 text-xs text-gray-600 font-bold">Ничего не найдено</div>`;
             } else {
@@ -585,10 +692,7 @@
                     const btn = document.createElement('button');
                     btn.className = 'px-4 py-2.5 text-left text-xs font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none w-full';
                     btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-[10px] text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
-                    btn.onclick = () => {
-                        searchDropdown.classList.add('hidden');
-                        item.action();
-                    };
+                    btn.onclick = () => { searchDropdown.classList.add('hidden'); item.action(); };
                     searchResultsList.appendChild(btn);
                 });
             }
@@ -604,24 +708,32 @@
         function openSection(title, text) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalContent').innerText = text;
-            document.getElementById('modalWindow').classList.remove('hidden');
             document.getElementById('modalWindow').classList.add('flex');
+            document.getElementById('modalWindow').classList.remove('hidden');
             searchDropdown.classList.add('hidden');
         }
         function closeModal() { document.getElementById('modalWindow').classList.add('hidden'); document.getElementById('modalWindow').classList.remove('flex'); }
 
         function openWeatherModal() {
-            document.getElementById('weatherModal').classList.remove('hidden');
             document.getElementById('weatherModal').classList.add('flex');
+            document.getElementById('weatherModal').classList.remove('hidden');
+            const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const icons = ['☀️', '🌤️', '☁️', '🌧️', '☀️', '🌤️', '☀️'];
+            document.getElementById('weatherWeekList').innerHTML = days.map((d, i) => `
+                <div class="bg-white/10 p-2.5 rounded-xl border border-white/10">
+                  <div class="text-green-200 font-bold">${d}</div>
+                  <div class="text-lg my-1">${icons[i]}</div>
+                  <div class="font-black">+${15 + i}°</div>
+                </div>`).join('');
         }
         function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
 
-        function openTransportModal() { document.getElementById('transportModal').classList.remove('hidden'); document.getElementById('transportModal').classList.add('flex'); }
+        function openTransportModal() { document.getElementById('transportModal').classList.add('flex'); document.getElementById('transportModal').classList.remove('hidden'); }
         function closeTransportModal() { document.getElementById('transportModal').classList.add('hidden'); document.getElementById('transportModal').classList.remove('flex'); }
 
         function openChatModal() {
-            document.getElementById('chatModal').classList.remove('hidden');
             document.getElementById('chatModal').classList.add('flex');
+            document.getElementById('chatModal').classList.remove('hidden');
             renderChatMessages();
         }
         function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
@@ -664,6 +776,65 @@
             addNotification('Новое сообщение в чате');
         }
 
+        // --- ДОБАВЛЕНИЕ НОВОСТЕЙ И ДОКУМЕНТОВ (С ПРОВЕРКОЙ ПРОФИЛЯ) ---
+        function openCreateNewsModal() {
+            const user = localStorage.getItem('gornyak_user');
+            const warning = document.getElementById('newsWarning');
+            if (!user) {
+                warning.classList.remove('hidden');
+            } else {
+                warning.classList.add('hidden');
+            }
+            document.getElementById('createNewsModal').classList.add('flex');
+            document.getElementById('createNewsModal').classList.remove('hidden');
+        }
+        function closeCreateNewsModal() { document.getElementById('createNewsModal').classList.add('hidden'); document.getElementById('createNewsModal').classList.remove('flex'); }
+
+        function submitNewsForm(e) {
+            e.preventDefault();
+            const title = document.getElementById('newsTitleInput').value.trim();
+            const user = localStorage.getItem('gornyak_user');
+            
+            let newsList = JSON.parse(localStorage.getItem('gornyak_news_db')) || [];
+            newsList.unshift({ title, date: new Date().toLocaleDateString(), author: user ? JSON.parse(user).email : 'Гость' });
+            localStorage.setItem('gornyak_news_db', JSON.stringify(newsList));
+
+            alert(user ? 'Новость успешно опубликована!' : 'Новость сохранена. При входе в профиль она закрепится за вашей учетной записью.');
+            addNotification('Опубликована новость: ' + title);
+            closeCreateNewsModal();
+        }
+
+        function openCreateDocModal() {
+            const user = localStorage.getItem('gornyak_user');
+            const warning = document.getElementById('docWarning');
+            if (!user) {
+                warning.classList.remove('hidden');
+            } else {
+                warning.classList.add('hidden');
+            }
+            document.getElementById('createDocModal').classList.add('flex');
+            document.getElementById('createDocModal').classList.remove('hidden');
+        }
+        function closeCreateDocModal() { document.getElementById('createDocModal').classList.add('hidden'); document.getElementById('createDocModal').classList.remove('flex'); }
+
+        function submitDocForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('docNameInput').value.trim();
+            const user = localStorage.getItem('gornyak_user');
+
+            let docsList = JSON.parse(localStorage.getItem('gornyak_docs_db')) || [];
+            docsList.unshift({ name, date: new Date().toLocaleDateString(), author: user ? JSON.parse(user).email : 'Гость' });
+            localStorage.setItem('gornyak_docs_db', JSON.stringify(docsList));
+
+            alert(user ? 'Документ успешно загружен в базу!' : 'Документ сохранен. При входе в профиль он закрепится за вашей учетной записью.');
+            addNotification('Загружен документ: ' + name);
+            closeCreateDocModal();
+        }
+
+        function openNewsModal() { openSection('Новости СНТ', '• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.'); }
+        function openDocsModal() { openSection('Документы', 'Устав НСТ, сметы, бланки заявлений.'); }
+
+        // --- ПРОФИЛЬ И АВТОРИЗАЦИЯ ---
         function openProfileAuthModal() {
             const currentUser = localStorage.getItem('gornyak_user');
             if (currentUser) {
@@ -671,11 +842,11 @@
                 document.getElementById('profEmail').innerText = user.email;
                 document.getElementById('profName').innerText = user.name || 'Не указано';
                 document.getElementById('profPlot').innerText = user.plot || 'Не указан';
-                document.getElementById('profileModal').classList.remove('hidden');
                 document.getElementById('profileModal').classList.add('flex');
+                document.getElementById('profileModal').classList.remove('hidden');
             } else {
-                document.getElementById('authModal').classList.remove('hidden');
                 document.getElementById('authModal').classList.add('flex');
+                document.getElementById('authModal').classList.remove('hidden');
             }
         }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('authModal').classList.remove('flex'); }
@@ -692,14 +863,22 @@
         }
 
         function forgotPassword() {
-            const email = prompt('Введите вашу почту для восстановления:');
-            if(email) alert('Инструкция отправлена на ' + email);
+            closeAuthModal();
+            document.getElementById('forgotModal').classList.add('flex');
+            document.getElementById('forgotModal').classList.remove('hidden');
+        }
+        function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
+        function handleForgotSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value.trim();
+            alert('Инструкция по восстановлению пароля отправлена на ' + email);
+            closeForgotModal();
         }
 
         function openRegisterModal() {
             closeAuthModal();
-            document.getElementById('registerModal').classList.remove('hidden');
             document.getElementById('registerModal').classList.add('flex');
+            document.getElementById('registerModal').classList.remove('hidden');
         }
         function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); document.getElementById('registerModal').classList.remove('flex'); }
 
@@ -719,13 +898,9 @@
         function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); document.getElementById('profileModal').classList.remove('flex'); }
         function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); alert('Вы вышли из аккаунта.'); }
 
-        function openNewsModal() { openSection('Новости СНТ', '• Общее собрание членов НСТ.\n• Чистка центральной дороги грейдером.'); }
-        function openCreateNewsModal() { alert('Открытие формы добавления новости'); }
-        function openDocsModal() { openSection('Документы', 'Устав НСТ, сметы, бланки заявлений.'); }
-        function openCreateDocModal() { alert('Открытие формы загрузки документа'); }
-
         fetchLiveWeather();
         updateNotifBadge();
     </script>
 </body>
 </html>
+
