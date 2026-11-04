@@ -22,8 +22,7 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #dceada;
             color: #0f2417;
-            font-size: var(--base-font-size, 14px) !important;
-            transition: font-size 0.2s ease;
+            
         }
 
         .glass-panel {
@@ -153,13 +152,13 @@
         .chat-act { font-size: .6875rem; font-weight: 800; padding: .25rem .6rem; border-radius: 9999px; background: rgba(0,0,0,.07); }
     </style>
 </head>
-<body id="mainBody" class="min-h-screen py-3 px-3 sm:px-6 flex flex-col items-center">
+<body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
-    <div class="w-full max-w-5xl mx-auto flex flex-col gap-3.5">
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-4">
 
-        <!-- Шапка -->
-        <div class="glass-panel relative z-40 rounded-2xl py-2 px-3 sm:px-4 flex items-center justify-between gap-2.5 shadow-sm border border-green-200">
-            <div class="flex items-center gap-2.5 shrink-0">
+        <!-- Шапка: z-40 — выше баннера и плиток, но ниже модалок (z-50) -->
+        <div class="glass-panel relative z-40 rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
+            <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-sm font-black shrink-0">
                     <i class="fa-solid fa-tree"></i>
                 </div>
@@ -169,35 +168,37 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 shrink-0">
-                <div class="relative z-[99999]">
+            <div class="flex items-center gap-1.5">
+                <!-- Поиск -->
+                <div class="relative z-10">
                     <input type="text" id="searchInput" placeholder="Поиск..." 
-                        class="w-24 sm:w-36 glass-panel border border-green-300 rounded-xl py-1.5 pl-7 pr-2 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-green-800 text-xs"></i>
+                        class="w-28 sm:w-40 glass-panel border border-green-300 rounded-xl py-2 pl-8 pr-3 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
                     
-                    <div id="searchDropdown" style="background:#ffffff" class="hidden absolute top-full right-0 mt-2 w-72 rounded-2xl shadow-2xl border border-green-200 z-[99999] overflow-hidden">
+                    <div id="searchDropdown" style="background:#ffffff" class="hidden absolute top-full right-0 mt-2 w-72 rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
                         <div class="p-2 text-[0.5625rem] font-black text-gray-500 uppercase bg-green-100 border-b border-green-200">Результаты поиска</div>
                         <div id="searchResultsList" class="flex flex-col py-1"></div>
                     </div>
                 </div>
 
-                <button onclick="openProfileAuthModal()" class="py-2 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
+                <!-- Кнопка профиля -->
+                <button onclick="openProfileAuthModal()" class="py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
                     <i class="fa-solid fa-user text-xs"></i>
                     <span>Профиль</span>
                 </button>
 
-                <button onclick="openNotifModal()" class="relative w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
+                <button onclick="openNotifModal()" class="relative w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
                     <i class="fa-solid fa-bell text-xs"></i>
                     <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[0.5rem] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
 
-                <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки">
+                <button onclick="openSettingsModal()" class="w-9 h-9 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки">
                     <i class="fa-solid fa-gear text-xs"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Баннер -->
+        <!-- Баннер с живой анимированной иконкой погоды -->
         <div class="forest-banner relative z-0 w-full rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col items-center text-center gap-4 border border-white/20">
             <div class="flex flex-col gap-0.5">
                 <h1 class="text-xl sm:text-3xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
@@ -244,9 +245,6 @@
 
     </div>
 
-    <!-- Подключаем выделенный слой данных (RAM) -->
-    <script src="database.js"></script>
-
     <!-- Модалки -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
@@ -256,7 +254,6 @@
                 Вы не вошли в профиль: запись будет опубликована от имени гостя. Войдите в личный кабинет, чтобы подписать её.
             </div>
             <form onsubmit="submitNewsForm(event)" class="space-y-3">
-                <input type="hidden" id="newsEditId">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Тема новости</label>
                     <input type="text" id="newsTitleInput" required placeholder="Заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
@@ -265,7 +262,7 @@
                     <label class="text-xs font-bold text-gray-600 uppercase">Описание</label>
                     <textarea id="newsDescInput" rows="3" required placeholder="Текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm"></textarea>
                 </div>
-                <button type="submit" id="newsSubmitBtn" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
+                <button type="submit" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
             </form>
         </div>
     </div>
@@ -434,15 +431,10 @@
         </div>
     </div>
 
-    <!-- Модальное окно с правильным innerHTML -->
-    <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700 z-10"><i class="fa-solid fa-xmark"></i></button>
-            <div class="flex justify-between items-center border-b pb-2 pr-10">
-                <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900"></h3>
-                <div id="modalActionBtnContainer"></div>
-            </div>
-            <div id="modalContent" class="text-gray-800 text-base font-semibold py-2 leading-relaxed"></div>
+    <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">\n        <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2"></h3>
+            <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
             <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold shadow-md">Понятно</button>
         </div>
     </div>
@@ -570,6 +562,7 @@
 
         let isEditingMode = false;
         let pressTimer = null;
+
         let selectedCardId = null;
         let resizing = null;
         const GRID_GAP = 8, GRID_COLS = 6, GRID_MAX_ROWS = 8;
@@ -615,19 +608,19 @@
                 const tiny = c.cw <= 2 && c.ch <= 2;
                 const sel = isEditingMode && selectedCardId === c.id;
                 const style = `grid-column:span ${c.cw};grid-row:span ${c.ch};` + (sel ? 'outline:3px solid #2563eb;outline-offset:2px;' : '');
-                const mk = (fn, icon, label, cls) => `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border flex items-center justify-center gap-1.5 backdrop-blur-md transition shrink-0"><i class="fa-solid ${icon} text-[0.625rem]"></i>${narrow ? '' : ' ' + label}</button>`;
-                const clip = (fn, cls) => narrow ? '' : `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border backdrop-blur-md transition shrink-0"><i class="fa-solid fa-paperclip text-[0.625rem]"></i></button>`;
+                const mk = (fn, icon, label, cls) => `<button onclick="${fn}()" class="${narrow ? '' : 'flex-1 sm:flex-none '}py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border flex items-center justify-center gap-1.5 backdrop-blur-md transition"><i class="fa-solid ${icon} text-[0.625rem]"></i>${narrow ? '' : ' ' + label}</button>`;
+                const clip = (fn, cls) => narrow ? '' : `<button onclick="${fn}()" class="py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border backdrop-blur-md transition"><i class="fa-solid fa-paperclip text-[0.625rem]"></i></button>`;
                 let btns = '';
                 if (c.type === 'news') btns = mk('openCreateNewsModal', 'fa-plus', 'Новость', 'text-gray-900 border-gray-300') + clip('openCreateNewsModal', 'text-gray-900 border-gray-300');
                 else if (c.type === 'docs') btns = mk('openCreateDocModal', 'fa-plus', 'Файл', 'text-orange-900 border-orange-300') + clip('openCreateDocModal', 'text-orange-900 border-orange-300');
                 else if (c.hasEditButtons) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
                 const extra = (btns && !tiny)
-                    ? `<div class="flex gap-2 justify-end shrink-0 ml-auto${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
+                    ? `<div class="flex gap-2 ${narrow ? 'w-full justify-center' : 'w-full sm:w-auto shrink-0'}${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
                 const icon = `<div class="icon-box ${c.color} dynamic-icon"><i class="fa-solid ${c.icon}"></i></div>`;
                 const body = narrow
                     ? `<div class="flex flex-col items-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 text-xs leading-tight">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
-                    : `<div class="flex items-center gap-3 w-full min-w-0">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
-                return `<div class="portal-card glass-panel rounded-2xl p-3 flex flex-row items-center justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
+                    : `<div class="flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
+                return `<div class="portal-card glass-panel rounded-2xl p-3 ${narrow ? 'flex-col' : 'flex-col sm:flex-row'} items-center justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
                      style="${style}" data-card-id="${c.id}"
                      onmousedown="startLongPress(event)" ontouchstart="startLongPress(event)" ontouchmove="cancelLongPress()"
                      onmouseup="cancelLongPress()" ontouchend="cancelLongPress()" onclick="cardClick('${c.id}')">
@@ -890,10 +883,9 @@
             }
         });
 
-        function openSection(title, htmlContent, actionBtnHtml = '') {
+        function openSection(title, text) {
             document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalContent').innerHTML = htmlContent;
-            document.getElementById('modalActionBtnContainer').innerHTML = actionBtnHtml;
+            document.getElementById('modalContent').innerText = text;
             document.getElementById('modalWindow').classList.add('flex');
             document.getElementById('modalWindow').classList.remove('hidden');
             searchDropdown.classList.add('hidden');
@@ -1032,7 +1024,7 @@
         }
         function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
 
-        // --- Системные окна ---
+        // --- Системные окна (вместо alert/confirm) ---
         let toastTimer = null;
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -1051,31 +1043,21 @@
             });
         }
 
-        // --- НОВОСТИ, ДОКУМЕНТЫ, О НСТ, КОНТАКТЫ ---
-        function openCreateNewsModal(editId = null) {
-            document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
-            const list = lsGet('gornyak_news_db', []);
-            const titleInput = document.getElementById('newsTitleInput');
-            const descInput = document.getElementById('newsDescInput');
-            const idInput = document.getElementById('newsEditId');
-            
-            if (editId) {
-                const item = list.find(x => x.id === editId);
-                if (item) {
-                    titleInput.value = item.title;
-                    descInput.value = item.desc;
-                    idInput.value = item.id;
-                    document.querySelector('#createNewsModal h3').innerText = 'Редактировать новость';
-                    document.getElementById('newsSubmitBtn').innerText = 'Сохранить изменения';
-                }
-            } else {
-                titleInput.value = '';
-                descInput.value = '';
-                idInput.value = '';
-                document.querySelector('#createNewsModal h3').innerText = 'Добавить новость';
-                document.getElementById('newsSubmitBtn').innerText = 'Опубликовать';
-            }
+        // --- НОВОСТИ, ДОКУМЕНТЫ, О НСТ, КОНТАКТЫ (хранятся на устройстве, не зависят от входа в профиль) ---
+        function openRichSection(title, html) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalWindow').classList.add('flex');
+            document.getElementById('modalWindow').classList.remove('hidden');
+            searchDropdown.classList.add('hidden');
+        }
+        document.getElementById('modalContent').addEventListener('click', e => {
+            const d = e.target.closest('[data-doc]'); if (d) downloadDoc(d.dataset.doc);
+            if (e.target.closest('[data-goto="map"]')) { closeModal(); openTransportModal(); }
+        });
 
+        function openCreateNewsModal() {
+            document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
             document.getElementById('createNewsModal').classList.add('flex');
             document.getElementById('createNewsModal').classList.remove('hidden');
         }
@@ -1086,60 +1068,19 @@
             const form = e.target;
             const title = document.getElementById('newsTitleInput').value.trim();
             const desc = document.getElementById('newsDescInput').value.trim();
-            const editId = document.getElementById('newsEditId').value;
             const list = lsGet('gornyak_news_db', []);
-
-            if (editId) {
-                const item = list.find(x => x.id === editId);
-                if (item) {
-                    item.title = title;
-                    item.desc = desc;
-                }
-                addNotification('Новость отредактирована: ' + title);
-            } else {
-                list.unshift({ id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
-                addNotification('Опубликована новость: ' + title);
-            }
-
+            list.unshift({ id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
             if (!lsSet('gornyak_news_db', list)) return;
             form.reset(); closeCreateNewsModal();
+            addNotification('Опубликована новость: ' + title);
             openNewsModal();
         }
-
-        async function deleteNewsItem(id) {
-            if (await askConfirm('Удалить эту новость?', 'Удалить')) {
-                let list = lsGet('gornyak_news_db', []);
-                list = list.filter(x => x.id !== id);
-                lsSet('gornyak_news_db', list);
-                openNewsModal();
-                addNotification('Новость удалена');
-            }
-        }
-
-        function openNewsModal() { 
-            const savedNews = lsGet('gornyak_news_db', []);
-            const base = [
-                { id: 'b1', title: 'Общее собрание членов НСТ.', desc: 'Состоится очно-заочное голосование.' },
-                { id: 'b2', title: 'Чистка центральной дороги грейдером.', desc: 'Просьба убрать автомобили с обочин.' }
-            ];
-            
-            let html = savedNews.map(n => `
-                <div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 relative">
-                    <div class="flex justify-between items-start">
-                        <div class="text-[0.625rem] font-bold text-gray-500">${esc(n.date)} · ${esc(n.author)}</div>
-                        <div class="flex gap-2">
-                            <button onclick="openCreateNewsModal('${n.id}')" class="text-blue-600 hover:text-blue-800 p-1" title="Редактировать"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="deleteNewsItem('${n.id}')" class="text-red-600 hover:text-red-800 p-1" title="Удалить"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-extrabold text-sm text-gray-900 mt-1">${esc(n.title)}</div>
-                    <div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>
-                </div>`).join('');
-
-            html += base.map(b => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900">${esc(b.title)}</div><div class="text-sm font-medium text-gray-700 mt-0.5">${esc(b.desc)}</div></div>`).join('');
-
-            const addBtnHtml = `<button onclick="openCreateNewsModal()" class="py-1 px-3 bg-[#1c5c38] hover:bg-[#144f2b] text-white rounded-xl text-xs font-extrabold shadow flex items-center gap-1"><i class="fa-solid fa-plus text-[10px]"></i> Добавить</button>`;
-            openSection('Новости СНТ', html, addBtnHtml);
+        function openNewsModal() {
+            const list = lsGet('gornyak_news_db', []);
+            const base = ['Общее собрание членов НСТ.', 'Чистка центральной дороги грейдером.'];
+            openRichSection('Новости СНТ',
+                list.map(n => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="text-[0.625rem] font-bold text-gray-500">${esc(n.date)} · ${esc(n.author)}</div><div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div><div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div></div>`).join('')
+                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join(''));
         }
 
         function openCreateDocModal() {
@@ -1170,10 +1111,9 @@
         function openDocsModal() {
             const list = lsGet('gornyak_docs_db', []);
             const base = ['Устав НСТ «Горняк»', 'Бланки заявлений'];
-            const html = list.map(d => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900 truncate">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(d.date)} · ${Math.max(1, Math.round(d.size / 1024))} КБ</div></div><button data-doc="${d.id}" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-download"></i></button></div>`).join('')
-                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join('');
-            const addBtnHtml = `<button onclick="openCreateDocModal()" class="py-1 px-3 bg-[#1c5c38] hover:bg-[#144f2b] text-white rounded-xl text-xs font-extrabold shadow flex items-center gap-1"><i class="fa-solid fa-plus text-[10px]"></i> Загрузить</button>`;
-            openSection('Документы', html, addBtnHtml);
+            openRichSection('Документы',
+                list.map(d => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900 truncate">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(d.date)} · ${Math.max(1, Math.round(d.size / 1024))} КБ</div></div><button data-doc="${d.id}" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-download"></i></button></div>`).join('')
+                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join(''));
         }
         function downloadDoc(id) {
             const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
@@ -1181,11 +1121,7 @@
         }
 
         const ABOUT_DEFAULT = 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.';
-        function openAbout() { 
-            const txt = localStorage.getItem('gornyak_about') || ABOUT_DEFAULT;
-            const editBtnHtml = `<button onclick="openAboutEdit()" class="py-1 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-extrabold shadow flex items-center gap-1"><i class="fa-solid fa-pen text-[10px]"></i> Редактировать</button>`;
-            openSection('О НСТ «Горняк»', txt, editBtnHtml); 
-        }
+        function openAbout() { openSection('О НСТ «Горняк»', localStorage.getItem('gornyak_about') || ABOUT_DEFAULT); }
         function openAboutEdit() {
             if (!currentUser()) { showToast('Войдите в профиль, чтобы редактировать'); openProfileAuthModal(); return; }
             document.getElementById('aboutText').value = localStorage.getItem('gornyak_about') || ABOUT_DEFAULT;
@@ -1197,7 +1133,6 @@
             const t = document.getElementById('aboutText').value.trim();
             if (!t) { showToast('Текст не может быть пустым'); return; }
             localStorage.setItem('gornyak_about', t); closeAboutModal(); showToast('Сохранено'); addNotification('Обновлено описание «О НСТ»');
-            openAbout();
         }
 
         const BOARD = [
