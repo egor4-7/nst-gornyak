@@ -2,13 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>НСТ «Горняк» — Информационный портал</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-        
+
         * {
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -16,14 +16,18 @@
             user-select: none;
             -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
 
+        html { font-size: calc(var(--fs, 14) / 14 * 16px); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; max-width: 100%; }
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #dceada;
             color: #0f2417;
-            
+            overflow-x: hidden;
+            max-width: 100%;
         }
+        input, textarea { -webkit-user-select: text; user-select: text; }
 
         .glass-panel {
             background: rgba(255, 255, 255, 0.85);
@@ -32,7 +36,6 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 20px 40px rgba(0, 40, 20, 0.08);
         }
-
         .glass-dark {
             background: rgba(15, 42, 28, 0.92);
             backdrop-filter: blur(30px) saturate(200%);
@@ -40,9 +43,8 @@
             border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
-
         .forest-banner {
-            background: linear-gradient(135deg, rgba(16, 51, 30, 0.92), rgba(28, 92, 56, 0.85)), 
+            background: linear-gradient(135deg, rgba(16, 51, 30, 0.92), rgba(28, 92, 56, 0.85)),
                         url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
@@ -51,99 +53,66 @@
         .portal-card {
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-        .portal-card:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 15px 30px -10px rgba(28, 92, 56, 0.2);
+        @media (hover: hover) {
+            .portal-card:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 15px 30px -10px rgba(28, 92, 56, 0.2); }
         }
 
-        @keyframes iosWiggle {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(-0.8deg); }
-            75% { transform: rotate(0.8deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .is-editing {
-            animation: iosWiggle 0.25s ease-in-out infinite;
-            border: 2px dashed rgba(28, 92, 56, 0.6) !important;
-            background: rgba(255, 255, 255, 0.95) !important;
-        }
+        @keyframes iosWiggle { 0% { transform: rotate(0deg); } 25% { transform: rotate(-0.8deg); } 75% { transform: rotate(0.8deg); } 100% { transform: rotate(0deg); } }
+        .is-editing { animation: iosWiggle 0.25s ease-in-out infinite; border: 2px dashed rgba(28, 92, 56, 0.6) !important; background: rgba(255, 255, 255, 0.95) !important; }
 
-        .modal-animate {
-            animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.92) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        .modal-animate { animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.92) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-        @keyframes weatherFloat {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-3px) scale(1.04); }
-            100% { transform: translateY(0px) scale(1); }
-        }
-        .animate-weather {
-            animation: weatherFloat 3s ease-in-out infinite;
-        }
+        @keyframes weatherFloat { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.04); } 100% { transform: translateY(0) scale(1); } }
+        .animate-weather { animation: weatherFloat 3s ease-in-out infinite; }
+        .weather-icon-box { position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .glass-cloud { position: absolute; width: 32px; height: 18px; background: rgba(255, 255, 255, 0.9); border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); bottom: 4px; left: 4px; }
+        .glass-sun { position: absolute; top: 2px; right: 4px; width: 20px; height: 20px; background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900); border-radius: 50%; box-shadow: 0 0 10px rgba(255, 153, 0, 0.8); }
 
-        .weather-icon-box {
-            position: relative;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .glass-cloud {
-            position: absolute;
-            width: 32px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            bottom: 4px;
-            left: 4px;
-        }
-        .glass-sun {
-            position: absolute;
-            top: 2px;
-            right: 4px;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 153, 0, 0.8);
-        }
+        /* ===== ИКОНКИ: 4 стиля (classic / glass / ios / round) ===== */
+        .ic { position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; isolation: isolate; border-radius: var(--r, 16px); }
+        .ic > i { position: relative; z-index: 3; }
+        .icon-box { --r: 16px; width: var(--icon-w, 44px) !important; height: var(--icon-h, 44px) !important; font-size: var(--icon-f, 16px) !important; }
+        .hdr-icon { --r: 12px; width: 36px; height: 36px; font-size: 12px; }
+        .ic-pv { --r: 11px; width: 34px; height: 34px; font-size: 13px; }
 
-        .icon-box {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border-radius: 16px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            width: var(--icon-w, 44px) !important;
-            height: var(--icon-h, 44px) !important;
-            font-size: var(--icon-f, 16px) !important;
-        }
-        .icon-transport { background: linear-gradient(135deg, rgba(110,231,183,0.8), rgba(16,185,129,0.9)); color: #064e3b; }
-        .icon-tarif { background: linear-gradient(135deg, rgba(253,230,138,0.9), rgba(245,158,11,0.9)); color: #78350f; }
-        .icon-news { background: linear-gradient(135deg, rgba(209,213,219,0.9), rgba(107,114,128,0.9)); color: #111827; }
-        .icon-docs { background: linear-gradient(135deg, rgba(254,215,170,0.9), rgba(249,115,22,0.9)); color: #7c2d12; }
-        .icon-contacts { background: linear-gradient(135deg, rgba(233,213,255,0.9), rgba(168,85,247,0.9)); color: #581c87; }
-        .icon-chat { background: linear-gradient(135deg, rgba(186,230,253,0.9), rgba(14,165,233,0.9)); color: #0369a1; }
-        .icon-money { background: linear-gradient(135deg, rgba(254,205,211,0.9), rgba(244,63,94,0.9)); color: #881337; }
-        .icon-info { background: linear-gradient(135deg, rgba(147,197,253,0.9), rgba(30,58,138,0.9)); color: #eff6ff; }
-    
-        html { font-size: calc(var(--fs, 14) / 14 * 16px); -webkit-text-size-adjust: 100%; }
-        input, textarea { -webkit-user-select: text; user-select: text; }
-        .cards-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; grid-auto-rows: var(--u, 52px); grid-auto-flow: row dense; }
+        .icon-transport { --c1: #6ee7b7; --c2: #10b981; --fg: #064e3b; }
+        .icon-tarif { --c1: #fde68a; --c2: #f59e0b; --fg: #78350f; }
+        .icon-news { --c1: #d1d5db; --c2: #6b7280; --fg: #111827; }
+        .icon-docs { --c1: #fed7aa; --c2: #f97316; --fg: #7c2d12; }
+        .icon-contacts { --c1: #e9d5ff; --c2: #a855f7; --fg: #581c87; }
+        .icon-chat { --c1: #bae6fd; --c2: #0ea5e9; --fg: #0369a1; }
+        .icon-money { --c1: #fecdd3; --c2: #f43f5e; --fg: #881337; }
+        .icon-info { --c1: #93c5fd; --c2: #1e3a8a; --fg: #eff6ff; }
+        .icon-bell { --c1: #fcd34d; --c2: #f97316; --fg: #fff; }
+        .icon-gear { --c1: #a5b4fc; --c2: #6366f1; --fg: #fff; }
+
+        /* 1. Текущий */
+        .ic[data-istyle="classic"] { background: linear-gradient(135deg, var(--c1), var(--c2)); color: var(--fg); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+        .ic[data-istyle="classic"].icon-bell { --c1: #f3f4f6; --c2: #e5e7eb; --fg: #1f2937; border: 1px solid #e5e7eb; box-shadow: none; }
+        .ic[data-istyle="classic"].icon-gear { --c1: #e5e7eb; --c2: #d1d5db; --fg: #374151; border: 1px solid #d1d5db; box-shadow: none; }
+
+        /* 2. Стекло */
+        .ic[data-istyle="glass"] { background: transparent; box-shadow: none; color: var(--c2); }
+        .ic[data-istyle="glass"]::before { content: ""; position: absolute; left: 6%; top: 6%; width: 62%; height: 62%; border-radius: 30%; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: .9; z-index: 1; }
+        .ic[data-istyle="glass"]::after { content: ""; position: absolute; right: 6%; bottom: 6%; width: 62%; height: 62%; border-radius: 30%; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 6px 14px rgba(0,0,0,.12); z-index: 2; }
+        .ic[data-istyle="glass"] > i { left: 9%; top: 9%; }
+
+        /* 3. iOS 26 */
+        .ic[data-istyle="ios"] { border-radius: 26%; background: linear-gradient(180deg, var(--c1) 0%, var(--c2) 100%); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 4px rgba(0,0,0,.12); }
+        .ic[data-istyle="ios"]::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 55%); z-index: 2; pointer-events: none; }
+        .ic[data-istyle="ios"] > i { filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
+
+        /* 4. Круглые */
+        .ic[data-istyle="round"] { border-radius: 50%; background: #fff; color: var(--c2); box-shadow: 0 6px 16px rgba(0,0,0,.12), inset 0 0 0 1px rgba(0,0,0,.05); }
+        .ic[data-istyle="round"]::before { content: ""; position: absolute; left: 20%; top: 20%; width: 56%; height: 56%; border-radius: 38%; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: .35; z-index: 1; }
+
+        .cards-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; grid-auto-rows: minmax(var(--u, 52px), auto); grid-auto-flow: row dense; }
         .cards-grid > .portal-card { min-height: 0; }
         .resize-handle { position: absolute; right: 8px; bottom: 8px; width: 26px; height: 26px; border-right: 5px solid #1c5c38; border-bottom: 5px solid #1c5c38; border-radius: 0 0 12px 0; touch-action: none; cursor: nwse-resize; z-index: 30; }
         .is-editing.resizing { animation: none; }
@@ -154,57 +123,54 @@
 </head>
 <body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
-    <div class="w-full max-w-5xl mx-auto flex flex-col gap-4">
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-4 min-w-0">
 
-        <!-- Шапка: z-40 — выше баннера и плиток, но ниже модалок (z-50) -->
-        <div class="glass-panel relative z-40 rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 shadow-sm border border-green-200">
-            <div class="flex items-center gap-2">
+        <!-- Шапка -->
+        <div class="glass-panel relative z-40 rounded-2xl p-2.5 sm:p-3 flex flex-wrap items-center gap-2 shadow-sm border border-green-200">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
                 <div class="w-8 h-8 rounded-xl bg-emerald-100 text-[#1c5c38] flex items-center justify-center text-sm font-black shrink-0">
                     <i class="fa-solid fa-tree"></i>
                 </div>
-                <div>
-                    <h2 class="font-black text-xs text-gray-900 leading-tight">НСТ «Горняк»</h2>
+                <div class="min-w-0">
+                    <h2 class="font-black text-xs text-gray-900 leading-tight truncate">НСТ «Горняк»</h2>
                     <p class="text-[0.5rem] text-gray-600 font-bold">Мобильная версия</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-1.5">
-                <!-- Поиск -->
-                <div class="relative z-10">
-                    <input type="text" id="searchInput" placeholder="Поиск..." 
-                        class="w-28 sm:w-40 glass-panel border border-green-300 rounded-xl py-2 pl-8 pr-3 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
-                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
-                    
-                    <div id="searchDropdown" style="background:#ffffff" class="hidden absolute top-full right-0 mt-2 w-72 rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden">
-                        <div class="p-2 text-[0.5625rem] font-black text-gray-500 uppercase bg-green-100 border-b border-green-200">Результаты поиска</div>
-                        <div id="searchResultsList" class="flex flex-col py-1"></div>
-                    </div>
-                </div>
-
-                <!-- Кнопка профиля -->
-                <button onclick="openProfileAuthModal()" class="py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
+            <div class="flex items-center gap-1.5 shrink-0 sm:order-3">
+                <button onclick="openProfileAuthModal()" class="py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
                     <i class="fa-solid fa-user text-xs"></i>
                     <span>Профиль</span>
                 </button>
-
-                <button onclick="openNotifModal()" class="relative w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
-                    <i class="fa-solid fa-bell text-xs"></i>
-                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[0.5rem] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
+                <button onclick="openNotifModal()" class="ic hdr-icon icon-bell" data-istyle="classic" aria-label="Уведомления">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[0.5rem] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow" style="z-index:5">0</span>
                 </button>
-
-                <button onclick="openSettingsModal()" class="w-9 h-9 rounded-xl bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition text-gray-700 shrink-0 border border-gray-300" title="Настройки">
-                    <i class="fa-solid fa-gear text-xs"></i>
+                <button onclick="openSettingsModal()" class="ic hdr-icon icon-gear" data-istyle="classic" title="Настройки" aria-label="Настройки">
+                    <i class="fa-solid fa-gear"></i>
                 </button>
+            </div>
+
+            <!-- Поиск -->
+            <div class="relative w-full sm:w-44 sm:order-2">
+                <input type="text" id="searchInput" placeholder="Поиск..."
+                    class="w-full glass-panel border border-green-300 rounded-xl py-2 pl-8 pr-3 text-xs font-bold text-gray-950 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
+                <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-green-800 text-xs"></i>
+
+                <div id="searchDropdown" style="background:#ffffff" class="hidden absolute top-full left-0 right-0 sm:left-auto sm:w-72 mt-2 rounded-2xl shadow-2xl border border-green-200 z-50 overflow-hidden max-h-[60vh] overflow-y-auto">
+                    <div class="p-2 text-[0.5625rem] font-black text-gray-500 uppercase bg-green-100 border-b border-green-200">Результаты поиска</div>
+                    <div id="searchResultsList" class="flex flex-col py-1"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Баннер с живой анимированной иконкой погоды -->
+        <!-- Баннер -->
         <div class="forest-banner relative z-0 w-full rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col items-center text-center gap-4 border border-white/20">
             <div class="flex flex-col gap-0.5">
                 <h1 class="text-xl sm:text-3xl font-black tracking-tight drop-shadow-md">НСТ «Горняк»</h1>
                 <p class="text-green-100 text-[0.6875rem] sm:text-xs font-semibold opacity-95">Информационный портал для садоводов</p>
             </div>
-            
+
             <div class="w-full max-w-md bg-black/40 backdrop-blur-2xl p-3.5 rounded-2xl border border-white/20 shadow-lg flex flex-col gap-2.5">
                 <div onclick="openWeatherModal()" class="flex justify-between items-center gap-2 cursor-pointer hover:opacity-95 transition pb-2 border-b border-white/15">
                     <div class="flex items-center gap-2.5">
@@ -217,7 +183,7 @@
                             <span class="text-[0.625rem] text-green-200 font-bold" id="widgetDesc">Котельники • Онлайн</span>
                         </div>
                     </div>
-                    <div class="text-[0.625rem] text-green-100 font-semibold bg-white/10 px-2.5 py-1 rounded-lg border border-white/10">
+                    <div class="text-[0.625rem] text-green-100 font-semibold bg-white/10 px-2.5 py-1 rounded-lg border border-white/10 whitespace-nowrap">
                         <i class="fa-solid fa-sun text-amber-300"></i> <span id="sunriseTxt">06:20</span> &nbsp;|&nbsp; <i class="fa-solid fa-moon text-sky-200"></i> <span id="sunsetTxt">18:45</span>
                     </div>
                 </div>
@@ -229,10 +195,8 @@
             </div>
         </div>
 
-        <!-- Контейнер карточек с поддержкой iOS-режима редактирования -->
         <div id="cardsContainer" class="relative z-0 cards-grid pb-24"></div>
 
-        <!-- Кнопка «Готово» для режима редактирования -->
         <div id="editModeBar" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md px-2.5 py-2 rounded-full shadow-2xl z-50 items-center gap-1.5 max-w-[96vw]">
             <button class="tb" onclick="moveSelected(-1)" title="Выше"><i class="fa-solid fa-arrow-up"></i></button>
             <button class="tb" onclick="moveSelected(1)" title="Ниже"><i class="fa-solid fa-arrow-down"></i></button>
@@ -270,7 +234,7 @@
     <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeCreateDocModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Загрузить документ</h3>
+            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Добавить файл</h3>
             <div id="docWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
                 Вы не вошли в профиль: запись будет опубликована от имени гостя. Войдите в личный кабинет, чтобы подписать её.
             </div>
@@ -289,13 +253,34 @@
     </div>
 
     <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 border border-green-200 relative">
+        <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 border border-green-200 relative max-h-[92vh] overflow-y-auto">
             <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-extrabold text-gray-900 border-b pb-2">Настройки интерфейса</h3>
             <div class="flex flex-col gap-4 text-xs font-bold text-gray-700">
                 <div>
                     <label class="block mb-1">Размер шрифта:</label>
                     <input type="range" id="fontSizeRange" min="12" max="18" value="14" class="w-full accent-[#1c5c38]" oninput="previewFontSize(this.value)">
+                </div>
+                <div>
+                    <label class="block mb-2">Стиль иконок:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div data-style-opt="classic" onclick="setIconStyle('classic')" class="cursor-pointer flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-green-50 border border-green-200">
+                            <div class="flex gap-1"><div class="ic ic-pv ic-preview icon-transport" data-istyle="classic"><i class="fa-solid fa-bus"></i></div><div class="ic ic-pv ic-preview icon-docs" data-istyle="classic"><i class="fa-solid fa-folder-open"></i></div><div class="ic ic-pv ic-preview icon-bell" data-istyle="classic"><i class="fa-solid fa-bell"></i></div></div>
+                            <span class="text-[0.625rem]">Текущий</span>
+                        </div>
+                        <div data-style-opt="glass" onclick="setIconStyle('glass')" class="cursor-pointer flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-green-50 border border-green-200">
+                            <div class="flex gap-1"><div class="ic ic-pv ic-preview icon-transport" data-istyle="glass"><i class="fa-solid fa-bus"></i></div><div class="ic ic-pv ic-preview icon-docs" data-istyle="glass"><i class="fa-solid fa-folder-open"></i></div><div class="ic ic-pv ic-preview icon-bell" data-istyle="glass"><i class="fa-solid fa-bell"></i></div></div>
+                            <span class="text-[0.625rem]">Стекло</span>
+                        </div>
+                        <div data-style-opt="ios" onclick="setIconStyle('ios')" class="cursor-pointer flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-green-50 border border-green-200">
+                            <div class="flex gap-1"><div class="ic ic-pv ic-preview icon-transport" data-istyle="ios"><i class="fa-solid fa-bus"></i></div><div class="ic ic-pv ic-preview icon-docs" data-istyle="ios"><i class="fa-solid fa-folder-open"></i></div><div class="ic ic-pv ic-preview icon-bell" data-istyle="ios"><i class="fa-solid fa-bell"></i></div></div>
+                            <span class="text-[0.625rem]">iOS 26</span>
+                        </div>
+                        <div data-style-opt="round" onclick="setIconStyle('round')" class="cursor-pointer flex flex-col items-center gap-1.5 p-2 rounded-2xl bg-green-50 border border-green-200">
+                            <div class="flex gap-1"><div class="ic ic-pv ic-preview icon-transport" data-istyle="round"><i class="fa-solid fa-bus"></i></div><div class="ic ic-pv ic-preview icon-docs" data-istyle="round"><i class="fa-solid fa-folder-open"></i></div><div class="ic ic-pv ic-preview icon-bell" data-istyle="round"><i class="fa-solid fa-bell"></i></div></div>
+                            <span class="text-[0.625rem]">Круглые</span>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="block mb-2">Адаптация размера иконок:</label>
@@ -316,7 +301,7 @@
         </div>
     </div>
 
-    <!-- Модалка чата -->
+    <!-- Чат -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-3xl w-full shadow-2xl flex flex-col h-[88vh] border border-green-200 relative overflow-hidden">
             <div class="flex items-center gap-2 border-b border-gray-200 px-4 py-3">
@@ -395,7 +380,7 @@
             <div class="space-y-3 text-sm font-semibold text-gray-800">
                 <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
                     <span class="text-xs text-gray-500 block">Электронная почта:</span>
-                    <b id="profEmail" class="text-gray-900">...</b>
+                    <b id="profEmail" class="text-gray-900 break-all">...</b>
                 </div>
                 <div class="bg-white/90 p-3.5 rounded-xl border border-gray-200">
                     <span class="text-xs text-gray-500 block">ФИО:</span>
@@ -413,12 +398,12 @@
         </div>
     </div>
 
-    <!-- Уведомления, модалки погоды, транспорта, сброса пароля -->
+    <!-- Уведомления -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <div class="flex items-center gap-2 text-[#1c5c38] border-b pb-2">
-                <i class="fa-solid fa-bell text-xl"></i>
+            <div class="flex items-center gap-2.5 text-[#1c5c38] border-b pb-2">
+                <div class="ic hdr-icon icon-bell" data-istyle="classic"><i class="fa-solid fa-bell"></i></div>
                 <h3 class="text-xl font-extrabold">Уведомления</h3>
             </div>
             <div id="notifContainer" class="flex flex-col gap-3 py-2 max-h-[50vh] overflow-y-auto">
@@ -431,16 +416,17 @@
         </div>
     </div>
 
-    <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">\n        <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
+    <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2"></h3>
+            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2 pr-10"></h3>
             <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
             <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold shadow-md">Понятно</button>
         </div>
     </div>
 
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
+        <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20 max-h-[92vh] overflow-y-auto">
             <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
             <div class="flex items-center gap-3 border-b border-white/10 pb-4">
                 <div class="weather-icon-box animate-weather"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
@@ -470,16 +456,16 @@
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
             <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-2xl font-black text-gray-900 border-b pb-2">Транспорт и расписание</h3>
+            <h3 class="text-2xl font-black text-gray-900 border-b pb-2 pr-10">Транспорт и расписание</h3>
             <div class="text-xs font-bold text-gray-700"><i class="fa-solid fa-location-dot text-red-600"></i> Правление: Центральная улица, дом 247 · <a href="https://yandex.ru/maps/?pt=37.884565,55.642572&z=17&l=map" target="_blank" class="text-blue-700 underline">открыть в Яндекс.Картах</a></div>
             <div class="w-full h-56 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative mb-2">
                 <iframe src="https://yandex.ru/map-widget/v1/?ll=37.884565%2C55.642572&z=16&pt=37.884565%2C55.642572%2Cpm2rdm&l=map" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
             <div class="flex flex-col gap-3 text-sm text-gray-800">
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
+                    <div class="flex justify-between items-center gap-2 font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 474к: от Карьера — Метро Котельники</span>
-                        <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold">Раскрыть</button>
+                        <button onclick="toggleRoute('route1')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold shrink-0">Раскрыть</button>
                     </div>
                     <div id="route1" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
                         <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
@@ -487,9 +473,9 @@
                     </div>
                 </div>
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
+                    <div class="flex justify-between items-center gap-2 font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 1к: Остановка Карьер — Метро Котельники</span>
-                        <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold">Раскрыть</button>
+                        <button onclick="toggleRoute('route2')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold shrink-0">Раскрыть</button>
                     </div>
                     <div id="route2" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
                         <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
@@ -497,9 +483,9 @@
                     </div>
                 </div>
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
+                    <div class="flex justify-between items-center gap-2 font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 26: до Силиката (через Карьер)</span>
-                        <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold">Раскрыть</button>
+                        <button onclick="toggleRoute('route3')" class="text-xs bg-gray-100 hover:bg-gray-200 px-3.5 py-1.5 rounded-xl text-gray-800 font-bold shrink-0">Раскрыть</button>
                     </div>
                     <div id="route3" class="hidden mt-3 pt-3 border-t border-gray-100 text-sm font-extrabold text-gray-800 leading-loose">
                         <span class="text-[#1c5c38]">Отправление от остановки «Карьер»:</span><br>
@@ -526,6 +512,27 @@
         </div>
     </div>
 
+    <!-- Редактирование (новости, документы, тарифы, «О НСТ») -->
+    <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-[60]">
+        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative max-h-[92vh] overflow-y-auto">
+            <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
+            <h3 id="editHead" class="text-xl font-extrabold text-gray-900 border-b pb-2 pr-10">Редактировать</h3>
+            <div id="editTitleWrap">
+                <label class="text-xs font-bold text-gray-600 uppercase">Название</label>
+                <input type="text" id="editTitle" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
+            </div>
+            <div id="editTextWrap">
+                <label class="text-xs font-bold text-gray-600 uppercase">Текст</label>
+                <textarea id="editText" rows="8" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold"></textarea>
+            </div>
+            <div id="editFileWrap">
+                <label class="text-xs font-bold text-gray-600 uppercase">Заменить файл (необязательно)</label>
+                <input type="file" id="editFile" class="w-full mt-1 text-xs text-gray-500">
+            </div>
+            <button onclick="saveEdit()" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Сохранить</button>
+        </div>
+    </div>
+
     <div id="confirmModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-[70]">
         <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200">
             <p id="confirmText" class="text-sm font-bold text-gray-900 leading-relaxed"></p>
@@ -536,36 +543,36 @@
         </div>
     </div>
     <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[80] bg-[#10331e] text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl max-w-[92vw] text-center"></div>
-    <div id="aboutModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeAboutModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Редактировать «О НСТ»</h3>
-            <textarea id="aboutText" rows="9" class="w-full p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold"></textarea>
-            <button onclick="saveAbout()" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Сохранить</button>
-        </div>
-    </div>
 
     <script>
         let liveWeatherData = null;
         let selectedIconSize = 'medium';
+        let selectedIconStyle = 'classic';
 
         const defaultCards = [
-            { id: 'transport', title: 'Транспорт и Карта', desc: 'Маршруты и Яндекс.Карта', icon: 'fa-bus', color: 'icon-transport', actionName: 'openTransportModal', size: 'normal' },
-            { id: 'tarif', title: 'Тарифы', desc: 'Свет, вода, услуги', icon: 'fa-bolt', color: 'icon-tarif', actionName: 'openTarifModal', size: 'normal' },
-            { id: 'news', title: 'Новости', desc: 'Объявления правления', icon: 'fa-newspaper', color: 'icon-news', actionName: 'openNewsModal', hasButtons: true, type: 'news', size: 'normal' },
-            { id: 'docs', title: 'Документы', desc: 'Устав, бланки, акты', icon: 'fa-folder-open', color: 'icon-docs', actionName: 'openDocsModal', hasButtons: true, type: 'docs', size: 'normal' },
-            { id: 'contacts', title: 'Контакты', desc: 'Правление и службы', icon: 'fa-address-book', color: 'icon-contacts', actionName: 'openContactsModal', size: 'normal' },
-            { id: 'chat', title: 'Общение', desc: 'Чат соседей, ответы и файлы', icon: 'fa-comments', color: 'icon-chat', actionName: 'openChatModal', size: 'normal' },
-            { id: 'money', title: 'Взносы', desc: 'Оплата и история', icon: 'fa-credit-card', color: 'icon-money', actionName: 'openMoneyModal', size: 'normal' },
-            { id: 'info', title: 'О НСТ', desc: 'История и схема', icon: 'fa-circle-info', color: 'icon-info', actionName: 'openInfoModalMain', hasEditButtons: true, size: 'normal' }
+            { id: 'transport', title: 'Транспорт и Карта', desc: 'Маршруты и Яндекс.Карта', icon: 'fa-bus', color: 'icon-transport', actionName: 'openTransportModal' },
+            { id: 'tarif', title: 'Тарифы', desc: 'Свет, вода, услуги', icon: 'fa-bolt', color: 'icon-tarif', actionName: 'openTarifModal' },
+            { id: 'news', title: 'Новости', desc: 'Объявления правления', icon: 'fa-newspaper', color: 'icon-news', actionName: 'openNewsModal', hasButtons: true, type: 'news' },
+            { id: 'docs', title: 'Документы', desc: 'Устав, бланки, акты', icon: 'fa-folder-open', color: 'icon-docs', actionName: 'openDocsModal', hasButtons: true, type: 'docs' },
+            { id: 'contacts', title: 'Контакты', desc: 'Правление и службы', icon: 'fa-address-book', color: 'icon-contacts', actionName: 'openContactsModal' },
+            { id: 'chat', title: 'Общение', desc: 'Чат соседей, ответы и файлы', icon: 'fa-comments', color: 'icon-chat', actionName: 'openChatModal' },
+            { id: 'money', title: 'Взносы', desc: 'Оплата и история', icon: 'fa-credit-card', color: 'icon-money', actionName: 'openMoneyModal' },
+            { id: 'info', title: 'О НСТ', desc: 'История и схема', icon: 'fa-circle-info', color: 'icon-info', actionName: 'openInfoModalMain', hasEditButtons: true }
         ];
 
         let isEditingMode = false;
         let pressTimer = null;
-
         let selectedCardId = null;
         let resizing = null;
-        const GRID_GAP = 8, GRID_COLS = 6, GRID_MAX_ROWS = 8;
+        const GRID_GAP = 8, GRID_COLS = 6, GRID_MAX_ROWS = 8, DEF_W = 2, DEF_H = 2;
+
+        // Сброс старой раскладки плиток (версия 3 = размер по умолчанию 100%)
+        try {
+            if (localStorage.getItem('gornyak_cards_v') !== '3') {
+                localStorage.removeItem('gornyak_cards');
+                localStorage.setItem('gornyak_cards_v', '3');
+            }
+        } catch (e) {}
 
         function getStoredCards() {
             let saved = null;
@@ -573,25 +580,24 @@
             const out = [];
             if (Array.isArray(saved)) saved.forEach(c => {
                 const d = defaultCards.find(x => x.id === c.id);
-                if (d) out.push({ ...d, cw: Math.min(GRID_COLS, Math.max(1, c.cw || GRID_COLS)), ch: Math.min(GRID_MAX_ROWS, Math.max(1, c.ch || 2)) });
+                if (d) out.push({ ...d, cw: Math.min(GRID_COLS, Math.max(1, c.cw || DEF_W)), ch: Math.min(GRID_MAX_ROWS, Math.max(1, c.ch || DEF_H)) });
             });
-            defaultCards.forEach(d => { if (!out.find(c => c.id === d.id)) out.push({ ...d, cw: GRID_COLS, ch: 2 }); });
+            defaultCards.forEach(d => { if (!out.find(c => c.id === d.id)) out.push({ ...d, cw: DEF_W, ch: DEF_H }); });
             return out;
         }
-
         function saveStoredCards(cards) {
             localStorage.setItem('gornyak_cards', JSON.stringify(cards.map(c => ({ id: c.id, cw: c.cw, ch: c.ch }))));
         }
 
-        function executeCardAction(actionName) {
-            if (actionName === 'openTransportModal') openTransportModal();
-            else if (actionName === 'openTarifModal') openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год');
-            else if (actionName === 'openNewsModal') openNewsModal();
-            else if (actionName === 'openDocsModal') openDocsModal();
-            else if (actionName === 'openContactsModal') openContactsModal();
-            else if (actionName === 'openChatModal') openChatModal();
-            else if (actionName === 'openMoneyModal') openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.');
-            else if (actionName === 'openInfoModalMain') openAbout();
+        function executeCardAction(a) {
+            if (a === 'openTransportModal') openTransportModal();
+            else if (a === 'openTarifModal') openTarif();
+            else if (a === 'openNewsModal') openNewsModal();
+            else if (a === 'openDocsModal') openDocsModal();
+            else if (a === 'openContactsModal') openContactsModal();
+            else if (a === 'openChatModal') openChatModal();
+            else if (a === 'openMoneyModal') openSection('Взносы', 'Оплата членских взносов онлайн через реквизиты НСТ в вашем банке.');
+            else if (a === 'openInfoModalMain') openAbout();
         }
 
         function gridUnit() {
@@ -616,7 +622,7 @@
                 else if (c.hasEditButtons) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
                 const extra = (btns && !tiny)
                     ? `<div class="flex gap-2 ${narrow ? 'w-full justify-center' : 'w-full sm:w-auto shrink-0'}${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
-                const icon = `<div class="icon-box ${c.color} dynamic-icon"><i class="fa-solid ${c.icon}"></i></div>`;
+                const icon = `<div class="ic icon-box ${c.color}" data-istyle="classic"><i class="fa-solid ${c.icon}"></i></div>`;
                 const body = narrow
                     ? `<div class="flex flex-col items-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 text-xs leading-tight">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
                     : `<div class="flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
@@ -627,7 +633,8 @@
                     ${body}${extra}${isEditingMode ? `<div class="resize-handle" onpointerdown="startResize(event,'${c.id}')"></div>` : ''}
                 </div>`;
             }).join('');
-            if (typeof applyIconSize === 'function' && selectedIconSize) applyIconSize(selectedIconSize);
+            applyIconSize(selectedIconSize);
+            applyIconStyle();
         }
 
         window.addEventListener('resize', () => { if (!resizing) renderCards(); });
@@ -638,7 +645,7 @@
             if (c) executeCardAction(c.actionName);
         }
 
-        function startLongPress(e) {
+        function startLongPress() {
             if (isEditingMode) return;
             cancelLongPress();
             pressTimer = setTimeout(() => {
@@ -658,7 +665,6 @@
             bar.classList.add('hidden'); bar.classList.remove('flex');
             renderCards();
         }
-
         function selectedOrWarn(cards) {
             const i = cards.findIndex(c => c.id === selectedCardId);
             if (i < 0) showToast('Сначала нажмите на плитку');
@@ -672,11 +678,10 @@
         }
         function presetSelected(kind) {
             const cards = getStoredCards(); const i = selectedOrWarn(cards); if (i < 0) return;
-            const p = { S: [2, 2], M: [4, 4], L: [6, 6], A: [6, 2] }[kind];
+            const p = { S: [2, 2], M: [4, 4], L: [6, 6], A: [DEF_W, DEF_H] }[kind];
             cards[i].cw = p[0]; cards[i].ch = p[1];
             saveStoredCards(cards); renderCards();
         }
-
         function startResize(e, id) {
             e.stopPropagation(); e.preventDefault();
             const card = e.target.closest('.portal-card');
@@ -709,59 +714,62 @@
             renderCards();
         }
 
+        // --- УТИЛИТЫ ---
+        const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+        const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { showToast('Не хватает места на устройстве'); return false; } };
+        const show = id => { const m = document.getElementById(id); m.classList.add('flex'); m.classList.remove('hidden'); };
+        const hide = id => { const m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('flex'); };
+        function loadProfiles() { return lsGet('gornyak_profiles', {}); }
+        function saveProfiles(p) { lsSet('gornyak_profiles', p); }
+        function currentUser() { return lsGet('gornyak_user', null); }
+        function myUid() { const u = currentUser(); return u ? u.email : 'guest'; }
+        function myNick() { const u = currentUser(); return u ? (u.name || u.email.split('@')[0]) : 'Гость'; }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.remove('hidden');
+            clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('hidden'), 3500);
+        }
+        function askConfirm(msg, yesText) {
+            return new Promise(res => {
+                const m = document.getElementById('confirmModal');
+                document.getElementById('confirmText').textContent = msg;
+                document.getElementById('confirmYes').textContent = yesText || 'Да';
+                const done = v => { hide('confirmModal'); res(v); };
+                document.getElementById('confirmYes').onclick = () => done(true);
+                document.getElementById('confirmNo').onclick = () => done(false);
+                show('confirmModal');
+            });
+        }
+
         // --- УВЕДОМЛЕНИЯ ---
         function addNotification(text) {
-            let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
+            const notifs = lsGet('gornyak_notifications', []);
             notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-            localStorage.setItem('gornyak_notifications', JSON.stringify(notifs));
+            lsSet('gornyak_notifications', notifs);
             updateNotifBadge();
         }
-
         function updateNotifBadge() {
-            const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
+            const n = lsGet('gornyak_notifications', []).length;
             const badge = document.getElementById('notifBadge');
-            if (badge) {
-                if (notifs.length > 0) {
-                    badge.innerText = notifs.length;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-            }
+            if (n > 0) { badge.innerText = n; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
         }
-
         function openNotifModal() {
             const container = document.getElementById('notifContainer');
-            const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
-            if (notifs.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>`;
-            } else {
-                container.innerHTML = notifs.map(n => `
-                    <div class="bg-green-50/90 p-3.5 rounded-2xl border border-green-200 text-xs">
-                        <div class="text-[0.625rem] font-bold text-emerald-800 mb-0.5">${n.time}</div>
-                        <div class="font-bold text-gray-800">${n.text}</div>
-                    </div>`).join('');
-            }
-            document.getElementById('notifModal').classList.add('flex');
-            document.getElementById('notifModal').classList.remove('hidden');
+            const notifs = lsGet('gornyak_notifications', []);
+            container.innerHTML = notifs.length === 0
+                ? `<div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>`
+                : notifs.map(n => `<div class="bg-green-50/90 p-3.5 rounded-2xl border border-green-200 text-xs"><div class="text-[0.625rem] font-bold text-emerald-800 mb-0.5">${esc(n.time)}</div><div class="font-bold text-gray-800">${esc(n.text)}</div></div>`).join('');
+            show('notifModal');
         }
-        function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
+        function closeNotifModal() { hide('notifModal'); }
+        function clearNotifications() { localStorage.removeItem('gornyak_notifications'); updateNotifBadge(); openNotifModal(); }
 
-        function clearNotifications() {
-            localStorage.removeItem('gornyak_notifications');
-            updateNotifBadge();
-            openNotifModal();
-        }
-
-        // --- НАСТРОЙКИ С РЕАЛЬНЫМ ПРИМЕНЕНИЕМ ---
-        function openSettingsModal() {
-            document.getElementById('settingsModal').classList.add('flex');
-            document.getElementById('settingsModal').classList.remove('hidden');
-        }
-        function closeSettingsModal() {
-            document.getElementById('settingsModal').classList.add('hidden');
-            document.getElementById('settingsModal').classList.remove('flex');
-        }
+        // --- НАСТРОЙКИ ---
+        function openSettingsModal() { show('settingsModal'); }
+        function closeSettingsModal() { restoreSettings(); hide('settingsModal'); }
         function previewFontSize(val) { document.documentElement.style.setProperty('--fs', val); }
         function previewBlur(val) { document.documentElement.style.setProperty('--blur-val', val + 'px'); }
 
@@ -769,51 +777,78 @@
             selectedIconSize = mode;
             ['small', 'medium', 'large'].forEach(m => {
                 const el = document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1));
-                if(el) el.className = 'cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition';
+                if (el) el.className = 'cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition';
             });
             const activeEl = document.getElementById('mode' + mode.charAt(0).toUpperCase() + mode.slice(1));
-            if(activeEl) activeEl.className = 'cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl bg-white shadow-sm';
+            if (activeEl) activeEl.className = 'cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl bg-white shadow-sm';
+            applyIconSize(mode);
         }
-
-        function applySettings() {
-            const fontSize = document.getElementById('fontSizeRange').value;
-            const blurVal = document.getElementById('blurRange').value;
-            localStorage.setItem('gornyak_settings', JSON.stringify({ fontSize, iconSize: selectedIconSize, blurVal }));
-            applyIconSize(selectedIconSize);
-            previewFontSize(fontSize);
-            previewBlur(blurVal);
-            closeSettingsModal();
-            addNotification('Настройки интерфейса применены');
-        }
-
         function applyIconSize(size) {
-            const boxes = document.querySelectorAll('.icon-box');
-            boxes.forEach(b => {
-                if(size === 'small') {
-                    b.style.setProperty('--icon-w', '36px'); b.style.setProperty('--icon-h', '36px'); b.style.setProperty('--icon-f', '14px');
-                } else if(size === 'large') {
-                    b.style.setProperty('--icon-w', '56px'); b.style.setProperty('--icon-h', '56px'); b.style.setProperty('--icon-f', '20px');
-                } else {
-                    b.style.setProperty('--icon-w', '44px'); b.style.setProperty('--icon-h', '44px'); b.style.setProperty('--icon-f', '16px');
-                }
+            const v = size === 'small' ? ['36px', '14px'] : size === 'large' ? ['56px', '20px'] : ['44px', '16px'];
+            document.querySelectorAll('.icon-box').forEach(b => {
+                b.style.setProperty('--icon-w', v[0]); b.style.setProperty('--icon-h', v[0]); b.style.setProperty('--icon-f', v[1]);
             });
+        }
+        function setIconStyle(style) {
+            selectedIconStyle = style;
+            applyIconStyle();
+            document.querySelectorAll('[data-style-opt]').forEach(el => {
+                el.style.outline = el.dataset.styleOpt === style ? '2px solid #1c5c38' : 'none';
+            });
+        }
+        function applyIconStyle() {
+            document.querySelectorAll('.ic:not(.ic-preview)').forEach(el => el.setAttribute('data-istyle', selectedIconStyle));
+        }
+        function restoreSettings() {
+            const s = lsGet('gornyak_settings', {});
+            const fs = s.fontSize || 14, bl = s.blurVal || 25;
+            previewFontSize(fs); previewBlur(bl);
+            document.getElementById('fontSizeRange').value = fs;
+            document.getElementById('blurRange').value = bl;
+            setIconSizeMode(s.iconSize || 'medium');
+            setIconStyle(s.iconStyle || 'classic');
+        }
+        function applySettings() {
+            lsSet('gornyak_settings', {
+                fontSize: document.getElementById('fontSizeRange').value,
+                blurVal: document.getElementById('blurRange').value,
+                iconSize: selectedIconSize,
+                iconStyle: selectedIconStyle
+            });
+            hide('settingsModal');
+            restoreSettings();
+        }
+
+        // --- ДАННЫЕ ПО УМОЛЧАНИЮ И ОЧИСТКА ---
+        function initData() {
+            let news = lsGet('gornyak_news_db', []).filter(n => !/egorkreed094/i.test(n.author || ''));
+            let docs = lsGet('gornyak_docs_db', []);
+            if (!lsGet('gornyak_seeded_v1', false)) {
+                news = news.concat([
+                    { id: 'seed_n1', title: 'Общее собрание членов НСТ.', desc: '', date: '', author: '' },
+                    { id: 'seed_n2', title: 'Чистка центральной дороги грейдером.', desc: '', date: '', author: '' }
+                ]);
+                docs = docs.concat([
+                    { id: 'seed_d1', name: 'Устав НСТ «Горняк»', fileName: '', size: 0, data: '', date: '', author: '' },
+                    { id: 'seed_d2', name: 'Бланки заявлений', fileName: '', size: 0, data: '', date: '', author: '' }
+                ]);
+                lsSet('gornyak_docs_db', docs);
+                lsSet('gornyak_seeded_v1', true);
+            }
+            lsSet('gornyak_news_db', news);
+            const notifs = lsGet('gornyak_notifications', []).filter(n => n.text !== 'Настройки интерфейса применены');
+            lsSet('gornyak_notifications', notifs);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('gornyak_settings');
-            if (saved) {
-                const s = JSON.parse(saved);
-                document.documentElement.style.setProperty('--fs', s.fontSize);
-                document.documentElement.style.setProperty('--blur-val', s.blurVal + 'px');
-                document.getElementById('fontSizeRange').value = s.fontSize;
-                document.getElementById('blurRange').value = s.blurVal;
-                if(s.iconSize) { setIconSizeMode(s.iconSize); applyIconSize(s.iconSize); }
-            }
+            initData();
             renderCards();
+            restoreSettings();
             fetchLiveWeather();
             updateNotifBadge();
         });
 
+        // --- ПОГОДА ---
         const WX_ICON = c => c === 0 ? 'fa-sun' : c <= 2 ? 'fa-cloud-sun' : c === 3 ? 'fa-cloud' : c <= 48 ? 'fa-smog' : (c <= 67 || (c >= 80 && c <= 82)) ? 'fa-cloud-rain' : (c <= 77 || c === 85 || c === 86) ? 'fa-snowflake' : 'fa-cloud-bolt';
         const hm = iso => (iso || '').slice(11, 16);
 
@@ -838,63 +873,8 @@
                 document.getElementById('modalTemp').innerText = '—';
             }
         }
-
-        const searchInput = document.getElementById('searchInput');
-        const searchDropdown = document.getElementById('searchDropdown');
-        const searchResultsList = document.getElementById('searchResultsList');
-
-        const searchDatabase = [
-            { query: '474', title: 'Маршрут № 474к: от Карьера — М. Котельники', desc: 'Расписание автобусов', action: openTransportModal },
-            { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: openTransportModal },
-            { query: 'карта', title: 'Яндекс.Карта НСТ «Горняк»', desc: 'Смотреть расположение на карте', action: openTransportModal },
-            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей', action: openChatModal },
-            { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт', action: () => openSection('Тарифы', 'Электричество: 4.85 руб/кВт⋅ч') }
-        ];
-
-        searchInput.addEventListener('focus', () => renderSearch(searchInput.value));
-        searchInput.addEventListener('input', (e) => renderSearch(e.target.value));
-
-        function renderSearch(keyword) {
-            const term = keyword.trim().toLowerCase();
-            searchResultsList.innerHTML = '';
-            let filtered = searchDatabase;
-            if (term.length > 0) {
-                filtered = searchDatabase.filter(item => 
-                    item.query.includes(term) || item.title.toLowerCase().includes(term) || item.desc.toLowerCase().includes(term)
-                );
-            }
-            if (filtered.length === 0) {
-                searchResultsList.innerHTML = `<div class="px-4 py-2.5 text-xs text-gray-600 font-bold">Ничего не найдено</div>`;
-            } else {
-                filtered.forEach(item => {
-                    const btn = document.createElement('button');
-                    btn.className = 'px-4 py-2.5 text-left text-xs font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none w-full';
-                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-[0.625rem] text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
-                    btn.onclick = () => { searchDropdown.classList.add('hidden'); item.action(); };
-                    searchResultsList.appendChild(btn);
-                });
-            }
-            searchDropdown.classList.remove('hidden');
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
-                searchDropdown.classList.add('hidden');
-            }
-        });
-
-        function openSection(title, text) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalContent').innerText = text;
-            document.getElementById('modalWindow').classList.add('flex');
-            document.getElementById('modalWindow').classList.remove('hidden');
-            searchDropdown.classList.add('hidden');
-        }
-        function closeModal() { document.getElementById('modalWindow').classList.add('hidden'); document.getElementById('modalWindow').classList.remove('flex'); }
-
         function openWeatherModal() {
-            document.getElementById('weatherModal').classList.add('flex');
-            document.getElementById('weatherModal').classList.remove('hidden');
+            show('weatherModal');
             const d = liveWeatherData && liveWeatherData.daily;
             const box = document.getElementById('weatherWeekList');
             if (!d) { box.innerHTML = '<div class="col-span-full text-green-200 font-bold">Нет данных</div>'; return; }
@@ -908,161 +888,127 @@
                   <div class="text-green-200 font-semibold">${f(Math.round(d.temperature_2m_min[i]))}</div>
                 </div>`).join('');
         }
-        function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
+        function closeWeatherModal() { hide('weatherModal'); }
 
-        function openTransportModal() { document.getElementById('transportModal').classList.add('flex'); document.getElementById('transportModal').classList.remove('hidden'); }
-        function closeTransportModal() { document.getElementById('transportModal').classList.add('hidden'); document.getElementById('transportModal').classList.remove('flex'); }
-
-        function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
-
-        const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
-        const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { showToast('Не хватает места на устройстве'); return false; } };
-        function loadProfiles() { return lsGet('gornyak_profiles', {}); }
-        function saveProfiles(p) { lsSet('gornyak_profiles', p); }
-        function currentUser() { return lsGet('gornyak_user', null); }
-        function myUid() { const u = currentUser(); return u ? u.email : 'guest'; }
-        function myNick() { const u = currentUser(); return u ? (u.name || u.email.split('@')[0]) : 'Гость'; }
-
-        const chatState = { peer: 'general', replyTo: null, editId: null, menuId: null };
-        const roomKey = peer => peer === 'general' ? 'general' : [myUid(), peer].sort().join('|');
-        const loadChat = () => lsGet('gornyak_real_chat', []);
-        const saveChat = m => lsSet('gornyak_real_chat', m);
-
-        function chatPeers() {
-            const map = {};
-            const pr = loadProfiles();
-            Object.keys(pr).forEach(e => { map[e] = pr[e].name || e.split('@')[0]; });
-            loadChat().forEach(m => { map[m.uid || m.author] = m.author; });
-            delete map[myUid()];
-            return Object.keys(map).map(u => ({ uid: u, nick: map[u] })).sort((a, b) => a.nick.localeCompare(b.nick, 'ru'));
-        }
-        function nickOf(uid) { const p = chatPeers().find(x => x.uid === uid); return p ? p.nick : uid; }
-
-        function renderChatNicks() {
-            const item = (uid, nick, icon) => `<button data-peer="${esc(uid)}" class="w-full text-left px-3 py-3 text-xs font-extrabold border-b border-gray-100 flex items-center gap-2 ${chatState.peer === uid ? 'bg-green-100 text-[#1c5c38]' : 'text-gray-800'}"><i class="fa-solid ${icon} text-[0.6875rem]"></i><span class="truncate">${esc(nick)}</span></button>`;
-            const peers = chatPeers();
-            document.getElementById('chatNicks').innerHTML = item('general', 'Общий чат', 'fa-users') + peers.map(p => item(p.uid, p.nick, 'fa-user')).join('')
-                + (peers.length ? '' : '<div class="p-3 text-[0.625rem] text-gray-500 font-bold leading-snug">Здесь появятся садоводы, когда зарегистрируются или напишут в чат.</div>');
-        }
-
-        function updateChatBar() {
-            const bar = document.getElementById('chatBar');
-            let txt = '';
-            if (chatState.editId) txt = 'Редактирование сообщения';
-            else if (chatState.replyTo) { const m = loadChat().find(x => x.id === chatState.replyTo); txt = m ? 'Ответ для ' + m.author + ': ' + m.text : ''; }
-            document.getElementById('chatBarText').textContent = txt;
-            bar.classList.toggle('hidden', !txt); bar.classList.toggle('flex', !!txt);
-        }
-        function cancelChatMode() {
-            chatState.replyTo = null; chatState.editId = null;
-            document.getElementById('chatInputText').value = '';
-            updateChatBar();
-        }
-        function selectChatPeer(uid) {
-            chatState.peer = uid; chatState.menuId = null; cancelChatMode();
-            renderChatNicks(); renderChatMessages(true);
-        }
-
-        function renderChatMessages(stick) {
-            const box = document.getElementById('chatMessagesContainer');
-            const keep = box.scrollTop;
-            const all = loadChat();
-            const room = roomKey(chatState.peer);
-            const msgs = all.filter(m => (m.room || 'general') === room);
-            document.getElementById('chatTitle').textContent = chatState.peer === 'general' ? 'Общий чат садоводов' : 'Диалог: ' + nickOf(chatState.peer);
-            if (!msgs.length) { box.innerHTML = '<div class="text-center py-10 text-gray-500 font-semibold text-xs">Сообщений пока нет. Напишите первое!</div>'; return; }
-            box.innerHTML = msgs.map(m => {
-                const mine = (m.uid || m.author) === myUid();
-                const rep = m.replyTo ? all.find(x => x.id === m.replyTo) : null;
-                const quote = m.replyTo ? `<div class="border-l-4 border-[#1c5c38] bg-black/5 rounded-lg px-2 py-1 mb-1 text-[0.6875rem] text-gray-600 font-semibold truncate">${rep ? esc(rep.author) + ': ' + esc(rep.text) : 'Сообщение удалено'}</div>` : '';
-                const menu = chatState.menuId === m.id ? `<div class="flex gap-1.5 mt-1.5 flex-wrap"><button data-act="reply" class="chat-act">Ответить</button>${mine ? '<button data-act="edit" class="chat-act">Изменить</button><button data-act="del" class="chat-act text-red-700">Удалить</button>' : ''}</div>` : '';
-                return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div data-mid="${m.id}" class="max-w-[88%] rounded-2xl px-3 py-2 shadow-sm border ${mine ? 'bg-emerald-100 border-emerald-200' : 'bg-white/95 border-gray-200'}"><div class="text-[0.625rem] font-black text-[#1c5c38]">${esc(m.author)}</div>${quote}<div class="text-sm font-medium text-gray-800 break-words whitespace-pre-wrap">${esc(m.text)}</div><div class="text-[0.625rem] text-gray-400 font-semibold mt-0.5">${esc(m.time)}${m.edited ? ' · изменено' : ''}</div>${menu}</div></div>`;
-            }).join('');
-            box.scrollTop = stick ? box.scrollHeight : keep;
-        }
-
-        document.getElementById('chatNicks').addEventListener('click', e => {
-            const b = e.target.closest('[data-peer]'); if (b) selectChatPeer(b.dataset.peer);
-        });
-        document.getElementById('chatMessagesContainer').addEventListener('click', async e => {
-            const bubble = e.target.closest('[data-mid]'); if (!bubble) return;
-            const id = bubble.dataset.mid, act = e.target.closest('[data-act]');
-            if (!act) { chatState.menuId = chatState.menuId === id ? null : id; renderChatMessages(); return; }
-            const all = loadChat(), m = all.find(x => x.id === id); if (!m) return;
-            const inp = document.getElementById('chatInputText');
-            chatState.menuId = null;
-            if (act.dataset.act === 'reply') { chatState.replyTo = id; chatState.editId = null; inp.value = ''; updateChatBar(); inp.focus(); }
-            else if (act.dataset.act === 'edit') { chatState.editId = id; chatState.replyTo = null; inp.value = m.text; updateChatBar(); inp.focus(); }
-            else if (act.dataset.act === 'del') {
-                if (await askConfirm('Удалить сообщение?', 'Удалить')) { saveChat(all.filter(x => x.id !== id)); if (chatState.replyTo === id) cancelChatMode(); }
-            }
-            renderChatMessages();
-        });
-
-        function sendChatMessage(e) {
-            e.preventDefault();
-            const inp = document.getElementById('chatInputText');
-            const text = inp.value.trim(); if (!text) return;
-            const all = loadChat();
-            if (chatState.editId) {
-                const m = all.find(x => x.id === chatState.editId);
-                if (m && (m.uid || m.author) === myUid()) { m.text = text; m.edited = true; }
+        // --- ПОИСК ---
+        const searchInput = document.getElementById('searchInput');
+        const searchDropdown = document.getElementById('searchDropdown');
+        const searchResultsList = document.getElementById('searchResultsList');
+        const searchDatabase = [
+            { query: '474', title: 'Маршрут № 474к: от Карьера — М. Котельники', desc: 'Расписание автобусов', action: () => openTransportModal() },
+            { query: 'транспорт', title: 'Транспорт и расписание', desc: 'Все актуальные маршруты', action: () => openTransportModal() },
+            { query: 'карта', title: 'Яндекс.Карта НСТ «Горняк»', desc: 'Смотреть расположение на карте', action: () => openTransportModal() },
+            { query: 'общение', title: 'Общение садоводов', desc: 'Живой чат соседей', action: () => openChatModal() },
+            { query: 'тарифы', title: 'Тарифы на свет и взносы', desc: 'Электричество: 4.85 руб/кВт', action: () => openTarif() }
+        ];
+        searchInput.addEventListener('focus', () => renderSearch(searchInput.value));
+        searchInput.addEventListener('input', e => renderSearch(e.target.value));
+        function renderSearch(keyword) {
+            const term = keyword.trim().toLowerCase();
+            searchResultsList.innerHTML = '';
+            const filtered = term ? searchDatabase.filter(i => i.query.includes(term) || i.title.toLowerCase().includes(term) || i.desc.toLowerCase().includes(term)) : searchDatabase;
+            if (!filtered.length) {
+                searchResultsList.innerHTML = `<div class="px-4 py-2.5 text-xs text-gray-600 font-bold">Ничего не найдено</div>`;
             } else {
-                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), replyTo: chatState.replyTo || null, time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
+                filtered.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.className = 'px-4 py-2.5 text-left text-xs font-bold text-gray-800 hover:bg-green-100/80 flex flex-col transition border-b border-green-100 last:border-none w-full';
+                    btn.innerHTML = `<span class="text-[#1c5c38] font-black">${item.title}</span><span class="text-[0.625rem] text-gray-600 font-semibold mt-0.5">${item.desc}</span>`;
+                    btn.onclick = () => { searchDropdown.classList.add('hidden'); item.action(); };
+                    searchResultsList.appendChild(btn);
+                });
             }
-            saveChat(all);
-            chatState.replyTo = null; chatState.editId = null; inp.value = '';
-            updateChatBar(); renderChatNicks(); renderChatMessages(true);
+            searchDropdown.classList.remove('hidden');
         }
+        document.addEventListener('click', e => {
+            if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) searchDropdown.classList.add('hidden');
+        });
 
-        function openChatModal() {
-            document.getElementById('chatModal').classList.add('flex');
-            document.getElementById('chatModal').classList.remove('hidden');
-            chatState.menuId = null; updateChatBar();
-            renderChatNicks(); renderChatMessages(true);
+        // --- ОБЩЕЕ ОКНО ---
+        function openSection(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerText = text;
+            show('modalWindow');
+            searchDropdown.classList.add('hidden');
         }
-        function closeChatModal() { document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); }
-
-        // --- Системные окна (вместо alert/confirm) ---
-        let toastTimer = null;
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg; t.classList.remove('hidden');
-            clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('hidden'), 3500);
-        }
-        function askConfirm(msg, yesText) {
-            return new Promise(res => {
-                const m = document.getElementById('confirmModal');
-                document.getElementById('confirmText').textContent = msg;
-                document.getElementById('confirmYes').textContent = yesText || 'Да';
-                const done = v => { m.classList.add('hidden'); m.classList.remove('flex'); res(v); };
-                document.getElementById('confirmYes').onclick = () => done(true);
-                document.getElementById('confirmNo').onclick = () => done(false);
-                m.classList.remove('hidden'); m.classList.add('flex');
-            });
-        }
-
-        // --- НОВОСТИ, ДОКУМЕНТЫ, О НСТ, КОНТАКТЫ (хранятся на устройстве, не зависят от входа в профиль) ---
         function openRichSection(title, html) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalContent').innerHTML = html;
-            document.getElementById('modalWindow').classList.add('flex');
-            document.getElementById('modalWindow').classList.remove('hidden');
+            show('modalWindow');
             searchDropdown.classList.add('hidden');
         }
-        document.getElementById('modalContent').addEventListener('click', e => {
-            const d = e.target.closest('[data-doc]'); if (d) downloadDoc(d.dataset.doc);
-            if (e.target.closest('[data-goto="map"]')) { closeModal(); openTransportModal(); }
+        function closeModal() { hide('modalWindow'); }
+
+        function openTransportModal() { show('transportModal'); }
+        function closeTransportModal() { hide('transportModal'); }
+        function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
+
+        // --- КНОПКИ ДЕЙСТВИЙ В ОКНАХ ---
+        const BTN_ADD = 'bg-[#1c5c38] text-white';
+        const BTN_EDIT = 'bg-blue-50 text-blue-800 border border-blue-200';
+        const BTN_DEL = 'bg-red-50 text-red-700 border border-red-200';
+        const bigBtn = (act, icon, label, cls) => `<button data-act="${act}" class="flex-1 min-w-[30%] py-2.5 px-2 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 ${cls}"><i class="fa-solid ${icon}"></i>${label}</button>`;
+        const miniBtn = (act, id, icon, label, cls) => `<button data-act="${act}" data-id="${esc(id)}" class="text-[0.6875rem] font-extrabold px-2.5 py-1.5 rounded-xl flex items-center gap-1 ${cls}"><i class="fa-solid ${icon} text-[0.625rem]"></i>${label}</button>`;
+        const toolbar = inner => `<div class="flex flex-wrap gap-2 mb-3">${inner}</div>`;
+
+        function requireLogin() {
+            if (currentUser()) return true;
+            closeModal();
+            showToast('Войдите в профиль, чтобы изменять записи');
+            openProfileAuthModal();
+            return false;
+        }
+
+        document.getElementById('modalContent').addEventListener('click', async e => {
+            if (e.target.closest('[data-goto="map"]')) { closeModal(); openTransportModal(); return; }
+            const b = e.target.closest('[data-act]'); if (!b) return;
+            const act = b.dataset.act, id = b.dataset.id;
+            if (act === 'news-add') { closeModal(); openCreateNewsModal(); }
+            else if (act === 'news-edit') { if (requireLogin()) openEditModal('news', id); }
+            else if (act === 'news-del') { if (requireLogin()) delNews(id); }
+            else if (act === 'doc-add') { closeModal(); openCreateDocModal(); }
+            else if (act === 'doc-edit') { if (requireLogin()) openEditModal('doc', id); }
+            else if (act === 'doc-del') { if (requireLogin()) delDoc(id); }
+            else if (act === 'doc-dl') downloadDoc(id);
+            else if (act === 'tarif-edit') { if (requireLogin()) openEditModal('tarif'); }
+            else if (act === 'tarif-del') { if (requireLogin()) delText('tarif'); }
+            else if (act === 'about-edit') { if (requireLogin()) openEditModal('about'); }
+            else if (act === 'about-del') { if (requireLogin()) delText('about'); }
         });
 
+        // --- ТАРИФЫ ---
+        const TARIF_DEFAULT = 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год';
+        const getTarif = () => { const v = localStorage.getItem('gornyak_tarif'); return v === null ? TARIF_DEFAULT : v; };
+        function openTarif() {
+            const t = getTarif();
+            openRichSection('Тарифы',
+                toolbar(bigBtn('tarif-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('tarif-del', 'fa-trash', 'Удалить', BTN_DEL))
+                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Тарифы не указаны.'}</div>`);
+        }
+
+        // --- О НСТ ---
+        const ABOUT_DEFAULT = 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.';
+        const getAbout = () => { const v = localStorage.getItem('gornyak_about'); return v === null ? ABOUT_DEFAULT : v; };
+        function openAbout() {
+            const t = getAbout();
+            openRichSection('О НСТ «Горняк»',
+                toolbar(bigBtn('about-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('about-del', 'fa-trash', 'Удалить', BTN_DEL))
+                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Описание не указано.'}</div>`);
+        }
+        function openAboutEdit() { if (requireLogin()) openEditModal('about'); }
+
+        async function delText(kind) {
+            if (!(await askConfirm(kind === 'tarif' ? 'Удалить текст тарифов?' : 'Удалить описание «О НСТ»?', 'Удалить'))) return;
+            localStorage.setItem(kind === 'tarif' ? 'gornyak_tarif' : 'gornyak_about', '');
+            kind === 'tarif' ? openTarif() : openAbout();
+        }
+
+        // --- НОВОСТИ ---
         function openCreateNewsModal() {
             document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
-            document.getElementById('createNewsModal').classList.add('flex');
-            document.getElementById('createNewsModal').classList.remove('hidden');
+            show('createNewsModal');
         }
-        function closeCreateNewsModal() { document.getElementById('createNewsModal').classList.add('hidden'); document.getElementById('createNewsModal').classList.remove('flex'); }
-
+        function closeCreateNewsModal() { hide('createNewsModal'); }
         function submitNewsForm(e) {
             e.preventDefault();
             const form = e.target;
@@ -1077,19 +1023,24 @@
         }
         function openNewsModal() {
             const list = lsGet('gornyak_news_db', []);
-            const base = ['Общее собрание членов НСТ.', 'Чистка центральной дороги грейдером.'];
-            openRichSection('Новости СНТ',
-                list.map(n => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="text-[0.625rem] font-bold text-gray-500">${esc(n.date)} · ${esc(n.author)}</div><div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div><div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div></div>`).join('')
-                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join(''));
+            const items = list.length ? list.map(n => {
+                const meta = [n.date, n.author].filter(Boolean).join(' · ');
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}<div class="flex gap-2 mt-2">${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+            }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
+            openRichSection('Новости СНТ', toolbar(bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD)) + items);
+        }
+        async function delNews(id) {
+            if (!(await askConfirm('Удалить новость?', 'Удалить'))) return;
+            lsSet('gornyak_news_db', lsGet('gornyak_news_db', []).filter(x => x.id !== id));
+            openNewsModal();
         }
 
+        // --- ДОКУМЕНТЫ ---
         function openCreateDocModal() {
             document.getElementById('docWarning').classList.toggle('hidden', !!currentUser());
-            document.getElementById('createDocModal').classList.add('flex');
-            document.getElementById('createDocModal').classList.remove('hidden');
+            show('createDocModal');
         }
-        function closeCreateDocModal() { document.getElementById('createDocModal').classList.add('hidden'); document.getElementById('createDocModal').classList.remove('flex'); }
-
+        function closeCreateDocModal() { hide('createDocModal'); }
         function submitDocForm(e) {
             e.preventDefault();
             const form = e.target;
@@ -1100,138 +1051,4 @@
             const rd = new FileReader();
             rd.onload = () => {
                 const list = lsGet('gornyak_docs_db', []);
-                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
-                if (!lsSet('gornyak_docs_db', list)) return;
-                form.reset(); closeCreateDocModal();
-                addNotification('Загружен документ: ' + name);
-                openDocsModal();
-            };
-            rd.readAsDataURL(file);
-        }
-        function openDocsModal() {
-            const list = lsGet('gornyak_docs_db', []);
-            const base = ['Устав НСТ «Горняк»', 'Бланки заявлений'];
-            openRichSection('Документы',
-                list.map(d => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900 truncate">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(d.date)} · ${Math.max(1, Math.round(d.size / 1024))} КБ</div></div><button data-doc="${d.id}" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-download"></i></button></div>`).join('')
-                + base.map(t => `<div class="bg-green-50 border border-green-200 rounded-2xl p-3 mb-2 text-sm font-semibold">${esc(t)}</div>`).join(''));
-        }
-        function downloadDoc(id) {
-            const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
-            const a = document.createElement('a'); a.href = d.data; a.download = d.fileName || d.name; document.body.appendChild(a); a.click(); a.remove();
-        }
-
-        const ABOUT_DEFAULT = 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.';
-        function openAbout() { openSection('О НСТ «Горняк»', localStorage.getItem('gornyak_about') || ABOUT_DEFAULT); }
-        function openAboutEdit() {
-            if (!currentUser()) { showToast('Войдите в профиль, чтобы редактировать'); openProfileAuthModal(); return; }
-            document.getElementById('aboutText').value = localStorage.getItem('gornyak_about') || ABOUT_DEFAULT;
-            document.getElementById('aboutModal').classList.add('flex');
-            document.getElementById('aboutModal').classList.remove('hidden');
-        }
-        function closeAboutModal() { document.getElementById('aboutModal').classList.add('hidden'); document.getElementById('aboutModal').classList.remove('flex'); }
-        function saveAbout() {
-            const t = document.getElementById('aboutText').value.trim();
-            if (!t) { showToast('Текст не может быть пустым'); return; }
-            localStorage.setItem('gornyak_about', t); closeAboutModal(); showToast('Сохранено'); addNotification('Обновлено описание «О НСТ»');
-        }
-
-        const BOARD = [
-            ['Макарова Ольга Михайловна', 'Председатель правления', '8916-710-74-18'],
-            ['Сафонова Ирина Викторовна', 'Главный бухгалтер', '8916-222-06-38'],
-            ['Красенькова Наталья Борисовна', 'Бухгалтер', '8916-104-01-85'],
-            ['Вахрушев Константин Михайлович', 'Главный энергетик', '8926-958-52-51'],
-            ['Тимошилов Антон Андреевич', 'Электрик', '8925-000-47-11'],
-            ['Горицкая Нина Александровна', 'Дворник', '8909-657-06-31'],
-            ['Муминов Омонуло Абдулхалимович', 'Хозяйственный работник', '8903-667-84-81'],
-            ['Асланов Телман Магомед Оглы', 'Член правления', '8929-664-58-06'],
-            ['Зеновкина Александра Владимировна', 'Член правления', '8977-488-26-63'],
-            ['Князева Ирина Вениаминовна', 'Член правления', '8925-008-21-22'],
-            ['Личманова Евгения Александровна', 'Член правления', '8917-532-39-12'],
-            ['Мичкасов Валентин Васильевич', 'Член правления', '8903-156-75-25'],
-            ['Черкесс Игорь Викторович', 'Член правления', '8926-361-50-61']
-        ];
-        function openContactsModal() {
-            const tel = p => '+7' + p.replace(/\D/g, '').slice(1);
-            const row = (n, r, p) => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900">${esc(n)}</div><div class="text-[0.6875rem] text-gray-600 font-bold">${esc(r)}</div></div><a href="tel:${tel(p)}" class="shrink-0 text-xs font-extrabold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl px-2.5 py-1.5">${esc(p)}</a></div>`;
-            const h = t => `<div class="text-[0.625rem] font-black uppercase text-gray-500 mt-3 mb-1.5">${t}</div>`;
-            openRichSection('Контакты',
-                h('Адрес правления')
-                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="font-extrabold text-sm text-gray-900">Центральная улица, дом 247</div><button data-goto="map" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-map-location-dot"></i></button></div>`
-                + h('Правление и службы') + BOARD.map(b => row(...b)).join('')
-                + h('Участковый по НСТ «Горняк»') + row('Сырчин Кирилл Владимирович', 'Участковый', '8985-131-14-84')
-                + h('Полиция г. Котельники') + row('Дежурная часть', 'Круглосуточно', '8926-777-57-84'));
-        }
-
-        // --- ПРОФИЛЬ И АВТОРИЗАЦИЯ ---
-        function openProfileAuthModal() {
-            const currentUser = localStorage.getItem('gornyak_user');
-            if (currentUser) {
-                const user = JSON.parse(currentUser);
-                document.getElementById('profEmail').innerText = user.email;
-                document.getElementById('profName').innerText = user.name || 'Не указано';
-                document.getElementById('profPlot').innerText = user.plot || 'Не указан';
-                document.getElementById('profileModal').classList.add('flex');
-                document.getElementById('profileModal').classList.remove('hidden');
-            } else {
-                document.getElementById('authModal').classList.add('flex');
-                document.getElementById('authModal').classList.remove('hidden');
-            }
-        }
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('authModal').classList.remove('flex'); }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPassword').value.trim();
-            if(!email || !pass) { showToast('Заполните почту и пароль'); return; }
-            const prf = loadProfiles()[email] || {}; localStorage.setItem('gornyak_user', JSON.stringify({ email, name: prf.name || '', plot: prf.plot || '' }));
-            closeAuthModal();
-            addNotification('Вход в личный кабинет: ' + email);
-            openProfileAuthModal();
-        }
-
-        function forgotPassword() {
-            closeAuthModal();
-            document.getElementById('forgotModal').classList.add('flex');
-            document.getElementById('forgotModal').classList.remove('hidden');
-        }
-        function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
-        function handleForgotSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('forgotEmail').value.trim();
-            showToast('Восстановление по почте пока недоступно: для отправки писем нужен серверный модуль.');
-            closeForgotModal();
-        }
-
-        function openRegisterModal() {
-            closeAuthModal();
-            document.getElementById('registerModal').classList.add('flex');
-            document.getElementById('registerModal').classList.remove('hidden');
-        }
-        function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); document.getElementById('registerModal').classList.remove('flex'); }
-
-        function handleRegisterSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('regEmail').value.trim();
-            const name = document.getElementById('regName').value.trim();
-            const plot = document.getElementById('regPlot').value.trim();
-            if(!email) { showToast('Укажите почту'); return; }
-            localStorage.setItem('gornyak_user', JSON.stringify({ email, name, plot })); const prs = loadProfiles(); prs[email] = { name, plot }; saveProfiles(prs);
-            closeRegisterModal();
-            showToast('Регистрация успешна');
-            addNotification('Зарегистрирован новый садовод');
-            openProfileAuthModal();
-        }
-
-        function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); document.getElementById('profileModal').classList.remove('flex'); }
-        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); showToast('Вы вышли из аккаунта. Данные сохранены на этом устройстве.'); }
-        async function deleteAccount() {
-            if (!(await askConfirm('Вы действительно хотите удалить аккаунт?', 'Удалить'))) return;
-            const u = currentUser();
-            if (u) { const pr = loadProfiles(); delete pr[u.email]; saveProfiles(pr); }
-            localStorage.removeItem('gornyak_user'); closeProfileModal();
-            showToast('Аккаунт удалён'); addNotification('Аккаунт садовода удален');
-        }
-    </script>
-</body>
-</html>
+                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: 
