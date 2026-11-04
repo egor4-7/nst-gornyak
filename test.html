@@ -62,16 +62,16 @@
             box-shadow: 0 15px 30px -10px rgba(28, 92, 56, 0.2);
         }
 
-        /* Анимация покачивания в режиме редактирования */
-        @keyframes wiggle {
+        /* Анимация покачивания в стиле iOS */
+        @keyframes iosWiggle {
             0% { transform: rotate(0deg); }
-            25% { transform: rotate(-1deg); }
-            75% { transform: rotate(1deg); }
+            25% { transform: rotate(-0.8deg); }
+            75% { transform: rotate(0.8deg); }
             100% { transform: rotate(0deg); }
         }
         .is-editing {
-            animation: wiggle 0.2s ease-in-out infinite;
-            border: 2px dashed #1c5c38 !important;
+            animation: iosWiggle 0.25s ease-in-out infinite;
+            border: 2px dashed rgba(28, 92, 56, 0.6) !important;
             background: rgba(255, 255, 255, 0.95) !important;
         }
 
@@ -156,7 +156,7 @@
                 </div>
                 <div>
                     <h2 class="font-black text-xs text-gray-900 leading-tight">НСТ «Горняк»</h2>
-                    <p class="text-[8px] text-gray-600 font-bold">Мобильный портал</p>
+                    <p class="text-[8px] text-gray-600 font-bold">Мобильная версия</p>
                 </div>
             </div>
 
@@ -172,9 +172,9 @@
                     </div>
                 </div>
 
-                <button onclick="openProfileAuthModal()" class="py-1.5 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] shadow transition shrink-0 flex items-center gap-1">
-                    <i class="fa-solid fa-user text-[10px]"></i>
-                    <span class="hidden xs:inline">Профиль</span>
+                <button onclick="openProfileAuthModal()" class="py-2 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow transition shrink-0 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user text-xs"></i>
+                    <span>Профиль</span>
                 </button>
 
                 <button onclick="openNotifModal()" class="relative w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition text-gray-800 shrink-0 border border-gray-200">
@@ -219,12 +219,10 @@
             </div>
         </div>
 
-        <!-- Контейнер карточек с поддержкой перетаскивания и изменения размера -->
-        <div id="cardsContainer" class="flex flex-col gap-3">
-            <!-- Плитки генерируются динамически скриптом -->
-        </div>
+        <!-- Динамический контейнер плиток с поддержкой iOS-режима редактирования -->
+        <div id="cardsContainer" class="flex flex-col gap-3"></div>
 
-        <!-- Кнопка «Готово» для режима редактирования (появляется при удержании) -->
+        <!-- Нижняя панель «Готово» для режима редактирования -->
         <div id="editModeBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-4">
             <span class="text-xs font-bold">Режим настройки плиток</span>
             <button onclick="exitEditMode()" class="bg-[#1c5c38] hover:bg-[#144f2b] text-white px-4 py-1.5 rounded-full text-xs font-extrabold shadow">Готово</button>
@@ -232,20 +230,18 @@
 
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ НОВОСТИ -->
+    <!-- Модалки создания новости, документов, настроек, чата и т.д. -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeCreateNewsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Добавить новость</h3>
-            
             <div id="newsWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
                 Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
             </div>
-
             <form onsubmit="submitNewsForm(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Тема новости</label>
-                    <input type="text" id="newsTitleInput" required placeholder="Введите заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
+                    <input type="text" id="newsTitleInput" required placeholder="Заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Описание</label>
@@ -256,20 +252,17 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДОКУМЕНТА -->
     <div id="createDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeCreateDocModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Загрузить документ</h3>
-            
             <div id="docWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
                 Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
             </div>
-
             <form onsubmit="submitDocForm(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Название документа</label>
-                    <input type="text" id="docNameInput" required placeholder="Устав, бланк, акт..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
+                    <input type="text" id="docNameInput" required placeholder="Устав, бланк..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Файл</label>
@@ -280,51 +273,36 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
+    <!-- Модалка настроек -->
     <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 border border-green-200 relative">
-            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-extrabold text-gray-900 border-b pb-2">Настройки интерфейса</h3>
-
             <div class="flex flex-col gap-4 text-xs font-bold text-gray-700">
                 <div>
                     <label class="block mb-1">Размер шрифта:</label>
                     <input type="range" id="fontSizeRange" min="12" max="18" value="14" class="w-full accent-[#1c5c38]" oninput="previewFontSize(this.value)">
                 </div>
-
                 <div>
-                    <label class="block mb-2">Адаптация размера иконок с иллюстрацией:</label>
+                    <label class="block mb-2">Адаптация размера иконок:</label>
                     <div class="flex items-center justify-around gap-2 bg-green-50 p-3 rounded-2xl border border-green-200">
-                        <div onclick="setIconSizeMode('small')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeSmall">
-                            <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-bus"></i></div>
-                            <span class="text-[10px]">Мелкий</span>
-                        </div>
-                        <div onclick="setIconSizeMode('medium')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition bg-white shadow-sm" id="modeMedium">
-                            <div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-base"><i class="fa-solid fa-bus"></i></div>
-                            <span class="text-[10px]">Средний</span>
-                        </div>
-                        <div onclick="setIconSizeMode('large')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeLarge">
-                            <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-bus"></i></div>
-                            <span class="text-[10px]">Крупный</span>
-                        </div>
+                        <div onclick="setIconSizeMode('small')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeSmall"><div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs"><i class="fa-solid fa-bus"></i></div><span class="text-[10px]">Мелкий</span></div>
+                        <div onclick="setIconSizeMode('medium')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition bg-white shadow-sm" id="modeMedium"><div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-base"><i class="fa-solid fa-bus"></i></div><span class="text-[10px]">Средний</span></div>
+                        <div onclick="setIconSizeMode('large')" class="cursor-pointer flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-white transition" id="modeLarge"><div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-bus"></i></div><span class="text-[10px]">Крупный</span></div>
                     </div>
                 </div>
-
                 <div>
                     <label class="block mb-1">Интенсивность блюра (стекло):</label>
                     <input type="range" id="blurRange" min="5" max="40" value="25" class="w-full accent-[#1c5c38]" oninput="previewBlur(this.value)">
                 </div>
             </div>
-
             <div class="flex justify-center pt-2">
                 <button onclick="applySettings()" class="py-3 px-8 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow-lg transition text-xs">Применить</button>
             </div>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ЧАТА -->
+    <!-- Модалка чата -->
     <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-5 shadow-2xl flex flex-col h-[85vh] border border-green-200 relative">
             <button onclick="closeChatModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -340,7 +318,7 @@
         </div>
     </div>
 
-    <!-- Модалка авторизации -->
+    <!-- Авторизация и профиль -->
     <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -363,7 +341,6 @@
         </div>
     </div>
 
-    <!-- Модалка регистрации -->
     <div id="registerModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -379,7 +356,7 @@
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">ФИО (необязательно)</label>
-                    <input type="text" id="regName" placeholder="Иванов Иван Иванович" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold">
+                    <input type="text" id="regName" placeholder="Иванов И.И." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Участок (необязательно)</label>
@@ -390,7 +367,6 @@
         </div>
     </div>
 
-    <!-- Модалка профиля с кнопкой удаления аккаунта -->
     <div id="profileModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -416,7 +392,7 @@
         </div>
     </div>
 
-    <!-- Модалка уведомлений -->
+    <!-- Уведомления, Общие модалки, Погода, Транспорт, Сброс пароля -->
     <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -434,7 +410,6 @@
         </div>
     </div>
 
-    <!-- Общее модальное окно -->
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -444,12 +419,11 @@
         </div>
     </div>
 
-    <!-- Модалка погоды -->
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
             <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
             <div class="flex items-center gap-3 border-b border-white/10 pb-4">
-                <div class="weather-icon-box"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
+                <div class="weather-icon-box animate-weather"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
                 <div>
                     <h3 class="text-2xl font-black">Погода в Котельниках</h3>
                     <p class="text-xs text-green-200 font-bold">Метеостанция online • Open-Meteo</p>
@@ -473,16 +447,13 @@
         </div>
     </div>
 
-    <!-- Модалка транспорта -->
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
             <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-2xl font-black text-gray-900 border-b pb-2">Транспорт и расписание</h3>
-            
             <div class="w-full h-56 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative mb-2">
                 <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Af704229424c3a7266a2b8e390c588a4e8d3848b593a1ffbc3e28448d3bc1ff15&amp;source=constructor" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
             </div>
-
             <div class="flex flex-col gap-3 text-sm text-gray-800">
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
                     <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
@@ -494,7 +465,6 @@
                         06:18, 07:01, 07:50, 08:33, 09:16, 14:14, 15:31, 16:14, 16:58, 17:46, 18:37.
                     </div>
                 </div>
-
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
                     <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 1к: Остановка Карьер — Метро Котельники</span>
@@ -505,7 +475,6 @@
                         06:15, 07:05, 07:56, 08:51, 09:41, 12:58, 13:51, 14:36, 16:25, 17:10, 18:04, 19:06.
                     </div>
                 </div>
-
                 <div class="bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
                     <div class="flex justify-between items-center font-extrabold text-base text-[#1c5c38]">
                         <span>Маршрут № 26: до Силиката (через Карьер)</span>
@@ -517,17 +486,15 @@
                     </div>
                 </div>
             </div>
-
             <button onclick="closeTransportModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold mt-2">Закрыть</button>
         </div>
     </div>
 
-    <!-- Модальное окно сброса пароля -->
     <div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Восстановление пароля</h3>
-            <p id="forgotMessage" class="text-xs text-gray-700 font-semibold leading-relaxed">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
+            <p class="text-xs text-gray-700 font-semibold leading-relaxed">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
             <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
@@ -542,7 +509,7 @@
         let liveWeatherData = null;
         let selectedIconSize = 'medium';
 
-        // --- ДИНАМИЧЕСКИЙ РЕНДЕР И ПЕРЕПИСЫВАНИЕ ПЛИТОК С УДЕРЖАНИЕМ ---
+        // --- ДИНАМИЧЕСКИЕ ПЛИТКИ С iOS РЕЖИМОМ РЕДАКТИРОВАНИЯ ---
         const defaultCards = [
             { id: 'transport', title: 'Транспорт и Карта', desc: 'Маршруты и Яндекс.Карта', icon: 'fa-bus', color: 'icon-transport', action: openTransportModal, size: 'normal' },
             { id: 'tarif', title: 'Тарифы', desc: 'Свет, вода, услуги', icon: 'fa-bolt', color: 'icon-tarif', action: () => openSection('Тарифы', 'Текущие тарифы:\n• Электроэнергия: 4.85 руб/кВт⋅ч\n• Членский взнос: 1200 руб. с сотки в год'), size: 'normal' },
@@ -610,14 +577,17 @@
                         </div>`;
                 }
 
-                // Элементы управления для режима редактирования
+                // Иконка минус (как в iOS) и стрелки перемещения в режиме редактирования
                 let editControls = '';
                 if (isEditingMode) {
                     editControls = `
-                        <div class="absolute top-2 right-2 flex items-center gap-1 z-20 bg-black/70 p-1 rounded-full text-white text-xs">
-                            <button onclick="moveCard(${index}, -1)" class="w-6 h-6 flex items-center justify-center hover:bg-white/20 rounded-full" title="Выше"><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
-                            <button onclick="moveCard(${index}, 1)" class="w-6 h-6 flex items-center justify-center hover:bg-white/20 rounded-full" title="Ниже"><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
-                            <button onclick="toggleCardSize(${index})" class="px-2 py-0.5 bg-gornyak-700 rounded-full text-[10px] font-bold" title="Изменить размер">${c.size === 'compact' ? 'Полная' : 'Компактная'}</button>
+                        <div class="absolute -top-2 -left-2 z-35 bg-gray-700 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md cursor-pointer hover:bg-red-600" onclick="event.stopPropagation(); removeCard('${c.id}')" title="Удалить / скрыть">
+                            <i class="fa-solid fa-minus text-xs"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 flex items-center gap-1 z-30 bg-black/80 p-1 rounded-full text-white text-xs">
+                            <button onclick="event.stopPropagation(); moveCard(${index}, -1)" class="w-6 h-6 flex items-center justify-center hover:bg-white/20 rounded-full" title="Выше"><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
+                            <button onclick="event.stopPropagation(); moveCard(${index}, 1)" class="w-6 h-6 flex items-center justify-center hover:bg-white/20 rounded-full" title="Ниже"><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+                            <button onclick="event.stopPropagation(); toggleCardSize(${index})" class="px-2 py-0.5 bg-[#1c5c38] rounded-full text-[10px] font-bold">${c.size === 'compact' ? 'Полная' : 'Компактная'}</button>
                         </div>`;
                 }
 
@@ -626,8 +596,8 @@
                 return `
                 <div class="portal-card glass-panel rounded-2xl ${cardPadding} flex flex-col sm:flex-row items-center justify-between gap-3 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
                      data-card-id="${c.id}"
-                     onmousedown="startLongPress(event, '${c.id}')"
-                     ontouchstart="startLongPress(event, '${c.id}')"
+                     onmousedown="startLongPress(event)"
+                     ontouchstart="startLongPress(event)"
                      onmouseup="cancelLongPress()"
                      ontouchend="cancelLongPress()"
                      onclick="if(!isEditingMode) { (${c.action.toString()})(); }">
@@ -648,25 +618,17 @@
             }
         }
 
-        // Логика удержания (Long Press) для перехода в режим редактирования
-        function startLongPress(e, cardId) {
+        function startLongPress(e) {
             const user = localStorage.getItem('gornyak_user');
-            if (!user) {
-                if (e.type === 'touchstart') {
-                    // Разрешаем гостям смотреть, но редактирование только после входа
-                    return;
-                }
-            }
             pressTimer = setTimeout(() => {
                 if (!user) {
-                    alert('Для настройки и перемещения плиток войдите в профиль!');
                     openProfileAuthModal();
                     return;
                 }
                 isEditingMode = true;
                 document.getElementById('editModeBar').classList.remove('hidden');
                 renderCards();
-            }, 600); // 0.6 секунды удержания
+            }, 600); // 0.6 сек удержания (как в iOS)
         }
 
         function cancelLongPress() {
@@ -693,6 +655,13 @@
         function toggleCardSize(index) {
             let cards = getStoredCards();
             cards[index].size = cards[index].size === 'compact' ? 'normal' : 'compact';
+            saveStoredCards(cards);
+            renderCards();
+        }
+
+        function removeCard(id) {
+            let cards = getStoredCards();
+            cards = cards.filter(c => c.id !== id);
             saveStoredCards(cards);
             renderCards();
         }
@@ -741,7 +710,7 @@
             openNotifModal();
         }
 
-        // --- НАСТРОЙКИ ---
+        // --- НАСТРОЙКИ С РЕАЛЬНЫМ ПРИМЕНЕНИЕМ ШРИФТА И ИКОНОК ---
         function openSettingsModal() {
             document.getElementById('settingsModal').classList.add('flex');
             document.getElementById('settingsModal').classList.remove('hidden');
@@ -802,9 +771,10 @@
                 if(s.iconSize) { setIconSizeMode(s.iconSize); applyIconSize(s.iconSize); }
             }
             renderCards();
+            fetchLiveWeather();
+            updateNotifBadge();
         });
 
-        // --- ПОГОДА ---
         async function fetchLiveWeather() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Europe/Moscow');
@@ -1089,10 +1059,6 @@
                 addNotification('Аккаунт садовода удален');
             }
         }
-
-        fetchLiveWeather();
-        updateNotifBadge();
     </script>
 </body>
 </html>
-
