@@ -1051,4 +1051,274 @@
             const rd = new FileReader();
             rd.onload = () => {
                 const list = lsGet('gornyak_docs_db', []);
-                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: 
+                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
+                if (!lsSet('gornyak_docs_db', list)) return;
+                form.reset(); closeCreateDocModal();
+                addNotification('Загружен документ: ' + name);
+                openDocsModal();
+            };
+            rd.readAsDataURL(file);
+        }
+        function openDocsModal() {
+            const list = lsGet('gornyak_docs_db', []);
+            const items = list.length ? list.map(d => {
+                const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
+                const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+            }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
+            openRichSection('Документы', toolbar(bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD)) + items);
+        }
+        function downloadDoc(id) {
+            const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
+            const a = document.createElement('a'); a.href = d.data; a.download = d.fileName || d.name; document.body.appendChild(a); a.click(); a.remove();
+        }
+        async function delDoc(id) {
+            if (!(await askConfirm('Удалить документ?', 'Удалить'))) return;
+            lsSet('gornyak_docs_db', lsGet('gornyak_docs_db', []).filter(x => x.id !== id));
+            openDocsModal();
+        }
+
+        // --- ОКНО РЕДАКТИРОВАНИЯ ---
+        let editCtx = null;
+        function openEditModal(kind, id) {
+            editCtx = { kind, id };
+            const t = document.getElementById('editTitle'), x = document.getElementById('editText'), f = document.getElementById('editFile');
+            f.value = '';
+            let head = 'Редактировать', showTitle = false, showText = false, showFile = false;
+            if (kind === 'news') {
+                const n = lsGet('gornyak_news_db', []).find(v => v.id === id); if (!n) return;
+                head = 'Редактировать новость'; showTitle = showText = true; t.value = n.title; x.value = n.desc || '';
+            } else if (kind === 'doc') {
+                const d = lsGet('gornyak_docs_db', []).find(v => v.id === id); if (!d) return;
+                head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name;
+            } else if (kind === 'tarif') {
+                head = 'Редактировать тарифы'; showText = true; x.value = getTarif();
+            } else if (kind === 'about') {
+                head = 'Редактировать «О НСТ»'; showText = true; x.value = getAbout();
+            }
+            document.getElementById('editHead').textContent = head;
+            document.getElementById('editTitleWrap').classList.toggle('hidden', !showTitle);
+            document.getElementById('editTextWrap').classList.toggle('hidden', !showText);
+            document.getElementById('editFileWrap').classList.toggle('hidden', !showFile);
+            closeModal();
+            show('editModal');
+        }
+        function closeEditModal() { hide('editModal'); }
+        function finishEdit(reopen) { closeEditModal(); showToast('Сохранено'); reopen(); }
+        function saveEdit() {
+            if (!editCtx) return;
+            const { kind, id } = editCtx;
+            const title = document.getElementById('editTitle').value.trim();
+            const text = document.getElementById('editText').value.trim();
+            if (kind === 'news') {
+                if (!title) { showToast('Укажите тему новости'); return; }
+                const list = lsGet('gornyak_news_db', []); const n = list.find(v => v.id === id);
+                if (n) { n.title = title; n.desc = text; if (!lsSet('gornyak_news_db', list)) return; }
+                finishEdit(openNewsModal);
+            } else if (kind === 'doc') {
+                if (!title) { showToast('Укажите название'); return; }
+                const file = document.getElementById('editFile').files[0];
+                const apply = f => {
+                    const list = lsGet('gornyak_docs_db', []); const d = list.find(v => v.id === id);
+                    if (d) {
+                        d.name = title;
+                        if (f) { d.fileName = f.file.name; d.size = f.file.size; d.data = f.data; d.date = new Date().toLocaleDateString('ru-RU'); }
+                        if (!lsSet('gornyak_docs_db', list)) return;
+                    }
+                    finishEdit(openDocsModal);
+                };
+                if (file) {
+                    if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+                    const rd = new FileReader();
+                    rd.onload = () => apply({ file, data: rd.result });
+                    rd.readAsDataURL(file);
+                } else apply(null);
+            } else if (kind === 'tarif') {
+                if (!text) { showToast('Текст не может быть пустым'); return; }
+                localStorage.setItem('gornyak_tarif', text);
+                finishEdit(openTarif);
+            } else if (kind === 'about') {
+                if (!text) { showToast('Текст не может быть пустым'); return; }
+                localStorage.setItem('gornyak_about', text);
+                finishEdit(openAbout);
+            }
+        }
+
+        // --- КОНТАКТЫ ---
+        const BOARD = [
+            ['Макарова Ольга Михайловна', 'Председатель правления', '8916-710-74-18'],
+            ['Сафонова Ирина Викторовна', 'Главный бухгалтер', '8916-222-06-38'],
+            ['Красенькова Наталья Борисовна', 'Бухгалтер', '8916-104-01-85'],
+            ['Вахрушев Константин Михайлович', 'Главный энергетик', '8926-958-52-51'],
+            ['Тимошилов Антон Андреевич', 'Электрик', '8925-000-47-11'],
+            ['Горицкая Нина Александровна', 'Дворник', '8909-657-06-31'],
+            ['Муминов Омонуло Абдулхалимович', 'Хозяйственный работник', '8903-667-84-81'],
+            ['Асланов Телман Магомед Оглы', 'Член правления', '8929-664-58-06'],
+            ['Зеновкина Александра Владимировна', 'Член правления', '8977-488-26-63'],
+            ['Князева Ирина Вениаминовна', 'Член правления', '8925-008-21-22'],
+            ['Личманова Евгения Александровна', 'Член правления', '8917-532-39-12'],
+            ['Мичкасов Валентин Васильевич', 'Член правления', '8903-156-75-25'],
+            ['Черкесс Игорь Викторович', 'Член правления', '8926-361-50-61']
+        ];
+        function openContactsModal() {
+            const tel = p => '+7' + p.replace(/\D/g, '').slice(1);
+            const row = (n, r, p) => `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="min-w-0"><div class="font-extrabold text-sm text-gray-900">${esc(n)}</div><div class="text-[0.6875rem] text-gray-600 font-bold">${esc(r)}</div></div><a href="tel:${tel(p)}" class="shrink-0 text-xs font-extrabold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl px-2.5 py-1.5">${esc(p)}</a></div>`;
+            const h = t => `<div class="text-[0.625rem] font-black uppercase text-gray-500 mt-3 mb-1.5">${t}</div>`;
+            openRichSection('Контакты',
+                h('Адрес правления')
+                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2 flex items-center justify-between gap-2"><div class="font-extrabold text-sm text-gray-900">Центральная улица, дом 247</div><button data-goto="map" class="shrink-0 text-xs font-extrabold text-white bg-[#1c5c38] rounded-xl px-3 py-2"><i class="fa-solid fa-map-location-dot"></i></button></div>`
+                + h('Правление и службы') + BOARD.map(b => row(...b)).join('')
+                + h('Участковый по НСТ «Горняк»') + row('Сырчин Кирилл Владимирович', 'Участковый', '8985-131-14-84')
+                + h('Полиция г. Котельники') + row('Дежурная часть', 'Круглосуточно', '8926-777-57-84'));
+        }
+
+        // --- ЧАТ ---
+        const chatState = { peer: 'general', replyTo: null, editId: null, menuId: null };
+        const roomKey = peer => peer === 'general' ? 'general' : [myUid(), peer].sort().join('|');
+        const loadChat = () => lsGet('gornyak_real_chat', []);
+        const saveChat = m => lsSet('gornyak_real_chat', m);
+
+        function chatPeers() {
+            const map = {};
+            const pr = loadProfiles();
+            Object.keys(pr).forEach(e => { map[e] = pr[e].name || e.split('@')[0]; });
+            loadChat().forEach(m => { map[m.uid || m.author] = m.author; });
+            delete map[myUid()];
+            return Object.keys(map).map(u => ({ uid: u, nick: map[u] })).sort((a, b) => a.nick.localeCompare(b.nick, 'ru'));
+        }
+        function nickOf(uid) { const p = chatPeers().find(x => x.uid === uid); return p ? p.nick : uid; }
+        function renderChatNicks() {
+            const item = (uid, nick, icon) => `<button data-peer="${esc(uid)}" class="w-full text-left px-3 py-3 text-xs font-extrabold border-b border-gray-100 flex items-center gap-2 ${chatState.peer === uid ? 'bg-green-100 text-[#1c5c38]' : 'text-gray-800'}"><i class="fa-solid ${icon} text-[0.6875rem]"></i><span class="truncate">${esc(nick)}</span></button>`;
+            const peers = chatPeers();
+            document.getElementById('chatNicks').innerHTML = item('general', 'Общий чат', 'fa-users') + peers.map(p => item(p.uid, p.nick, 'fa-user')).join('')
+                + (peers.length ? '' : '<div class="p-3 text-[0.625rem] text-gray-500 font-bold leading-snug">Здесь появятся садоводы, когда зарегистрируются или напишут в чат.</div>');
+        }
+        function updateChatBar() {
+            const bar = document.getElementById('chatBar');
+            let txt = '';
+            if (chatState.editId) txt = 'Редактирование сообщения';
+            else if (chatState.replyTo) { const m = loadChat().find(x => x.id === chatState.replyTo); txt = m ? 'Ответ для ' + m.author + ': ' + m.text : ''; }
+            document.getElementById('chatBarText').textContent = txt;
+            bar.classList.toggle('hidden', !txt); bar.classList.toggle('flex', !!txt);
+        }
+        function cancelChatMode() {
+            chatState.replyTo = null; chatState.editId = null;
+            document.getElementById('chatInputText').value = '';
+            updateChatBar();
+        }
+        function selectChatPeer(uid) {
+            chatState.peer = uid; chatState.menuId = null; cancelChatMode();
+            renderChatNicks(); renderChatMessages(true);
+        }
+        function renderChatMessages(stick) {
+            const box = document.getElementById('chatMessagesContainer');
+            const keep = box.scrollTop;
+            const all = loadChat();
+            const room = roomKey(chatState.peer);
+            const msgs = all.filter(m => (m.room || 'general') === room);
+            document.getElementById('chatTitle').textContent = chatState.peer === 'general' ? 'Общий чат садоводов' : 'Диалог: ' + nickOf(chatState.peer);
+            if (!msgs.length) { box.innerHTML = '<div class="text-center py-10 text-gray-500 font-semibold text-xs">Сообщений пока нет. Напишите первое!</div>'; return; }
+            box.innerHTML = msgs.map(m => {
+                const mine = (m.uid || m.author) === myUid();
+                const rep = m.replyTo ? all.find(x => x.id === m.replyTo) : null;
+                const quote = m.replyTo ? `<div class="border-l-4 border-[#1c5c38] bg-black/5 rounded-lg px-2 py-1 mb-1 text-[0.6875rem] text-gray-600 font-semibold truncate">${rep ? esc(rep.author) + ': ' + esc(rep.text) : 'Сообщение удалено'}</div>` : '';
+                const menu = chatState.menuId === m.id ? `<div class="flex gap-1.5 mt-1.5 flex-wrap"><button data-act="reply" class="chat-act">Ответить</button>${mine ? '<button data-act="edit" class="chat-act">Изменить</button><button data-act="del" class="chat-act text-red-700">Удалить</button>' : ''}</div>` : '';
+                return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div data-mid="${m.id}" class="max-w-[88%] rounded-2xl px-3 py-2 shadow-sm border ${mine ? 'bg-emerald-100 border-emerald-200' : 'bg-white/95 border-gray-200'}"><div class="text-[0.625rem] font-black text-[#1c5c38]">${esc(m.author)}</div>${quote}<div class="text-sm font-medium text-gray-800 break-words whitespace-pre-wrap">${esc(m.text)}</div><div class="text-[0.625rem] text-gray-400 font-semibold mt-0.5">${esc(m.time)}${m.edited ? ' · изменено' : ''}</div>${menu}</div></div>`;
+            }).join('');
+            box.scrollTop = stick ? box.scrollHeight : keep;
+        }
+        document.getElementById('chatNicks').addEventListener('click', e => {
+            const b = e.target.closest('[data-peer]'); if (b) selectChatPeer(b.dataset.peer);
+        });
+        document.getElementById('chatMessagesContainer').addEventListener('click', async e => {
+            const bubble = e.target.closest('[data-mid]'); if (!bubble) return;
+            const id = bubble.dataset.mid, act = e.target.closest('[data-act]');
+            if (!act) { chatState.menuId = chatState.menuId === id ? null : id; renderChatMessages(); return; }
+            const all = loadChat(), m = all.find(x => x.id === id); if (!m) return;
+            const inp = document.getElementById('chatInputText');
+            chatState.menuId = null;
+            if (act.dataset.act === 'reply') { chatState.replyTo = id; chatState.editId = null; inp.value = ''; updateChatBar(); inp.focus(); }
+            else if (act.dataset.act === 'edit') { chatState.editId = id; chatState.replyTo = null; inp.value = m.text; updateChatBar(); inp.focus(); }
+            else if (act.dataset.act === 'del') {
+                if (await askConfirm('Удалить сообщение?', 'Удалить')) { saveChat(all.filter(x => x.id !== id)); if (chatState.replyTo === id) cancelChatMode(); }
+            }
+            renderChatMessages();
+        });
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const inp = document.getElementById('chatInputText');
+            const text = inp.value.trim(); if (!text) return;
+            const all = loadChat();
+            if (chatState.editId) {
+                const m = all.find(x => x.id === chatState.editId);
+                if (m && (m.uid || m.author) === myUid()) { m.text = text; m.edited = true; }
+            } else {
+                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), replyTo: chatState.replyTo || null, time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
+            }
+            saveChat(all);
+            chatState.replyTo = null; chatState.editId = null; inp.value = '';
+            updateChatBar(); renderChatNicks(); renderChatMessages(true);
+        }
+        function openChatModal() {
+            show('chatModal');
+            chatState.menuId = null; updateChatBar();
+            renderChatNicks(); renderChatMessages(true);
+        }
+        function closeChatModal() { hide('chatModal'); }
+
+        // --- ПРОФИЛЬ И АВТОРИЗАЦИЯ ---
+        function openProfileAuthModal() {
+            const u = currentUser();
+            if (u) {
+                document.getElementById('profEmail').innerText = u.email;
+                document.getElementById('profName').innerText = u.name || 'Не указано';
+                document.getElementById('profPlot').innerText = u.plot || 'Не указан';
+                show('profileModal');
+            } else show('authModal');
+        }
+        function closeAuthModal() { hide('authModal'); }
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+            if (!email || !pass) { showToast('Заполните почту и пароль'); return; }
+            const prf = loadProfiles()[email] || {};
+            lsSet('gornyak_user', { email, name: prf.name || '', plot: prf.plot || '' });
+            closeAuthModal();
+            addNotification('Вход в личный кабинет: ' + email);
+            openProfileAuthModal();
+        }
+        function forgotPassword() { closeAuthModal(); show('forgotModal'); }
+        function closeForgotModal() { hide('forgotModal'); }
+        function handleForgotSubmit(e) {
+            e.preventDefault();
+            showToast('Восстановление по почте пока недоступно: для отправки писем нужен серверный модуль.');
+            closeForgotModal();
+        }
+        function openRegisterModal() { closeAuthModal(); show('registerModal'); }
+        function closeRegisterModal() { hide('registerModal'); }
+        function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value.trim();
+            const name = document.getElementById('regName').value.trim();
+            const plot = document.getElementById('regPlot').value.trim();
+            if (!email) { showToast('Укажите почту'); return; }
+            lsSet('gornyak_user', { email, name, plot });
+            const prs = loadProfiles(); prs[email] = { name, plot }; saveProfiles(prs);
+            closeRegisterModal();
+            showToast('Регистрация успешна');
+            addNotification('Зарегистрирован новый садовод');
+            openProfileAuthModal();
+        }
+        function closeProfileModal() { hide('profileModal'); }
+        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); showToast('Вы вышли из аккаунта. Данные сохранены на этом устройстве.'); }
+        async function deleteAccount() {
+            if (!(await askConfirm('Вы действительно хотите удалить аккаунт?', 'Удалить'))) return;
+            const u = currentUser();
+            if (u) { const pr = loadProfiles(); delete pr[u.email]; saveProfiles(pr); }
+            localStorage.removeItem('gornyak_user'); closeProfileModal();
+            showToast('Аккаунт удалён'); addNotification('Аккаунт садовода удален');
+        }
+    </script>
+</body>
+</html>
