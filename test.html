@@ -1074,7 +1074,8 @@
             const list = lsGet('news', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                const canEdit = Database.isOwner(n.uid);
+                // Кнопки видны ТОЛЬКО если пользователь авторизован и совпадает uid автора
+                const canEdit = currentUser() && Database.isOwner(n.uid);
                 const buttons = canEdit ? `<div class="flex gap-2 mt-2">${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div>` : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${buttons}</div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
@@ -1083,7 +1084,7 @@
         async function delNews(id) {
             const list = lsGet('news', []);
             const item = list.find(x => x.id === id);
-            if (item && !Database.isOwner(item.uid)) { showToast('Вы можете удалять только свои новости'); return; }
+            if (!currentUser() || (item && !Database.isOwner(item.uid))) { showToast('Вы можете удалять только свои новости'); return; }
             if (!(await askConfirm('Удалить новость?', 'Удалить'))) return;
             lsSet('news', list.filter(x => x.id !== id));
             openNewsModal();
@@ -1118,7 +1119,8 @@
             const items = list.length ? list.map(d => {
                 const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
                 const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
-                const canEdit = Database.isOwner(d.uid);
+                // Кнопки видны ТОЛЬКО если пользователь авторизован и совпадает uid автора
+                const canEdit = currentUser() && Database.isOwner(d.uid);
                 const editButtons = canEdit ? `${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}` : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${editButtons}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
@@ -1132,7 +1134,7 @@
         async function delDoc(id) {
             const list = lsGet('docs', []);
             const item = list.find(x => x.id === id);
-            if (item && !Database.isOwner(item.uid)) { showToast('Вы можете удалять только свои документы'); return; }
+            if (!currentUser() || (item && !Database.isOwner(item.uid))) { showToast('Вы можете удалять только свои документы'); return; }
             if (!(await askConfirm('Удалить документ?', 'Удалить'))) return;
             lsSet('docs', list.filter(x => x.id !== id));
             openDocsModal();
@@ -1147,15 +1149,17 @@
             let head = 'Редактировать', showTitle = false, showText = false, showFile = false;
             if (kind === 'news') {
                 const n = lsGet('news', []).find(v => v.id === id); 
-                if (!n || !Database.isOwner(n.uid)) { showToast('Редактировать можно только свои записи'); return; }
+                if (!currentUser() || !n || !Database.isOwner(n.uid)) { showToast('Редактировать можна только свои записи'); return; }
                 head = 'Редактировать новость'; showTitle = showText = true; t.value = n.title; x.value = n.desc || '';
             } else if (kind === 'doc') {
                 const d = lsGet('docs', []).find(v => v.id === id); 
-                if (!d || !Database.isOwner(d.uid)) { showToast('Редактировать можно только свои файлы'); return; }
+                if (!currentUser() || !d || !Database.isOwner(d.uid)) { showToast('Редактировать можна только свои файлы'); return; }
                 head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name;
             } else if (kind === 'tarif') {
+                if (!currentUser()) { showToast('Войдите в профиль'); return; }
                 head = 'Редактировать тарифы'; showText = true; x.value = getTarif();
             } else if (kind === 'about') {
+                if (!currentUser()) { showToast('Войдите в профиль'); return; }
                 head = 'Редактировать «О НСТ»'; showText = true; x.value = getAbout();
             }
             document.getElementById('editHead').textContent = head;
