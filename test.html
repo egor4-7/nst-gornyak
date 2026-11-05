@@ -74,7 +74,7 @@
         .glass-cloud { position: absolute; width: 32px; height: 18px; background: rgba(255, 255, 255, 0.9); border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); bottom: 4px; left: 4px; }
         .glass-sun { position: absolute; top: 2px; right: 4px; width: 20px; height: 20px; background: radial-gradient(circle at 35% 35%, #fff6bc, #ff9900); border-radius: 50%; box-shadow: 0 0 10px rgba(255, 153, 0, 0.8); }
 
-        /* ===== ИКОНКИ: 4 стиля (classic / glass / ios / round) ===== */
+        /* ===== ИКОНКИ: 4 стиля ===== */
         .ic { position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; isolation: isolate; border-radius: var(--r, 16px); }
         .ic > i { position: relative; z-index: 3; }
         .icon-box { --r: 16px; width: var(--icon-w, 44px) !important; height: var(--icon-h, 44px) !important; font-size: var(--icon-f, 16px) !important; }
@@ -92,23 +92,19 @@
         .icon-bell { --c1: #fcd34d; --c2: #f97316; --fg: #fff; }
         .icon-gear { --c1: #a5b4fc; --c2: #6366f1; --fg: #fff; }
 
-        /* 1. Текущий */
         .ic[data-istyle="classic"] { background: linear-gradient(135deg, var(--c1), var(--c2)); color: var(--fg); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
         .ic[data-istyle="classic"].icon-bell { --c1: #f3f4f6; --c2: #e5e7eb; --fg: #1f2937; border: 1px solid #e5e7eb; box-shadow: none; }
         .ic[data-istyle="classic"].icon-gear { --c1: #e5e7eb; --c2: #d1d5db; --fg: #374151; border: 1px solid #d1d5db; box-shadow: none; }
 
-        /* 2. Стекло */
         .ic[data-istyle="glass"] { background: transparent; box-shadow: none; color: var(--c2); }
         .ic[data-istyle="glass"]::before { content: ""; position: absolute; left: 6%; top: 6%; width: 62%; height: 62%; border-radius: 30%; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: .9; z-index: 1; }
         .ic[data-istyle="glass"]::after { content: ""; position: absolute; right: 6%; bottom: 6%; width: 62%; height: 62%; border-radius: 30%; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.85); box-shadow: 0 6px 14px rgba(0,0,0,.12); z-index: 2; }
         .ic[data-istyle="glass"] > i { left: 9%; top: 9%; }
 
-        /* 3. iOS 26 */
         .ic[data-istyle="ios"] { border-radius: 26%; background: linear-gradient(180deg, var(--c1) 0%, var(--c2) 100%); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 4px rgba(0,0,0,.12); }
         .ic[data-istyle="ios"]::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 55%); z-index: 2; pointer-events: none; }
         .ic[data-istyle="ios"] > i { filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
 
-        /* 4. Круглые */
         .ic[data-istyle="round"] { border-radius: 50%; background: #fff; color: var(--c2); box-shadow: 0 6px 16px rgba(0,0,0,.12), inset 0 0 0 1px rgba(0,0,0,.05); }
         .ic[data-istyle="round"]::before { content: ""; position: absolute; left: 20%; top: 20%; width: 56%; height: 56%; border-radius: 38%; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: .35; z-index: 1; }
 
@@ -195,12 +191,6 @@
             </div>
         </div>
 
-        <div id="uiHint" class="hidden relative z-0 bg-white/80 border border-green-200 rounded-2xl p-3 text-[0.6875rem] font-semibold text-gray-700 leading-snug items-start gap-2">
-            <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
-            <div class="flex-1"><b class="text-gray-900">Подсказка:</b> чтобы изменить размер или порядок плиток, зажмите любую плитку на 1 секунду (нужен вход в профиль). Затем тяните за правый нижний угол — размер, стрелки ↑ ↓ — перемещение. Кнопка «Готово» сохраняет результат.</div>
-            <button onclick="closeUiHint()" class="shrink-0 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center" aria-label="Скрыть подсказку"><i class="fa-solid fa-xmark text-[0.625rem]"></i></button>
-        </div>
-
         <div id="cardsContainer" class="relative z-0 cards-grid pb-24"></div>
 
         <div id="editModeBar" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md px-2.5 py-2 rounded-full shadow-2xl z-50 items-center gap-1.5 max-w-[96vw]">
@@ -215,6 +205,9 @@
 
     </div>
 
+    <!-- Подключаем выделенный слой данных (RAM) -->
+    <script src="database.js"></script>
+
     <!-- Модалки -->
     <div id="createNewsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
@@ -224,6 +217,7 @@
                 Вы не вошли в профиль: запись будет опубликована от имени гостя. Войдите в личный кабинет, чтобы подписать её.
             </div>
             <form onsubmit="submitNewsForm(event)" class="space-y-3">
+                <input type="hidden" id="newsEditId">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Тема новости</label>
                     <input type="text" id="newsTitleInput" required placeholder="Заголовок..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
@@ -233,11 +227,16 @@
                     <textarea id="newsDescInput" rows="3" required placeholder="Текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm"></textarea>
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-gray-600 uppercase"><i class="fa-solid fa-paperclip"></i> Прикрепить файл (необязательно)</label>
-                    <input type="file" id="newsFileInput" class="w-full mt-1 text-xs text-gray-500">
-                    <p class="text-[0.625rem] text-gray-500 font-semibold mt-1">Размер файла — до 600 КБ.</p>
+                    <label class="text-xs font-bold text-gray-600 uppercase">Прикрепить файл (необязательно)</label>
+                    <div class="mt-1 flex items-center gap-2">
+                        <input type="file" id="newsFileInput" onchange="handleFileSelected(this)" class="w-full text-xs text-gray-500">
+                        <button type="button" id="clearFileBtn" onclick="clearSelectedFile()" class="hidden py-1.5 px-2.5 bg-red-100 hover:bg-red-200 text-red-700 rounded-xl text-xs font-bold transition shrink-0" title="Удалить файл">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <span id="fileNameDisplay" class="text-[0.625rem] text-gray-500 font-semibold mt-1 block"></span>
                 </div>
-                <button type="submit" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
+                <button type="submit" id="newsSubmitBtn" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
             </form>
         </div>
     </div>
@@ -306,15 +305,6 @@
                     <input type="range" id="blurRange" min="5" max="40" value="25" class="w-full accent-[#1c5c38]" oninput="previewBlur(this.value)">
                 </div>
             </div>
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-[0.6875rem] font-semibold text-gray-700 leading-snug">
-                <div class="font-extrabold text-gray-900 mb-1"><i class="fa-solid fa-lightbulb text-amber-500"></i> Как изменить плитки</div>
-                Зажмите любую плитку на главной на 1 секунду (нужен вход в профиль). Тяните за правый нижний угол — меняется размер. Стрелки ↑ ↓ внизу экрана — перемещение. Кнопки S, M, L задают готовые размеры, «Авто» возвращает исходный.
-                <button onclick="resetUiHint()" class="block mt-2 text-blue-700 font-extrabold underline">Показывать подсказку на главной</button>
-            </div>
-            <a href="https://t.me/egor23u" target="_blank" rel="noopener" class="w-full py-3 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow">
-                <i class="fa-brands fa-telegram text-base"></i>
-                <span>Связь с разработчиком: @egor23u</span>
-            </a>
             <div class="flex justify-center pt-2">
                 <button onclick="applySettings()" class="py-3 px-8 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow-lg transition text-xs">Применить</button>
             </div>
@@ -438,9 +428,12 @@
 
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2 pr-10"></h3>
-            <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700 z-10"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex justify-between items-center border-b pb-2 pr-10">
+                <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900"></h3>
+                <div id="modalActionBtnContainer"></div>
+            </div>
+            <div id="modalContent" class="text-gray-800 text-base font-semibold py-2 leading-relaxed"></div>
             <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold shadow-md">Понятно</button>
         </div>
     </div>
@@ -521,20 +514,18 @@
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Восстановление пароля</h3>
-            <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
-                <i class="fa-solid fa-triangle-exclamation"></i> Восстановление пароля временно недоступно. Мы сообщим, когда функция заработает.
-            </div>
+            <p class="text-xs text-gray-700 font-semibold leading-relaxed">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
             <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
                     <input type="email" id="forgotEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
-                <button type="submit" disabled class="w-full py-3.5 bg-gray-300 text-gray-500 font-extrabold rounded-2xl cursor-not-allowed">Отправить</button>
+                <button type="submit" class="w-full py-3.5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Отправить</button>
             </form>
         </div>
     </div>
 
-    <!-- Редактирование (новости, документы, тарифы, «О НСТ») -->
+    <!-- Редактирование -->
     <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-[60]">
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative max-h-[92vh] overflow-y-auto">
             <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
@@ -548,7 +539,7 @@
                 <textarea id="editText" rows="8" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold"></textarea>
             </div>
             <div id="editFileWrap">
-                <label class="text-xs font-bold text-gray-600 uppercase">Прикрепить / заменить файл (необязательно)</label>
+                <label class="text-xs font-bold text-gray-600 uppercase">Заменить файл (необязательно)</label>
                 <input type="file" id="editFile" class="w-full mt-1 text-xs text-gray-500">
             </div>
             <button onclick="saveEdit()" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Сохранить</button>
@@ -588,7 +579,6 @@
         let resizing = null;
         const GRID_GAP = 8, GRID_COLS = 6, GRID_MAX_ROWS = 8, DEF_W = 2, DEF_H = 2;
 
-        // Сброс старой раскладки плиток (версия 3 = размер по умолчанию 100%)
         try {
             if (localStorage.getItem('gornyak_cards_v') !== '3') {
                 localStorage.removeItem('gornyak_cards');
@@ -738,15 +728,15 @@
 
         // --- УТИЛИТЫ ---
         const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
-        const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { showToast('Не хватает места на устройстве'); return false; } };
+        const lsGet = (k, d) => Database.get(k, d);
+        const lsSet = (k, v) => Database.set(k, v);
         const show = id => { const m = document.getElementById(id); m.classList.add('flex'); m.classList.remove('hidden'); };
         const hide = id => { const m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('flex'); };
-        function loadProfiles() { return lsGet('gornyak_profiles', {}); }
-        function saveProfiles(p) { lsSet('gornyak_profiles', p); }
-        function currentUser() { return lsGet('gornyak_user', null); }
-        function myUid() { const u = currentUser(); return u ? u.email : 'guest'; }
-        function myNick() { const u = currentUser(); return u ? (u.name || u.email.split('@')[0]) : 'Гость'; }
+        function loadProfiles() { return Database.get('profiles', {}); }
+        function saveProfiles(p) { Database.set('profiles', p); }
+        function currentUser() { return Database.getCurrentUser(); }
+        function myUid() { return Database.getMyUid(); }
+        function myNick() { return Database.getMyNick(); }
 
         let toastTimer = null;
         function showToast(msg) {
@@ -768,28 +758,44 @@
 
         // --- УВЕДОМЛЕНИЯ ---
         function addNotification(text) {
-            const notifs = lsGet('gornyak_notifications', []);
+            const notifs = lsGet('notifs', []);
             notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-            lsSet('gornyak_notifications', notifs);
+            lsSet('notifs', notifs);
             updateNotifBadge();
         }
         function updateNotifBadge() {
-            const n = lsGet('gornyak_notifications', []).length;
+            const n = lsGet('notifs', []).length;
             const badge = document.getElementById('notifBadge');
-            if (n > 0) { badge.innerText = n; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
+            if (badge) {
+                if (n > 0) { badge.innerText = n; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
+            }
         }
         function openNotifModal() {
             const container = document.getElementById('notifContainer');
-            const notifs = lsGet('gornyak_notifications', []);
+            const notifs = lsGet('notifs', []);
             container.innerHTML = notifs.length === 0
                 ? `<div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>`
                 : notifs.map(n => `<div class="bg-green-50/90 p-3.5 rounded-2xl border border-green-200 text-xs"><div class="text-[0.625rem] font-bold text-emerald-800 mb-0.5">${esc(n.time)}</div><div class="font-bold text-gray-800">${esc(n.text)}</div></div>`).join('');
             show('notifModal');
         }
         function closeNotifModal() { hide('notifModal'); }
-        function clearNotifications() { localStorage.removeItem('gornyak_notifications'); updateNotifBadge(); openNotifModal(); }
+        function clearNotifications() { Database.remove('notifs'); updateNotifBadge(); openNotifModal(); }
 
-        // --- НАСТРОЙКИ ---
+        // --- ИНДИВИДУАЛЬНЫЕ НАСТРОЙКИ ---
+        function getStoredSettings() {
+            const u = currentUser();
+            const key = u ? `gornyak_settings_${u.email}` : 'gornyak_settings_guest';
+            const saved = lsGet(key, null);
+            if (saved) return saved;
+            const oldGlobal = lsGet('settings', null);
+            return oldGlobal || { fontSize: 14, blurVal: 25, iconSize: 'medium', iconStyle: 'classic' };
+        }
+        function saveStoredSettings(settingsObj) {
+            const u = currentUser();
+            const key = u ? `gornyak_settings_${u.email}` : 'gornyak_settings_guest';
+            lsSet(key, settingsObj);
+        }
+
         function openSettingsModal() { show('settingsModal'); }
         function closeSettingsModal() { restoreSettings(); hide('settingsModal'); }
         function previewFontSize(val) { document.documentElement.style.setProperty('--fs', val); }
@@ -822,7 +828,7 @@
             document.querySelectorAll('.ic:not(.ic-preview)').forEach(el => el.setAttribute('data-istyle', selectedIconStyle));
         }
         function restoreSettings() {
-            const s = lsGet('gornyak_settings', {});
+            const s = getStoredSettings();
             const fs = s.fontSize || 14, bl = s.blurVal || 25;
             previewFontSize(fs); previewBlur(bl);
             document.getElementById('fontSizeRange').value = fs;
@@ -831,41 +837,40 @@
             setIconStyle(s.iconStyle || 'classic');
         }
         function applySettings() {
-            lsSet('gornyak_settings', {
+            const settingsObj = {
                 fontSize: document.getElementById('fontSizeRange').value,
                 blurVal: document.getElementById('blurRange').value,
                 iconSize: selectedIconSize,
                 iconStyle: selectedIconStyle
-            });
+            };
+            saveStoredSettings(settingsObj);
+            applyIconSize(selectedIconSize);
+            previewFontSize(settingsObj.fontSize);
+            previewBlur(settingsObj.blurVal);
             hide('settingsModal');
-            restoreSettings();
+            addNotification('Индивидуальные настройки интерфейса применены');
         }
 
-        // --- ДАННЫЕ ПО УМОЛЧАНИЮ И ОЧИСТКА ---
+        // --- ИНИЦИАЛИЗАЦИЯ ---
         function initData() {
-            let news = lsGet('gornyak_news_db', []).filter(n => !/egorkreed094/i.test(n.author || ''));
-            let docs = lsGet('gornyak_docs_db', []);
-            if (!lsGet('gornyak_seeded_v1', false)) {
+            let news = lsGet('news', []).filter(n => !/egorkreed094/i.test(n.author || ''));
+            let docs = lsGet('docs', []);
+            if (!lsGet('seeded_v2', false)) {
                 news = news.concat([
-                    { id: 'seed_n1', title: 'Общее собрание членов НСТ.', desc: '', date: '', author: '' },
-                    { id: 'seed_n2', title: 'Чистка центральной дороги грейдером.', desc: '', date: '', author: '' }
+                    { id: 'seed_n1', title: 'Общее собрание членов НСТ.', desc: '', date: '', author: '', uid: 'admin' },
+                    { id: 'seed_n2', title: 'Чистка центральной дороги грейдером.', desc: '', date: '', author: '', uid: 'admin' }
                 ]);
                 docs = docs.concat([
-                    { id: 'seed_d1', name: 'Устав НСТ «Горняк»', fileName: '', size: 0, data: '', date: '', author: '' },
-                    { id: 'seed_d2', name: 'Бланки заявлений', fileName: '', size: 0, data: '', date: '', author: '' }
+                    { id: 'seed_d1', name: 'Устав НСТ «Горняк»', fileName: '', size: 0, data: '', date: '', author: '', uid: 'admin' },
+                    { id: 'seed_d2', name: 'Бланки заявлений', fileName: '', size: 0, data: '', date: '', author: '', uid: 'admin' }
                 ]);
-                lsSet('gornyak_docs_db', docs);
-                lsSet('gornyak_seeded_v1', true);
+                lsSet('docs', docs);
+                lsSet('seeded_v2', true);
             }
-            lsSet('gornyak_news_db', news);
-            const notifs = lsGet('gornyak_notifications', []).filter(n => n.text !== 'Настройки интерфейса применены');
-            lsSet('gornyak_notifications', notifs);
+            lsSet('news', news);
         }
 
-        function resetUiHint() { localStorage.removeItem('gornyak_hint_closed'); show('uiHint'); showToast('Подсказка показана на главной'); }
-        function closeUiHint() { localStorage.setItem('gornyak_hint_closed', '1'); hide('uiHint'); }
         window.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('gornyak_hint_closed') !== '1') show('uiHint');
             initData();
             renderCards();
             restoreSettings();
@@ -873,7 +878,6 @@
             updateNotifBadge();
         });
 
-        // --- ПОГОДА ---
         const WX_ICON = c => c === 0 ? 'fa-sun' : c <= 2 ? 'fa-cloud-sun' : c === 3 ? 'fa-cloud' : c <= 48 ? 'fa-smog' : (c <= 67 || (c >= 80 && c <= 82)) ? 'fa-cloud-rain' : (c <= 77 || c === 85 || c === 86) ? 'fa-snowflake' : 'fa-cloud-bolt';
         const hm = iso => (iso || '').slice(11, 16);
 
@@ -949,16 +953,18 @@
             if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) searchDropdown.classList.add('hidden');
         });
 
-        // --- ОБЩЕЕ ОКНО ---
+        // --- МОДАЛЬНЫЕ ОКНА ---
         function openSection(title, text) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalContent').innerText = text;
+            document.getElementById('modalActionBtnContainer').innerHTML = '';
             show('modalWindow');
             searchDropdown.classList.add('hidden');
         }
-        function openRichSection(title, html) {
+        function openRichSection(title, html, actionBtnHtml = '') {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalActionBtnContainer').innerHTML = actionBtnHtml;
             show('modalWindow');
             searchDropdown.classList.add('hidden');
         }
@@ -968,11 +974,10 @@
         function closeTransportModal() { hide('transportModal'); }
         function toggleRoute(id) { document.getElementById(id).classList.toggle('hidden'); }
 
-        // --- КНОПКИ ДЕЙСТВИЙ В ОКНАХ ---
         const BTN_ADD = 'bg-[#1c5c38] text-white';
         const BTN_EDIT = 'bg-blue-50 text-blue-800 border border-blue-200';
         const BTN_DEL = 'bg-red-50 text-red-700 border border-red-200';
-        const bigBtn = (act, icon, label, cls) => `<button data-act="${act}" class="flex-1 min-w-[30%] py-2.5 px-2 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 ${cls}"><i class="fa-solid ${icon}"></i>${label}</button>`;
+        const bigBtn = (act, icon, label, cls) => `<button data-act="${act}" class="py-2.5 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 ${cls}"><i class="fa-solid ${icon}"></i>${label}</button>`;
         const miniBtn = (act, id, icon, label, cls) => `<button data-act="${act}" data-id="${esc(id)}" class="text-[0.6875rem] font-extrabold px-2.5 py-1.5 rounded-xl flex items-center gap-1 ${cls}"><i class="fa-solid ${icon} text-[0.625rem]"></i>${label}</button>`;
         const toolbar = inner => `<div class="flex flex-wrap gap-2 mb-3">${inner}</div>`;
 
@@ -991,7 +996,6 @@
             if (act === 'news-add') { closeModal(); openCreateNewsModal(); }
             else if (act === 'news-edit') { if (requireLogin()) openEditModal('news', id); }
             else if (act === 'news-del') { if (requireLogin()) delNews(id); }
-            else if (act === 'news-dl') downloadNewsFile(id);
             else if (act === 'doc-add') { closeModal(); openCreateDocModal(); }
             else if (act === 'doc-edit') { if (requireLogin()) openEditModal('doc', id); }
             else if (act === 'doc-del') { if (requireLogin()) delDoc(id); }
@@ -1008,8 +1012,8 @@
         function openTarif() {
             const t = getTarif();
             openRichSection('Тарифы',
-                toolbar(bigBtn('tarif-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('tarif-del', 'fa-trash', 'Удалить', BTN_DEL))
-                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Тарифы не указаны.'}</div>`);
+                `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Тарифы не указаны.'}</div>`,
+                bigBtn('tarif-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('tarif-del', 'fa-trash', 'Удалить', BTN_DEL));
         }
 
         // --- О НСТ ---
@@ -1018,65 +1022,74 @@
         function openAbout() {
             const t = getAbout();
             openRichSection('О НСТ «Горняк»',
-                toolbar(bigBtn('about-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('about-del', 'fa-trash', 'Удалить', BTN_DEL))
-                + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Описание не указано.'}</div>`);
+                `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Описание не указано.'}</div>`,
+                bigBtn('about-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('about-del', 'fa-trash', 'Удалить', BTN_DEL));
         }
         function openAboutEdit() { if (requireLogin()) openEditModal('about'); }
-
         async function delText(kind) {
             if (!(await askConfirm(kind === 'tarif' ? 'Удалить текст тарифов?' : 'Удалить описание «О НСТ»?', 'Удалить'))) return;
             localStorage.setItem(kind === 'tarif' ? 'gornyak_tarif' : 'gornyak_about', '');
             kind === 'tarif' ? openTarif() : openAbout();
         }
 
-        // --- НОВОСТИ ---
+        // --- НОВОСТИ С ПРОВЕРКОЙ ПРАВ АВТОРА ---
         function openCreateNewsModal() {
             document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
+            clearSelectedFile();
             show('createNewsModal');
         }
         function closeCreateNewsModal() { hide('createNewsModal'); }
+        function handleFileSelected(input) {
+            const clearBtn = document.getElementById('clearFileBtn');
+            const nameDisplay = document.getElementById('fileNameDisplay');
+            if (input.files && input.files[0]) {
+                clearBtn.classList.remove('hidden');
+                nameDisplay.textContent = 'Выбран файл: ' + input.files[0].name;
+            } else {
+                clearBtn.classList.add('hidden');
+                nameDisplay.textContent = '';
+            }
+        }
+        function clearSelectedFile() {
+            const input = document.getElementById('newsFileInput');
+            if (input) input.value = '';
+            const clearBtn = document.getElementById('clearFileBtn');
+            if (clearBtn) clearBtn.classList.add('hidden');
+            const nameDisplay = document.getElementById('fileNameDisplay');
+            if (nameDisplay) nameDisplay.textContent = '';
+        }
         function submitNewsForm(e) {
             e.preventDefault();
             const form = e.target;
             const title = document.getElementById('newsTitleInput').value.trim();
             const desc = document.getElementById('newsDescInput').value.trim();
-            const file = document.getElementById('newsFileInput').files[0];
-            const publish = att => {
-                const list = lsGet('gornyak_news_db', []);
-                const item = { id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() };
-                if (att) { item.fileName = att.file.name; item.size = att.file.size; item.data = att.data; }
-                list.unshift(item);
-                if (!lsSet('gornyak_news_db', list)) return;
-                form.reset(); closeCreateNewsModal();
-                addNotification('Опубликована новость: ' + title);
-                openNewsModal();
-            };
-            if (file) {
-                if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
-                const rd = new FileReader();
-                rd.onload = () => publish({ file, data: rd.result });
-                rd.readAsDataURL(file);
-            } else publish(null);
-        }
-        function downloadNewsFile(id) {
-            const n = lsGet('gornyak_news_db', []).find(x => x.id === id); if (!n || !n.data) return;
-            const a = document.createElement('a'); a.href = n.data; a.download = n.fileName || 'file'; document.body.appendChild(a); a.click(); a.remove();
+            const list = lsGet('news', []);
+            list.unshift({ id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick(), uid: myUid() });
+            if (!lsSet('news', list)) return;
+            form.reset(); clearSelectedFile(); closeCreateNewsModal();
+            addNotification('Опубликована новость: ' + title);
+            openNewsModal();
         }
         function openNewsModal() {
-            const list = lsGet('gornyak_news_db', []);
+            const list = lsGet('news', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${n.data ? `<div class="mt-2 text-[0.6875rem] font-bold text-gray-600"><i class="fa-solid fa-paperclip"></i> ${esc(n.fileName || 'Файл')} · ${Math.max(1, Math.round((n.size || 0) / 1024))} КБ</div>` : ''}<div class="flex flex-wrap gap-2 mt-2">${n.data ? miniBtn('news-dl', n.id, 'fa-download', 'Скачать', BTN_ADD) : ''}${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+                const canEdit = Database.isOwner(n.uid);
+                const buttons = canEdit ? `<div class="flex gap-2 mt-2">${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div>` : '';
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${buttons}</div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
-            openRichSection('Новости СНТ', toolbar(bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD)) + items);
+            openRichSection('Новости СНТ', items, bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD));
         }
         async function delNews(id) {
+            const list = lsGet('news', []);
+            const item = list.find(x => x.id === id);
+            if (item && !Database.isOwner(item.uid)) { showToast('Вы можете удалять только свои новости'); return; }
             if (!(await askConfirm('Удалить новость?', 'Удалить'))) return;
-            lsSet('gornyak_news_db', lsGet('gornyak_news_db', []).filter(x => x.id !== id));
+            lsSet('news', list.filter(x => x.id !== id));
             openNewsModal();
         }
 
-        // --- ДОКУМЕНТЫ ---
+        // --- ДОКУМЕНТЫ С ПРОВЕРКОЙ ПРАВ АВТОРА ---
         function openCreateDocModal() {
             document.getElementById('docWarning').classList.toggle('hidden', !!currentUser());
             show('createDocModal');
@@ -1091,9 +1104,9 @@
             if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
             const rd = new FileReader();
             rd.onload = () => {
-                const list = lsGet('gornyak_docs_db', []);
-                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
-                if (!lsSet('gornyak_docs_db', list)) return;
+                const list = lsGet('docs', []);
+                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick(), uid: myUid() });
+                if (!lsSet('docs', list)) return;
                 form.reset(); closeCreateDocModal();
                 addNotification('Загружен документ: ' + name);
                 openDocsModal();
@@ -1101,21 +1114,27 @@
             rd.readAsDataURL(file);
         }
         function openDocsModal() {
-            const list = lsGet('gornyak_docs_db', []);
+            const list = lsGet('docs', []);
             const items = list.length ? list.map(d => {
                 const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
                 const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
-                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+                const canEdit = Database.isOwner(d.uid);
+                const editButtons = canEdit ? `${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}` : '';
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${editButtons}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
-            openRichSection('Документы', toolbar(bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD)) + items);
+            openDocsModalBtnHtml = bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD);
+            openRichSection('Документы', items, openDocsModalBtnHtml);
         }
         function downloadDoc(id) {
-            const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
+            const d = lsGet('docs', []).find(x => x.id === id); if (!d || !d.data) return;
             const a = document.createElement('a'); a.href = d.data; a.download = d.fileName || d.name; document.body.appendChild(a); a.click(); a.remove();
         }
         async function delDoc(id) {
+            const list = lsGet('docs', []);
+            const item = list.find(x => x.id === id);
+            if (item && !Database.isOwner(item.uid)) { showToast('Вы можете удалять только свои документы'); return; }
             if (!(await askConfirm('Удалить документ?', 'Удалить'))) return;
-            lsSet('gornyak_docs_db', lsGet('gornyak_docs_db', []).filter(x => x.id !== id));
+            lsSet('docs', list.filter(x => x.id !== id));
             openDocsModal();
         }
 
@@ -1127,10 +1146,12 @@
             f.value = '';
             let head = 'Редактировать', showTitle = false, showText = false, showFile = false;
             if (kind === 'news') {
-                const n = lsGet('gornyak_news_db', []).find(v => v.id === id); if (!n) return;
-                head = 'Редактировать новость'; showTitle = showText = showFile = true; t.value = n.title; x.value = n.desc || '';
+                const n = lsGet('news', []).find(v => v.id === id); 
+                if (!n || !Database.isOwner(n.uid)) { showToast('Редактировать можно только свои записи'); return; }
+                head = 'Редактировать новость'; showTitle = showText = true; t.value = n.title; x.value = n.desc || '';
             } else if (kind === 'doc') {
-                const d = lsGet('gornyak_docs_db', []).find(v => v.id === id); if (!d) return;
+                const d = lsGet('docs', []).find(v => v.id === id); 
+                if (!d || !Database.isOwner(d.uid)) { showToast('Редактировать можно только свои файлы'); return; }
                 head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name;
             } else if (kind === 'tarif') {
                 head = 'Редактировать тарифы'; showText = true; x.value = getTarif();
@@ -1153,31 +1174,18 @@
             const text = document.getElementById('editText').value.trim();
             if (kind === 'news') {
                 if (!title) { showToast('Укажите тему новости'); return; }
-                const nf = document.getElementById('editFile').files[0];
-                const applyNews = f => {
-                    const list = lsGet('gornyak_news_db', []); const n = list.find(v => v.id === id);
-                    if (n) {
-                        n.title = title; n.desc = text;
-                        if (f) { n.fileName = f.file.name; n.size = f.file.size; n.data = f.data; }
-                        if (!lsSet('gornyak_news_db', list)) return;
-                    }
-                    finishEdit(openNewsModal);
-                };
-                if (nf) {
-                    if (nf.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
-                    const rd = new FileReader();
-                    rd.onload = () => applyNews({ file: nf, data: rd.result });
-                    rd.readAsDataURL(nf);
-                } else applyNews(null);
+                const list = lsGet('news', []); const n = list.find(v => v.id === id);
+                if (n) { n.title = title; n.desc = text; if (!lsSet('news', list)) return; }
+                finishEdit(openNewsModal);
             } else if (kind === 'doc') {
                 if (!title) { showToast('Укажите название'); return; }
                 const file = document.getElementById('editFile').files[0];
                 const apply = f => {
-                    const list = lsGet('gornyak_docs_db', []); const d = list.find(v => v.id === id);
+                    const list = lsGet('docs', []); const d = list.find(v => v.id === id);
                     if (d) {
                         d.name = title;
                         if (f) { d.fileName = f.file.name; d.size = f.file.size; d.data = f.data; d.date = new Date().toLocaleDateString('ru-RU'); }
-                        if (!lsSet('gornyak_docs_db', list)) return;
+                        if (!lsSet('docs', list)) return;
                     }
                     finishEdit(openDocsModal);
                 };
@@ -1198,7 +1206,7 @@
             }
         }
 
-        // --- КОНТАКТЫ ---
+        // --- КОНТАКТЫ И ЧАТ ---
         const BOARD = [
             ['Макарова Ольга Михайловна', 'Председатель правления', '8916-710-74-18'],
             ['Сафонова Ирина Викторовна', 'Главный бухгалтер', '8916-222-06-38'],
@@ -1226,11 +1234,10 @@
                 + h('Полиция г. Котельники') + row('Дежурная часть', 'Круглосуточно', '8926-777-57-84'));
         }
 
-        // --- ЧАТ ---
         const chatState = { peer: 'general', replyTo: null, editId: null, menuId: null };
         const roomKey = peer => peer === 'general' ? 'general' : [myUid(), peer].sort().join('|');
-        const loadChat = () => lsGet('gornyak_real_chat', []);
-        const saveChat = m => lsSet('gornyak_real_chat', m);
+        const loadChat = () => lsGet('chat', []);
+        const saveChat = m => lsSet('chat', m);
 
         function chatPeers() {
             const map = {};
@@ -1238,8 +1245,6 @@
             Object.keys(pr).forEach(e => { map[e] = pr[e].name || e.split('@')[0]; });
             loadChat().forEach(m => { map[m.uid || m.author] = m.author; });
             delete map[myUid()];
-            delete map['guest'];
-            Object.keys(map).forEach(k => { if (/гость/i.test(map[k])) delete map[k]; });
             return Object.keys(map).map(u => ({ uid: u, nick: map[u] })).sort((a, b) => a.nick.localeCompare(b.nick, 'ru'));
         }
         function nickOf(uid) { const p = chatPeers().find(x => x.uid === uid); return p ? p.nick : uid; }
@@ -1339,16 +1344,17 @@
             const pass = document.getElementById('loginPassword').value.trim();
             if (!email || !pass) { showToast('Заполните почту и пароль'); return; }
             const prf = loadProfiles()[email] || {};
-            lsSet('gornyak_user', { email, name: prf.name || '', plot: prf.plot || '' });
+            lsSet('user', { email, name: prf.name || '', plot: prf.plot || '' });
             closeAuthModal();
             addNotification('Вход в личный кабинет: ' + email);
             openProfileAuthModal();
+            renderCards();
         }
         function forgotPassword() { closeAuthModal(); show('forgotModal'); }
         function closeForgotModal() { hide('forgotModal'); }
         function handleForgotSubmit(e) {
             e.preventDefault();
-            showToast('Восстановление пароля временно недоступно');
+            showToast('Восстановление по почте пока недоступно: для отправки писем нужен серверный модуль.');
             closeForgotModal();
         }
         function openRegisterModal() { closeAuthModal(); show('registerModal'); }
@@ -1359,21 +1365,23 @@
             const name = document.getElementById('regName').value.trim();
             const plot = document.getElementById('regPlot').value.trim();
             if (!email) { showToast('Укажите почту'); return; }
-            lsSet('gornyak_user', { email, name, plot });
+            lsSet('user', { email, name, plot });
             const prs = loadProfiles(); prs[email] = { name, plot }; saveProfiles(prs);
             closeRegisterModal();
             showToast('Регистрация успешна');
             addNotification('Зарегистрирован новый садовод');
             openProfileAuthModal();
+            renderCards();
         }
         function closeProfileModal() { hide('profileModal'); }
-        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); showToast('Вы вышли из аккаунта. Данные сохранены на этом устройстве.'); }
+        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); showToast('Вы вышли из аккаунта. Данные сохранены на этом устройстве.'); renderCards(); }
         async function deleteAccount() {
             if (!(await askConfirm('Вы действительно хотите удалить аккаунт?', 'Удалить'))) return;
             const u = currentUser();
             if (u) { const pr = loadProfiles(); delete pr[u.email]; saveProfiles(pr); }
             localStorage.removeItem('gornyak_user'); closeProfileModal();
             showToast('Аккаунт удалён'); addNotification('Аккаунт садовода удален');
+            renderCards();
         }
     </script>
 </body>
