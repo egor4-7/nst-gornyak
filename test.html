@@ -947,7 +947,6 @@
                     searchResultsList.appendChild(btn);
                 });
             }
-            searchDropdown.classList.add('hidden'); // безопасный вызов скрытия
             searchDropdown.classList.remove('hidden');
         }
         document.addEventListener('click', e => {
@@ -960,7 +959,7 @@
             document.getElementById('modalContent').innerText = text;
             document.getElementById('modalActionBtnContainer').innerHTML = '';
             
-            // Если пользователь вошел, показываем кнопки управления для Тарифов и «О НСТ»
+            // Кнопки редактирования Тарифов и «О НСТ» отображаются СТРОГО ЕСЛИ пользователь авторизован
             if (currentUser() && (title === 'Тарифы' || title === 'О НСТ «Горняк»')) {
                 const kind = title === 'Тарифы' ? 'tarif' : 'about';
                 document.getElementById('modalActionBtnContainer').innerHTML = bigBtn(kind + '-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn(kind + '-del', 'fa-trash', 'Удалить', BTN_DEL);
@@ -1034,6 +1033,7 @@
             const t = getAbout();
             openSection('О НСТ «Горняк»', t ? t : 'Описание не указано.');
         }
+        function openAboutEdit() { if (requireLogin()) openEditModal('about'); }
         async function delText(kind) {
             if (!(await askConfirm(kind === 'tarif' ? 'Удалить текст тарифов?' : 'Удалить описание «О НСТ»?', 'Удалить'))) return;
             localStorage.setItem(kind === 'tarif' ? 'gornyak_tarif' : 'gornyak_about', '');
@@ -1082,8 +1082,8 @@
             const list = lsGet('news', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                // Кнопки видны СТРОГО ЕСЛИ пользователь залогинен И является автором этой записи
-                const canEdit = currentUser() && Database.isOwner(n.uid);
+                // Кнопки видны СТРОГО ЕСЛИ пользователь залогинен И совпадает uid автора (системные с uid: 'admin' без входа не покажут кнопки)
+                const canEdit = currentUser() && n.uid && Database.isOwner(n.uid);
                 const buttons = canEdit ? `<div class="flex gap-2 mt-2">${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div>` : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${buttons}</div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
@@ -1127,8 +1127,8 @@
             const items = list.length ? list.map(d => {
                 const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
                 const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
-                // Кнопки видны СТРОГО ЕСЛИ пользователь залогинен И является автором этой записи
-                const canEdit = currentUser() && Database.isOwner(d.uid);
+                // Кнопки видны СТРОГО ЕСЛИ пользователь залогинен И совпадает uid автора
+                const canEdit = currentUser() && d.uid && Database.isOwner(d.uid);
                 const editButtons = canEdit ? `${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}` : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${editButtons}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
