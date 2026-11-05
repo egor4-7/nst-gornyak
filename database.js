@@ -1,3 +1,5 @@
+// Слой данных (RAM / Database) для портала НСТ «Горняк»
+
 const DB_KEYS = {
     news: 'gornyak_news_db',
     docs: 'gornyak_docs_db',
