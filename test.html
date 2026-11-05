@@ -195,6 +195,12 @@
             </div>
         </div>
 
+        <div id="uiHint" class="hidden relative z-0 bg-white/80 border border-green-200 rounded-2xl p-3 text-[0.6875rem] font-semibold text-gray-700 leading-snug items-start gap-2">
+            <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+            <div class="flex-1"><b class="text-gray-900">Подсказка:</b> чтобы изменить размер или порядок плиток, зажмите любую плитку на 1 секунду (нужен вход в профиль). Затем тяните за правый нижний угол — размер, стрелки ↑ ↓ — перемещение. Кнопка «Готово» сохраняет результат.</div>
+            <button onclick="closeUiHint()" class="shrink-0 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center" aria-label="Скрыть подсказку"><i class="fa-solid fa-xmark text-[0.625rem]"></i></button>
+        </div>
+
         <div id="cardsContainer" class="relative z-0 cards-grid pb-24"></div>
 
         <div id="editModeBar" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md px-2.5 py-2 rounded-full shadow-2xl z-50 items-center gap-1.5 max-w-[96vw]">
@@ -225,6 +231,11 @@
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Описание</label>
                     <textarea id="newsDescInput" rows="3" required placeholder="Текст объявления..." class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-600 uppercase"><i class="fa-solid fa-paperclip"></i> Прикрепить файл (необязательно)</label>
+                    <input type="file" id="newsFileInput" class="w-full mt-1 text-xs text-gray-500">
+                    <p class="text-[0.625rem] text-gray-500 font-semibold mt-1">Размер файла — до 600 КБ.</p>
                 </div>
                 <button type="submit" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
             </form>
@@ -295,6 +306,15 @@
                     <input type="range" id="blurRange" min="5" max="40" value="25" class="w-full accent-[#1c5c38]" oninput="previewBlur(this.value)">
                 </div>
             </div>
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-[0.6875rem] font-semibold text-gray-700 leading-snug">
+                <div class="font-extrabold text-gray-900 mb-1"><i class="fa-solid fa-lightbulb text-amber-500"></i> Как изменить плитки</div>
+                Зажмите любую плитку на главной на 1 секунду (нужен вход в профиль). Тяните за правый нижний угол — меняется размер. Стрелки ↑ ↓ внизу экрана — перемещение. Кнопки S, M, L задают готовые размеры, «Авто» возвращает исходный.
+                <button onclick="resetUiHint()" class="block mt-2 text-blue-700 font-extrabold underline">Показывать подсказку на главной</button>
+            </div>
+            <a href="https://t.me/egor23u" target="_blank" rel="noopener" class="w-full py-3 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow">
+                <i class="fa-brands fa-telegram text-base"></i>
+                <span>Связь с разработчиком: @egor23u</span>
+            </a>
             <div class="flex justify-center pt-2">
                 <button onclick="applySettings()" class="py-3 px-8 bg-[#1c5c38] hover:bg-[#144f2b] text-white font-extrabold rounded-2xl shadow-lg transition text-xs">Применить</button>
             </div>
@@ -501,13 +521,15 @@
         <div class="glass-panel modal-animate rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-xl font-extrabold text-gray-900 border-b pb-2">Восстановление пароля</h3>
-            <p class="text-xs text-gray-700 font-semibold leading-relaxed">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
+            <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
+                <i class="fa-solid fa-triangle-exclamation"></i> Восстановление пароля временно недоступно. Мы сообщим, когда функция заработает.
+            </div>
             <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase">Электронная почта</label>
                     <input type="email" id="forgotEmail" required placeholder="mail@example.com" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-bold">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Отправить</button>
+                <button type="submit" disabled class="w-full py-3.5 bg-gray-300 text-gray-500 font-extrabold rounded-2xl cursor-not-allowed">Отправить</button>
             </form>
         </div>
     </div>
@@ -526,7 +548,7 @@
                 <textarea id="editText" rows="8" class="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-white/90 text-sm font-semibold"></textarea>
             </div>
             <div id="editFileWrap">
-                <label class="text-xs font-bold text-gray-600 uppercase">Заменить файл (необязательно)</label>
+                <label class="text-xs font-bold text-gray-600 uppercase">Прикрепить / заменить файл (необязательно)</label>
                 <input type="file" id="editFile" class="w-full mt-1 text-xs text-gray-500">
             </div>
             <button onclick="saveEdit()" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Сохранить</button>
@@ -840,7 +862,10 @@
             lsSet('gornyak_notifications', notifs);
         }
 
+        function resetUiHint() { localStorage.removeItem('gornyak_hint_closed'); show('uiHint'); showToast('Подсказка показана на главной'); }
+        function closeUiHint() { localStorage.setItem('gornyak_hint_closed', '1'); hide('uiHint'); }
         window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('gornyak_hint_closed') !== '1') show('uiHint');
             initData();
             renderCards();
             restoreSettings();
@@ -966,6 +991,7 @@
             if (act === 'news-add') { closeModal(); openCreateNewsModal(); }
             else if (act === 'news-edit') { if (requireLogin()) openEditModal('news', id); }
             else if (act === 'news-del') { if (requireLogin()) delNews(id); }
+            else if (act === 'news-dl') downloadNewsFile(id);
             else if (act === 'doc-add') { closeModal(); openCreateDocModal(); }
             else if (act === 'doc-edit') { if (requireLogin()) openEditModal('doc', id); }
             else if (act === 'doc-del') { if (requireLogin()) delDoc(id); }
@@ -1014,18 +1040,33 @@
             const form = e.target;
             const title = document.getElementById('newsTitleInput').value.trim();
             const desc = document.getElementById('newsDescInput').value.trim();
-            const list = lsGet('gornyak_news_db', []);
-            list.unshift({ id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
-            if (!lsSet('gornyak_news_db', list)) return;
-            form.reset(); closeCreateNewsModal();
-            addNotification('Опубликована новость: ' + title);
-            openNewsModal();
+            const file = document.getElementById('newsFileInput').files[0];
+            const publish = att => {
+                const list = lsGet('gornyak_news_db', []);
+                const item = { id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() };
+                if (att) { item.fileName = att.file.name; item.size = att.file.size; item.data = att.data; }
+                list.unshift(item);
+                if (!lsSet('gornyak_news_db', list)) return;
+                form.reset(); closeCreateNewsModal();
+                addNotification('Опубликована новость: ' + title);
+                openNewsModal();
+            };
+            if (file) {
+                if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+                const rd = new FileReader();
+                rd.onload = () => publish({ file, data: rd.result });
+                rd.readAsDataURL(file);
+            } else publish(null);
+        }
+        function downloadNewsFile(id) {
+            const n = lsGet('gornyak_news_db', []).find(x => x.id === id); if (!n || !n.data) return;
+            const a = document.createElement('a'); a.href = n.data; a.download = n.fileName || 'file'; document.body.appendChild(a); a.click(); a.remove();
         }
         function openNewsModal() {
             const list = lsGet('gornyak_news_db', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}<div class="flex gap-2 mt-2">${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${n.data ? `<div class="mt-2 text-[0.6875rem] font-bold text-gray-600"><i class="fa-solid fa-paperclip"></i> ${esc(n.fileName || 'Файл')} · ${Math.max(1, Math.round((n.size || 0) / 1024))} КБ</div>` : ''}<div class="flex flex-wrap gap-2 mt-2">${n.data ? miniBtn('news-dl', n.id, 'fa-download', 'Скачать', BTN_ADD) : ''}${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
             openRichSection('Новости СНТ', toolbar(bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD)) + items);
         }
@@ -1087,7 +1128,7 @@
             let head = 'Редактировать', showTitle = false, showText = false, showFile = false;
             if (kind === 'news') {
                 const n = lsGet('gornyak_news_db', []).find(v => v.id === id); if (!n) return;
-                head = 'Редактировать новость'; showTitle = showText = true; t.value = n.title; x.value = n.desc || '';
+                head = 'Редактировать новость'; showTitle = showText = showFile = true; t.value = n.title; x.value = n.desc || '';
             } else if (kind === 'doc') {
                 const d = lsGet('gornyak_docs_db', []).find(v => v.id === id); if (!d) return;
                 head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name;
@@ -1112,9 +1153,22 @@
             const text = document.getElementById('editText').value.trim();
             if (kind === 'news') {
                 if (!title) { showToast('Укажите тему новости'); return; }
-                const list = lsGet('gornyak_news_db', []); const n = list.find(v => v.id === id);
-                if (n) { n.title = title; n.desc = text; if (!lsSet('gornyak_news_db', list)) return; }
-                finishEdit(openNewsModal);
+                const nf = document.getElementById('editFile').files[0];
+                const applyNews = f => {
+                    const list = lsGet('gornyak_news_db', []); const n = list.find(v => v.id === id);
+                    if (n) {
+                        n.title = title; n.desc = text;
+                        if (f) { n.fileName = f.file.name; n.size = f.file.size; n.data = f.data; }
+                        if (!lsSet('gornyak_news_db', list)) return;
+                    }
+                    finishEdit(openNewsModal);
+                };
+                if (nf) {
+                    if (nf.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+                    const rd = new FileReader();
+                    rd.onload = () => applyNews({ file: nf, data: rd.result });
+                    rd.readAsDataURL(nf);
+                } else applyNews(null);
             } else if (kind === 'doc') {
                 if (!title) { showToast('Укажите название'); return; }
                 const file = document.getElementById('editFile').files[0];
@@ -1184,6 +1238,8 @@
             Object.keys(pr).forEach(e => { map[e] = pr[e].name || e.split('@')[0]; });
             loadChat().forEach(m => { map[m.uid || m.author] = m.author; });
             delete map[myUid()];
+            delete map['guest'];
+            Object.keys(map).forEach(k => { if (/гость/i.test(map[k])) delete map[k]; });
             return Object.keys(map).map(u => ({ uid: u, nick: map[u] })).sort((a, b) => a.nick.localeCompare(b.nick, 'ru'));
         }
         function nickOf(uid) { const p = chatPeers().find(x => x.uid === uid); return p ? p.nick : uid; }
@@ -1292,7 +1348,7 @@
         function closeForgotModal() { hide('forgotModal'); }
         function handleForgotSubmit(e) {
             e.preventDefault();
-            showToast('Восстановление по почте пока недоступно: для отправки писем нужен серверный модуль.');
+            showToast('Восстановление пароля временно недоступно');
             closeForgotModal();
         }
         function openRegisterModal() { closeAuthModal(); show('registerModal'); }
