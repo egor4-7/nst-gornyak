@@ -947,6 +947,7 @@
                     searchResultsList.appendChild(btn);
                 });
             }
+            searchDropdown.classList.add('hidden'); // безопасный вызов скрытия
             searchDropdown.classList.remove('hidden');
         }
         document.addEventListener('click', e => {
@@ -958,6 +959,13 @@
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalContent').innerText = text;
             document.getElementById('modalActionBtnContainer').innerHTML = '';
+            
+            // Если пользователь вошел, показываем кнопки управления для Тарифов и «О НСТ»
+            if (currentUser() && (title === 'Тарифы' || title === 'О НСТ «Горняк»')) {
+                const kind = title === 'Тарифы' ? 'tarif' : 'about';
+                document.getElementById('modalActionBtnContainer').innerHTML = bigBtn(kind + '-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn(kind + '-del', 'fa-trash', 'Удалить', BTN_DEL);
+            }
+
             show('modalWindow');
             searchDropdown.classList.add('hidden');
         }
@@ -1000,7 +1008,12 @@
             else if (act === 'doc-edit') { if (requireLogin()) openEditModal('doc', id); }
             else if (act === 'doc-del') { if (requireLogin()) delDoc(id); }
             else if (act === 'doc-dl') downloadDoc(id);
-            else if (act === 'tarif-edit') { if (requireLogin()) openEditModal('tarif'); }
+        });
+
+        document.getElementById('modalActionBtnContainer').addEventListener('click', async e => {
+            const b = e.target.closest('[data-act]'); if (!b) return;
+            const act = b.dataset.act;
+            if (act === 'tarif-edit') { if (requireLogin()) openEditModal('tarif'); }
             else if (act === 'tarif-del') { if (requireLogin()) delText('tarif'); }
             else if (act === 'about-edit') { if (requireLogin()) openEditModal('about'); }
             else if (act === 'about-del') { if (requireLogin()) delText('about'); }
@@ -1011,9 +1024,7 @@
         const getTarif = () => { const v = localStorage.getItem('gornyak_tarif'); return v === null ? TARIF_DEFAULT : v; };
         function openTarif() {
             const t = getTarif();
-            openRichSection('Тарифы',
-                `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Тарифы не указаны.'}</div>`,
-                bigBtn('tarif-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('tarif-del', 'fa-trash', 'Удалить', BTN_DEL));
+            openSection('Тарифы', t ? t : 'Тарифы не указаны.');
         }
 
         // --- О НСТ ---
@@ -1021,18 +1032,15 @@
         const getAbout = () => { const v = localStorage.getItem('gornyak_about'); return v === null ? ABOUT_DEFAULT : v; };
         function openAbout() {
             const t = getAbout();
-            openRichSection('О НСТ «Горняк»',
-                `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Описание не указано.'}</div>`,
-                bigBtn('about-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('about-del', 'fa-trash', 'Удалить', BTN_DEL));
+            openSection('О НСТ «Горняк»', t ? t : 'Описание не указано.');
         }
-        function openAboutEdit() { if (requireLogin()) openEditModal('about'); }
         async function delText(kind) {
             if (!(await askConfirm(kind === 'tarif' ? 'Удалить текст тарифов?' : 'Удалить описание «О НСТ»?', 'Удалить'))) return;
             localStorage.setItem(kind === 'tarif' ? 'gornyak_tarif' : 'gornyak_about', '');
             kind === 'tarif' ? openTarif() : openAbout();
         }
 
-        // --- НОВОСТИ С ПРОВЕРКОЙ ПРАВ АВТОРА ---
+        // --- НОВОСТИ С СТРОГОЙ ПРОВЕРКОЙ АВТОРА ---
         function openCreateNewsModal() {
             document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
             clearSelectedFile();
@@ -1074,7 +1082,7 @@
             const list = lsGet('news', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                // Кнопки видны ТОЛЬКО если пользователь авторизован и совпадает uid автора
+                // Кнопки видны СТРОГО ЕСЛИ пользователь залогинен И является автором этой записи
                 const canEdit = currentUser() && Database.isOwner(n.uid);
                 const buttons = canEdit ? `<div class="flex gap-2 mt-2">${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div>` : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${buttons}</div>`;
@@ -1090,7 +1098,7 @@
             openNewsModal();
         }
 
-        // --- ДОКУМЕНТЫ С ПРОВЕРКОЙ ПРАВ АВТОРА ---
+        // --- ДОКУМЕНТЫ С СТРОГОЙ ПРОВЕРКОЙ АВТОРА ---
         function openCreateDocModal() {
             document.getElementById('docWarning').classList.toggle('hidden', !!currentUser());
             show('createDocModal');
@@ -1119,13 +1127,12 @@
             const items = list.length ? list.map(d => {
                 const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
                 const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
-                // Кнопки видны ТОЛЬКО если пользователь авторизован и совпадает uid автора
+                // Кнопки видны СТРОГО ЕСЛИ пользователь залогинен И является автором этой записи
                 const canEdit = currentUser() && Database.isOwner(d.uid);
                 const editButtons = canEdit ? `${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}` : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${editButtons}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
-            openDocsModalBtnHtml = bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD);
-            openRichSection('Документы', items, openDocsModalBtnHtml);
+            openRichSection('Документы', items, bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD));
         }
         function downloadDoc(id) {
             const d = lsGet('docs', []).find(x => x.id === id); if (!d || !d.data) return;
@@ -1149,11 +1156,11 @@
             let head = 'Редактировать', showTitle = false, showText = false, showFile = false;
             if (kind === 'news') {
                 const n = lsGet('news', []).find(v => v.id === id); 
-                if (!currentUser() || !n || !Database.isOwner(n.uid)) { showToast('Редактировать можна только свои записи'); return; }
+                if (!currentUser() || !n || !Database.isOwner(n.uid)) { showToast('Редактировать можно только свои записи'); return; }
                 head = 'Редактировать новость'; showTitle = showText = true; t.value = n.title; x.value = n.desc || '';
             } else if (kind === 'doc') {
                 const d = lsGet('docs', []).find(v => v.id === id); 
-                if (!currentUser() || !d || !Database.isOwner(d.uid)) { showToast('Редактировать можна только свои файлы'); return; }
+                if (!currentUser() || !d || !Database.isOwner(d.uid)) { showToast('Редактировать можно только свои файлы'); return; }
                 head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name;
             } else if (kind === 'tarif') {
                 if (!currentUser()) { showToast('Войдите в профиль'); return; }
