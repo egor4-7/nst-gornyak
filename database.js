@@ -1,5 +1,7 @@
 // Слой данных (RAM / Database) для портала НСТ «Горняк»
 
+// Слой данных (RAM / Database) для портала НСТ «Горняк»
+
 const DB_KEYS = {
     news: 'gornyak_news_db',
     docs: 'gornyak_docs_db',
@@ -48,5 +50,15 @@ const Database = {
     getMyUid() {
         const u = this.getCurrentUser();
         return u ? u.email : 'guest';
+    },
+
+    // Проверка, является ли текущий пользователь владельцем записи
+    isOwner(itemAuthorUid) {
+        const currentId = this.getMyUid();
+        // Если запись создана гостем или без UID, разрешаем гостю (или совпадению по нику)
+        if (!itemAuthorUid || itemAuthorUid === 'guest') {
+            return currentId === 'guest';
+        }
+        return itemAuthorUid === currentId;
     }
 };
