@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>НСТ «Горняк» — Информационный портал</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
@@ -119,6 +120,33 @@
         .tb { min-width: 36px; height: 36px; border-radius: 9999px; background: rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 800; color: #fff; padding: 0 10px; }
         .tb-ok { background: #1c5c38; padding: 0 16px; }
         .chat-act { font-size: .6875rem; font-weight: 800; padding: .25rem .6rem; border-radius: 9999px; background: rgba(0,0,0,.07); }
+        .selectable, .selectable * { -webkit-user-select: text; user-select: text; }
+        button, a { transition: transform .15s ease; }
+        button:active, a:active { transform: scale(.96); }
+        .press-ring { position: fixed; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; pointer-events: none; z-index: 9999; background: rgba(255,255,255,.28); border: 1.5px solid rgba(255,255,255,.85); box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 6px 18px rgba(0,40,20,.18); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: ringPop .55s cubic-bezier(.16,1,.3,1) forwards; }
+        @keyframes ringPop { 0% { transform: scale(.4); opacity: .95; } 100% { transform: scale(1.5); opacity: 0; } }
+        .modal-out { animation: modalFadeOut .18s ease-in forwards; }
+        @keyframes modalFadeOut { to { opacity: 0; transform: scale(.94) translateY(8px); } }
+        .fade-out { animation: bgOut .18s ease-in forwards; }
+        @keyframes bgOut { to { opacity: 0; } }
+        .loupe { position: fixed; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; pointer-events: none; z-index: 9998; background: rgba(255,255,255,.6); border: 2px solid rgba(255,255,255,.95); box-shadow: 0 10px 28px rgba(0,0,0,.28), inset 0 0 14px rgba(255,255,255,.7); }
+        .sel-bar { position: fixed; z-index: 9998; display: flex; gap: 2px; padding: 4px; border-radius: 9999px; background: rgba(255,255,255,.78); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+        .sel-bar button { font-size: .6875rem; font-weight: 800; padding: .4rem .8rem; border-radius: 9999px; color: #0f2417; }
+        .sel-bar button:active { background: rgba(28,92,56,.15); }
+        .selectable ::selection, .selectable::selection { background: rgba(245,180,40,.38); }
+        .sel-bar { gap: 0; padding: 3px; animation: menuIn .2s cubic-bezier(.16,1,.3,1); }
+        .sel-bar button { font-size: .75rem; font-weight: 600; padding: .4rem .7rem; }
+        .sel-h { position: fixed; width: 2px; background: #e8a800; z-index: 9997; touch-action: none; }
+        .sel-h i { position: absolute; left: -5px; width: 12px; height: 12px; border-radius: 50%; background: #e8a800; box-shadow: 0 0 0 1px rgba(255,255,255,.7); }
+        .sel-h.start i { top: -9px; } .sel-h.end i { bottom: -9px; }
+        .sel-h::after { content: ""; position: absolute; left: -18px; width: 38px; height: 38px; }
+        .sel-h.start::after { top: -28px; } .sel-h.end::after { bottom: -28px; }
+        .sel-menu { position: fixed; z-index: 9998; width: 210px; padding: 6px; border-radius: 24px; background: rgba(255,255,255,.8); backdrop-filter: blur(24px) saturate(190%); -webkit-backdrop-filter: blur(24px) saturate(190%); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 16px 40px rgba(0,0,0,.25); transform-origin: top center; animation: menuIn .24s cubic-bezier(.16,1,.3,1); }
+        .sel-menu button { width: 100%; display: flex; align-items: center; gap: 12px; padding: .65rem .8rem; border-radius: 16px; font-size: .8125rem; font-weight: 600; color: #0f2417; text-align: left; }
+        .sel-menu button + button { border-top: 1px solid rgba(0,0,0,.06); }
+        .sel-menu button i { width: 18px; text-align: center; color: #1c5c38; }
+        .sel-menu button:active { background: rgba(28,92,56,.12); }
+        @keyframes menuIn { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
@@ -235,7 +263,7 @@
                 <div>
                     <label class="text-xs font-bold text-gray-600 uppercase"><i class="fa-solid fa-paperclip"></i> Прикрепить файл (необязательно)</label>
                     <input type="file" id="newsFileInput" class="w-full mt-1 text-xs text-gray-500">
-                    <p class="text-[0.625rem] text-gray-500 font-semibold mt-1">Размер файла — до 600 КБ.</p>
+                    <p class="text-[0.625rem] text-gray-500 font-semibold mt-1">Размер файла — до 5 МБ.</p>
                 </div>
                 <button type="submit" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Опубликовать</button>
             </form>
@@ -327,13 +355,14 @@
             <div class="flex items-center gap-2 border-b border-gray-200 px-4 py-3">
                 <i class="fa-solid fa-comments text-[#1c5c38] text-lg"></i>
                 <h3 class="text-base font-extrabold text-gray-900 flex-grow">Общение садоводов</h3>
+                <button onclick="shareText('Чат садоводов НСТ «Горняк»', 'Присоединяйтесь к общению соседей на портале.')" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-700" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
                 <button onclick="closeChatModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="flex flex-grow min-h-0">
                 <div id="chatNicks" class="w-[30%] shrink-0 border-r border-gray-200 overflow-y-auto bg-white/50"></div>
                 <div class="flex flex-col flex-grow min-w-0">
                     <div id="chatTitle" class="px-3 py-2 text-xs font-black text-[#1c5c38] border-b border-gray-200 truncate"></div>
-                    <div id="chatMessagesContainer" class="flex-grow overflow-y-auto space-y-2 p-3 text-sm"></div>
+                    <div id="chatMessagesContainer" class="selectable flex-grow overflow-y-auto space-y-2 p-3 text-sm"></div>
                     <div id="chatBar" class="hidden px-3 py-1.5 bg-green-100/80 text-[0.6875rem] font-bold text-gray-700 items-center gap-2 border-t border-green-200"><span id="chatBarText" class="flex-grow truncate"></span><button type="button" onclick="cancelChatMode()" class="text-gray-600"><i class="fa-solid fa-xmark"></i></button></div>
                     <form onsubmit="sendChatMessage(event)" class="p-2 border-t border-gray-200 flex items-center gap-2">
                         <input type="text" id="chatInputText" autocomplete="off" placeholder="Сообщение..." class="flex-grow min-w-0 p-3 rounded-2xl border border-gray-300 bg-white/90 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#1c5c38]">
@@ -413,7 +442,7 @@
             </div>
             <div class="flex flex-col gap-2 pt-2">
                 <button onclick="logout()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl shadow">Выйти из аккаунта</button>
-                <button onclick="deleteAccount()" class="w-full py-2 bg-gray-200 hover:bg-gray-300 text-red-700 font-bold rounded-xl text-xs transition">Удалить аккаунт</button>
+                <button onclick="deleteAccount()" class="w-full py-2 bg-gray-200 hover:bg-gray-300 text-red-700 font-bold rounded-xl text-xs transition">Удалить профиль</button>
             </div>
         </div>
     </div>
@@ -426,7 +455,7 @@
                 <div class="ic hdr-icon icon-bell" data-istyle="classic"><i class="fa-solid fa-bell"></i></div>
                 <h3 class="text-xl font-extrabold">Уведомления</h3>
             </div>
-            <div id="notifContainer" class="flex flex-col gap-3 py-2 max-h-[50vh] overflow-y-auto">
+            <div id="notifContainer" class="selectable flex flex-col gap-3 py-2 max-h-[50vh] overflow-y-auto">
                 <div class="text-center py-6 text-sm text-gray-500 font-bold">Нет новых уведомлений</div>
             </div>
             <div class="flex gap-2">
@@ -439,14 +468,16 @@
     <div id="modalWindow" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-lg max-h-[90vh] overflow-y-auto w-full p-6 shadow-2xl flex flex-col gap-4 border border-green-200 relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2 pr-10"></h3>
-            <div id="modalContent" class="text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
+            <button onclick="shareCurrent()" class="absolute top-4 right-14 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-700" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
+            <h3 id="modalTitle" class="text-xl font-extrabold text-gray-900 border-b pb-2 pr-20"></h3>
+            <div id="modalContent" class="selectable text-gray-800 text-base font-semibold whitespace-pre-line py-2 leading-relaxed"></div>
             <button onclick="closeModal()" class="w-full py-3.5 bg-[#1c5c38] text-white rounded-2xl font-extrabold shadow-md">Понятно</button>
         </div>
     </div>
 
     <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-xl hidden items-center justify-center p-4 z-50">
         <div class="glass-dark modal-animate text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20 max-h-[92vh] overflow-y-auto">
+            <button onclick="shareText('Погода в Котельниках', document.getElementById('modalTemp').innerText + ', ' + document.getElementById('modalWind').innerText)" class="absolute top-4 right-16 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
             <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
             <div class="flex items-center gap-3 border-b border-white/10 pb-4">
                 <div class="weather-icon-box animate-weather"><div class="glass-sun"></div><div class="glass-cloud"></div></div>
@@ -476,7 +507,9 @@
     <div id="transportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
         <div class="glass-panel modal-animate rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col gap-4 max-h-[95vh] overflow-y-auto relative">
             <button onclick="closeTransportModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center font-bold text-gray-700"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-2xl font-black text-gray-900 border-b pb-2 pr-10">Транспорт и расписание</h3>
+            <button onclick="shareTransport()" class="absolute top-4 right-14 w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-700" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
+            <h3 class="text-2xl font-black text-gray-900 border-b pb-2 pr-20">Транспорт и расписание</h3>
+            <div class="text-[0.625rem] font-bold text-amber-900 bg-amber-100 rounded-xl p-2 leading-snug">Время отправления нужно сверять с перевозчиком или в Яндекс.Расписаниях — данные ниже не обновлялись автоматически.</div>
             <div class="text-xs font-bold text-gray-700"><i class="fa-solid fa-location-dot text-red-600"></i> Правление: Центральная улица, дом 247 · <a href="https://yandex.ru/maps/?pt=37.884565,55.642572&z=17&l=map" target="_blank" class="text-blue-700 underline">открыть в Яндекс.Картах</a></div>
             <div class="w-full h-56 rounded-2xl overflow-hidden shadow-md border border-gray-300 relative mb-2">
                 <iframe src="https://yandex.ru/map-widget/v1/?ll=37.884565%2C55.642572&z=16&pt=37.884565%2C55.642572%2Cpm2rdm&l=map" width="100%" height="100%" frameborder="0" style="position:relative;"></iframe>
@@ -550,6 +583,7 @@
             <div id="editFileWrap">
                 <label class="text-xs font-bold text-gray-600 uppercase">Прикрепить / заменить файл (необязательно)</label>
                 <input type="file" id="editFile" class="w-full mt-1 text-xs text-gray-500">
+                <button type="button" id="editDropFile" onclick="dropEditFile()" class="hidden mt-2 w-full py-2 rounded-xl text-xs font-extrabold bg-red-50 text-red-700 border border-red-200"><i class="fa-solid fa-trash"></i> Удалить файл</button>
             </div>
             <button onclick="saveEdit()" class="w-full py-3 bg-[#1c5c38] text-white font-extrabold rounded-2xl shadow">Сохранить</button>
         </div>
@@ -641,10 +675,10 @@
                 let btns = '';
                 if (c.type === 'news') btns = mk('openCreateNewsModal', 'fa-plus', 'Новость', 'text-gray-900 border-gray-300') + clip('openCreateNewsModal', 'text-gray-900 border-gray-300');
                 else if (c.type === 'docs') btns = mk('openCreateDocModal', 'fa-plus', 'Файл', 'text-orange-900 border-orange-300') + clip('openCreateDocModal', 'text-orange-900 border-orange-300');
-                else if (c.hasEditButtons) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
+                else if (c.hasEditButtons && currentUser()) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
                 const extra = (btns && !tiny)
                     ? `<div class="flex gap-2 ${narrow ? 'w-full justify-center' : 'w-full sm:w-auto shrink-0'}${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
-                const icon = `<div class="ic icon-box ${c.color}" data-istyle="classic"><i class="fa-solid ${c.icon}"></i></div>`;
+                const icon = `<div class="ic icon-box ${c.color}" data-istyle="classic"><i class="fa-solid ${c.icon}"></i>${c.id === 'chat' ? '<span class="chat-badge hidden absolute -top-1.5 -right-1.5 min-w-[1.25rem] h-5 px-1 bg-red-600 text-white text-[0.625rem] font-black rounded-full flex items-center justify-center shadow" style="z-index:5">0</span>' : ''}</div>`;
                 const body = narrow
                     ? `<div class="flex flex-col items-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 text-xs leading-tight">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
                     : `<div class="flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
@@ -738,14 +772,14 @@
 
         // --- УТИЛИТЫ ---
         const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
-        const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { showToast('Не хватает места на устройстве'); return false; } };
-        const show = id => { const m = document.getElementById(id); m.classList.add('flex'); m.classList.remove('hidden'); };
-        const hide = id => { const m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('flex'); };
-        function loadProfiles() { return lsGet('gornyak_profiles', {}); }
+        const lsGet = (k, d) => { if (CK[k]) return JSON.parse(JSON.stringify(CLOUD[CK[k]])); try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+        const lsSet = (k, v) => { if (CK[k]) return cloudSet(CK[k], v); try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { showToast('Не хватает места на устройстве'); return false; } };
+        const show = id => { const m = document.getElementById(id); clearTimeout(m._t); m.classList.remove('fade-out'); if (m.firstElementChild) m.firstElementChild.classList.remove('modal-out'); m.classList.add('flex'); m.classList.remove('hidden'); };
+        const hide = id => { const m = document.getElementById(id); if (!m.classList.contains('fixed') || m.classList.contains('hidden')) { m.classList.add('hidden'); m.classList.remove('flex'); return; } const p = m.firstElementChild; m.classList.add('fade-out'); p.classList.add('modal-out'); clearTimeout(m._t); m._t = setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex', 'fade-out'); p.classList.remove('modal-out'); }, 170); };
+        function loadProfiles() { return CLOUD.profiles; }
         function saveProfiles(p) { lsSet('gornyak_profiles', p); }
         function currentUser() { return lsGet('gornyak_user', null); }
-        function myUid() { const u = currentUser(); return u ? u.email : 'guest'; }
+        function myUid() { const u = currentUser(); return u ? (u.id || u.email) : 'guest'; }
         function myNick() { const u = currentUser(); return u ? (u.name || u.email.split('@')[0]) : 'Гость'; }
 
         let toastTimer = null;
@@ -754,11 +788,11 @@
             t.textContent = msg; t.classList.remove('hidden');
             clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('hidden'), 3500);
         }
-        function askConfirm(msg, yesText) {
+        function askConfirm(msg, yesText, noText) {
             return new Promise(res => {
                 const m = document.getElementById('confirmModal');
                 document.getElementById('confirmText').textContent = msg;
-                document.getElementById('confirmYes').textContent = yesText || 'Да';
+                document.getElementById('confirmYes').textContent = yesText || 'Да'; document.getElementById('confirmNo').textContent = noText || 'Отмена';
                 const done = v => { hide('confirmModal'); res(v); };
                 document.getElementById('confirmYes').onclick = () => done(true);
                 document.getElementById('confirmNo').onclick = () => done(false);
@@ -864,7 +898,9 @@
 
         function resetUiHint() { localStorage.removeItem('gornyak_hint_closed'); show('uiHint'); showToast('Подсказка показана на главной'); }
         function closeUiHint() { localStorage.setItem('gornyak_hint_closed', '1'); hide('uiHint'); }
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            await restoreFromBackup();
+            try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
             if (localStorage.getItem('gornyak_hint_closed') !== '1') show('uiHint');
             initData();
             renderCards();
@@ -989,12 +1025,14 @@
             const b = e.target.closest('[data-act]'); if (!b) return;
             const act = b.dataset.act, id = b.dataset.id;
             if (act === 'news-add') { closeModal(); openCreateNewsModal(); }
-            else if (act === 'news-edit') { if (requireLogin()) openEditModal('news', id); }
-            else if (act === 'news-del') { if (requireLogin()) delNews(id); }
+            else if (act === 'news-edit') { if (requireLogin() && ownerOk('gornyak_news_db', id)) openEditModal('news', id); }
+            else if (act === 'news-del') { if (requireLogin() && ownerOk('gornyak_news_db', id)) delNews(id); }
             else if (act === 'news-dl') downloadNewsFile(id);
+            else if (act === 'news-share') { const n = lsGet('gornyak_news_db', []).find(x => x.id === id); if (n) shareText(n.title, n.desc || ''); }
+            else if (act === 'doc-share') { const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (d) shareText(d.name, 'Документ НСТ «Горняк»'); }
             else if (act === 'doc-add') { closeModal(); openCreateDocModal(); }
-            else if (act === 'doc-edit') { if (requireLogin()) openEditModal('doc', id); }
-            else if (act === 'doc-del') { if (requireLogin()) delDoc(id); }
+            else if (act === 'doc-edit') { if (requireLogin() && ownerOk('gornyak_docs_db', id)) openEditModal('doc', id); }
+            else if (act === 'doc-del') { if (requireLogin() && ownerOk('gornyak_docs_db', id)) delDoc(id); }
             else if (act === 'doc-dl') downloadDoc(id);
             else if (act === 'tarif-edit') { if (requireLogin()) openEditModal('tarif'); }
             else if (act === 'tarif-del') { if (requireLogin()) delText('tarif'); }
@@ -1008,7 +1046,7 @@
         function openTarif() {
             const t = getTarif();
             openRichSection('Тарифы',
-                toolbar(bigBtn('tarif-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('tarif-del', 'fa-trash', 'Удалить', BTN_DEL))
+                (currentUser() ? toolbar(bigBtn('tarif-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('tarif-del', 'fa-trash', 'Удалить', BTN_DEL)) : '')
                 + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Тарифы не указаны.'}</div>`);
         }
 
@@ -1018,7 +1056,7 @@
         function openAbout() {
             const t = getAbout();
             openRichSection('О НСТ «Горняк»',
-                toolbar(bigBtn('about-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('about-del', 'fa-trash', 'Удалить', BTN_DEL))
+                (currentUser() ? toolbar(bigBtn('about-edit', 'fa-pen', 'Редактировать', BTN_EDIT) + bigBtn('about-del', 'fa-trash', 'Удалить', BTN_DEL)) : '')
                 + `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 text-sm font-semibold text-gray-800 whitespace-pre-line">${t ? esc(t) : 'Описание не указано.'}</div>`);
         }
         function openAboutEdit() { if (requireLogin()) openEditModal('about'); }
@@ -1030,7 +1068,7 @@
         }
 
         // --- НОВОСТИ ---
-        function openCreateNewsModal() {
+        function openCreateNewsModal() { if (!currentUser()) { closeModal(); showToast('Войдите в профиль, чтобы публиковать'); openProfileAuthModal(); return; }
             document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
             show('createNewsModal');
         }
@@ -1043,7 +1081,7 @@
             const file = document.getElementById('newsFileInput').files[0];
             const publish = att => {
                 const list = lsGet('gornyak_news_db', []);
-                const item = { id: Date.now().toString(36), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() };
+                const item = { id: Date.now().toString(36), uid: myUid(), title, desc, date: new Date().toLocaleDateString('ru-RU'), author: myNick() };
                 if (att) { item.fileName = att.file.name; item.size = att.file.size; item.data = att.data; }
                 list.unshift(item);
                 if (!lsSet('gornyak_news_db', list)) return;
@@ -1052,7 +1090,7 @@
                 openNewsModal();
             };
             if (file) {
-                if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+                if (file.size > 5 * 1024 * 1024) { showToast('Файл больше 5 МБ'); return; }
                 const rd = new FileReader();
                 rd.onload = () => publish({ file, data: rd.result });
                 rd.readAsDataURL(file);
@@ -1060,13 +1098,13 @@
         }
         function downloadNewsFile(id) {
             const n = lsGet('gornyak_news_db', []).find(x => x.id === id); if (!n || !n.data) return;
-            const a = document.createElement('a'); a.href = n.data; a.download = n.fileName || 'file'; document.body.appendChild(a); a.click(); a.remove();
+            dlFile(n.data, n.fileName || 'file');
         }
         function openNewsModal() {
             const list = lsGet('gornyak_news_db', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${n.data ? `<div class="mt-2 text-[0.6875rem] font-bold text-gray-600"><i class="fa-solid fa-paperclip"></i> ${esc(n.fileName || 'Файл')} · ${Math.max(1, Math.round((n.size || 0) / 1024))} КБ</div>` : ''}<div class="flex flex-wrap gap-2 mt-2">${n.data ? miniBtn('news-dl', n.id, 'fa-download', 'Скачать', BTN_ADD) : ''}${miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${n.data ? `<div class="mt-2 text-[0.6875rem] font-bold text-gray-600"><i class="fa-solid fa-paperclip"></i> ${esc(n.fileName || 'Файл')} · ${Math.max(1, Math.round((n.size || 0) / 1024))} КБ</div>` : ''}<div class="flex flex-wrap gap-2 mt-2">${n.data ? miniBtn('news-dl', n.id, 'fa-download', 'Скачать', BTN_ADD) : ''}${miniBtn('news-share', n.id, 'fa-share-nodes', 'Поделиться', BTN_EDIT)}${isOwner(n) ? miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT) + miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL) : ''}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
             openRichSection('Новости СНТ', toolbar(bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD)) + items);
         }
@@ -1077,7 +1115,7 @@
         }
 
         // --- ДОКУМЕНТЫ ---
-        function openCreateDocModal() {
+        function openCreateDocModal() { if (!currentUser()) { closeModal(); showToast('Войдите в профиль, чтобы публиковать'); openProfileAuthModal(); return; }
             document.getElementById('docWarning').classList.toggle('hidden', !!currentUser());
             show('createDocModal');
         }
@@ -1088,11 +1126,11 @@
             const name = document.getElementById('docNameInput').value.trim();
             const file = document.getElementById('docFileInput').files[0];
             if (!file) return;
-            if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+            if (file.size > 5 * 1024 * 1024) { showToast('Файл больше 5 МБ'); return; }
             const rd = new FileReader();
             rd.onload = () => {
                 const list = lsGet('gornyak_docs_db', []);
-                list.unshift({ id: Date.now().toString(36), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
+                list.unshift({ id: Date.now().toString(36), uid: myUid(), name, fileName: file.name, size: file.size, data: rd.result, date: new Date().toLocaleDateString('ru-RU'), author: myNick() });
                 if (!lsSet('gornyak_docs_db', list)) return;
                 form.reset(); closeCreateDocModal();
                 addNotification('Загружен документ: ' + name);
@@ -1105,13 +1143,13 @@
             const items = list.length ? list.map(d => {
                 const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
                 const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
-                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT)}${miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL)}</div></div>`;
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${miniBtn('doc-share', d.id, 'fa-share-nodes', 'Поделиться', BTN_EDIT)}${isOwner(d) ? miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT) + miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL) : ''}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
             openRichSection('Документы', toolbar(bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD)) + items);
         }
         function downloadDoc(id) {
             const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
-            const a = document.createElement('a'); a.href = d.data; a.download = d.fileName || d.name; document.body.appendChild(a); a.click(); a.remove();
+            dlFile(d.data, d.fileName || d.name);
         }
         async function delDoc(id) {
             if (!(await askConfirm('Удалить документ?', 'Удалить'))) return;
@@ -1124,14 +1162,14 @@
         function openEditModal(kind, id) {
             editCtx = { kind, id };
             const t = document.getElementById('editTitle'), x = document.getElementById('editText'), f = document.getElementById('editFile');
-            f.value = '';
+            f.value = ''; editCtx.drop = false; document.getElementById('editDropFile').classList.add('hidden');
             let head = 'Редактировать', showTitle = false, showText = false, showFile = false;
             if (kind === 'news') {
                 const n = lsGet('gornyak_news_db', []).find(v => v.id === id); if (!n) return;
-                head = 'Редактировать новость'; showTitle = showText = showFile = true; t.value = n.title; x.value = n.desc || '';
+                head = 'Редактировать новость'; showTitle = showText = showFile = true; t.value = n.title; x.value = n.desc || ''; if (n.data) document.getElementById('editDropFile').classList.remove('hidden');
             } else if (kind === 'doc') {
                 const d = lsGet('gornyak_docs_db', []).find(v => v.id === id); if (!d) return;
-                head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name;
+                head = 'Редактировать документ'; showTitle = showFile = true; t.value = d.name; if (d.data) document.getElementById('editDropFile').classList.remove('hidden');
             } else if (kind === 'tarif') {
                 head = 'Редактировать тарифы'; showText = true; x.value = getTarif();
             } else if (kind === 'about') {
@@ -1164,7 +1202,7 @@
                     finishEdit(openNewsModal);
                 };
                 if (nf) {
-                    if (nf.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+                    if (nf.size > 5 * 1024 * 1024) { showToast('Файл больше 5 МБ'); return; }
                     const rd = new FileReader();
                     rd.onload = () => applyNews({ file: nf, data: rd.result });
                     rd.readAsDataURL(nf);
@@ -1182,7 +1220,7 @@
                     finishEdit(openDocsModal);
                 };
                 if (file) {
-                    if (file.size > 600 * 1024) { showToast('Файл больше 600 КБ: без сервера хранить его негде'); return; }
+                    if (file.size > 5 * 1024 * 1024) { showToast('Файл больше 5 МБ'); return; }
                     const rd = new FileReader();
                     rd.onload = () => apply({ file, data: rd.result });
                     rd.readAsDataURL(file);
@@ -1309,13 +1347,13 @@
                 const m = all.find(x => x.id === chatState.editId);
                 if (m && (m.uid || m.author) === myUid()) { m.text = text; m.edited = true; }
             } else {
-                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), replyTo: chatState.replyTo || null, time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
+                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), replyTo: chatState.replyTo || null, ts: Date.now(), time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
             }
             saveChat(all);
             chatState.replyTo = null; chatState.editId = null; inp.value = '';
             updateChatBar(); renderChatNicks(); renderChatMessages(true);
         }
-        function openChatModal() {
+        function openChatModal() { if (!currentUser()) { showToast('Войдите в профиль, чтобы общаться в чате'); openProfileAuthModal(); return; }
             show('chatModal');
             chatState.menuId = null; updateChatBar();
             renderChatNicks(); renderChatMessages(true);
@@ -1333,16 +1371,16 @@
             } else show('authModal');
         }
         function closeAuthModal() { hide('authModal'); }
-        function handleLoginSubmit(e) {
+        async function handleLoginSubmit(e) {
             e.preventDefault();
+            if (!sb) { showToast('Нет связи с сервером'); return; }
             const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPassword').value.trim();
-            if (!email || !pass) { showToast('Заполните почту и пароль'); return; }
-            const prf = loadProfiles()[email] || {};
-            lsSet('gornyak_user', { email, name: prf.name || '', plot: prf.plot || '' });
-            closeAuthModal();
-            addNotification('Вход в личный кабинет: ' + email);
-            openProfileAuthModal();
+            const password = document.getElementById('loginPassword').value;
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+            if (error) { showToast(/invalid/i.test(error.message) ? 'Неверная почта или пароль' : 'Ошибка входа: ' + error.message); return; }
+            applySession(data.session); closeAuthModal();
+            addNotification('Вход в личный кабинет: ' + email); renderCards();
+            loadCloud(); openProfileAuthModal();
         }
         function forgotPassword() { closeAuthModal(); show('forgotModal'); }
         function closeForgotModal() { hide('forgotModal'); }
@@ -1353,28 +1391,317 @@
         }
         function openRegisterModal() { closeAuthModal(); show('registerModal'); }
         function closeRegisterModal() { hide('registerModal'); }
-        function handleRegisterSubmit(e) {
+        async function handleRegisterSubmit(e) {
             e.preventDefault();
+            if (!sb) { showToast('Нет связи с сервером'); return; }
             const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
             const name = document.getElementById('regName').value.trim();
             const plot = document.getElementById('regPlot').value.trim();
-            if (!email) { showToast('Укажите почту'); return; }
-            lsSet('gornyak_user', { email, name, plot });
-            const prs = loadProfiles(); prs[email] = { name, plot }; saveProfiles(prs);
+            if (password.length < 6) { showToast('Пароль — не короче 6 символов'); return; }
+            const { data, error } = await sb.auth.signUp({ email, password, options: { data: { name, plot } } });
+            if (error) { showToast('Ошибка регистрации: ' + error.message); return; }
             closeRegisterModal();
-            showToast('Регистрация успешна');
-            addNotification('Зарегистрирован новый садовод');
-            openProfileAuthModal();
+            if (!data.session) { showToast('Подтвердите почту по ссылке из письма, затем войдите'); return; }
+            applySession(data.session); showToast('Регистрация успешна');
+            addNotification('Зарегистрирован новый садовод'); renderCards(); loadCloud(); openProfileAuthModal();
         }
         function closeProfileModal() { hide('profileModal'); }
-        function logout() { localStorage.removeItem('gornyak_user'); closeProfileModal(); showToast('Вы вышли из аккаунта. Данные сохранены на этом устройстве.'); }
-        async function deleteAccount() {
-            if (!(await askConfirm('Вы действительно хотите удалить аккаунт?', 'Удалить'))) return;
-            const u = currentUser();
-            if (u) { const pr = loadProfiles(); delete pr[u.email]; saveProfiles(pr); }
-            localStorage.removeItem('gornyak_user'); closeProfileModal();
-            showToast('Аккаунт удалён'); addNotification('Аккаунт садовода удален');
+        async function logout() {
+            try { sb && await sb.auth.signOut(); } catch (e) {}
+            localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache();
+            closeProfileModal(); renderCards(); showToast('Вы вышли из аккаунта');
         }
+        async function deleteAccount() {
+            if (!(await askConfirm('Вы точно хотите удалить профиль? База данных будет удалена безвозвратно', 'Удалить', 'Отменить'))) return;
+            const { error } = sb ? await sb.rpc('delete_my_account') : { error: { message: 'нет связи' } };
+            if (error) { showToast('Не удалось удалить: ' + error.message); return; }
+            try { await sb.auth.signOut(); } catch (e) {}
+            localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache();
+            closeProfileModal(); showToast('Профиль удалён'); renderCards(); loadCloud();
+        }
+    
+        // ===== ВЛАДЕЛЕЦ ЗАПИСИ =====
+        const isOwner = it => { const u = currentUser(); return !!(u && it && it.uid && it.uid === (u.id || u.email)); };
+        const ownerOk = (k, id) => { if (isOwner(lsGet(k, []).find(x => x.id === id))) return true; showToast('Изменять запись может только её автор'); return false; };
+
+        // ===== УДАЛИТЬ ФАЙЛ =====
+        async function dropEditFile() {
+            if (!editCtx) return;
+            if (!(await askConfirm('Удалить прикреплённый файл?', 'Удалить', 'Отменить'))) return;
+            const k = editCtx.kind === 'news' ? 'gornyak_news_db' : 'gornyak_docs_db';
+            const list = lsGet(k, []); const it = list.find(v => v.id === editCtx.id);
+            if (it && isOwner(it)) { it.data = ''; it.fileName = ''; it.size = 0; lsSet(k, list); }
+            document.getElementById('editDropFile').classList.add('hidden');
+            document.getElementById('editFile').value = '';
+            showToast('Файл удалён');
+        }
+
+        // ===== ПОДЕЛИТЬСЯ =====
+        async function shareText(title, text) {
+            const url = location.protocol.startsWith('http') ? location.href : '';
+            try {
+                if (navigator.share) { await navigator.share({ title, text, url: url || undefined }); return; }
+                await navigator.clipboard.writeText(title + '\n' + text + (url ? '\n' + url : ''));
+                showToast('Скопировано в буфер обмена');
+            } catch (e) {}
+        }
+        function shareCurrent() { shareText(document.getElementById('modalTitle').innerText, document.getElementById('modalContent').innerText.trim()); }
+        function shareTransport() {
+            shareText('Транспорт НСТ «Горняк»', ['route1', 'route2', 'route3'].map(id => document.getElementById(id).parentElement.textContent.replace(/Раскрыть/, '').replace(/\s+/g, ' ').trim()).join('\n\n'));
+        }
+
+        // ===== СЧЁТЧИК ЧАТА =====
+        const SEEN_KEY = 'gornyak_chat_seen';
+        function unreadCount() {
+            const me = myUid(), seen = lsGet(SEEN_KEY, 0);
+            return loadChat().filter(m => (m.ts || 0) > seen && (m.uid || m.author) !== me && ((m.room || 'general') === 'general' || String(m.room).split('|').includes(me))).length;
+        }
+        function updateChatBadge() {
+            const n = unreadCount();
+            document.querySelectorAll('.chat-badge').forEach(b => { b.textContent = n > 99 ? '99+' : n; b.classList.toggle('hidden', n === 0); });
+        }
+        function markChatSeen() { lsSet(SEEN_KEY, Date.now()); updateChatBadge(); }
+        const _origRender = renderCards; renderCards = function () { _origRender(); updateChatBadge(); };
+        const _origOpenChat = openChatModal; openChatModal = function () { _origOpenChat(); markChatSeen(); };
+        window.addEventListener('storage', e => {
+            if (e.key !== 'gornyak_real_chat') return;
+            if (document.getElementById('chatModal').classList.contains('flex')) { markChatSeen(); renderChatNicks(); renderChatMessages(true); } else updateChatBadge();
+        });
+        setInterval(updateChatBadge, 5000);
+
+        // ===== «ТИХОЕ» СОХРАНЕНИЕ: копия localStorage в IndexedDB =====
+        const IDB = {
+            open: () => new Promise((res, rej) => { const q = indexedDB.open('gornyak', 1); q.onupgradeneeded = () => q.result.createObjectStore('kv'); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }),
+            async put(o) { const db = await this.open(); return new Promise(r => { const t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(o, 'snapshot'); t.oncomplete = () => r(true); t.onerror = () => r(false); }); },
+            async get() { const db = await this.open(); return new Promise(r => { const q = db.transaction('kv').objectStore('kv').get('snapshot'); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }); }
+        };
+        function backupNow() {
+            try { const o = {}; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('gornyak_')) o[k] = localStorage.getItem(k); } IDB.put(o); } catch (e) {}
+        }
+        async function restoreFromBackup() {
+            try { if (localStorage.getItem('gornyak_seeded_v1') !== null) return; const s = await IDB.get(); if (s) Object.keys(s).forEach(k => localStorage.setItem(k, s[k])); } catch (e) {}
+        }
+        document.addEventListener('visibilitychange', () => { if (document.hidden) backupNow(); });
+        window.addEventListener('pagehide', backupNow);
+        setInterval(backupNow, 15000);
+
+        // ===== КОЛЬЦО КАСАНИЯ =====
+        document.addEventListener('pointerdown', e => {
+            if (!e.target.closest('button, a, .portal-card, [data-peer], [data-style-opt], input[type=range]')) return;
+            const d = document.createElement('span'); d.className = 'press-ring';
+            d.style.left = e.clientX + 'px'; d.style.top = e.clientY + 'px';
+            document.body.appendChild(d); setTimeout(() => d.remove(), 600);
+        }, true);
+
+        // ===== ВЫДЕЛЕНИЕ КАК В iOS: янтарная подсветка, ручки, стеклянная лупа, меню =====
+        (function () {
+            let timer = null, drag = null, loupe = null, bar = null, menu = null, hs = [], tgt = null, sx = 0, sy = 0, blockUntil = 0, busy = false;
+            const S = () => window.getSelection();
+            const rm = n => { if (n) n.remove(); return null; };
+            const hasSel = () => { const s = S(); return s.rangeCount && !s.isCollapsed; };
+            function rangeAt(x, y) {
+                if (document.caretRangeFromPoint) return document.caretRangeFromPoint(x, y);
+                const q = document.caretPositionFromPoint && document.caretPositionFromPoint(x, y);
+                if (!q) return null; const r = document.createRange(); r.setStart(q.offsetNode, q.offset); return r;
+            }
+            function selectWord(x, y) {
+                const r = rangeAt(x, y); if (!r) return false;
+                const s = S(); s.removeAllRanges(); s.addRange(r);
+                if (s.modify) { s.modify('move', 'backward', 'word'); s.modify('extend', 'forward', 'word'); }
+                return !s.isCollapsed;
+            }
+            function clearAll() { bar = rm(bar); menu = rm(menu); hs.forEach(h => h.remove()); hs = []; loupe = rm(loupe); }
+            function drawHandles() {
+                hs.forEach(h => h.remove()); hs = [];
+                if (!hasSel()) return;
+                const rs = S().getRangeAt(0).getClientRects(); if (!rs.length) return;
+                const f = rs[0], l = rs[rs.length - 1];
+                [['start', f.left, f.top, f.height], ['end', l.right, l.top, l.height]].forEach(([w, x, y, h]) => {
+                    const e = document.createElement('div'); e.className = 'sel-h ' + w; e.dataset.w = w;
+                    e.style.cssText = 'left:' + (x - 1) + 'px;top:' + y + 'px;height:' + h + 'px';
+                    e.innerHTML = '<i></i>'; document.body.appendChild(e); hs.push(e);
+                });
+            }
+            function lens(x, y) {
+                const el = document.elementsFromPoint(x, y).find(e => !e.closest('.sel-h,.loupe,.sel-bar,.sel-menu'));
+                if (!el) return;
+                if (!loupe) { loupe = document.createElement('div'); loupe.className = 'loupe'; document.body.appendChild(loupe); }
+                loupe.style.left = Math.max(4, Math.min(innerWidth - 100, x - 48)) + 'px';
+                loupe.style.top = Math.max(4, y - 140) + 'px';
+                const r = el.getBoundingClientRect(), k = 1.6;
+                loupe.innerHTML = '';
+                const c = el.cloneNode(true);
+                c.style.cssText = 'position:absolute;margin:0;transform-origin:0 0;pointer-events:none;width:' + r.width + 'px;transform:scale(' + k + ');left:' + (48 - (x - r.left) * k) + 'px;top:' + (48 - (y - r.top) * k) + 'px;';
+                loupe.appendChild(c);
+            }
+            const selText = isIn => isIn ? tgt.value.slice(tgt.selectionStart, tgt.selectionEnd) : S().toString();
+            async function doCopy(t) { try { await navigator.clipboard.writeText(t); } catch (e) { document.execCommand('copy'); } showToast('Скопировано'); }
+            async function doPaste() { try { const t = await navigator.clipboard.readText(); tgt.setRangeText(t, tgt.selectionStart, tgt.selectionEnd, 'end'); tgt.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) { showToast('Нет доступа к буферу обмена'); } }
+            function anchor(isIn) {
+                if (isIn) { const b = tgt.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top, bot: b.bottom }; }
+                const b = S().getRangeAt(0).getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top, bot: b.bottom };
+            }
+            function place(el, a, below) {
+                document.body.appendChild(el);
+                el.style.left = Math.max(8, Math.min(innerWidth - el.offsetWidth - 8, a.x - el.offsetWidth / 2)) + 'px';
+                el.style.top = Math.max(8, below ? a.bot + 12 : a.y - el.offsetHeight - 14) + 'px';
+            }
+            function showBar(isIn) {
+                bar = rm(bar); menu = rm(menu);
+                const txt = selText(isIn); if (!isIn && !txt) return;
+                const a = anchor(isIn);
+                bar = document.createElement('div'); bar.className = 'sel-bar';
+                const main = isIn && !txt ? 'Вставить' : 'Копировать';
+                bar.innerHTML = '<button data-k="main">' + main + '</button><button data-k="more" aria-label="Ещё"><i class="fa-solid fa-chevron-right"></i></button>';
+                bar.onclick = ev => {
+                    const k = ev.target.closest('button'); if (!k) return; ev.stopPropagation();
+                    if (k.dataset.k === 'main') { main === 'Вставить' ? doPaste() : doCopy(txt); clearAll(); }
+                    else openMenu(isIn, txt, a);
+                };
+                place(bar, a, false);
+            }
+            function openMenu(isIn, txt, a) {
+                bar = rm(bar); menu = document.createElement('div'); menu.className = 'sel-menu';
+                const it = (k, ic, t) => '<button data-k="' + k + '"><i class="fa-solid ' + ic + '"></i><span>' + t + '</span></button>';
+                menu.innerHTML = (txt ? it('copy', 'fa-copy', 'Копировать') : '') + (isIn ? it('paste', 'fa-paste', 'Вставить') : '')
+                    + (txt ? it('web', 'fa-magnifying-glass', 'Искать в интернете') + it('share', 'fa-share-nodes', 'Поделиться…') : '');
+                menu.onclick = ev => {
+                    const k = ev.target.closest('button'); if (!k) return; ev.stopPropagation();
+                    const c = k.dataset.k;
+                    if (c === 'copy') doCopy(txt); else if (c === 'paste') doPaste();
+                    else if (c === 'web') window.open('https://yandex.ru/search/?text=' + encodeURIComponent(txt), '_blank');
+                    else if (c === 'share') shareText('НСТ «Горняк»', txt);
+                    clearAll();
+                };
+                place(menu, a, true);
+            }
+            document.addEventListener('pointerdown', e => {
+                const h = e.target.closest('.sel-h');
+                if (h) {
+                    e.preventDefault(); busy = true; bar = rm(bar); menu = rm(menu);
+                    const s = S(), rg = s.getRangeAt(0);
+                    if (h.dataset.w === 'start') s.collapse(rg.endContainer, rg.endOffset); else s.collapse(rg.startContainer, rg.startOffset);
+                    drag = h.dataset.w; try { h.setPointerCapture(e.pointerId); } catch (er) {}
+                    sx = e.clientX; sy = e.clientY; lens(sx, sy); return;
+                }
+                if (e.target.closest('.sel-bar,.sel-menu')) return;
+                const inp = e.target.closest('input[type=text],input[type=email],input[type=password],textarea');
+                const sel = e.target.closest('.selectable');
+                if (bar || menu || hs.length) { clearAll(); if (!inp && !sel) S().removeAllRanges(); }
+                if (!inp && !sel) return;
+                sx = e.clientX; sy = e.clientY; tgt = inp; clearTimeout(timer);
+                timer = setTimeout(() => {
+                    if (inp) { inp.focus(); showBar(true); return; }
+                    if (selectWord(sx, sy)) { busy = true; drawHandles(); blockUntil = Date.now() + 600; }
+                }, 450);
+            });
+            document.addEventListener('pointermove', e => {
+                if (!drag) { if (Math.hypot(e.clientX - sx, e.clientY - sy) > 8) clearTimeout(timer); return; }
+                const r = rangeAt(e.clientX, e.clientY - 18), s = S();
+                if (r && s.extend) { try { s.extend(r.startContainer, r.startOffset); } catch (er) {} }
+                lens(e.clientX, e.clientY - 18);
+            });
+            const end = () => {
+                clearTimeout(timer);
+                if (drag) { drag = null; loupe = rm(loupe); drawHandles(); blockUntil = Date.now() + 350; showBar(false); }
+                else if (busy && hasSel()) { showBar(false); }
+                busy = false;
+            };
+            document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+            document.addEventListener('touchmove', e => { if (drag) e.preventDefault(); }, { passive: false });
+            document.addEventListener('scroll', () => { if (hs.length) { bar = rm(bar); menu = rm(menu); drawHandles(); } }, true);
+            document.addEventListener('click', e => { if (Date.now() < blockUntil) { e.stopPropagation(); e.preventDefault(); } }, true);
+        })();
+
+        // ===== SUPABASE: общая база, вход, чат в реальном времени =====
+        const SB_URL = 'https://jlwykppketifzjpplmga.supabase.co';
+        const SB_KEY = 'sb_publishable_grh-4YZ2iQ1WC80Smk3Msg_aR5hlyGX';
+        const sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+        const CK = { gornyak_news_db: 'news', gornyak_docs_db: 'docs', gornyak_real_chat: 'chat' };
+        const CLOUD = { news: [], docs: [], chat: [], profiles: {}, ready: false, pending: 0 };
+        const TBL = { news: 'news', docs: 'docs', chat: 'messages' };
+        function saveCache() { try { localStorage.setItem('gornyak_cloud_cache', JSON.stringify({ news: CLOUD.news, docs: CLOUD.docs, chat: CLOUD.chat, profiles: CLOUD.profiles })); } catch (e) {} }
+        try { const c = JSON.parse(localStorage.getItem('gornyak_cloud_cache')); if (c) { CLOUD.news = c.news || []; CLOUD.docs = c.docs || []; CLOUD.chat = c.chat || []; CLOUD.profiles = c.profiles || {}; } } catch (e) {}
+
+        function applySession(session) {
+            if (!session) { localStorage.removeItem('gornyak_user'); return; }
+            const u = session.user, md = u.user_metadata || {};
+            lsSet('gornyak_user', { id: u.id, email: u.email, name: md.name || '', plot: md.plot || '' });
+        }
+        const fromRow = (k, r) => k === 'chat'
+            ? { id: r.id, uid: r.uid, author: r.author, text: r.body, room: r.room, replyTo: r.reply_to, ts: r.ts, time: r.sent_time || '', edited: !!r.edited }
+            : { id: r.id, uid: r.uid, date: r.pub_date || '', author: r.author || '', fileName: r.file_name || '', size: r.size || 0, data: r.file_url || '', ...(k === 'news' ? { title: r.title, desc: r.descr || '' } : { name: r.name }) };
+        async function toRow(k, n) {
+            if (k === 'chat') return { id: n.id, uid: n.uid, author: n.author, body: n.text, room: n.room || 'general', reply_to: n.replyTo || null, ts: n.ts || Date.now(), sent_time: n.time || '', edited: !!n.edited };
+            let url = n.data || '';
+            if (url.startsWith('data:')) {
+                const ext = ((n.fileName || 'f').split('.').pop() || 'bin').replace(/[^a-z0-9]/gi, '').slice(0, 8) || 'bin';
+                const path = n.uid + '/' + Date.now() + '.' + ext;
+                const blob = await (await fetch(url)).blob();
+                const up = await sb.storage.from('files').upload(path, blob, { contentType: blob.type || 'application/octet-stream' });
+                if (up.error) throw up.error;
+                url = sb.storage.from('files').getPublicUrl(path).data.publicUrl;
+            }
+            const base = { id: n.id, uid: n.uid, pub_date: n.date || '', author: n.author || '', file_name: n.fileName || '', size: n.size || 0, file_url: url };
+            return k === 'news' ? { ...base, title: n.title, descr: n.desc || '' } : { ...base, name: n.name };
+        }
+        function cloudSet(k, list) {
+            const old = CLOUD[k]; CLOUD[k] = list; saveCache();
+            if (sb && CLOUD.ready && currentUser()) pushDiff(k, old, list);
+            return true;
+        }
+        async function pushDiff(k, oldL, newL) {
+            CLOUD.pending++;
+            try {
+                const ids = new Set(newL.map(x => x.id)), om = new Map(oldL.map(x => [x.id, x]));
+                for (const o of oldL) if (!ids.has(o.id)) { const r = await sb.from(TBL[k]).delete().eq('id', o.id); if (r.error) throw r.error; }
+                for (const n of newL) { const o = om.get(n.id); if (!o || JSON.stringify(o) !== JSON.stringify(n)) { const r = await sb.from(TBL[k]).upsert(await toRow(k, n)); if (r.error) throw r.error; } }
+            } catch (e) { showToast('Не удалось сохранить на сервере: ' + (e.message || e)); }
+            CLOUD.pending--; loadCloud();
+        }
+        async function loadCloud() {
+            if (!sb || CLOUD.pending > 0) return;
+            try {
+                const [n, d, p] = await Promise.all([
+                    sb.from('news').select('*').order('created_at', { ascending: false }),
+                    sb.from('docs').select('*').order('created_at', { ascending: false }),
+                    sb.from('profiles').select('*')]);
+                if (n.error || d.error) throw (n.error || d.error);
+                CLOUD.news = n.data.map(r => fromRow('news', r));
+                CLOUD.docs = d.data.map(r => fromRow('docs', r));
+                if (p.data) CLOUD.profiles = Object.fromEntries(p.data.map(r => [r.id, { name: r.name, plot: r.plot }]));
+                if (currentUser()) {
+                    const m = await sb.from('messages').select('*').order('ts', { ascending: false }).limit(500);
+                    if (m.data) CLOUD.chat = m.data.reverse().map(r => fromRow('chat', r));
+                } else CLOUD.chat = [];
+                CLOUD.ready = true; saveCache(); refreshViews();
+            } catch (e) { showToast('Нет связи с сервером — показаны сохранённые данные'); }
+        }
+        function refreshViews() {
+            const box = document.getElementById('chatMessagesContainer');
+            if (document.getElementById('chatModal').classList.contains('flex')) {
+                const near = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+                markChatSeen(); renderChatNicks(); renderChatMessages(near);
+            }
+            updateChatBadge();
+        }
+        async function dlFile(u, name) {
+            try { const b = await (await fetch(u)).blob(); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+            catch (e) { window.open(u, '_blank'); }
+        }
+        let loadT = null;
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (!sb) { showToast('Сервер недоступен: работает сохранённая копия'); return; }
+            try { const { data } = await sb.auth.getSession(); if (data.session) applySession(data.session); else if (navigator.onLine) applySession(null); } catch (e) {}
+            sb.auth.onAuthStateChange((ev, session) => {
+                if (ev === 'SIGNED_OUT') { localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache(); }
+                else if (session && ev !== 'INITIAL_SESSION') applySession(session);
+            });
+            renderCards(); await loadCloud();
+            sb.channel('gornyak').on('postgres_changes', { event: '*', schema: 'public' }, () => { clearTimeout(loadT); loadT = setTimeout(loadCloud, 400); }).subscribe();
+            window.addEventListener('online', loadCloud);
+        });
     </script>
 </body>
 </html>
