@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>НСТ «Горняк» — Официальный портал</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -96,6 +96,28 @@ h1, h2, h3, h4 {
   border-radius: 50px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
+
+:root{--blur-val:25px;--gp:94;--wp:85}
+html{-webkit-text-size-adjust:100%;font-size:16px}
+body{overflow-x:hidden;min-height:100vh;min-height:100dvh;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+img,iframe,video{max-width:100%}
+input,select,textarea{font-size:16px!important}
+header{padding-top:env(safe-area-inset-top)}
+#mobNav::-webkit-scrollbar{display:none}
+.modal-glass{background:rgba(255,255,255,calc(var(--gp)/100))}
+.glass-weather{background:rgba(15,61,34,calc(var(--wp)/100))}
+.tile{background:var(--tb);background:color-mix(in srgb,var(--tb) calc(var(--gp)*1%),transparent);backdrop-filter:blur(var(--blur-val));-webkit-backdrop-filter:blur(var(--blur-val));position:relative;transition:transform .2s;-webkit-touch-callout:none}
+.tile:active{transform:scale(.98)}
+.tile .tctl{display:none}
+.editing .tile .tctl{display:flex}
+.editing .tile{animation:wig .35s infinite;cursor:grab}
+@keyframes wig{0%,100%{transform:rotate(-.8deg)}50%{transform:rotate(.8deg)}}
+html[data-ic=s] .tile-ic{font-size:1.25rem}
+html[data-ic=m] .tile-ic{font-size:1.75rem}
+html[data-ic=l] .tile-ic{font-size:2.5rem}
+input[type=range]{-webkit-appearance:none;appearance:none;height:14px;border-radius:9999px;background:#cbd5e1;outline:none;touch-action:manipulation}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:34px;height:34px;border-radius:50%;background:#176334;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;background:#176334;border:3px solid #fff}
 </style>
 </head>
 <body id="mainBody" class="min-h-screen flex flex-col justify-between antialiased">
@@ -109,31 +131,21 @@ h1, h2, h3, h4 {
       </div>
       <div>
         <span class="block text-base font-extrabold text-gornyak-900 leading-none">НСТ «Горняк»</span>
-        <span class="text-[9px] text-slate-500 font-medium">Садовое некоммерческое товарищество</span>
+        <span class="hidden sm:block text-[9px] text-slate-500 font-medium">Садовое некоммерческое товарищество</span>
       </div>
     </a>
 
-    <nav class="hidden lg:flex items-center gap-4 text-[11px] font-semibold text-slate-700">
-      <button onclick="navigateTo('home')" class="flex flex-col items-center gap-0.5 text-gornyak-800 hover:text-gornyak-700 transition"><i class="fa-solid fa-house text-sm"></i> Главная</button>
-      <button onclick="navigateTo('articles')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-book-open text-sm"></i> Статьи</button>
-      <button onclick="navigateTo('announcements')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-bullhorn text-sm"></i> Новости</button>
-      <button onclick="navigateTo('documents')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-folder text-sm"></i> Документы</button>
-      <button onclick="navigateTo('estimates')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-coins text-sm"></i> Сметы</button>
-      <button onclick="navigateTo('contacts')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-phone text-sm"></i> Контакты</button>
-      <button onclick="navigateTo('contact-form')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-envelope text-sm"></i> Написать</button>
-      <button onclick="navigateTo('chat')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-comments text-sm"></i> Чат</button>
-      <button onclick="navigateTo('auth')" class="flex flex-col items-center gap-0.5 text-slate-600 hover:text-gornyak-700 transition"><i class="fa-solid fa-user text-sm"></i> Профиль</button>
-    </nav>
+    <nav id="desktopNav" class="hidden lg:flex items-center gap-4 text-[11px] font-semibold text-slate-700"></nav>
 
     <!-- Поиск, Регистрация, Колокольчик и Настройки -->
     <div class="flex items-center gap-2">
       <div class="relative flex items-center">
-        <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-28 sm:w-36 transition">
+        <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="bg-slate-100 text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-20 sm:w-36 transition">
         <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-xs"></i>
         <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
       </div>
-      <button onclick="navigateTo('register')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
-      
+      <button id="regBtn" onclick="regClick()" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
+
       <!-- Колокольчик уведомлений -->
       <button onclick="openNotifModal()" class="relative p-2 text-slate-600 hover:text-gornyak-700 text-lg transition">
         <i class="fa-solid fa-bell"></i>
@@ -141,16 +153,18 @@ h1, h2, h3, h4 {
       </button>
 
       <!-- Иконка настроек рядом с колокольчиком -->
+      <button onclick="shareCurrent()" class="p-2 text-slate-600 hover:text-gornyak-700 text-lg transition" title="Поделиться" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
       <button onclick="openSettingsModal()" class="p-2 text-slate-600 hover:text-gornyak-700 text-lg transition" title="Настройки интерфейса">
         <i class="fa-solid fa-gear"></i>
       </button>
     </div>
   </div>
+<nav id="mobNav" class="lg:hidden flex overflow-x-auto border-t border-slate-100 text-[10px] font-semibold px-1"></nav>
 </header>
 
 <main class="flex-grow">
   <section id="page-home" class="page-section active">
-    
+
     <!-- Главный баннер -->
     <div class="father-hero text-white py-12 px-4 relative overflow-hidden">
       <div class="container mx-auto relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -186,59 +200,10 @@ h1, h2, h3, h4 {
       </div>
     </div>
 
-    <!-- Сетка карточек -->
-    <div class="container mx-auto px-4 py-8 space-y-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <div onclick="navigateTo('articles')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-book-open"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Статьи (с 2020 г.)</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Архив материалов, полезные советы и отчеты</p>
-        </div>
-
-        <div onclick="navigateTo('announcements')" class="bg-[#faf5ff] p-6 rounded-2xl border border-purple-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-newspaper"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Новости СНТ</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Актуальные события и объявления правления</p>
-        </div>
-
-        <div onclick="navigateTo('documents')" class="bg-[#f0f9ff] p-6 rounded-2xl border border-sky-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-folder"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Документы</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Устав, сметы, договоры, другие документы</p>
-        </div>
-
-        <div onclick="navigateTo('estimates')" class="bg-[#fffbeb] p-6 rounded-2xl border border-amber-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-amber-600 text-2xl mb-3"><i class="fa-solid fa-coins"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Сметы и Финансы</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Отчеты, сметы, платежи товарищества</p>
-        </div>
-
-        <div onclick="openInfoModal('О СНТ «Горняк»', 'НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.')" class="bg-[#f2f9f4] p-6 rounded-2xl border border-gornyak-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-gornyak-700 text-2xl mb-3"><i class="fa-solid fa-tree"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">О СНТ</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">История, территория, информация о товариществе</p>
-        </div>
-
-        <div onclick="navigateTo('contacts')" class="bg-[#eef2ff] p-6 rounded-2xl border border-indigo-100 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-indigo-700 text-2xl mb-3"><i class="fa-solid fa-users"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Контакты и Правление</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Состав, контакты, работа правления</p>
-        </div>
-
-        <div onclick="navigateTo('contact-form')" class="bg-[#f8fafc] p-6 rounded-2xl border border-slate-200 hover:shadow-md transition cursor-pointer group relative">
-          <div class="text-slate-700 text-2xl mb-3"><i class="fa-solid fa-envelope"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Написать нам</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Форма обратной связи с администрацией</p>
-        </div>
-
-        <div onclick="navigateTo('chat')" class="bg-[#f3e8ff] p-6 rounded-2xl border border-purple-200 hover:shadow-md transition cursor-pointer group relative lg:col-span-1">
-          <div class="text-purple-700 text-2xl mb-3"><i class="fa-solid fa-comments"></i></div>
-          <h3 class="font-bold text-slate-900 text-base mb-1">Чат садоводов</h3>
-          <p class="text-slate-500 text-xs leading-relaxed">Общение с соседями, важная информация</p>
-        </div>
-
-      </div>
+    <!-- Плитки (управляются из JS) -->
+    <div class="container mx-auto px-4 py-6 space-y-3">
+      <div id="tileToolbar"></div>
+      <div id="tileGrid"></div>
     </div>
   </section>
 
@@ -308,17 +273,24 @@ h1, h2, h3, h4 {
   </section>
 
   <!-- ЧАТ -->
-  <section id="page-chat" class="page-section container mx-auto px-4 py-8 max-w-3xl">
-    <div class="modal-glass p-6 rounded-3xl shadow-xl border border-slate-200 flex flex-col h-[70vh]">
-      <div class="border-b pb-3 mb-4 flex justify-between items-center">
-        <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-comments text-gornyak-700"></i> Общий чат садоводов</h2>
-        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
+  <section id="page-chat" class="page-section container mx-auto px-4 py-6 max-w-5xl">
+    <div class="modal-glass rounded-3xl shadow-xl border border-slate-200 flex flex-col md:flex-row overflow-hidden" style="height:78vh;height:78dvh">
+      <aside id="chatSidebar" class="md:w-60 shrink-0 border-b md:border-b-0 md:border-r border-slate-200 p-2 flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto"></aside>
+      <div class="flex-grow flex flex-col min-w-0 p-4">
+        <div class="border-b pb-2 mb-3 flex flex-wrap justify-between items-center gap-2">
+          <h2 id="chatTitle" class="text-lg font-black text-slate-900 truncate"></h2>
+          <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
+        </div>
+        <div id="chatMessages" class="flex-grow overflow-y-auto space-y-3 pr-1 mb-3"></div>
+        <div id="chatPending" class="hidden flex-wrap gap-1 mb-2 text-[11px]"></div>
+        <div id="chatEditBar" class="hidden mb-2 text-xs bg-amber-100 text-amber-900 rounded-lg px-3 py-1.5 justify-between items-center">Редактирование сообщения <button type="button" onclick="cancelEdit()" class="font-bold underline">Отмена</button></div>
+        <form onsubmit="sendChatMessage(event)" class="flex gap-2 items-center">
+          <input type="file" id="chatFile" multiple hidden accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="pickFiles(this)">
+          <button type="button" onclick="document.getElementById('chatFile').click()" class="w-11 h-11 shrink-0 rounded-xl bg-slate-100 border border-slate-300 text-slate-600" aria-label="Прикрепить файл"><i class="fa-solid fa-paperclip"></i></button>
+          <input type="text" id="chatInput" placeholder="Сообщение..." class="flex-grow min-w-0 p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
+          <button type="submit" class="w-11 h-11 shrink-0 bg-gornyak-700 hover:bg-gornyak-800 text-white rounded-xl shadow" aria-label="Отправить"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
       </div>
-      <div id="chatMessages" class="flex-grow overflow-y-auto space-y-3 pr-2 mb-4"></div>
-      <form onsubmit="sendChatMessage(event)" class="flex gap-2">
-        <input type="text" id="chatInput" placeholder="Введите сообщение..." required class="flex-grow p-3 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
-        <button type="submit" class="px-6 py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Отправить</button>
-      </form>
     </div>
   </section>
 
@@ -333,6 +305,68 @@ h1, h2, h3, h4 {
       <div id="authContentArea">
         <!-- Динамически заменяется: форма входа или данные профиля -->
       </div>
+    </div>
+  </section>
+
+
+  <!-- ТРАНСПОРТ -->
+  <section id="page-transport" class="page-section container mx-auto px-4 py-8 max-w-3xl">
+    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+      <h2 class="text-2xl font-black text-gornyak-900">🚌 Транспорт</h2>
+      <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
+    </div>
+    <div class="modal-glass rounded-3xl border border-slate-200 shadow-xl p-4 space-y-4">
+      <iframe title="Карта Яндекс" src="https://yandex.ru/map-widget/v1/?ll=37.85%2C55.66&z=12&l=map&pt=37.85,55.66,pm2gnm" class="w-full rounded-2xl border border-slate-200" style="height:320px" loading="lazy"></iframe>
+      <a href="https://yandex.ru/maps/?ll=37.85%2C55.66&z=12" target="_blank" rel="noopener" class="inline-block text-xs font-bold text-gornyak-700 underline">Открыть в Яндекс Картах ↗</a>
+      <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">⚠️ Расписание не проверено: укажите точные номера маршрутов и остановку СНТ, и я внесу актуальные рейсы. Пока сверяйтесь с Яндекс Расписаниями.</div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <thead><tr class="text-slate-500 border-b"><th class="py-2 pr-3">Маршрут</th><th class="pr-3">Дни</th><th>Отправление от СНТ</th></tr></thead>
+          <tbody class="text-slate-800">
+            <tr class="border-b"><td class="py-2 pr-3 font-bold">Автобус № — (СНТ ⇄ м. «Котельники»)</td><td class="pr-3">Будни</td><td>уточнить</td></tr>
+            <tr class="border-b"><td class="py-2 pr-3 font-bold">Маршрутка № —</td><td class="pr-3">Ежедневно</td><td>уточнить</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a href="https://rasp.yandex.ru/" target="_blank" rel="noopener" class="block text-center py-3 bg-gornyak-700 text-white font-bold rounded-xl text-sm">Актуальное расписание — Яндекс Расписания ↗</a>
+    </div>
+  </section>
+
+  <!-- НАПИСАТЬ НАМ -->
+  <section id="page-contact-form" class="page-section container mx-auto px-4 py-8 max-w-xl">
+    <div class="modal-glass p-6 rounded-3xl shadow-xl border border-slate-200 space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b pb-3">
+        <h2 class="text-2xl font-black text-slate-900">✉️ Написать нам</h2>
+        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
+      </div>
+      <form onsubmit="submitContact(event)" class="space-y-3">
+        <input id="cfName" required placeholder="Ваше ФИО" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <input id="cfContact" required placeholder="Телефон или e-mail для ответа" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <select id="cfTopic" class="w-full p-3 rounded-xl border border-slate-300 bg-white outline-none"><option>Общий вопрос</option><option>Показания счётчиков</option><option>Электричество</option><option>Предложение / жалоба</option></select>
+        <textarea id="cfText" rows="5" required placeholder="Текст обращения" class="w-full p-3 rounded-xl border border-slate-300 outline-none"></textarea>
+        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Отправить</button>
+      </form>
+      <div id="cfOk" class="hidden bg-green-50 border border-green-200 text-green-900 rounded-xl p-3 text-xs font-bold">Открылось почтовое приложение, отправьте письмо. Копия обращения сохранена в браузере.</div>
+    </div>
+  </section>
+
+  <!-- РЕГИСТРАЦИЯ -->
+  <section id="page-register" class="page-section container mx-auto px-4 py-10 max-w-md">
+    <div class="modal-glass p-6 rounded-3xl shadow-2xl border border-slate-200">
+      <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+        <h2 class="text-2xl font-black text-slate-900">Регистрация</h2>
+        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
+      </div>
+      <form onsubmit="handleRegister(event)" class="space-y-3">
+        <input id="regName" required placeholder="ФИО" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <input id="regPlot" required placeholder="Номер участка" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <input id="regPhone" type="tel" placeholder="Телефон" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <input id="regEmail" type="email" required placeholder="Электронная почта" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <input id="regPass" type="password" required minlength="6" placeholder="Пароль (от 6 символов)" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <div id="regErr" class="hidden text-xs font-bold text-red-700"></div>
+        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Зарегистрироваться</button>
+        <button type="button" onclick="navigateTo('auth')" class="w-full text-xs text-gornyak-700 font-bold underline">Уже есть аккаунт? Войти</button>
+      </form>
     </div>
   </section>
 
@@ -357,52 +391,42 @@ h1, h2, h3, h4 {
 </div>
 
 <!-- МОДАЛКА НАСТРОЕК -->
-<div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-  <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 relative">
+<div id="settingsModal" class="fixed inset-0 bg-black/15 hidden items-center justify-center p-4 z-50">
+  <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 relative overflow-y-auto" style="max-height:90vh">
     <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
-    <h3 class="text-lg font-black text-slate-900 border-b pb-2">⚙️ Настройки интерфейса</h3>
-
-    <div class="flex flex-col gap-4 text-xs font-bold text-slate-700">
+    <h3 class="text-lg font-black text-slate-900 border-b pb-2 pr-10">⚙️ Настройки интерфейса</h3>
+    <div class="flex flex-col gap-5 text-xs font-bold text-slate-700">
+      <div><label class="block mb-2">Размер шрифта: <span id="fontVal"></span></label><input type="range" id="fontSizeRange" min="13" max="20" step="1" class="w-full" oninput="setDraft('font',this.value)"></div>
+      <div><label class="block mb-2">Размытие (стекло): <span id="blurVal"></span></label><input type="range" id="blurRange" min="0" max="40" class="w-full" oninput="setDraft('blur',this.value)"></div>
+      <div><label class="block mb-2">Непрозрачность окон: <span id="opVal"></span></label><input type="range" id="opacityRange" min="35" max="100" class="w-full" oninput="setDraft('op',this.value)"></div>
       <div>
-        <label class="block mb-1">Размер шрифта:</label>
-        <input type="range" id="fontSizeRange" min="12" max="18" value="14" class="w-full accent-gornyak-700" oninput="previewFontSize(this.value)">
-      </div>
-      <div>
-        <label class="block mb-1">Интенсивность блюра (стекло):</label>
-        <input type="range" id="blurRange" min="5" max="40" value="25" class="w-full accent-gornyak-700" oninput="previewBlur(this.value)">
+        <label class="block mb-2">Размер значков плиток:</label>
+        <div class="grid grid-cols-3 gap-2" id="icBtns">
+          <button type="button" data-ic="s" onclick="setDraft('ic','s')" class="py-3 rounded-xl border border-slate-300 bg-white">Малые</button>
+          <button type="button" data-ic="m" onclick="setDraft('ic','m')" class="py-3 rounded-xl border border-slate-300 bg-white">Средние</button>
+          <button type="button" data-ic="l" onclick="setDraft('ic','l')" class="py-3 rounded-xl border border-slate-300 bg-white">Крупные</button>
+        </div>
+        <p class="mt-2 font-normal text-slate-500 leading-relaxed">ⓘ Плитки на главной можно перемещать и менять их размер. Это доступно после регистрации: кнопка «Изменить плитки» на главной странице.</p>
       </div>
     </div>
-
-    <div class="flex justify-center pt-2">
-      <button onclick="applySettings()" class="py-3 px-8 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow transition text-xs">Применить</button>
+    <div class="flex gap-2 pt-1">
+      <button onclick="resetSettings()" class="flex-1 py-3 bg-slate-200 text-slate-800 font-bold rounded-xl text-xs">Сбросить</button>
+      <button onclick="applySettings()" class="flex-1 py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow text-xs">Применить</button>
     </div>
   </div>
 </div>
 
-<!-- МОДАЛКА ДОБАВЛЕНИЯ ЗАПИСИ (С ПРОВЕРКОЙ ПРОФИЛЯ) -->
+<!-- МОДАЛКА ДОБАВЛЕНИЯ / РЕДАКТИРОВАНИЯ -->
 <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
+  <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative overflow-y-auto" style="max-height:90vh">
     <button onclick="closeAddModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
-    <h3 id="modalTitle" class="text-lg font-black text-slate-900 border-b pb-2">Добавить запись</h3>
-    
-    <div id="authWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">
-      ⚠️ Без захода в профиль данные не сохранятся, после повторного захода. Пожалуйста, войдите в личный кабинет!
-    </div>
-
-    <form onsubmit="handleModalSubmit(event)" class="space-y-3">
-      <div>
-        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Заголовок / Тема</label>
-        <input type="text" id="itemTitle" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Описание / Текст</label>
-        <textarea id="itemDesc" rows="3" required class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none"></textarea>
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото</label>
-        <input type="file" id="itemFile" class="w-full text-xs text-slate-500">
-      </div>
-      <button type="submit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow">Сохранить</button>
+    <h3 id="modalTitle" class="text-lg font-black text-slate-900 border-b pb-2 pr-10">Добавить запись</h3>
+    <div id="authWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">⚠️ Публиковать могут только зарегистрированные пользователи. Войдите в личный кабинет!</div>
+    <form id="addForm" onsubmit="handleModalSubmit(event)" class="space-y-3">
+      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Заголовок / Тема</label><input type="text" id="itemTitle" required class="w-full p-3 rounded-xl border border-slate-300 outline-none"></div>
+      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Описание / Текст</label><textarea id="itemDesc" rows="3" required class="w-full p-3 rounded-xl border border-slate-300 outline-none"></textarea></div>
+      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото</label><input type="file" id="itemFile" class="w-full text-xs text-slate-500"></div>
+      <button type="submit" id="addSubmit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow disabled:opacity-40">Сохранить</button>
     </form>
   </div>
 </div>
@@ -411,14 +435,11 @@ h1, h2, h3, h4 {
 <div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
     <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
-    <h3 class="text-xl font-black text-slate-900 border-b pb-2">🔑 Восстановление пароля</h3>
-    <p class="text-xs text-slate-600">Введите вашу электронную почту для получения инструкции по сбросу пароля.</p>
+    <h3 class="text-xl font-black text-slate-900 border-b pb-2 pr-10">🔑 Восстановление пароля</h3>
+    <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold">⚠️ Эта функция сейчас не работает.</div>
     <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
-      <div>
-        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label>
-        <input type="email" id="forgotEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
-      </div>
-      <button type="submit" class="w-full py-3.5 bg-gornyak-700 text-white font-extrabold rounded-xl shadow">Отправить инструкцию</button>
+      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта или телефон</label><input type="text" id="forgotEmail" required placeholder="mail@example.com / +7..." class="w-full p-3 rounded-xl border border-slate-300 outline-none"></div>
+      <button type="submit" class="w-full py-3.5 bg-gornyak-700 text-white font-extrabold rounded-xl shadow">Отправить</button>
     </form>
   </div>
 </div>
@@ -452,6 +473,19 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
+<!-- ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ ПРОФИЛЯ -->
+<div id="delModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+  <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-4">
+    <h3 class="text-lg font-black text-slate-900">Удалить профиль?</h3>
+    <p class="text-sm text-slate-700 leading-relaxed">Вы уверены, что хотите удалить свой профиль? База данных будет безвозвратно удалена.</p>
+    <div class="flex gap-2">
+      <button onclick="closeDelModal()" class="flex-1 py-3 bg-slate-200 text-slate-800 font-bold rounded-xl">Отмена</button>
+      <button onclick="confirmDeleteAccount()" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl">Удалить</button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="hidden fixed left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-xl z-[60] max-w-[90vw] text-center" style="bottom:calc(1.5rem + env(safe-area-inset-bottom))"></div>
+
 <footer class="forest-footer pt-10 pb-4 text-xs text-slate-700 border-t border-gornyak-200 mt-10">
   <div class="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
     <div class="font-serif italic font-bold text-gornyak-900 text-base">Вместе — мы сильнее!</div>
@@ -461,313 +495,182 @@ h1, h2, h3, h4 {
 </footer>
 
 <script>
-let dbData = {
-  articles: JSON.parse(localStorage.getItem('gornyak_articles')) || [
-    { id: 1, date: '15.08.2025', title: 'Итоги летнего сезона и подготовка к зиме', text: 'Подробный отчет правления по расходу воды, электроэнергии и обслуживанию дорог в НСТ Горняк.' }
-  ],
-  news: JSON.parse(localStorage.getItem('gornyak_news')) || [
-    { id: 1, date: '02.11.2026', title: 'Общее собрание членов НСТ', text: 'Состоится очно-заочное голосование по вопросам утверждения сметы и ремонта КПП.' }
-  ],
-  documents: JSON.parse(localStorage.getItem('gornyak_docs')) || [
-    { id: 1, title: 'Устав НСТ «Горняк» (ред. 2024)', desc: 'Официальный учредительный документ.', file: 'Ustav_2024.pdf' }
-  ],
-  estimates: JSON.parse(localStorage.getItem('gornyak_estimates')) || [
-    { id: 1, title: 'Смета доходов и расходов на 2026 год', desc: 'Утверждена общим собранием.', file: 'Smeta_2026.pdf' }
-  ],
-  chat: JSON.parse(localStorage.getItem('gornyak_chat')) || [
-    { user: 'Правление НСТ', text: 'Уважаемые садоводы! Напоминаем о передаче показаний счетчиков.', time: '10:15' }
-  ]
-};
+const $=id=>document.getElementById(id);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS={get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast('Не хватает места в памяти браузера');return false}}};
+const show=id=>{$(id).classList.add('flex');$(id).classList.remove('hidden')};
+const hide=id=>{$(id).classList.add('hidden');$(id).classList.remove('flex')};
+const me=()=>LS.get('gornyak_user',null);
+const myId=()=>me()?me().email:null;
+const users=()=>LS.get('gornyak_users',[]);
+const CONFIG={boardEmail:'board@example.com'}; // TODO: адрес правления
+const SEED='Правление';
+const PAGES=['home','articles','announcements','documents','estimates','transport','contacts','contact-form','chat','auth','register'];
+const PAGEOF={articles:'articles',news:'announcements',documents:'documents',estimates:'estimates'};
+const NAV=[['home','fa-house','Главная'],['articles','fa-book-open','Статьи'],['announcements','fa-bullhorn','Новости'],['documents','fa-folder','Документы'],['estimates','fa-coins','Сметы'],['transport','fa-bus','Транспорт'],['contacts','fa-phone','Контакты'],['contact-form','fa-envelope','Написать'],['chat','fa-comments','Чат'],['auth','fa-user','Профиль']];
+const TILES=[
+{id:'articles',ic:'fa-book-open',c:'#f2f9f4',icc:'text-gornyak-700',t:'Статьи (с 2020 г.)',d:'Архив материалов, полезные советы и отчеты',go:'articles'},
+{id:'news',ic:'fa-newspaper',c:'#faf5ff',icc:'text-purple-700',t:'Новости СНТ',d:'Актуальные события и объявления правления',go:'announcements'},
+{id:'docs',ic:'fa-folder',c:'#f0f9ff',icc:'text-sky-600',t:'Документы',d:'Устав, сметы, договоры, другие документы',go:'documents'},
+{id:'est',ic:'fa-coins',c:'#fffbeb',icc:'text-amber-600',t:'Сметы и Финансы',d:'Отчеты, сметы, платежи товарищества',go:'estimates'},
+{id:'about',ic:'fa-tree',c:'#f2f9f4',icc:'text-gornyak-700',t:'О СНТ',d:'История, территория, информация о товариществе',info:['О СНТ «Горняк»','НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.']},
+{id:'contacts',ic:'fa-users',c:'#eef2ff',icc:'text-indigo-700',t:'Контакты и Правление',d:'Состав, контакты, работа правления',go:'contacts'},
+{id:'transport',ic:'fa-bus',c:'#ecfeff',icc:'text-cyan-700',t:'Транспорт',d:'Карта и расписание автобусов, маршруток',go:'transport'},
+{id:'form',ic:'fa-envelope',c:'#f8fafc',icc:'text-slate-700',t:'Написать нам',d:'Форма обратной связи с администрацией',go:'contact-form'},
+{id:'chat',ic:'fa-comments',c:'#f3e8ff',icc:'text-purple-700',t:'Чат садоводов',d:'Общение с соседями, важная информация',go:'chat'}];
+let curPage='home',curDlg='general',editingMsg=null,pending=[],activeAddType='',editId=null,editMode=false,hintOpen=false,settings,draft,db,dragId=null;
 
-// --- УВЕДОМЛЕНИЯ ---
-function addNotification(text) {
-  let notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
-  notifs.unshift({ text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-  localStorage.setItem('gornyak_notifications', JSON.stringify(notifs));
-  updateNotifBadge();
-}
+// ---------- Данные ----------
+function loadDb(){db={
+ articles:LS.get('gornyak_articles',[{id:1,date:'15.08.2025',title:'Итоги летнего сезона и подготовка к зиме',text:'Подробный отчет правления по расходу воды, электроэнергии и обслуживанию дорог в НСТ Горняк.',author:SEED,authorName:SEED}]),
+ news:LS.get('gornyak_news',[{id:1,date:'02.11.2026',title:'Общее собрание членов НСТ',text:'Состоится очно-заочное голосование по вопросам утверждения сметы и ремонта КПП.',author:SEED,authorName:SEED}]),
+ documents:LS.get('gornyak_docs',[{id:1,title:'Устав НСТ «Горняк» (ред. 2024)',desc:'Официальный учредительный документ.',file:'Ustav_2024.pdf',author:SEED,authorName:SEED}]),
+ estimates:LS.get('gornyak_estimates',[{id:1,title:'Смета доходов и расходов на 2026 год',desc:'Утверждена общим собранием.',file:'Smeta_2026.pdf',author:SEED,authorName:SEED}]),
+ chat:LS.get('gornyak_chat2',{general:[{id:1,from:SEED,fromName:SEED,text:'Уважаемые садоводы! Напоминаем о передаче показаний счетчиков.',ts:Date.parse('2026-11-02T10:15:00'),files:[],delFor:[]}]})};}
+function saveData(){LS.set('gornyak_articles',db.articles);LS.set('gornyak_news',db.news);LS.set('gornyak_docs',db.documents);LS.set('gornyak_estimates',db.estimates)}
+function saveChat(){LS.set('gornyak_chat2',db.chat);renderChat();updateChatBadge()}
 
-function updateNotifBadge() {
-  const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
-  let badge = document.getElementById('headerNotifBadge');
-  if (badge) {
-    if (notifs.length > 0) {
-      badge.innerText = notifs.length;
-      badge.classList.remove('hidden');
-    } else {
-      badge.classList.add('hidden');
-    }
-  }
-}
+// ---------- Уведомления, тосты ----------
+let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.add('hidden'),2800)}
+function addNotification(text){const n=LS.get('gornyak_notifications',[]);n.unshift({text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});LS.set('gornyak_notifications',n);updateNotifBadge()}
+function updateNotifBadge(){const n=LS.get('gornyak_notifications',[]).length,b=$('headerNotifBadge');if(b){b.innerText=n;b.classList.toggle('hidden',!n)}}
+function openNotifModal(){const n=LS.get('gornyak_notifications',[]);$('notifContainer').innerHTML=n.length?n.map(x=>`<div class="bg-green-50 p-3 rounded-xl border border-green-200"><div class="text-[9px] font-bold text-emerald-800">${esc(x.time)}</div><div class="font-bold text-slate-800 text-xs mt-0.5">${esc(x.text)}</div></div>`).join(''):'<div class="text-center py-4 text-slate-400">Нет новых уведомлений</div>';show('notifModal')}
+function closeNotifModal(){hide('notifModal')}
+function clearNotifications(){localStorage.removeItem('gornyak_notifications');updateNotifBadge();openNotifModal()}
 
-function openNotifModal() {
-  const container = document.getElementById('notifContainer');
-  const notifs = JSON.parse(localStorage.getItem('gornyak_notifications')) || [];
-  if (notifs.length === 0) {
-    container.innerHTML = `<div class="text-center py-4 text-slate-400">Нет новых уведомлений</div>`;
-  } else {
-    container.innerHTML = notifs.map(n => `
-      <div class="bg-green-50 p-3 rounded-xl border border-green-200">
-        <div class="text-[9px] font-bold text-emerald-800">${n.time}</div>
-        <div class="font-bold text-slate-800 text-xs mt-0.5">${n.text}</div>
-      </div>`).join('');
-  }
-  document.getElementById('notifModal').classList.add('flex');
-  document.getElementById('notifModal').classList.remove('hidden');
-}
-function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); document.getElementById('notifModal').classList.remove('flex'); }
+// ---------- Настройки (живой предпросмотр) ----------
+const DEF={font:16,blur:25,op:94,ic:'m'};
+function applyUI(o){const r=document.documentElement;r.style.fontSize=o.font+'px';r.style.setProperty('--blur-val',o.blur+'px');r.style.setProperty('--gp',o.op);r.style.setProperty('--wp',Math.round(o.op*.9));r.dataset.ic=o.ic}
+function syncSettings(){$('fontSizeRange').value=draft.font;$('blurRange').value=draft.blur;$('opacityRange').value=draft.op;$('fontVal').textContent=draft.font+'px';$('blurVal').textContent=draft.blur+'px';$('opVal').textContent=draft.op+'%';document.querySelectorAll('#icBtns button').forEach(b=>{const on=b.dataset.ic===draft.ic;b.classList.toggle('bg-gornyak-700',on);b.classList.toggle('text-white',on)})}
+function openSettingsModal(){draft={...settings};syncSettings();show('settingsModal')}
+function setDraft(k,v){draft[k]=k==='ic'?v:+v;applyUI(draft);syncSettings()}
+function applySettings(){settings={...draft};LS.set('gornyak_settings2',settings);hide('settingsModal');toast('Настройки применены')}
+function closeSettingsModal(){applyUI(settings);hide('settingsModal')}
+function resetSettings(){draft={...DEF};applyUI(draft);syncSettings()}
 
-function clearNotifications() {
-  localStorage.removeItem('gornyak_notifications');
-  updateNotifBadge();
-  openNotifModal();
-}
+// ---------- Навигация ----------
+function renderNav(){const mk=(m,mob)=>`<button onclick="navigateTo('${m[0]}')" class="relative shrink-0 flex flex-col items-center gap-0.5 ${mob?'min-w-[64px] px-2 py-2':''} ${curPage===m[0]?'text-gornyak-800':'text-slate-600'} hover:text-gornyak-700 transition"><i class="fa-solid ${m[1]} ${mob?'text-base':'text-sm'}"></i>${m[2]}${m[0]==='chat'?'<span class="chatBadge hidden absolute -top-0.5 right-2 bg-red-600 text-white text-[9px] font-black min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center"></span>':''}</button>`;
+ $('desktopNav').innerHTML=NAV.map(m=>mk(m,0)).join('');$('mobNav').innerHTML=NAV.map(m=>mk(m,1)).join('');updateChatBadge()}
+function navigateTo(p){if(!PAGES.includes(p))p='home';curPage=p;if(p!=='home')editMode=false;document.querySelectorAll('.page-section').forEach(x=>x.classList.remove('active'));$('page-'+p).classList.add('active');try{history.replaceState(null,'','#'+p)}catch(e){}window.scrollTo({top:0,behavior:'smooth'});$('searchResults').classList.add('hidden');renderAll();renderNav();if(p==='contact-form'&&me()&&!$('cfName').value){$('cfName').value=me().name||'';$('cfContact').value=me().phone||me().email}}
+function regClick(){navigateTo(me()?'auth':'register')}
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h!==curPage)navigateTo(h)});
 
-// --- НАСТРОЙКИ ---
-function openSettingsModal() {
-  document.getElementById('settingsModal').classList.add('flex');
-  document.getElementById('settingsModal').classList.remove('hidden');
-}
-function closeSettingsModal() {
-  document.getElementById('settingsModal').classList.add('hidden');
-  document.getElementById('settingsModal').classList.remove('flex');
-}
-function previewFontSize(val) { document.body.style.fontSize = val + 'px'; }
-function previewBlur(val) { document.documentElement.style.setProperty('--blur-val', val + 'px'); }
-function applySettings() {
-  const fontSize = document.getElementById('fontSizeRange').value;
-  const blurVal = document.getElementById('blurRange').value;
-  localStorage.setItem('gornyak_settings', JSON.stringify({ fontSize, blurVal }));
-  closeSettingsModal();
-  addNotification('Настройки интерфейса применены');
-}
+// ---------- Поделиться ----------
+async function shareIt(title,page){const url=location.href.split('#')[0]+'#'+page;try{if(navigator.share){await navigator.share({title,text:title,url});return}}catch(e){if(e.name==='AbortError')return}
+ try{await navigator.clipboard.writeText(url);toast('Ссылка скопирована')}catch(e){prompt('Скопируйте ссылку:',url)}}
+function shareCurrent(){shareIt('НСТ «Горняк»',curPage)}
+function injectHeaders(){const mkBtn=()=>{const b=document.createElement('button');b.className='shareBtn text-xs font-bold bg-slate-100 border border-slate-200 text-slate-700 px-3 py-2 rounded-xl';b.innerHTML='<i class="fa-solid fa-share-nodes"></i> <span class="hidden sm:inline">Поделиться</span>';return b};
+ const ab=document.querySelector('#page-articles h2').parentElement;const add=document.createElement('button');add.className='bg-gornyak-700 hover:bg-gornyak-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow';add.textContent='+ Добавить статью';add.onclick=()=>openAddModal('articles');ab.insertBefore(add,ab.lastElementChild);
+ document.querySelectorAll('.page-section h2').forEach(h=>{const sec=h.closest('.page-section'),bar=h.parentElement,last=bar.lastElementChild,b=mkBtn();b.onclick=()=>shareIt(h.textContent.trim(),sec.id.slice(5));bar.classList.add('flex-wrap','gap-2');if(last===h)bar.appendChild(b);else if(last.tagName==='DIV')last.prepend(b);else bar.insertBefore(b,last)});
+ const hb=mkBtn();hb.className+=' bg-white/20 text-white border-white/30';hb.onclick=()=>shareIt('НСТ «Горняк»','home');document.querySelector('.father-hero .flex.items-center.gap-3').prepend(hb)}
 
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('gornyak_settings');
-  if (saved) {
-    const s = JSON.parse(saved);
-    document.body.style.fontSize = s.fontSize + 'px';
-    document.documentElement.style.setProperty('--blur-val', s.blurVal + 'px');
-    document.getElementById('fontSizeRange').value = s.fontSize;
-    document.getElementById('blurRange').value = s.blurVal;
-  }
-  renderAuthArea();
-  updateNotifBadge();
-});
+// ---------- Плитки (редактирование — только для зарегистрированных) ----------
+const layoutKey=()=>'gornyak_tiles_'+myId();
+function getLayout(){const ids=TILES.map(t=>t.id);let l=(me()?LS.get(layoutKey(),[]):[]).filter(x=>ids.includes(x.id));ids.forEach(id=>{if(!l.find(x=>x.id===id))l.push({id,w:1})});return l}
+function saveLayout(l){if(me())LS.set(layoutKey(),l)}
+function toggleEdit(){if(!me()){toast('Редактирование плиток доступно после регистрации');return}editMode=!editMode;renderTiles()}
+function resetLayout(){localStorage.removeItem(layoutKey());renderTiles()}
+function toggleHint(){hintOpen=!hintOpen;renderTiles()}
+function moveTile(id,d){const l=getLayout(),i=l.findIndex(x=>x.id===id),j=i+d;if(j<0||j>=l.length)return;[l[i],l[j]]=[l[j],l[i]];saveLayout(l);renderTiles()}
+function sizeTile(id){const l=getLayout(),x=l.find(q=>q.id===id);x.w=x.w===2?1:2;saveLayout(l);renderTiles()}
+function tileClick(id){if(editMode)return;const t=TILES.find(q=>q.id===id);if(t.info)openInfoModal(t.info[0],t.info[1]);else navigateTo(t.go)}
+function renderTiles(){const u=me();
+ $('tileToolbar').innerHTML=`<div class="flex flex-wrap items-center gap-2"><button onclick="toggleEdit()" class="px-4 py-2.5 rounded-xl text-xs font-bold shadow ${editMode?'bg-gornyak-700 text-white':'bg-white border border-slate-300 text-slate-700'}"><i class="fa-solid ${editMode?'fa-check':u?'fa-pen':'fa-lock'}"></i> ${editMode?'Готово':'Изменить плитки'}</button>${editMode?'<button onclick="resetLayout()" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-200 text-slate-800">Сбросить</button>':''}<button onclick="toggleHint()" class="w-10 h-10 rounded-full bg-white border border-slate-300 text-slate-600" aria-label="Подсказка"><i class="fa-solid fa-circle-info"></i></button></div>${hintOpen||editMode?`<div class="mt-2 text-xs bg-sky-50 border border-sky-200 text-sky-900 rounded-xl p-3 leading-relaxed">Перетаскивайте плитки или используйте стрелки ◀ ▶, кнопка ⤢ меняет размер плитки. ${u?'Раскладка сохраняется в вашем профиле.':'Доступно после регистрации.'}</div>`:''}`;
+ const g=$('tileGrid');g.className='grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4'+(editMode?' editing':'');
+ g.innerHTML=getLayout().map(x=>{const t=TILES.find(q=>q.id===x.id),cb='w-8 h-8 rounded-full bg-white shadow text-[11px] items-center justify-center';return `<div class="tile rounded-2xl border border-slate-200 p-4 sm:p-6 cursor-pointer ${x.w===2?'col-span-2':''}" style="--tb:${t.c}" data-id="${t.id}" draggable="${editMode}" onclick="tileClick('${t.id}')"><div class="tctl absolute top-1 right-1 gap-1"><button class="${cb}" aria-label="Влево" onclick="event.stopPropagation();moveTile('${t.id}',-1)">◀</button><button class="${cb}" aria-label="Вправо" onclick="event.stopPropagation();moveTile('${t.id}',1)">▶</button><button class="${cb}" aria-label="Размер" onclick="event.stopPropagation();sizeTile('${t.id}')">⤢</button></div><div class="tile-ic ${t.icc} mb-3 relative inline-block"><i class="fa-solid ${t.ic}"></i>${t.id==='chat'?'<span class="chatBadge hidden absolute -top-2 -right-4 bg-red-600 text-white text-[10px] font-black min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center"></span>':''}</div><h3 class="font-bold text-slate-900 text-base mb-1">${t.t}</h3><p class="text-slate-500 text-xs leading-relaxed">${t.d}</p></div>`}).join('');updateChatBadge()}
+$('tileGrid').addEventListener('dragstart',e=>{const t=e.target.closest('.tile');if(t&&editMode){dragId=t.dataset.id;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragId)}});
+$('tileGrid').addEventListener('dragover',e=>{if(editMode)e.preventDefault()});
+$('tileGrid').addEventListener('drop',e=>{const t=e.target.closest('.tile');if(!editMode||!t||!dragId||t.dataset.id===dragId)return;e.preventDefault();const l=getLayout(),a=l.findIndex(x=>x.id===dragId),b=l.findIndex(x=>x.id===t.dataset.id),[m]=l.splice(a,1);l.splice(b,0,m);saveLayout(l);dragId=null;renderTiles()});
 
-async function fetchLiveWeather() {
-  try {
-    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=Europe/Moscow');
-    const data = await res.json();
-    const temp = Math.round(data.current.temperature_2m);
-    const wind = Math.round(data.current.wind_speed_10m);
-    document.getElementById('widgetTemp').innerText = (temp > 0 ? '+' : '') + temp + '°C';
-    document.getElementById('widgetDesc').innerText = `Ветер ${wind} м/с • Онлайн`;
-  } catch(e) {
-    document.getElementById('widgetTemp').innerText = '+3°C';
-    document.getElementById('widgetDesc').innerText = 'Котельники • Онлайн';
-  }
-}
+// ---------- Списки + права автора ----------
+const own=it=>me()&&it.author===myId();
+function itemBtns(type,it){const b='w-8 h-8 rounded-lg bg-slate-100 text-slate-600 text-xs';return `<div class="flex gap-1 shrink-0"><button class="${b}" data-a="share" data-t="${type}" data-title="${esc(it.title)}" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>${own(it)?`<button class="${b}" data-a="edit" data-t="${type}" data-i="${it.id}" aria-label="Изменить"><i class="fa-solid fa-pen"></i></button><button class="w-8 h-8 rounded-lg bg-red-100 text-red-700 text-xs" data-a="del" data-t="${type}" data-i="${it.id}" aria-label="Удалить"><i class="fa-solid fa-trash"></i></button>`:''}</div>`}
+const card=(type,it,badge)=>`<div class="modal-glass p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between gap-3"><div><span class="text-[10px] ${badge} font-bold px-2.5 py-1 rounded-md">${esc(it.date)}</span><h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${esc(it.title)}</h3><p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${esc(it.text)}</p>${it.fileData&&it.fileData.startsWith('data:image')?`<img src="${it.fileData}" class="rounded-xl mt-2 max-h-48" alt="">`:it.file?`<button data-a="dl" data-t="${type}" data-i="${it.id}" class="mt-2 text-xs font-bold text-gornyak-700 underline">📎 ${esc(it.file)}</button>`:''}</div><div class="flex items-center justify-between gap-2"><span class="text-[10px] text-slate-400 truncate">${esc(it.authorName||'')}</span>${itemBtns(type,it)}</div></div>`;
+const row=(type,it,btn)=>`<div class="modal-glass p-4 rounded-2xl border border-slate-200 flex flex-wrap justify-between items-center gap-2 shadow-sm"><div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm">${esc(it.title)}</h4><p class="text-xs text-slate-500">${esc(it.desc||'')}</p><p class="text-[10px] text-slate-400">${esc(it.authorName||'')}</p></div><div class="flex items-center gap-2"><button data-a="dl" data-t="${type}" data-i="${it.id}" class="px-3 py-2 ${btn} rounded-xl font-bold text-xs">Скачать</button>${itemBtns(type,it)}</div></div>`;
+function renderLists(){$('articlesList').innerHTML=db.articles.map(a=>card('articles',a,'text-gornyak-700 bg-gornyak-50')).join('');$('newsList').innerHTML=db.news.map(n=>card('news',n,'text-purple-700 bg-purple-50')).join('');$('documentsList').innerHTML=db.documents.map(d=>row('documents',d,'bg-sky-100 text-sky-900')).join('');$('estimatesList').innerHTML=db.estimates.map(d=>row('estimates',d,'bg-amber-100 text-amber-900')).join('')}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const{a,t,i}=b.dataset;if(a==='share')shareIt(b.dataset.title,PAGEOF[t]);if(a==='edit')openAddModal(t,+i);if(a==='del')delItem(t,+i);if(a==='dl')downloadItem(t,+i)});
+function downloadItem(t,i){const it=db[t].find(x=>x.id===i);if(!it)return;if(it.fileData){const a=document.createElement('a');a.href=it.fileData;a.download=it.file||'file';a.click()}else toast('К этой записи файл не прикреплён (демо-запись)')}
+function delItem(t,i){const it=db[t].find(x=>x.id===i);if(!it||!own(it)){toast('Можно удалять только свои записи');return}if(!confirm('Удалить «'+it.title+'»?'))return;db[t]=db[t].filter(x=>x.id!==i);saveData();renderAll()}
+function openAddModal(type,id){activeAddType=type;editId=id||null;$('addForm').reset();const u=me();$('authWarning').classList.toggle('hidden',!!u);$('addSubmit').disabled=!u;
+ if(id){const it=db[type].find(x=>x.id===id);if(!it||!own(it)){toast('Можно менять только свои записи');return}$('itemTitle').value=it.title;$('itemDesc').value=it.text||it.desc||''}
+ const T={news:'новость',documents:'документ',estimates:'смету',articles:'статью'};$('modalTitle').innerText=(id?'Изменить: ':'Добавить: ')+T[type];show('addModal')}
+function closeAddModal(){hide('addModal')}
+async function handleModalSubmit(e){e.preventDefault();const u=me();if(!u){toast('Войдите в профиль');return}const title=$('itemTitle').value.trim(),desc=$('itemDesc').value.trim(),f=$('itemFile').files[0];let file=null,data=null;
+ if(f){file=f.name;if(f.size<=1.5*1048576)data=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});else toast('Файл больше 1,5 МБ: сохранено только название')}
+ const arr=db[activeAddType];
+ if(editId){const it=arr.find(x=>x.id===editId);if(!it||it.author!==u.email){toast('Можно менять только свои записи');return}Object.assign(it,{title,text:desc,desc});if(f){it.file=file;it.fileData=data}addNotification('Запись обновлена: '+title)}
+ else{arr.unshift({id:Date.now(),title,text:desc,desc,date:new Date().toLocaleDateString('ru-RU'),author:u.email,authorName:u.name||u.email,file,fileData:data});addNotification('Опубликовано: '+title)}
+ saveData();closeAddModal();renderAll();toast('Сохранено')}
 
-function saveData() {
-  localStorage.setItem('gornyak_articles', JSON.stringify(dbData.articles));
-  localStorage.setItem('gornyak_news', JSON.stringify(dbData.news));
-  localStorage.setItem('gornyak_docs', JSON.stringify(dbData.documents));
-  localStorage.setItem('gornyak_estimates', JSON.stringify(dbData.estimates));
-  localStorage.setItem('gornyak_chat', JSON.stringify(dbData.chat));
-}
+// ---------- Чат ----------
+function dialogs(){const l=[{id:'general',name:'Общий чат садоводов',ic:'fa-users'},{id:'board',name:'Правление',ic:'fa-landmark'}],m=myId();if(m)users().filter(u=>u.email!==m).forEach(u=>l.push({id:'dm:'+[m,u.email].sort().join('|'),name:u.name||u.email,ic:'fa-user'}));return l}
+const readKey=()=>'gornyak_read_'+(myId()||'guest');
+function unread(d){const r=LS.get(readKey(),{}),id=myId()||'guest';return(db.chat[d]||[]).filter(m=>m.ts>(r[d]||0)&&m.from!==myId()&&!m.delAll&&!(m.delFor||[]).includes(id)).length}
+function markRead(){const r=LS.get(readKey(),{});r[curDlg]=Date.now();LS.set(readKey(),r)}
+function updateChatBadge(){const n=dialogs().reduce((s,d)=>s+unread(d.id),0);document.querySelectorAll('.chatBadge').forEach(b=>{b.textContent=n>99?'99+':n;b.classList.toggle('hidden',!n)})}
+const fmt=ts=>new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+function msgHtml(m){const mine=me()&&m.from===myId();
+ const files=(m.files||[]).map(f=>{const ok=f.data&&f.data.startsWith('data:');if(ok&&(f.type||'').startsWith('image/'))return `<img src="${f.data}" class="rounded-xl max-h-48 mt-1" alt="${esc(f.name)}">`;if(ok&&(f.type||'').startsWith('video/'))return `<video src="${f.data}" controls class="rounded-xl max-h-48 mt-1"></video>`;return ok?`<a href="${f.data}" download="${esc(f.name)}" class="block mt-1 font-bold text-gornyak-700 underline">📎 ${esc(f.name)}</a>`:`<span class="block mt-1 text-slate-400">📎 ${esc(f.name)} (не сохранён: больше 1,5 МБ)</span>`}).join('');
+ const acts=!me()||m.delAll?'':`<div class="flex gap-3 mt-1 text-[10px] text-slate-500">${mine?`<button data-act="edit" data-id="${m.id}">Изменить</button>`:''}<button data-act="me" data-id="${m.id}">Удалить у меня</button>${mine?`<button data-act="all" data-id="${m.id}">Удалить у всех</button>`:''}</div>`;
+ return `<div class="p-3 rounded-xl border text-xs ${mine?'bg-green-50 border-green-200 ml-6':'bg-slate-50 border-slate-200 mr-6'}"><div class="flex justify-between gap-2 font-bold text-gornyak-800 mb-0.5"><span>${esc(m.fromName)}</span><span class="text-[9px] text-slate-400">${fmt(m.ts)}${m.edited?' · изм.':''}</span></div>${m.delAll?'<i class="text-slate-400">Сообщение удалено</i>':`<div class="text-slate-700 whitespace-pre-wrap break-words">${esc(m.text)}</div>${files}`}${acts}</div>`}
+function renderChat(){const ds=dialogs();if(!ds.find(d=>d.id===curDlg))curDlg='general';if(curPage==='chat')markRead();
+ $('chatSidebar').innerHTML=ds.map(d=>{const n=d.id===curDlg&&curPage==='chat'?0:unread(d.id);return `<button data-dlg="${esc(d.id)}" class="shrink-0 flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-left ${d.id===curDlg?'bg-gornyak-700 text-white':'bg-white/70 text-slate-700 border border-slate-200'}"><i class="fa-solid ${d.ic}"></i><span class="truncate">${esc(d.name)}</span>${n?`<span class="ml-auto bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">${n}</span>`:''}</button>`}).join('');
+ const cur=ds.find(d=>d.id===curDlg);$('chatTitle').innerHTML=`<i class="fa-solid ${cur.ic} text-gornyak-700"></i> ${esc(cur.name)}`;
+ const id=myId()||'guest',msgs=(db.chat[curDlg]||[]).filter(m=>!(m.delFor||[]).includes(id)),el=$('chatMessages');
+ el.innerHTML=msgs.length?msgs.map(msgHtml).join(''):'<div class="text-center text-slate-400 text-xs py-8">Сообщений пока нет</div>';el.scrollTop=el.scrollHeight;
+ $('chatInput').placeholder=me()?'Сообщение...':'Войдите, чтобы писать';updateChatBadge()}
+$('chatSidebar').addEventListener('click',e=>{const b=e.target.closest('[data-dlg]');if(!b)return;curDlg=b.dataset.dlg;cancelEdit();pending=[];renderPending();renderChat()});
+$('chatMessages').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||!me())return;const m=(db.chat[curDlg]||[]).find(x=>x.id===+b.dataset.id);if(!m)return;
+ if(b.dataset.act==='edit'&&m.from===myId()){editingMsg=m.id;$('chatInput').value=m.text;$('chatEditBar').classList.remove('hidden');$('chatEditBar').classList.add('flex');$('chatInput').focus()}
+ else if(b.dataset.act==='me'){(m.delFor=m.delFor||[]).push(myId());saveChat()}
+ else if(b.dataset.act==='all'&&m.from===myId()&&confirm('Удалить сообщение у всех?')){m.delAll=true;m.text='';m.files=[];saveChat()}});
+function cancelEdit(){editingMsg=null;$('chatInput').value='';$('chatEditBar').classList.add('hidden');$('chatEditBar').classList.remove('flex')}
+function pickFiles(inp){[...inp.files].forEach(f=>{if(f.size>1.5*1048576){pending.push({name:f.name,type:f.type,data:null});renderPending();return}const r=new FileReader();r.onload=()=>{pending.push({name:f.name,type:f.type,data:r.result});renderPending()};r.readAsDataURL(f)});inp.value=''}
+function rmPending(i){pending.splice(i,1);renderPending()}
+function renderPending(){const p=$('chatPending');p.classList.toggle('hidden',!pending.length);p.classList.toggle('flex',!!pending.length);p.innerHTML=pending.map((f,i)=>`<span class="bg-slate-100 border border-slate-300 rounded-lg px-2 py-1">📎 ${esc(f.name)} <button type="button" onclick="rmPending(${i})" class="font-bold ml-1">✕</button></span>`).join('')}
+function sendChatMessage(e){e.preventDefault();if(!me()){toast('Войдите в профиль, чтобы писать в чат');navigateTo('auth');return}const t=$('chatInput').value.trim();
+ if(editingMsg){const m=(db.chat[curDlg]||[]).find(x=>x.id===editingMsg);if(m&&m.from===myId()&&t){m.text=t;m.edited=true}cancelEdit();saveChat();return}
+ if(!t&&!pending.length)return;const u=me();(db.chat[curDlg]=db.chat[curDlg]||[]).push({id:Date.now(),from:u.email,fromName:u.name||u.email,text:t,ts:Date.now(),files:pending,delFor:[]});pending=[];$('chatInput').value='';renderPending();markRead();saveChat()}
 
-function navigateTo(pageId) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById('page-' + pageId);
-  if (target) target.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  renderAllSections();
-  if(pageId === 'auth') renderAuthArea();
-}
+// ---------- Профиль, регистрация ----------
+async function sha(x){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(x));return[...new Uint8Array(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(x)))}}
+function loginAs(u){LS.set('gornyak_user',{email:u.email,name:u.name,plot:u.plot,phone:u.phone});addNotification('Вход: '+u.email);refreshUserUI()}
+function refreshUserUI(){const u=me();$('regBtn').textContent=u?((u.name||u.email).split(' ')[0]).slice(0,10):'Регистрация';renderAll();renderNav()}
+function regErr(m){const e=$('regErr');e.textContent=m;e.classList.remove('hidden')}
+async function handleRegister(e){e.preventDefault();const g=id=>$(id).value.trim(),email=g('regEmail').toLowerCase(),pw=$('regPass').value;if(pw.length<6)return regErr('Пароль — не менее 6 символов');if(users().some(u=>u.email===email))return regErr('Этот email уже зарегистрирован');
+ const u={email,name:g('regName'),plot:g('regPlot'),phone:g('regPhone'),hash:await sha(pw)};LS.set('gornyak_users',[...users(),u]);loginAs(u);toast('Регистрация завершена');navigateTo('home')}
+async function handleLoginSubmit(e){e.preventDefault();const email=$('loginEmail').value.trim().toLowerCase(),u=users().find(x=>x.email===email);if(!u||u.hash!==await sha($('loginPassword').value)){$('loginErr').classList.remove('hidden');return}loginAs(u);navigateTo('home')}
+function logout(){localStorage.removeItem('gornyak_user');editMode=false;addNotification('Выход из личного кабинета');refreshUserUI();navigateTo('auth')}
+function renderAuthArea(){const a=$('authContentArea'),u=me();
+ a.innerHTML=u?`<div class="space-y-4 text-sm text-slate-700 mt-3"><div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2"><div><span class="text-xs text-slate-400 block">Электронная почта:</span><b>${esc(u.email)}</b></div><div><span class="text-xs text-slate-400 block">ФИО:</span><b>${esc(u.name||'Не указано')}</b></div><div><span class="text-xs text-slate-400 block">Участок:</span><b>${esc(u.plot||'Не указан')}</b></div><div><span class="text-xs text-slate-400 block">Телефон:</span><b>${esc(u.phone||'Не указан')}</b></div></div><button onclick="logout()" class="w-full py-3 bg-slate-200 text-slate-800 font-bold rounded-xl shadow">Выйти из аккаунта</button><button onclick="show('delModal')" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow">Удалить профиль</button></div>`
+ :`<form onsubmit="handleLoginSubmit(event)" class="space-y-4 mt-3"><input type="email" id="loginEmail" required placeholder="Электронная почта" class="w-full p-3 rounded-xl border border-slate-300 outline-none"><input type="password" id="loginPassword" required placeholder="Пароль" class="w-full p-3 rounded-xl border border-slate-300 outline-none"><div id="loginErr" class="hidden text-xs font-bold text-red-700">Неверная почта или пароль</div><button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Войти</button><div class="flex justify-between text-xs pt-2"><button type="button" onclick="navigateTo('register')" class="text-gornyak-700 font-bold underline">Регистрация</button><button type="button" onclick="openForgotModal()" class="text-slate-600 underline">Забыли пароль?</button></div></form>`}
+function closeDelModal(){hide('delModal')}
+function confirmDeleteAccount(){const id=myId();if(!id)return closeDelModal();LS.set('gornyak_users',users().filter(u=>u.email!==id));['articles','news','documents','estimates'].forEach(k=>db[k]=db[k].filter(x=>x.author!==id));Object.keys(db.chat).forEach(d=>db.chat[d]=db.chat[d].filter(m=>m.from!==id));saveData();LS.set('gornyak_chat2',db.chat);localStorage.removeItem(layoutKey());localStorage.removeItem(readKey());localStorage.removeItem('gornyak_user');editMode=false;closeDelModal();refreshUserUI();toast('Профиль удалён');navigateTo('home')}
+function openForgotModal(){show('forgotModal')}
+function closeForgotModal(){hide('forgotModal')}
+function handleForgotSubmit(e){e.preventDefault();toast('Эта функция сейчас не работает');closeForgotModal()}
 
-function renderAllSections() {
-  document.getElementById('articlesList').innerHTML = dbData.articles.map(a => `
-    <div class="modal-glass p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-      <div>
-        <span class="text-[10px] text-gornyak-700 font-bold bg-gornyak-50 px-2.5 py-1 rounded-md">${a.date}</span>
-        <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${a.title}</h3>
-        <p class="text-xs text-slate-600 leading-relaxed">${a.text}</p>
-      </div>
-    </div>`).join('');
+// ---------- Обратная связь ----------
+function submitContact(e){e.preventDefault();const m={name:$('cfName').value.trim(),contact:$('cfContact').value.trim(),topic:$('cfTopic').value,text:$('cfText').value.trim(),ts:Date.now()};const o=LS.get('gornyak_outbox',[]);o.push(m);LS.set('gornyak_outbox',o);addNotification('Обращение подготовлено: '+m.topic);
+ $('cfOk').classList.remove('hidden');e.target.reset();location.href='mailto:'+CONFIG.boardEmail+'?subject='+encodeURIComponent('Обращение: '+m.topic)+'&body='+encodeURIComponent(m.text+'\n\n'+m.name+', '+m.contact)}
 
-  document.getElementById('newsList').innerHTML = dbData.news.map(n => `
-    <div class="modal-glass p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-      <div>
-        <span class="text-[10px] text-purple-700 font-bold bg-purple-50 px-2.5 py-1 rounded-md">${n.date}</span>
-        <h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${n.title}</h3>
-        <p class="text-xs text-slate-600 leading-relaxed">${n.text}</p>
-      </div>
-    </div>`).join('');
+// ---------- Поиск, инфо, погода ----------
+function handleSearch(q){const box=$('searchResults');q=q.trim().toLowerCase();if(!q){box.classList.add('hidden');return}const L={articles:'Статья',news:'Новость',documents:'Документ',estimates:'Смета'},r=[];
+ Object.keys(L).forEach(k=>db[k].forEach(it=>{if((it.title+' '+(it.text||it.desc||'')).toLowerCase().includes(q))r.push(`<button class="block w-full text-left p-2 rounded-lg hover:bg-slate-100 text-xs" data-go="${PAGEOF[k]}"><b>${esc(it.title)}</b> <span class="text-slate-400">· ${L[k]}</span></button>`)}));
+ box.innerHTML=r.join('')||'<div class="p-2 text-xs text-slate-500">Ничего не найдено</div>';box.classList.remove('hidden')}
+$('searchResults').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){$('globalSearch').value='';navigateTo(b.dataset.go)}});
+function openInfoModal(t,x){$('infoModalTitle').innerText=t;$('infoModalText').innerText=x;show('infoModal')}
+function closeInfoModal(){hide('infoModal')}
+function openWeatherModal(){show('weatherModal')}
+function closeWeatherModal(){hide('weatherModal')}
+async function fetchLiveWeather(){try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=Europe/Moscow'),d=await r.json(),t=Math.round(d.current.temperature_2m),w=Math.round(d.current.wind_speed_10m),tx=(t>0?'+':'')+t+'°C';
+ $('widgetTemp').innerText=tx;$('widgetDesc').innerText=`Ветер ${w} м/с • Онлайн`;$('modalTemp').innerText=tx;$('modalWind').innerText=w+' м/с';$('modalHum').innerText=Math.round(d.current.relative_humidity_2m)+'%'}catch(e){$('widgetDesc').innerText='Нет связи с метеостанцией';$('modalTemp').innerText=$('modalWind').innerText=$('modalHum').innerText='—'}}
 
-  document.getElementById('documentsList').innerHTML = dbData.documents.map(d => `
-    <div class="modal-glass p-4 rounded-2xl border border-slate-200 flex justify-between items-center shadow-sm">
-      <div><h4 class="font-bold text-slate-900 text-sm">${d.title}</h4><p class="text-xs text-slate-500">${d.desc || ''}</p></div>
-      <button onclick="alert('Скачивание: ${d.title}')" class="px-3 py-1.5 bg-sky-100 text-sky-900 rounded-xl font-bold text-xs">Скачать</button>
-    </div>`).join('');
+function renderAll(){renderTiles();renderLists();renderChat();renderAuthArea();updateNotifBadge()}
+window.addEventListener('storage',()=>{loadDb();renderAll();renderNav()});
 
-  document.getElementById('estimatesList').innerHTML = dbData.estimates.map(e => `
-    <div class="modal-glass p-4 rounded-2xl border border-slate-200 flex justify-between items-center shadow-sm">
-      <div><h4 class="font-bold text-slate-900 text-sm">${e.title}</h4><p class="text-xs text-slate-500">${e.desc || ''}</p></div>
-      <button onclick="alert('Скачивание: ${e.title}')" class="px-3.5 py-2 bg-amber-100 text-amber-900 rounded-xl font-bold text-xs">Скачать</button>
-    </div>`).join('');
-
-  document.getElementById('chatMessages').innerHTML = dbData.chat.map(c => `
-    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-      <div class="flex justify-between font-bold text-gornyak-800 mb-0.5"><span>${c.user}</span><span class="text-[9px] text-slate-400">${c.time}</span></div>
-      <div class="text-slate-700">${c.text}</div>
-    </div>`).join('');
-}
-
-function openInfoModal(title, text) {
-  document.getElementById('infoModalTitle').innerText = title;
-  document.getElementById('infoModalText').innerText = text;
-  document.getElementById('infoModal').classList.add('flex');
-  document.getElementById('infoModal').classList.remove('hidden');
-}
-function closeInfoModal() { document.getElementById('infoModal').classList.add('hidden'); document.getElementById('infoModal').classList.remove('flex'); }
-
-let activeAddType = '';
-function openAddModal(type) {
-  activeAddType = type;
-  const user = localStorage.getItem('gornyak_user');
-  const warning = document.getElementById('authWarning');
-  if (!user) {
-    warning.classList.remove('hidden');
-  } else {
-    warning.classList.add('hidden');
-  }
-  document.getElementById('modalTitle').innerText = type === 'news' ? 'Добавить новость' : (type === 'documents' ? 'Загрузить документ' : 'Добавить смету');
-  document.getElementById('addModal').classList.add('flex');
-  document.getElementById('addModal').classList.remove('hidden');
-}
-function closeAddModal() { document.getElementById('addModal').classList.add('hidden'); document.getElementById('addModal').classList.remove('flex'); }
-
-function handleModalSubmit(e) {
-  e.preventDefault();
-  const title = document.getElementById('itemTitle').value;
-  const desc = document.getElementById('itemDesc').value;
-  const user = localStorage.getItem('gornyak_user');
-  const newItem = { id: Date.now(), title, text: desc, desc, date: new Date().toLocaleDateString(), author: user ? JSON.parse(user).email : 'Гость' };
-  
-  if (activeAddType === 'news') {
-    dbData.news.unshift(newItem);
-    addNotification('Опубликована новая новость: ' + title);
-  } else if (activeAddType === 'documents') {
-    dbData.documents.unshift(newItem);
-    addNotification('Загружен новый документ: ' + title);
-  } else if (activeAddType === 'estimates') {
-    dbData.estimates.unshift(newItem);
-    addNotification('Добавлена новая смета: ' + title);
-  }
-  
-  saveData();
-  closeAddModal();
-  renderAllSections();
-  alert(user ? 'Успешно сохранено!' : 'Данные сохранены локально. Войдите в профиль для постоянной синхронизации.');
-}
-
-// --- АВТОРИЗАЦИЯ, ПРОФИЛЬ И УДАЛЕНИЕ АККАУНТА ---
-function renderAuthArea() {
-  const area = document.getElementById('authContentArea');
-  const user = localStorage.getItem('gornyak_user');
-
-  if (user) {
-    const u = JSON.parse(user);
-    area.innerHTML = `
-      <div class="space-y-4 text-sm text-slate-700">
-        <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-          <div><span class="text-xs text-slate-400 block">Электронная почта:</span><b class="text-slate-900">${u.email}</b></div>
-          <div><span class="text-xs text-slate-400 block">ФИО:</span><b class="text-slate-900">${u.name || 'Не указано'}</b></div>
-          <div><span class="text-xs text-slate-400 block">Участок:</span><b class="text-slate-900">${u.plot || 'Не указан'}</b></div>
-        </div>
-        <button onclick="logout()" class="w-full py-3 bg-slate-200 text-slate-800 font-bold rounded-xl shadow">Выйти из аккаунта</button>
-        <button onclick="deleteAccount()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow">Удалить аккаунт</button>
-      </div>`;
-  } else {
-    area.innerHTML = `
-      <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label>
-          <input type="email" id="loginEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Пароль</label>
-          <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-300 text-sm outline-none">
-        </div>
-        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Войти</button>
-        <div class="flex justify-between text-xs pt-2">
-          <button type="button" onclick="navigateTo('register')" class="text-gornyak-700 font-bold underline">Регистрация</button>
-          <button type="button" onclick="openForgotModal()" class="text-slate-600 underline">Забыли пароль?</button>
-        </div>
-      </form>`;
-  }
-}
-
-function handleLoginSubmit(e) {
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value.trim();
-  localStorage.setItem('gornyak_user', JSON.stringify({ email, name: '', plot: '' }));
-  addNotification('Вход в личный кабинет: ' + email);
-  navigateTo('auth');
-}
-
-function logout() {
-  localStorage.removeItem('gornyak_user');
-  addNotification('Выход из личного кабинета');
-  navigateTo('auth');
-}
-
-function deleteAccount() {
-  if (confirm('Вы действительно хотите полностью удалить аккаунт и связанные данные?')) {
-    localStorage.removeItem('gornyak_user');
-    addNotification('Аккаунт был удален');
-    alert('Аккаунт успешно удален.');
-    navigateTo('home');
-  }
-}
-
-function openForgotModal() {
-  document.getElementById('forgotModal').classList.add('flex');
-  document.getElementById('forgotModal').classList.remove('hidden');
-}
-function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
-function handleForgotSubmit(e) {
-  e.preventDefault();
-  const email = document.getElementById('forgotEmail').value.trim();
-  alert('Инструкция по восстановлению пароля отправлена на ' + email);
-  closeForgotModal();
-}
-
-function sendChatMessage(e) {
-  e.preventDefault();
-  const input = document.getElementById('chatInput');
-  if(!input.value.trim()) return;
-  dbData.chat.push({ user: 'Садовод', text: input.value, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
-  saveData();
-  addNotification('Новое сообщение в общем чате');
-  input.value = '';
-  renderAllSections();
-}
-
-function openWeatherModal() { document.getElementById('weatherModal').classList.add('flex'); document.getElementById('weatherModal').classList.remove('hidden'); }
-function closeWeatherModal() { document.getElementById('weatherModal').classList.add('hidden'); document.getElementById('weatherModal').classList.remove('flex'); }
-
-function handleSearch(query) {
-  const resBox = document.getElementById('searchResults');
-  if(!query.trim()) { resBox.classList.add('hidden'); return; }
-  resBox.innerHTML = `<div class="p-2 text-xs text-slate-600 font-bold">Поиск: ${query}</div>`;
-  resBox.classList.remove('hidden');
-}
-
-fetchLiveWeather();
-renderAllSections();
-updateNotifBadge();
+settings={...DEF,...LS.get('gornyak_settings2',{})};applyUI(settings);loadDb();injectHeaders();refreshUserUI();fetchLiveWeather();
+{const h=location.hash.slice(1);navigateTo(PAGES.includes(h)?h:'home')}
 </script>
 </body>
 </html>
