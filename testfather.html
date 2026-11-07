@@ -6,6 +6,7 @@
 <title>НСТ «Горняк» — Официальный портал</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,10 +78,10 @@ h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
 
 /* Верхняя строка с голубоватым стеклом */
 .header-sky-glass {
-  background: rgba(240, 249, 255, calc(var(--gp, 94)/100));
+  background: rgba(255, 255, 255, calc(var(--gp, 94)/100));
   backdrop-filter: blur(var(--blur-val, 25px));
   -webkit-backdrop-filter: blur(var(--blur-val, 25px));
-  border-bottom: 1px solid rgba(186, 230, 253, 0.6);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 
 /* Цветовые темы оглавлений */
@@ -143,6 +144,15 @@ html[data-ic=l] .tile-ic{font-size:2.5rem}
 input[type=range]{-webkit-appearance:none;appearance:none;height:14px;border-radius:9999px;background:#cbd5e1;outline:none;touch-action:manipulation}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:34px;height:34px;border-radius:50%;background:#176334;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
 input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;background:#176334;border:3px solid #fff}
+
+/* Цветные заголовки разделов реагируют на блюр и прозрачность */
+.bg-theme-articles{background:linear-gradient(135deg,color-mix(in srgb,#f2f9f4 calc(var(--gp)*1%),transparent),color-mix(in srgb,#e1f3e6 calc(var(--gp)*1%),transparent)) !important}
+.bg-theme-news{background:linear-gradient(135deg,color-mix(in srgb,#faf5ff calc(var(--gp)*1%),transparent),color-mix(in srgb,#f3e8ff calc(var(--gp)*1%),transparent)) !important}
+.bg-theme-estimates{background:linear-gradient(135deg,color-mix(in srgb,#fffbeb calc(var(--gp)*1%),transparent),color-mix(in srgb,#fef3c7 calc(var(--gp)*1%),transparent)) !important}
+.bg-theme-docs{background:linear-gradient(135deg,color-mix(in srgb,#f0f9ff calc(var(--gp)*1%),transparent),color-mix(in srgb,#e0f2fe calc(var(--gp)*1%),transparent)) !important}
+.bg-theme-contacts{background:linear-gradient(135deg,color-mix(in srgb,#eef2ff calc(var(--gp)*1%),transparent),color-mix(in srgb,#e0e7ff calc(var(--gp)*1%),transparent)) !important;border-color:#c7d2fe !important}
+.bg-theme-articles,.bg-theme-news,.bg-theme-estimates,.bg-theme-docs,.bg-theme-contacts{backdrop-filter:blur(var(--blur-val));-webkit-backdrop-filter:blur(var(--blur-val))}
+.hero-glass{background:rgba(255,255,255,calc(var(--gp)/100*.28));backdrop-filter:blur(var(--blur-val));-webkit-backdrop-filter:blur(var(--blur-val));border:1px solid rgba(255,255,255,.35)}
 </style>
 </head>
 <body id="mainBody" class="min-h-screen flex flex-col justify-between antialiased">
@@ -160,14 +170,14 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     </a>
 
     <!-- Прокручиваемое верхнее меню -->
-    <nav id="desktopNav" class="flex items-center gap-3 overflow-x-auto text-[11px] font-semibold text-slate-700 py-1 shrink max-w-[40vw] sm:max-w-none" style="scrollbar-width:none"></nav>
+    <nav id="desktopNav" class="hidden lg:flex items-center gap-3 overflow-x-auto text-[11px] font-semibold text-slate-700 py-1 shrink" style="scrollbar-width:none"></nav>
 
     <!-- Поиск, Круглая кнопка профиля, Колокольчик и Настройки -->
-    <div class="flex items-center gap-1.5 shrink-0">
-      <div class="relative flex items-center">
-        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-2.5 py-1.5 pl-7 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-16 sm:w-28 transition">
+    <div class="flex items-center gap-1.5 flex-1 lg:flex-none min-w-0">
+      <div class="sm:relative flex items-center flex-1 min-w-0 lg:flex-none lg:w-56">
+        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-2.5 py-1.5 pl-7 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-full transition">
         <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-xs"></i>
-        <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 modal-glass rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
+        <div id="searchResults" class="hidden absolute left-3 right-3 top-full mt-2 sm:left-auto sm:right-0 sm:w-72 modal-glass rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
       </div>
 
       <!-- Компактная круглая зеленая кнопка профиля с иконкой человека -->
@@ -180,12 +190,10 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
         <i class="fa-solid fa-bell"></i>
         <span id="headerNotifBadge" class="hidden absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
       </button>
-
-      <button onclick="shareCurrent()" class="p-1.5 text-slate-600 hover:text-gornyak-700 text-base transition" title="Поделиться" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
       <button onclick="openSettingsModal()" class="p-1.5 text-slate-600 hover:text-gornyak-700 text-base transition" title="Настройки интерфейса" aria-label="Настройки"><i class="fa-solid fa-gear"></i></button>
     </div>
   </div>
-  <nav id="mobNav" class="lg:hidden flex overflow-x-auto border-t border-sky-200 text-[10px] font-semibold px-1 py-1" style="scrollbar-width:none"></nav>
+  <nav id="mobNav" class="lg:hidden flex overflow-x-auto border-t border-slate-200 text-[10px] font-semibold px-1 py-1" style="scrollbar-width:none"></nav>
 </header>
 
 <main class="flex-grow w-full">
@@ -197,12 +205,12 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
         <div>
           <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-2 drop-shadow">НСТ «Горняк»</h1>
           <p class="text-sm sm:text-base text-emerald-100 font-light max-w-xl drop-shadow">
-            Наше СНТ — это наш дом, наши соседи, наша ответственность!
+            Наше НСТ — это наш дом, наши соседи, наша ответственность!
           </p>
         </div>
 
         <div class="flex items-center gap-3">
-          <a href="index.html" class="bg-white/20 hover:bg-white/35 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition">
+          <a href="index.html" class="hero-glass hover:brightness-125 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition">
             <i class="fa-solid fa-mobile-screen-button text-yellow-300"></i> Мобильная версия
           </a>
 
@@ -279,22 +287,23 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   </section>
 
   <!-- КОНТАКТЫ -->
-  <section id="page-contacts" class="page-section container mx-auto px-4 py-8 max-w-2xl">
-    <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
-      <div class="flex justify-between items-center border-b pb-3 modal-glass -mx-8 -mt-8 p-6 rounded-t-3xl border-slate-200">
-        <h2 class="text-2xl font-black theme-contacts flex items-center gap-2.5"><i class="fa-solid fa-phone-volume"></i> Контакты служб и правления</h2>
-        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
-      </div>
-      <div class="space-y-4 text-sm text-slate-700 pt-2">
-        <div class="modal-glass p-4 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="font-extrabold text-slate-900 text-base mb-1">Председатель правления</div>
-          <a href="tel:+79001234567" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 123-45-67</a>
-        </div>
-        <div class="modal-glass p-4 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="font-extrabold text-slate-900 text-base mb-1">Электрик НСТ</div>
-          <a href="tel:+79007654321" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 765-43-21</a>
-        </div>
-      </div>
+  <section id="page-contacts" class="page-section container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6 bg-theme-contacts border p-4 rounded-2xl shadow-sm">
+      <h2 class="text-2xl font-black theme-contacts flex items-center gap-2.5"><i class="fa-solid fa-phone-volume"></i> Контакты служб и правления</h2>
+      <button onclick="navigateTo('home')" class="text-xs theme-contacts font-bold underline">← На главную</button>
+    </div>
+    <div id="contactsList" class="space-y-3"></div>
+  </section>
+
+  <!-- О НСТ -->
+  <section id="page-about" class="page-section container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6 bg-theme-articles border p-4 rounded-2xl shadow-sm">
+      <h2 class="text-2xl font-black theme-articles flex items-center gap-2.5"><i class="fa-solid fa-tree"></i> О НСТ «Горняк»</h2>
+      <button onclick="navigateTo('home')" class="text-xs theme-articles font-bold underline">← На главную</button>
+    </div>
+    <div class="modal-glass p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 text-sm text-slate-700 leading-relaxed">
+      <p>НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности.</p>
+      <p>Товарищество расположено в Московской области. На территории работают центральное водоснабжение и электроснабжение.</p>
     </div>
   </section>
 
@@ -310,7 +319,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
         <div id="chatMessages" class="flex-grow overflow-y-auto space-y-3 pr-1 mb-3"></div>
         <div id="chatPending" class="hidden flex-wrap gap-1 mb-2 text-[11px]"></div>
         <div id="chatEditBar" class="hidden mb-2 text-xs bg-amber-100 text-amber-900 rounded-lg px-3 py-1.5 justify-between items-center">Редактирование сообщения <button type="button" onclick="cancelEdit()" class="font-bold underline">Отмена</button></div>
-        <form onsubmit="sendChatMessage(event)" class="flex gap-2 items-center">
+        <form id="chatForm" onsubmit="sendChatMessage(event)" class="flex gap-2 items-center">
           <input type="file" id="chatFile" multiple hidden accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="pickFiles(this)">
           <button type="button" onclick="document.getElementById('chatFile').click()" class="w-11 h-11 shrink-0 rounded-xl modal-glass border border-slate-300 text-slate-600 flex items-center justify-center" aria-label="Прикрепить файл"><i class="fa-solid fa-paperclip"></i></button>
           <input type="text" id="chatInput" placeholder="Сообщение..." class="flex-grow min-w-0 p-3 rounded-xl modal-glass border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
@@ -339,10 +348,9 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     </div>
     <div class="modal-glass rounded-3xl border border-slate-200 shadow-xl p-4 space-y-4">
       <iframe title="Карта Яндекс" src="https://yandex.ru/map-widget/v1/?ll=37.85%2C55.66&z=12&l=map&pt=37.85,55.66,pm2gnm" class="w-full rounded-2xl border border-slate-200" style="height:320px" loading="lazy"></iframe>
-      <a href="https://yandex.ru/maps/?ll=37.85%2C55.66&z=12" target="_blank" rel="noopener" class="inline-block text-xs font-bold text-cyan-700 underline">Открыть в Яндекс Картах ↗</a>
       
       <div class="bg-cyan-50 border border-cyan-200 text-cyan-900 p-3 rounded-xl text-xs font-medium leading-relaxed">
-        ℹ️ Актуальное расписание автобусных маршрутов и маршруток (№ 26 до ст. Люберцы, № 474к, № 1к):
+        <i class="fa-solid fa-circle-info mr-1"></i> Маршруты через остановку «Карьер»:
       </div>
 
       <div class="overflow-x-auto">
@@ -351,33 +359,29 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
             <tr class="text-slate-600 border-b bg-slate-100">
               <th class="py-2.5 px-3">Маршрут</th>
               <th class="py-2.5 px-3">Направление</th>
-              <th class="py-2.5 px-3">Режим работы</th>
-              <th class="py-2.5 px-3">Интервал / Время</th>
+              <th class="py-2.5 px-3">Время / интервал</th>
             </tr>
           </thead>
           <tbody class="text-slate-800 divide-y divide-slate-200">
             <tr>
               <td class="py-2.5 px-3 font-bold text-cyan-900">№ 26</td>
-              <td class="py-2.5 px-3">Ст. Люберцы — СНТ / Остановка</td>
-              <td class="py-2.5 px-3">Ежедневно</td>
-              <td class="py-2.5 px-3">Каждые 20-30 мин (06:00 — 22:00)</td>
+              <td class="py-2.5 px-3">До Силиката и обратно через Карьер</td>
+              <td class="py-2.5 px-3">Каждые … мин</td>
             </tr>
             <tr>
               <td class="py-2.5 px-3 font-bold text-cyan-900">№ 474к</td>
-              <td class="py-2.5 px-3">м. «Котельники» — Остановка Горняк</td>
-              <td class="py-2.5 px-3">Ежедневно</td>
-              <td class="py-2.5 px-3">По расписанию / каждые 15 мин</td>
+              <td class="py-2.5 px-3">М. Котельники — Силикат — Карьер — М. Котельники</td>
+              <td class="py-2.5 px-3">Будни: 6:18–9:56 и 14:14–19:17<br>Выходные: каждые … мин</td>
             </tr>
             <tr>
               <td class="py-2.5 px-3 font-bold text-cyan-900">№ 1к</td>
-              <td class="py-2.5 px-3">Местные рейсы / СНТ маршрут</td>
-              <td class="py-2.5 px-3">Будни / Выходные</td>
-              <td class="py-2.5 px-3">Утром и вечером (часы пик)</td>
+              <td class="py-2.5 px-3">Местные рейсы</td>
+              <td class="py-2.5 px-3">—</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <a href="https://rasp.yandex.ru/" target="_blank" rel="noopener" class="block text-center py-3 bg-cyan-700 hover:bg-cyan-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — Яндекс Расписания ↗</a>
+      <a href="https://yandex.ru/maps/?text=%D0%9A%D0%B0%D1%80%D1%8C%D0%B5%D1%80%20%D0%BE%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%9A%D0%BE%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B8%D0%BA%D0%B8" target="_blank" rel="noopener" class="block text-center py-3 bg-cyan-700 hover:bg-cyan-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — остановка «Карьер» <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
     </div>
   </section>
 
@@ -395,7 +399,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
         <textarea id="cfText" rows="5" required placeholder="Текст обращения" class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"></textarea>
         <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Отправить</button>
       </form>
-      <div id="cfOk" class="hidden bg-green-50 border border-green-200 text-green-900 rounded-xl p-3 text-xs font-bold">Открылось почтовое приложение, отправьте письмо. Копия обращения сохранена в браузере.</div>
+      <div id="cfOk" class="hidden bg-green-50 border border-green-200 text-green-900 rounded-xl p-3 text-xs font-bold">Обращение отправлено правлению. Ответ придёт по указанным контактам.</div>
     </div>
   </section>
 
@@ -439,7 +443,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 <!-- МОДАЛКИ -->
 <div id="notifModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
-    <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <button onclick="closeNotifModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
     <div class="flex items-center gap-2 text-slate-900 border-b pb-2">
       <i class="fa-solid fa-bell text-xl text-gornyak-700"></i>
       <h3 class="text-lg font-black">Уведомления</h3>
@@ -456,7 +460,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
 <div id="settingsModal" class="fixed inset-0 bg-black/15 hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 relative overflow-y-auto" style="max-height:90vh">
-    <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
     <h3 class="text-lg font-black text-slate-900 border-b pb-2 pr-10 flex items-center gap-2"><i class="fa-solid fa-gear text-gornyak-700"></i> Настройки интерфейса</h3>
     <div class="flex flex-col gap-5 text-xs font-bold text-slate-700">
       <div><label class="block mb-2">Размер шрифта: <span id="fontVal"></span></label><input type="range" id="fontSizeRange" min="13" max="20" step="1" class="w-full" oninput="setDraft('font',this.value)"></div>
@@ -480,12 +484,13 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
 <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative overflow-y-auto" style="max-height:90vh">
-    <button onclick="closeAddModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <button onclick="closeAddModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
     <h3 id="modalTitle" class="text-lg font-black text-slate-900 border-b pb-2 pr-10">Добавить запись</h3>
-    <div id="authWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">⚠️ Публиковать могут только зарегистрированные пользователи. Войдите в личный кабинет!</div>
+    <div id="authWarning" class="hidden bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Публиковать могут только члены НСТ, подтверждённые правлением. Войдите в личный кабинет.</div>
     <form id="addForm" onsubmit="handleModalSubmit(event)" class="space-y-3">
       <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Заголовок / Тема</label><input type="text" id="itemTitle" required class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"></div>
       <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Описание / Текст</label><textarea id="itemDesc" rows="3" required class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"></textarea></div>
+      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Кто видит</label><select id="itemVis" class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"></select></div>
       <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Файл или фото</label><input type="file" id="itemFile" class="w-full text-xs text-slate-500"></div>
       <button type="submit" id="addSubmit" class="w-full py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl shadow disabled:opacity-40">Сохранить</button>
     </form>
@@ -494,11 +499,11 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
 <div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
-    <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
     <h3 class="text-xl font-black text-slate-900 border-b pb-2 pr-10 flex items-center gap-2"><i class="fa-solid fa-key text-gornyak-700"></i> Восстановление пароля</h3>
-    <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold">⚠️ Эта функция сейчас не работает.</div>
+    
     <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
-      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта или телефон</label><input type="text" id="forgotEmail" required placeholder="mail@example.com / +7..." class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"></div>
+      <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта</label><input type="text" id="forgotEmail" required placeholder="mail@example.com" class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"></div>
       <button type="submit" class="w-full py-3.5 bg-gornyak-700 text-white font-extrabold rounded-xl shadow">Отправить</button>
     </form>
   </div>
@@ -506,7 +511,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
 <div id="infoModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-4 relative">
-    <button onclick="closeInfoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
+    <button onclick="closeInfoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold"><i class="fa-solid fa-xmark"></i></button>
     <h3 id="infoModalTitle" class="text-lg font-black text-slate-900 border-b pb-2">Инфо</h3>
     <div id="infoModalText" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></div>
     <button onclick="closeInfoModal()" class="w-full py-3 bg-gornyak-700 text-white font-bold rounded-xl shadow">Понятно</button>
@@ -515,7 +520,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
 <div id="weatherModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="glass-weather text-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 relative border border-white/20">
-    <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white">✕</button>
+    <button onclick="closeWeatherModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
     <div class="flex items-center gap-3 border-b border-white/15 pb-4">
       <div class="weather-icon-box"><div class="g-sun"></div><div class="g-cloud"></div></div>
       <div>
@@ -536,7 +541,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 <div id="delModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-4">
     <h3 class="text-lg font-black text-slate-900">Удалить профиль?</h3>
-    <p class="text-sm text-slate-700 leading-relaxed">Вы уверены, что хотите удалить свой профиль? База данных будет безвозвратно удалена.</p>
+    <p class="text-sm text-slate-700 leading-relaxed">Вы уверены, что хотите удалить свой профиль? Профиль, ваши публикации и сообщения будут безвозвратно удалены.</p>
     <div class="flex gap-2">
       <button onclick="closeDelModal()" class="flex-1 py-3 bg-slate-200 text-slate-800 font-bold rounded-xl">Отмена</button>
       <button onclick="confirmDeleteAccount()" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl">Удалить</button>
@@ -559,12 +564,16 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const LS={get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast('Не хватает места в памяти браузера');return false}}};
 const show=id=>{$(id).classList.add('flex');$(id).classList.remove('hidden')};
 const hide=id=>{$(id).classList.add('hidden');$(id).classList.remove('flex')};
-const me=()=>LS.get('gornyak_user',null);
-const myId=()=>me()?me().email:null;
-const users=()=>LS.get('gornyak_users',[]);
-const CONFIG={boardEmail:'board@example.com'}; 
-const SEED='Правление';
-const PAGES=['home','articles','announcements','documents','estimates','transport','contacts','contact-form','chat','auth','register'];
+const SB_URL='https://ВАШ-ПРОЕКТ.supabase.co',SB_KEY='ВАШ_ANON_PUBLIC_KEY';
+const sb=(window.supabase&&SB_URL.startsWith('https://')&&!SB_URL.includes('ВАШ'))?window.supabase.createClient(SB_URL,SB_KEY):null;
+let PROFILE=null;
+const me=()=>PROFILE;
+const myId=()=>PROFILE?PROFILE.id:null;
+const isMember=()=>!!(PROFILE&&(PROFILE.approved||PROFILE.is_admin));
+const isAdmin=()=>!!(PROFILE&&PROFILE.is_admin);
+const dn=u=>u.name||'Садовод';
+const BIG=10*1048576;
+const PAGES=['home','about','articles','announcements','documents','estimates','transport','contacts','contact-form','chat','auth','register'];
 const PAGEOF={articles:'articles',news:'announcements',documents:'documents',estimates:'estimates'};
 const NAV=[
   ['home','fa-house','Главная',''],
@@ -575,30 +584,27 @@ const NAV=[
   ['transport','fa-bus','Транспорт','theme-transport'],
   ['contacts','fa-phone','Контакты','theme-contacts'],
   ['contact-form','fa-envelope','Написать',''],
-  ['chat','fa-comments','Чат',''],
-  ['auth','fa-user','Профиль','']
+  ['chat','fa-comments','Чат','']
 ];
 const TILES=[
 {id:'articles',ic:'fa-book-open',c:'#f2f9f4',icc:'text-gornyak-700',t:'Статьи (с 2020 г.)',d:'Архив материалов, полезные советы и отчеты',go:'articles'},
-{id:'news',ic:'fa-newspaper',c:'#faf5ff',icc:'text-purple-700',t:'Новости СНТ',d:'Актуальные события и объявления правления',go:'announcements'},
+{id:'news',ic:'fa-newspaper',c:'#faf5ff',icc:'text-purple-700',t:'Новости НСТ',d:'Актуальные события и объявления правления',go:'announcements'},
 {id:'docs',ic:'fa-folder',c:'#f0f9ff',icc:'text-sky-600',t:'Документы',d:'Устав, сметы, договоры, другие документы',go:'documents'},
 {id:'est',ic:'fa-coins',c:'#fffbeb',icc:'text-amber-600',t:'Сметы и Финансы',d:'Отчеты, сметы, платежи товарищества',go:'estimates'},
-{id:'about',ic:'fa-tree',c:'#f2f9f4',icc:'text-gornyak-700',t:'О СНТ',d:'История, территория, информация о товариществе',info:['О СНТ «Горняк»','НСТ «Горняк» основано в 1985 году ветеранами горнодобывающей промышленности. На территории расположено 320 участков, работает автоматический шлагбаум, видеонаблюдение, центральное водоснабжение и электрификация 380В.']},
+{id:'about',ic:'fa-tree',c:'#f2f9f4',icc:'text-gornyak-700',t:'О НСТ',d:'История, территория, информация о товариществе',go:'about'},
 {id:'contacts',ic:'fa-users',c:'#eef2ff',icc:'text-indigo-700',t:'Контакты и Правление',d:'Состав, контакты, работа правления',go:'contacts'},
 {id:'transport',ic:'fa-bus',c:'#ecfeff',icc:'text-cyan-700',t:'Транспорт',d:'Карта и расписание автобусов, маршруток',go:'transport'},
 {id:'form',ic:'fa-envelope',c:'#f8fafc',icc:'text-slate-700',t:'Написать нам',d:'Форма обратной связи с администрацией',go:'contact-form'},
 {id:'chat',ic:'fa-comments',c:'#f3e8ff',icc:'text-purple-700',t:'Чат садоводов',d:'Общение с соседями, важная информация',go:'chat'}];
 let curPage='home',curDlg='general',editingMsg=null,pending=[],activeAddType='',editId=null,editMode=false,hintOpen=false,settings,draft,db,dragId=null;
 
-// ---------- Данные ----------
-function loadDb(){db={
- articles:LS.get('gornyak_articles',[{id:1,date:'15.08.2025',title:'Итоги летнего сезона и подготовка к зиме',text:'Подробный отчет правления по расходу воды, электроэнергии и обслуживанию дорог в НСТ Горняк.',author:SEED,authorName:SEED}]),
- news:LS.get('gornyak_news',[{id:1,date:'02.11.2026',title:'Общее собрание членов НСТ',text:'Состоится очно-заочное голосование по вопросам утверждения сметы и ремонта КПП.',author:SEED,authorName:SEED}]),
- documents:LS.get('gornyak_docs',[{id:1,title:'Устав НСТ «Горняк» (ред. 2024)',desc:'Официальный учредительный документ.',file:'Ustav_2024.pdf',author:SEED,authorName:SEED}]),
- estimates:LS.get('gornyak_estimates',[{id:1,title:'Смета доходов и расходов на 2026 год',desc:'Утверждена общим собранием.',file:'Smeta_2026.pdf',author:SEED,authorName:SEED}]),
- chat:LS.get('gornyak_chat2',{general:[{id:1,from:SEED,fromName:SEED,text:'Уважаемые садоводы! Напоминаем о передаче показаний счетчиков.',ts:Date.parse('2026-11-02T10:15:00'),files:[],delFor:[]}]})};}
-function saveData(){LS.set('gornyak_articles',db.articles);LS.set('gornyak_news',db.news);LS.set('gornyak_docs',db.documents);LS.set('gornyak_estimates',db.estimates)}
-function saveChat(){LS.set('gornyak_chat2',db.chat);renderChat();updateChatBadge()}
+// ---------- Данные (Supabase) ----------
+function loadDb(){db={articles:[],news:[],documents:[],estimates:[],chat:{general:[]}}}
+const mapPost=r=>({id:r.id,date:new Date(r.created_at).toLocaleDateString('ru-RU'),title:r.title,text:r.body||'',desc:r.body||'',author:r.author_id,authorName:r.author_name||'',file:r.file_name,filePath:r.file_path,vis:r.visibility});
+async function loadPosts(){if(!sb)return;const{data,error}=await sb.from('posts').select('*').order('created_at',{ascending:false});if(error){toast('Не удалось загрузить записи');return}['articles','news','documents','estimates'].forEach(k=>db[k]=data.filter(r=>r.kind===k).map(mapPost))}
+const mapMsg=r=>({id:r.id,from:r.author_id,fromName:r.author_name||'Садовод',text:r.body||'',ts:Date.parse(r.created_at),files:r.files||[],delAll:r.deleted,edited:r.edited});
+async function loadChat(){if(!sb||!isMember()){db.chat.general=[];return}const{data}=await sb.from('messages').select('*').eq('dialog','general').order('created_at',{ascending:false}).limit(300);db.chat.general=(data||[]).map(mapMsg).reverse()}
+async function openStorage(bucket,path){const w=window.open('','_blank');try{let url;if(bucket==='public-files')url=sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;else{const{data,error}=await sb.storage.from(bucket).createSignedUrl(path,300);if(error)throw error;url=data.signedUrl}if(w)w.location.href=url;else location.href=url}catch(e){if(w)w.close();toast('Нет доступа к файлу')}}
 
 // ---------- Уведомления, тосты ----------
 let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.add('hidden'),2800)}
@@ -655,7 +661,7 @@ function injectHeaders(){
   const mkBtn=()=>{const b=document.createElement('button');b.className='shareBtn text-xs font-bold modal-glass border border-slate-200 text-slate-700 px-3 py-2 rounded-xl';b.innerHTML='<i class="fa-solid fa-share-nodes"></i> <span class="hidden sm:inline">Поделиться</span>';return b};
   const ab=document.querySelector('#page-articles h2').parentElement;const add=document.createElement('button');add.className='bg-gornyak-700 hover:bg-gornyak-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow';add.textContent='+ Добавить статью';add.onclick=()=>openAddModal('articles');ab.insertBefore(add,ab.lastElementChild);
   document.querySelectorAll('.page-section h2').forEach(h=>{const sec=h.closest('.page-section'),bar=h.parentElement,last=bar.lastElementChild,b=mkBtn();b.onclick=()=>shareIt(h.textContent.trim(),sec.id.slice(5));bar.classList.add('flex-wrap','gap-2');if(last===h)bar.appendChild(b);else if(last.tagName==='DIV')last.prepend(b);else bar.insertBefore(b,last)});
-  const hb=mkBtn();hb.className+=' bg-white/20 text-white border-white/30';hb.onclick=()=>shareIt('НСТ «Горняк»','home');document.querySelector('.father-hero .flex.items-center.gap-3').prepend(hb);
+  const hb=mkBtn();hb.className='shareBtn hero-glass text-xs font-bold text-white px-3 py-2.5 rounded-2xl';hb.onclick=()=>shareIt('НСТ «Горняк»','home');document.querySelector('.father-hero .flex.items-center.gap-3').prepend(hb);
 }
 
 // ---------- Плитки ----------
@@ -677,76 +683,86 @@ $('tileGrid').addEventListener('dragover',e=>{if(editMode)e.preventDefault()});
 $('tileGrid').addEventListener('drop',e=>{const t=e.target.closest('.tile');if(!editMode||!t||!dragId||t.dataset.id===dragId)return;e.preventDefault();const l=getLayout(),a=l.findIndex(x=>x.id===dragId),b=l.findIndex(x=>x.id===t.dataset.id),[m]=l.splice(a,1);l.splice(b,0,m);saveLayout(l);dragId=null;renderTiles()});
 
 // ---------- Списки ----------
-const own=it=>me()&&it.author===myId();
+const own=it=>me()&&(it.author===myId()||isAdmin());
 function itemBtns(type,it){const b='w-8 h-8 rounded-lg modal-glass text-slate-600 text-xs flex items-center justify-center';return `<div class="flex gap-1 shrink-0"><button class="${b}" data-a="share" data-t="${type}" data-title="${esc(it.title)}" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>${own(it)?`<button class="${b}" data-a="edit" data-t="${type}" data-i="${it.id}" aria-label="Изменить"><i class="fa-solid fa-pen"></i></button><button class="w-8 h-8 rounded-lg bg-red-100 text-red-700 text-xs flex items-center justify-center" data-a="del" data-t="${type}" data-i="${it.id}" aria-label="Удалить"><i class="fa-solid fa-trash"></i></button>`:''}</div>`}
 const card=(type,it,badge)=>`<div class="modal-glass p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between gap-3"><div><span class="text-[10px] ${badge} font-bold px-2.5 py-1 rounded-md">${esc(it.date)}</span><h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${esc(it.title)}</h3><p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${esc(it.text)}</p>${it.fileData&&it.fileData.startsWith('data:image')?`<img src="${it.fileData}" class="rounded-xl mt-2 max-h-48" alt="">`:it.file?`<button data-a="dl" data-t="${type}" data-i="${it.id}" class="mt-2 text-xs font-bold text-gornyak-700 underline"><i class="fa-solid fa-paperclip"></i> ${esc(it.file)}</button>`:''}</div><div class="flex items-center justify-between gap-2"><span class="text-[10px] text-slate-400 truncate">${esc(it.authorName||'')}</span>${itemBtns(type,it)}</div></div>`;
 const row=(type,it,btn)=>`<div class="modal-glass p-4 rounded-2xl border border-slate-200 flex flex-wrap justify-between items-center gap-2 shadow-sm"><div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm">${esc(it.title)}</h4><p class="text-xs text-slate-500">${esc(it.desc||'')}</p><p class="text-[10px] text-slate-400">${esc(it.authorName||'')}</p></div><div class="flex items-center gap-2"><button data-a="dl" data-t="${type}" data-i="${it.id}" class="px-3 py-2 ${btn} rounded-xl font-bold text-xs">Скачать</button>${itemBtns(type,it)}</div></div>`;
 function renderLists(){$('articlesList').innerHTML=db.articles.map(a=>card('articles',a,'text-gornyak-700 bg-gornyak-50')).join('');$('newsList').innerHTML=db.news.map(n=>card('news',n,'text-purple-700 bg-purple-50')).join('');$('documentsList').innerHTML=db.documents.map(d=>row('documents',d,'bg-sky-100 text-sky-900')).join('');$('estimatesList').innerHTML=db.estimates.map(d=>row('estimates',d,'bg-amber-100 text-amber-900')).join('')}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const{a,t,i}=b.dataset;if(a==='share')shareIt(b.dataset.title,PAGEOF[t]);if(a==='edit')openAddModal(t,+i);if(a==='del')delItem(t,+i);if(a==='dl')downloadItem(t,+i)});
-function downloadItem(t,i){const it=db[t].find(x=>x.id===i);if(!it)return;if(it.fileData){const a=document.createElement('a');a.href=it.fileData;a.download=it.file||'file';a.click()}else toast('К этой записи файл не прикреплён (демо-запись)')}
-function delItem(t,i){const it=db[t].find(x=>x.id===i);if(!it||!own(it)){toast('Можно удалять только свои записи');return}if(!confirm('Удалить «'+it.title+'»?'))return;db[t]=db[t].filter(x=>x.id!==i);saveData();renderAll()}
-function openAddModal(type,id){activeAddType=type;editId=id||null;$('addForm').reset();const u=me();$('authWarning').classList.toggle('hidden',!!u);$('addSubmit').disabled=!u;
- if(id){const it=db[type].find(x=>x.id===id);if(!it||!own(it)){toast('Можно менять только свои записи');return}$('itemTitle').value=it.title;$('itemDesc').value=it.text||it.desc||''}
+function downloadItem(t,i){const it=db[t].find(x=>x.id===i);if(!it||!it.filePath){toast('К записи файл не прикреплён');return}openStorage(it.vis==='public'?'public-files':'member-files',it.filePath)}
+async function delItem(t,i){const it=db[t].find(x=>x.id===i);if(!it||!own(it)){toast('Нет прав на удаление');return}if(!confirm('Удалить «'+it.title+'»?'))return;const{error}=await sb.from('posts').delete().eq('id',i);if(error){toast('Не удалось удалить');return}if(it.filePath)sb.storage.from(it.vis==='public'?'public-files':'member-files').remove([it.filePath]);await loadPosts();renderAll()}
+function openAddModal(type,id){activeAddType=type;editId=id||null;$('addForm').reset();const ok=isMember();$('authWarning').classList.toggle('hidden',ok);$('addSubmit').disabled=!ok;
+ const sel=$('itemVis');sel.innerHTML='<option value="members">Только члены НСТ</option>'+(isAdmin()?'<option value="public">Все посетители</option>':'');sel.value=(isAdmin()&&(type==='news'||type==='articles'))?'public':'members';sel.disabled=!!id;
+ if(id){const it=db[type].find(x=>x.id===id);if(!it||!own(it)){toast('Можно менять только свои записи');return}$('itemTitle').value=it.title;$('itemDesc').value=it.text||it.desc||'';sel.value=it.vis}
  const T={news:'новость',documents:'документ',estimates:'смету',articles:'статью'};$('modalTitle').innerText=(id?'Изменить: ':'Добавить: ')+T[type];show('addModal')}
 function closeAddModal(){hide('addModal')}
-async function handleModalSubmit(e){e.preventDefault();const u=me();if(!u){toast('Войдите в профиль');return}const title=$('itemTitle').value.trim(),desc=$('itemDesc').value.trim(),f=$('itemFile').files[0];let file=null,data=null;
- if(f){file=f.name;if(f.size<=1.5*1048576)data=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});else toast('Файл больше 1,5 МБ: сохранено только название')}
- const arr=db[activeAddType];
- if(editId){const it=arr.find(x=>x.id===editId);if(!it||it.author!==u.email){toast('Можно менять только свои записи');return}Object.assign(it,{title,text:desc,desc});if(f){it.file=file;it.fileData=data}addNotification('Запись обновлена: '+title)}
- else{arr.unshift({id:Date.now(),title,text:desc,desc,date:new Date().toLocaleDateString('ru-RU'),author:u.email,authorName:u.name||u.email,file,fileData:data});addNotification('Опубликовано: '+title)}
- saveData();closeAddModal();renderAll();toast('Сохранено')}
+async function handleModalSubmit(e){e.preventDefault();const u=me();if(!isMember()){toast('Нужно подтверждение правлением');return}
+ const title=$('itemTitle').value.trim(),body=$('itemDesc').value.trim(),f=$('itemFile').files[0],btn=$('addSubmit'),it0=editId?db[activeAddType].find(x=>x.id===editId):null,vis=it0?it0.vis:(isAdmin()?$('itemVis').value:'members');
+ if(f&&f.size>BIG){toast('Файл больше 10 МБ');return}
+ btn.disabled=true;
+ try{let file_name=null,file_path=null;
+  if(f){file_name=f.name;file_path=u.id+'/'+Date.now()+'_'+f.name.replace(/[^\w.\-]+/g,'_');const{error}=await sb.storage.from(vis==='public'?'public-files':'member-files').upload(file_path,f);if(error)throw error}
+  if(editId){const row={title,body};if(f){row.file_name=file_name;row.file_path=file_path}const{error}=await sb.from('posts').update(row).eq('id',editId);if(error)throw error;addNotification('Запись обновлена: '+title)}
+  else{const{error}=await sb.from('posts').insert({kind:activeAddType,title,body,visibility:vis,file_name,file_path,author_name:dn(u)});if(error)throw error;addNotification('Опубликовано: '+title)}
+  closeAddModal();await loadPosts();renderAll();toast('Сохранено')
+ }catch(err){toast('Ошибка: '+(err.message||err))}finally{btn.disabled=false}}
 
-// ---------- Чат ----------
-function dialogs(){const l=[{id:'general',name:'Общий чат садоводов',ic:'fa-users'},{id:'board',name:'Правление',ic:'fa-landmark'}],m=myId();if(m)users().filter(u=>u.email!==m).forEach(u=>l.push({id:'dm:'+[m,u.email].sort().join('|'),name:u.name||u.email,ic:'fa-user'}));return l}
+// ---------- Чат (только подтверждённые члены НСТ) ----------
+function dialogs(){return[{id:'general',name:'Общий чат садоводов',ic:'fa-users'}]}
 const readKey=()=>'gornyak_read_'+(myId()||'guest');
-function unread(d){const r=LS.get(readKey(),{}),id=myId()||'guest';return(db.chat[d]||[]).filter(m=>m.ts>(r[d]||0)&&m.from!==myId()&&!m.delAll&&!(m.delFor||[]).includes(id)).length}
+function unread(d){const r=LS.get(readKey(),{});return(db.chat[d]||[]).filter(m=>m.ts>(r[d]||0)&&m.from!==myId()&&!m.delAll).length}
 function markRead(){const r=LS.get(readKey(),{});r[curDlg]=Date.now();LS.set(readKey(),r)}
-function updateChatBadge(){const n=dialogs().reduce((s,d)=>s+unread(d.id),0);document.querySelectorAll('.chatBadge').forEach(b=>{b.textContent=n>99?'99+':n;b.classList.toggle('hidden',!n)});}
+function updateChatBadge(){const n=isMember()?dialogs().reduce((s,d)=>s+unread(d.id),0):0;document.querySelectorAll('.chatBadge').forEach(b=>{b.textContent=n>99?'99+':n;b.classList.toggle('hidden',!n)})}
 const fmt=ts=>new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 function msgHtml(m){const mine=me()&&m.from===myId();
- const files=(m.files||[]).map(f=>{const ok=f.data&&f.data.startsWith('data:');if(ok&&(f.type||'').startsWith('image/'))return `<img src="${f.data}" class="rounded-xl max-h-48 mt-1" alt="${esc(f.name)}">`;if(ok&&(f.type||'').startsWith('video/'))return `<video src="${f.data}" controls class="rounded-xl max-h-48 mt-1"></video>`;return ok?`<a href="${f.data}" download="${esc(f.name)}" class="block mt-1 font-bold text-gornyak-700 underline"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)}</a>`:`<span class="block mt-1 text-slate-400"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)} (не сохранён)</span>`}).join('');
- const acts=!me()||m.delAll?'':`<div class="flex gap-3 mt-1 text-[10px] text-slate-500">${mine?`<button data-act="edit" data-id="${m.id}">Изменить</button>`:''}<button data-act="me" data-id="${m.id}">Удалить у меня</button>${mine?`<button data-act="all" data-id="${m.id}">Удалить у всех</button>`:''}</div>`;
+ const files=(m.files||[]).map(f=>`<button type="button" data-file="${esc(f.path)}" class="block mt-1 font-bold text-gornyak-700 underline text-left"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)}</button>`).join('');
+ const acts=m.delAll||!(mine||isAdmin())?'':`<div class="flex gap-3 mt-1 text-[10px] text-slate-500">${mine?`<button data-act="edit" data-id="${m.id}">Изменить</button>`:''}<button data-act="del" data-id="${m.id}">Удалить</button></div>`;
  return `<div class="p-3 rounded-xl border text-xs ${mine?'bg-green-50 border-green-200 ml-6':'modal-glass border-slate-200 mr-6'}"><div class="flex justify-between gap-2 font-bold text-gornyak-800 mb-0.5"><span>${esc(m.fromName)}</span><span class="text-[9px] text-slate-400">${fmt(m.ts)}${m.edited?' · изм.':''}</span></div>${m.delAll?'<i class="text-slate-400">Сообщение удалено</i>':`<div class="text-slate-700 whitespace-pre-wrap break-words">${esc(m.text)}</div>${files}`}${acts}</div>`}
-function renderChat(){const ds=dialogs();if(!ds.find(d=>d.id===curDlg))curDlg='general';if(curPage==='chat')markRead();
- $('chatSidebar').innerHTML=ds.map(d=>{const n=d.id===curDlg&&curPage==='chat'?0:unread(d.id);return `<button data-dlg="${esc(d.id)}" class="shrink-0 flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-left ${d.id===curDlg?'bg-gornyak-700 text-white':'modal-glass text-slate-700 border border-slate-200'}"><i class="fa-solid ${d.ic}"></i><span class="truncate">${esc(d.name)}</span>${n?`<span class="ml-auto bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">${n}</span>`:''}</button>`}).join('');
- const cur=ds.find(d=>d.id===curDlg);$('chatTitle').innerHTML=`<i class="fa-solid ${cur.ic} text-gornyak-700"></i> ${esc(cur.name)}`;
- const id=myId()||'guest',msgs=(db.chat[curDlg]||[]).filter(m=>!(m.delFor||[]).includes(id)),el=$('chatMessages');
- el.innerHTML=msgs.length?msgs.map(msgHtml).join(''):'<div class="text-center text-slate-400 text-xs py-8">Сообщений пока нет</div>';el.scrollTop=el.scrollHeight;
- $('chatInput').placeholder=me()?'Сообщение...':'Войдите, чтобы писать';updateChatBadge()}
-$('chatSidebar').addEventListener('click',e=>{const b=e.target.closest('[data-dlg]');if(!b)return;curDlg=b.dataset.dlg;cancelEdit();pending=[];renderPending();renderChat()});
-$('chatMessages').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||!me())return;const m=(db.chat[curDlg]||[]).find(x=>x.id===+b.dataset.id);if(!m)return;
+function chatLocked(t,btns){$('chatSidebar').style.display='none';$('chatForm').style.display='none';$('chatTitle').innerHTML='<i class="fa-solid fa-lock text-gornyak-700"></i> Чат садоводов';$('chatMessages').innerHTML=`<div class="text-center py-10 space-y-4"><div class="text-sm font-bold text-slate-700 px-4">${t}</div><div class="flex justify-center gap-2">${btns}</div></div>`;updateChatBadge()}
+function renderChat(){
+ if(!me())return chatLocked('Чат доступен только членам НСТ. Войдите или зарегистрируйтесь.','<button onclick="navigateTo(\'register\')" class="px-4 py-2.5 bg-gornyak-700 text-white rounded-xl text-xs font-bold">Регистрация</button><button onclick="navigateTo(\'auth\')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Войти</button>');
+ if(!isMember())return chatLocked('Ваш профиль ожидает подтверждения правлением. После проверки чат откроется.','');
+ $('chatSidebar').style.display='none';$('chatForm').style.display='';if(curPage==='chat')markRead();
+ const cur=dialogs()[0];$('chatTitle').innerHTML=`<i class="fa-solid ${cur.ic} text-gornyak-700"></i> ${esc(cur.name)}`;
+ const msgs=db.chat.general,el=$('chatMessages');el.innerHTML=msgs.length?msgs.map(msgHtml).join(''):'<div class="text-center text-slate-400 text-xs py-8">Сообщений пока нет</div>';el.scrollTop=el.scrollHeight;
+ $('chatInput').placeholder='Сообщение...';updateChatBadge()}
+$('chatMessages').addEventListener('click',async e=>{const fb=e.target.closest('[data-file]');if(fb){openStorage('member-files',fb.dataset.file);return}
+ const b=e.target.closest('[data-act]');if(!b||!me())return;const m=db.chat.general.find(x=>x.id===+b.dataset.id);if(!m)return;
  if(b.dataset.act==='edit'&&m.from===myId()){editingMsg=m.id;$('chatInput').value=m.text;$('chatEditBar').classList.remove('hidden');$('chatEditBar').classList.add('flex');$('chatInput').focus()}
- else if(b.dataset.act==='me'){(m.delFor=m.delFor||[]).push(myId());saveChat()}
- else if(b.dataset.act==='all'&&m.from===myId()&&confirm('Удалить сообщение у всех?')){m.delAll=true;m.text='';m.files=[];saveChat()}});
+ else if(b.dataset.act==='del'&&confirm('Удалить сообщение?')){const{error}=await sb.from('messages').update({deleted:true,body:'',files:[]}).eq('id',m.id);if(error)toast('Не удалось удалить');else{await loadChat();renderChat()}}});
 function cancelEdit(){editingMsg=null;$('chatInput').value='';$('chatEditBar').classList.add('hidden');$('chatEditBar').classList.remove('flex')}
-function pickFiles(inp){[...inp.files].forEach(f=>{if(f.size>1.5*1048576){pending.push({name:f.name,type:f.type,data:null});renderPending();return}const r=new FileReader();r.onload=()=>{pending.push({name:f.name,type:f.type,data:r.result});renderPending()};r.readAsDataURL(f)});inp.value=''}
+function pickFiles(inp){[...inp.files].forEach(f=>{if(f.size>BIG){toast('«'+f.name+'» больше 10 МБ');return}pending.push({name:f.name,type:f.type,file:f})});inp.value='';renderPending()}
 function rmPending(i){pending.splice(i,1);renderPending()}
-function renderPending(){const p=$('chatPending');p.classList.toggle('hidden',!pending.length);p.classList.toggle('flex',!!pending.length);p.innerHTML=pending.map((f,i)=>`<span class="modal-glass border border-slate-300 rounded-lg px-2 py-1"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)} <button type="button" onclick="rmPending(${i})" class="font-bold ml-1">✕</button></span>`).join('')}
-function sendChatMessage(e){e.preventDefault();if(!me()){toast('Войдите в профиль, чтобы писать в чат');navigateTo('auth');return}const t=$('chatInput').value.trim();
- if(editingMsg){const m=(db.chat[curDlg]||[]).find(x=>x.id===editingMsg);if(m&&m.from===myId()&&t){m.text=t;m.edited=true}cancelEdit();saveChat();return}
- if(!t&&!pending.length)return;const u=me();(db.chat[curDlg]=db.chat[curDlg]||[]).push({id:Date.now(),from:u.email,fromName:u.name||u.email,text:t,ts:Date.now(),files:pending,delFor:[]});pending=[];$('chatInput').value='';renderPending();markRead();saveChat()}
+function renderPending(){const p=$('chatPending');p.classList.toggle('hidden',!pending.length);p.classList.toggle('flex',!!pending.length);p.innerHTML=pending.map((f,i)=>`<span class="modal-glass border border-slate-300 rounded-lg px-2 py-1"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)} <button type="button" onclick="rmPending(${i})" class="font-bold ml-1"><i class="fa-solid fa-xmark"></i></button></span>`).join('')}
+async function sendChatMessage(e){e.preventDefault();if(!isMember()){toast('Чат доступен после подтверждения правлением');return}const t=$('chatInput').value.trim();
+ if(editingMsg){if(t){const{error}=await sb.from('messages').update({body:t,edited:true}).eq('id',editingMsg);if(error)toast('Не удалось изменить')}cancelEdit();await loadChat();renderChat();return}
+ if(!t&&!pending.length)return;const u=me(),btn=e.target.querySelector('[type=submit]');btn.disabled=true;
+ try{const files=[];for(const p of pending){const path=u.id+'/'+Date.now()+'_'+p.name.replace(/[^\w.\-]+/g,'_');const{error}=await sb.storage.from('member-files').upload(path,p.file);if(error)throw error;files.push({name:p.name,type:p.type,path})}
+  const{error}=await sb.from('messages').insert({dialog:'general',body:t,files,author_name:dn(u)});if(error)throw error;
+  pending=[];$('chatInput').value='';renderPending();await loadChat();markRead();renderChat()}catch(err){toast('Не отправлено: '+(err.message||err))}finally{btn.disabled=false}}
 
-// ---------- Профиль, регистрация ----------
-async function sha(x){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(x));return[...new Uint8Array(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(x)))}}
-function loginAs(u){LS.set('gornyak_user',{email:u.email,name:u.name,plot:u.plot,phone:u.phone});addNotification('Вход: '+u.email);refreshUserUI()}
-function refreshUserUI(){const u=me();renderAll();renderNav()}
+// ---------- Профиль, регистрация (Supabase Auth) ----------
 function regErr(m){const e=$('regErr');e.textContent=m;e.classList.remove('hidden')}
-async function handleRegister(e){e.preventDefault();const g=id=>$(id).value.trim(),email=g('regEmail').toLowerCase(),pw=$('regPass').value;if(pw.length<6)return regErr('Пароль — не менее 6 символов');if(users().some(u=>u.email===email))return regErr('Этот email уже зарегистрирован');
- const u={email,name:g('regName'),plot:g('regPlot'),phone:g('regPhone'),hash:await sha(pw)};LS.set('gornyak_users',[...users(),u]);loginAs(u);toast('Регистрация завершена');navigateTo('home')}
-async function handleLoginSubmit(e){e.preventDefault();const email=$('loginEmail').value.trim().toLowerCase(),u=users().find(x=>x.email===email);if(!u||u.hash!==await sha($('loginPassword').value)){$('loginErr').classList.remove('hidden');return}loginAs(u);navigateTo('home')}
-function logout(){localStorage.removeItem('gornyak_user');editMode=false;addNotification('Выход из личного кабинета');refreshUserUI();navigateTo('auth')}
+async function handleRegister(e){e.preventDefault();if(!sb)return regErr('Сервер не подключён');const g=id=>$(id).value.trim(),email=g('regEmail').toLowerCase(),pw=$('regPass').value;if(pw.length<6)return regErr('Пароль — не менее 6 символов');
+ const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{name:g('regName'),plot:g('regPlot'),phone:g('regPhone')}}});
+ if(error)return regErr(/registered/i.test(error.message)?'Этот email уже зарегистрирован':'Ошибка: '+error.message);
+ if(!data.session){toast('Подтвердите e-mail по ссылке из письма');navigateTo('auth');return}
+ await refreshAll();toast('Регистрация завершена. Правление подтвердит вашу принадлежность к НСТ');navigateTo('home')}
+async function handleLoginSubmit(e){e.preventDefault();if(!sb)return;const{error}=await sb.auth.signInWithPassword({email:$('loginEmail').value.trim().toLowerCase(),password:$('loginPassword').value});if(error){$('loginErr').classList.remove('hidden');return}await refreshAll();navigateTo('home')}
+async function logout(){if(sb)await sb.auth.signOut();PROFILE=null;editMode=false;await refreshAll();navigateTo('auth')}
 function renderAuthArea(){const a=$('authContentArea'),u=me();
- a.innerHTML=u?`<div class="space-y-4 text-sm text-slate-700 mt-3"><div class="modal-glass p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2"><div><span class="text-xs text-slate-400 block">Электронная почта:</span><b>${esc(u.email)}</b></div><div><span class="text-xs text-slate-400 block">ФИО:</span><b>${esc(u.name||'Не указано')}</b></div><div><span class="text-xs text-slate-400 block">Участок:</span><b>${esc(u.plot||'Не указан')}</b></div><div><span class="text-xs text-slate-400 block">Телефон:</span><b>${esc(u.phone||'Не указан')}</b></div></div><button onclick="logout()" class="w-full py-3 bg-slate-200 text-slate-800 font-bold rounded-xl shadow">Выйти из аккаунта</button><button onclick="show('delModal')" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow">Удалить профиль</button></div>`
+ a.innerHTML=u?`<div class="space-y-4 text-sm text-slate-700 mt-3"><div class="p-3 rounded-xl text-xs font-bold ${isMember()?'bg-green-50 border border-green-200 text-green-900':'bg-amber-100 border border-amber-300 text-amber-900'}"><i class="fa-solid ${isMember()?'fa-circle-check':'fa-hourglass-half'} mr-1"></i> ${isAdmin()?'Администратор':isMember()?'Подтверждён правлением':'Ожидает подтверждения правлением'}</div><div class="modal-glass p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2"><div><span class="text-xs text-slate-400 block">Электронная почта:</span><b>${esc(u.email)}</b></div><div><span class="text-xs text-slate-400 block">ФИО:</span><b>${esc(u.name||'Не указано')}</b></div><div><span class="text-xs text-slate-400 block">Участок:</span><b>${esc(u.plot||'Не указан')}</b></div><div><span class="text-xs text-slate-400 block">Телефон:</span><b>${esc(u.phone||'Не указан')}</b></div></div><button onclick="logout()" class="w-full py-3 bg-slate-200 text-slate-800 font-bold rounded-xl shadow">Выйти из аккаунта</button><button onclick="show('delModal')" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow">Удалить профиль</button></div>`
  :`<form onsubmit="handleLoginSubmit(event)" class="space-y-4 mt-3"><input type="email" id="loginEmail" required placeholder="Электронная почта" class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"><input type="password" id="loginPassword" required placeholder="Пароль" class="w-full p-3 rounded-xl modal-glass border border-slate-300 outline-none"><div id="loginErr" class="hidden text-xs font-bold text-red-700">Неверная почта или пароль</div><button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Войти</button><div class="flex justify-between text-xs pt-2"><button type="button" onclick="navigateTo('register')" class="text-gornyak-700 font-bold underline">Регистрация</button><button type="button" onclick="openForgotModal()" class="text-slate-600 underline">Забыли пароль?</button></div></form>`}
 function closeDelModal(){hide('delModal')}
-function confirmDeleteAccount(){const id=myId();if(!id)return closeDelModal();LS.set('gornyak_users',users().filter(u=>u.email!==id));['articles','news','documents','estimates'].forEach(k=>db[k]=db[k].filter(x=>x.author!==id));Object.keys(db.chat).forEach(d=>db.chat[d]=db.chat[d].filter(m=>m.from!==id));saveData();LS.set('gornyak_chat2',db.chat);localStorage.removeItem(layoutKey());localStorage.removeItem(readKey());localStorage.removeItem('gornyak_user');editMode=false;closeDelModal();refreshUserUI();toast('Профиль удалён');navigateTo('home')}
+async function confirmDeleteAccount(){if(!myId())return closeDelModal();const{error}=await sb.rpc('delete_my_account');if(error){toast('Не удалось удалить профиль');return}localStorage.removeItem(layoutKey());localStorage.removeItem(readKey());await sb.auth.signOut();PROFILE=null;editMode=false;closeDelModal();await refreshAll();toast('Профиль удалён');navigateTo('home')}
 function openForgotModal(){show('forgotModal')}
 function closeForgotModal(){hide('forgotModal')}
-function handleForgotSubmit(e){e.preventDefault();toast('Эта функция сейчас не работает');closeForgotModal()}
+async function handleForgotSubmit(e){e.preventDefault();if(!sb)return;const{error}=await sb.auth.resetPasswordForEmail($('forgotEmail').value.trim(),{redirectTo:location.origin+location.pathname});toast(error?'Не удалось отправить письмо':'Письмо для сброса пароля отправлено');if(!error)closeForgotModal()}
 
-// ---------- Обратная связь ----------
-function submitContact(e){e.preventDefault();const m={name:$('cfName').value.trim(),contact:$('cfContact').value.trim(),topic:$('cfTopic').value,text:$('cfText').value.trim(),ts:Date.now()};const o=LS.get('gornyak_outbox',[]);o.push(m);LS.set('gornyak_outbox',o);addNotification('Обращение подготовлено: '+m.topic);
- $('cfOk').classList.remove('hidden');e.target.reset();location.href='mailto:'+CONFIG.boardEmail+'?subject='+encodeURIComponent('Обращение: '+m.topic)+'&body='+encodeURIComponent(m.text+'\n\n'+m.name+', '+m.contact)}
+// ---------- Обратная связь (в таблицу requests, читает только правление) ----------
+async function submitContact(e){e.preventDefault();if(!sb){toast('Сервер не подключён');return}const form=e.target,btn=form.querySelector('[type=submit]'),m={name:$('cfName').value.trim(),contact:$('cfContact').value.trim(),topic:$('cfTopic').value,body:$('cfText').value.trim()};btn.disabled=true;
+ const{error}=await sb.from('requests').insert(m);btn.disabled=false;if(error){toast('Не удалось отправить. Попробуйте позже');return}
+ addNotification('Обращение отправлено: '+m.topic);$('cfOk').classList.remove('hidden');form.reset()}
 
 // ---------- Поиск, инфо, погода ----------
 function handleSearch(q){const box=$('searchResults');q=q.trim().toLowerCase();if(!q){box.classList.add('hidden');return}const L={articles:'Статья',news:'Новость',documents:'Документ',estimates:'Смета'},r=[];
@@ -760,11 +776,21 @@ function closeWeatherModal(){hide('weatherModal')}
 async function fetchLiveWeather(){try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.66&longitude=37.85&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=Europe/Moscow'),d=await r.json(),t=Math.round(d.current.temperature_2m),w=Math.round(d.current.wind_speed_10m),tx=(t>0?'+':'')+t+'°C';
  $('widgetTemp').innerText=tx;$('widgetDesc').innerText=`Ветер ${w} м/с • Онлайн`;$('modalTemp').innerText=tx;$('modalWind').innerText=w+' м/с';$('modalHum').innerText=Math.round(d.current.relative_humidity_2m)+'%'}catch(e){$('widgetDesc').innerText='Нет связи с метеостанцией';$('modalTemp').innerText=$('modalWind').innerText=$('modalHum').innerText='—'}}
 
-function renderAll(){renderTiles();renderLists();renderChat();renderAuthArea();updateNotifBadge()}
-window.addEventListener('storage',()=>{loadDb();renderAll();renderNav()});
-
-settings={...DEF,...LS.get('gornyak_settings2',{})};applyUI(settings);loadDb();injectHeaders();refreshUserUI();fetchLiveWeather();
+let CONTACTS=[];
+async function loadContacts(){if(!sb||!isMember()){CONTACTS=[];return}const{data}=await sb.from('contacts').select('*').order('sort');CONTACTS=data||[]}
+function renderContacts(){const el=$('contactsList');if(!el)return;
+ const card=c=>`<div class="modal-glass p-4 rounded-2xl border border-slate-200 shadow-sm"><div class="font-extrabold text-slate-900 text-base mb-1">${esc(c.role)}</div><a href="tel:${esc(String(c.phone).replace(/[^+\d]/g,''))}" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> ${esc(c.phone)}</a></div>`;
+ if(isMember()){el.innerHTML=CONTACTS.length?CONTACTS.map(card).join(''):'<div class="modal-glass p-5 rounded-2xl border border-slate-200 text-sm text-slate-500">Контакты пока не добавлены</div>';return}
+ const t=me()?'Ваш профиль ожидает подтверждения правлением. После проверки телефоны станут доступны.':'Телефоны доступны только членам НСТ, подтверждённым правлением.';
+ el.innerHTML=`<div class="modal-glass p-5 rounded-2xl border border-slate-200 shadow-sm text-sm text-slate-700 space-y-3"><div class="font-bold text-slate-900"><i class="fa-solid fa-lock text-indigo-700 mr-1"></i> ${t}</div><div class="flex flex-wrap gap-2">${me()?'':`<button onclick="navigateTo('register')" class="px-4 py-2.5 bg-gornyak-700 text-white rounded-xl text-xs font-bold">Регистрация</button><button onclick="navigateTo('auth')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Войти</button>`}<button onclick="navigateTo('contact-form')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Написать правлению</button></div></div>`}
+function renderAll(){renderTiles();renderLists();renderChat();renderAuthArea();renderContacts();updateNotifBadge()}
+async function loadProfile(){PROFILE=null;if(!sb)return;const{data:{session}}=await sb.auth.getSession();if(!session)return;const{data}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();PROFILE={...(data||{}),id:session.user.id,email:session.user.email}}
+async function refreshAll(){await loadProfile();await Promise.all([loadPosts(),loadChat(),loadContacts()]);renderAll();renderNav()}
+function subscribe(){if(!sb)return;sb.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'messages'},async()=>{await loadChat();renderChat()}).on('postgres_changes',{event:'*',schema:'public',table:'posts'},async()=>{await loadPosts();renderLists()}).subscribe()}
+['gornyak_users','gornyak_user','gornyak_chat2','gornyak_articles','gornyak_news','gornyak_docs','gornyak_estimates','gornyak_outbox'].forEach(k=>localStorage.removeItem(k));
+settings={...DEF,...LS.get('gornyak_settings2',{})};applyUI(settings);loadDb();injectHeaders();renderAll();fetchLiveWeather();
 {const h=location.hash.slice(1);navigateTo(PAGES.includes(h)?h:'home')}
+if(sb){refreshAll().then(subscribe);sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_IN'||ev==='SIGNED_OUT')setTimeout(refreshAll,0);if(ev==='PASSWORD_RECOVERY')setTimeout(()=>{const p=prompt('Введите новый пароль (от 6 символов)');if(p&&p.length>=6)sb.auth.updateUser({password:p}).then(r=>toast(r.error?'Не удалось сменить пароль':'Пароль изменён'))},0)})}else toast('Сервер Supabase не подключён')
 </script>
 </body>
 </html>
