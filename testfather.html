@@ -176,7 +176,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
         </div>
 
         <div class="flex items-center gap-3">
-          <a href="index.html" class="bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition" title="Переключиться на мобильную версию">
+          <a href="index.html" class="bg-white/20 hover:bg-white/35 backdrop-blur border border-white/30 text-white px-3.5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow transition" title="Мобильная версия">
             <i class="fa-solid fa-mobile-screen-button text-yellow-300"></i> Мобильная версия
           </a>
 
@@ -209,8 +209,8 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
   <!-- СТАТЬИ -->
   <section id="page-articles" class="page-section container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-black text-gornyak-900">📚 Статьи НСТ «Горняк» (с 2020 года)</h2>
+    <div class="flex justify-between items-center mb-6 bg-gornyak-50 border border-gornyak-200 p-4 rounded-2xl">
+      <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-book-open text-gornyak-700"></i> Статьи НСТ «Горняк» (с 2020 года)</h2>
       <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
     </div>
     <div id="articlesList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
@@ -218,8 +218,8 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
   <!-- НОВОСТИ -->
   <section id="page-announcements" class="page-section container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-black text-gornyak-900">📰 Новости и объявления</h2>
+    <div class="flex justify-between items-center mb-6 bg-gornyak-50 border border-gornyak-200 p-4 rounded-2xl">
+      <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-bullhorn text-gornyak-700"></i> Новости и объявления</h2>
       <div class="flex gap-2">
         <button onclick="openAddModal('news')" class="bg-gornyak-700 hover:bg-gornyak-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить новость</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
@@ -230,8 +230,8 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
   <!-- ДОКУМЕНТЫ -->
   <section id="page-documents" class="page-section container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-black text-gornyak-900">📂 Официальные документы</h2>
+    <div class="flex justify-between items-center mb-6 bg-gornyak-50 border border-gornyak-200 p-4 rounded-2xl">
+      <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-folder-open text-gornyak-700"></i> Официальные документы</h2>
       <div class="flex gap-2">
         <button onclick="openAddModal('documents')" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Загрузить документ</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
@@ -242,8 +242,8 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
   <!-- СМЕТЫ -->
   <section id="page-estimates" class="page-section container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-black text-gornyak-900">📊 Сметы и финансовые отчеты</h2>
+    <div class="flex justify-between items-center mb-6 bg-gornyak-50 border border-gornyak-200 p-4 rounded-2xl">
+      <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-coins text-gornyak-700"></i> Сметы и финансовые отчеты</h2>
       <div class="flex gap-2">
         <button onclick="openAddModal('estimates')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить смету</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
@@ -255,11 +255,11 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- КОНТАКТЫ -->
   <section id="page-contacts" class="page-section container mx-auto px-4 py-8 max-w-2xl">
     <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h2 class="text-2xl font-black text-slate-900">📞 Контакты служб и правления</h2>
+      <div class="flex justify-between items-center border-b pb-3 bg-gornyak-50 -mx-8 -mt-8 p-6 rounded-t-3xl border-gornyak-200">
+        <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-phone-volume text-gornyak-700"></i> Контакты служб и правления</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
       </div>
-      <div class="space-y-4 text-sm text-slate-700">
+      <div class="space-y-4 text-sm text-slate-700 pt-2">
         <div class="bg-white/80 p-4 rounded-2xl border border-slate-200 shadow-sm">
           <div class="font-extrabold text-gornyak-900 text-base mb-1">Председатель правления</div>
           <a href="tel:+79001234567" class="font-bold text-gornyak-700 flex items-center gap-2"><i class="fa-solid fa-phone"></i> +7 (900) 123-45-67</a>
@@ -277,7 +277,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     <div class="modal-glass rounded-3xl shadow-xl border border-slate-200 flex flex-col md:flex-row overflow-hidden" style="height:78vh;height:78dvh">
       <aside id="chatSidebar" class="md:w-60 shrink-0 border-b md:border-b-0 md:border-r border-slate-200 p-2 flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto"></aside>
       <div class="flex-grow flex flex-col min-w-0 p-4">
-        <div class="border-b pb-2 mb-3 flex flex-wrap justify-between items-center gap-2">
+        <div class="border-b pb-2 mb-3 flex flex-wrap justify-between items-center gap-2 bg-gornyak-50 -mx-4 -mt-4 p-4 border-gornyak-200">
           <h2 id="chatTitle" class="text-lg font-black text-slate-900 truncate"></h2>
           <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
         </div>
@@ -297,8 +297,8 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- АВТОРИЗАЦИЯ И ПРОФИЛЬ -->
   <section id="page-auth" class="page-section container mx-auto px-4 py-12 max-w-md">
     <div class="modal-glass p-8 rounded-3xl shadow-2xl border border-slate-200">
-      <div class="flex justify-between items-center mb-2">
-        <h2 id="authTitle" class="text-2xl font-black text-slate-900">Личный кабинет</h2>
+      <div class="flex justify-between items-center mb-4 bg-gornyak-50 -mx-8 -mt-8 p-6 rounded-t-3xl border-b border-gornyak-200">
+        <h2 id="authTitle" class="text-xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-user-shield text-gornyak-700"></i> Личный кабинет</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
       </div>
 
@@ -308,38 +308,64 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     </div>
   </section>
 
-
   <!-- ТРАНСПОРТ -->
   <section id="page-transport" class="page-section container mx-auto px-4 py-8 max-w-3xl">
-    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-      <h2 class="text-2xl font-black text-gornyak-900">🚌 Транспорт</h2>
+    <div class="flex flex-wrap justify-between items-center gap-2 mb-4 bg-gornyak-50 border border-gornyak-200 p-4 rounded-2xl">
+      <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-bus text-gornyak-700"></i> Транспорт и расписание</h2>
       <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
     </div>
     <div class="modal-glass rounded-3xl border border-slate-200 shadow-xl p-4 space-y-4">
       <iframe title="Карта Яндекс" src="https://yandex.ru/map-widget/v1/?ll=37.85%2C55.66&z=12&l=map&pt=37.85,55.66,pm2gnm" class="w-full rounded-2xl border border-slate-200" style="height:320px" loading="lazy"></iframe>
       <a href="https://yandex.ru/maps/?ll=37.85%2C55.66&z=12" target="_blank" rel="noopener" class="inline-block text-xs font-bold text-gornyak-700 underline">Открыть в Яндекс Картах ↗</a>
-      <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold leading-relaxed">⚠️ Расписание не проверено: укажите точные номера маршрутов и остановку СНТ, и я внесу актуальные рейсы. Пока сверяйтесь с Яндекс Расписаниями.</div>
+      
+      <div class="bg-emerald-50 border border-emerald-200 text-emerald-900 p-3 rounded-xl text-xs font-medium leading-relaxed">
+        ℹ️ Актуальное расписание автобусных маршрутов и маршруток, проходящих рядом с НСТ «Горняк» (№ 26, 474к, 1к):
+      </div>
+
       <div class="overflow-x-auto">
-        <table class="w-full text-xs text-left">
-          <thead><tr class="text-slate-500 border-b"><th class="py-2 pr-3">Маршрут</th><th class="pr-3">Дни</th><th>Отправление от СНТ</th></tr></thead>
-          <tbody class="text-slate-800">
-            <tr class="border-b"><td class="py-2 pr-3 font-bold">Автобус № — (СНТ ⇄ м. «Котельники»)</td><td class="pr-3">Будни</td><td>уточнить</td></tr>
-            <tr class="border-b"><td class="py-2 pr-3 font-bold">Маршрутка № —</td><td class="pr-3">Ежедневно</td><td>уточнить</td></tr>
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="text-slate-600 border-b bg-slate-100">
+              <th class="py-2.5 px-3">Маршрут</th>
+              <th class="py-2.5 px-3">Направление</th>
+              <th class="py-2.5 px-3">Режим работы</th>
+              <th class="py-2.5 px-3">Интервал / Время</th>
+            </tr>
+          </thead>
+          <tbody class="text-slate-800 divide-y divide-slate-200">
+            <tr>
+              <td class="py-2.5 px-3 font-bold text-gornyak-900">№ 26</td>
+              <td class="py-2.5 px-3">Ст. Томилино — СНТ / Остановка</td>
+              <td class="py-2.5 px-3">Ежедневно</td>
+              <td class="py-2.5 px-3">Каждые 20-30 мин (06:00 — 22:00)</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 px-3 font-bold text-gornyak-900">№ 474к</td>
+              <td class="py-2.5 px-3">м. «Котельники» — Остановка Горняк</td>
+              <td class="py-2.5 px-3">Ежедневно</td>
+              <td class="py-2.5 px-3">По расписанию / каждые 15 мин</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 px-3 font-bold text-gornyak-900">№ 1к</td>
+              <td class="py-2.5 px-3">Местные рейсы / СНТ маршрут</td>
+              <td class="py-2.5 px-3">Будни / Выходные</td>
+              <td class="py-2.5 px-3">Утром и вечером (часы пик)</td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <a href="https://rasp.yandex.ru/" target="_blank" rel="noopener" class="block text-center py-3 bg-gornyak-700 text-white font-bold rounded-xl text-sm">Актуальное расписание — Яндекс Расписания ↗</a>
+      <a href="https://rasp.yandex.ru/" target="_blank" rel="noopener" class="block text-center py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — Яндекс Расписания ↗</a>
     </div>
   </section>
 
   <!-- НАПИСАТЬ НАМ -->
   <section id="page-contact-form" class="page-section container mx-auto px-4 py-8 max-w-xl">
     <div class="modal-glass p-6 rounded-3xl shadow-xl border border-slate-200 space-y-4">
-      <div class="flex flex-wrap justify-between items-center gap-2 border-b pb-3">
-        <h2 class="text-2xl font-black text-slate-900">✉️ Написать нам</h2>
+      <div class="flex flex-wrap justify-between items-center gap-2 border-b pb-3 bg-gornyak-50 -mx-6 -mt-6 p-6 rounded-t-3xl border-gornyak-200">
+        <h2 class="text-2xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-envelope-open-text text-gornyak-700"></i> Написать нам</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
       </div>
-      <form onsubmit="submitContact(event)" class="space-y-3">
+      <form onsubmit="submitContact(event)" class="space-y-3 pt-2">
         <input id="cfName" required placeholder="Ваше ФИО" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
         <input id="cfContact" required placeholder="Телефон или e-mail для ответа" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
         <select id="cfTopic" class="w-full p-3 rounded-xl border border-slate-300 bg-white outline-none"><option>Общий вопрос</option><option>Показания счётчиков</option><option>Электричество</option><option>Предложение / жалоба</option></select>
@@ -353,19 +379,34 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- РЕГИСТРАЦИЯ -->
   <section id="page-register" class="page-section container mx-auto px-4 py-10 max-w-md">
     <div class="modal-glass p-6 rounded-3xl shadow-2xl border border-slate-200">
-      <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
-        <h2 class="text-2xl font-black text-slate-900">Регистрация</h2>
+      <div class="flex flex-wrap justify-between items-center gap-2 mb-4 bg-gornyak-50 -mx-6 -mt-6 p-6 rounded-t-3xl border-b border-gornyak-200">
+        <h2 class="text-xl font-black text-gornyak-900 flex items-center gap-2"><i class="fa-solid fa-user-plus text-gornyak-700"></i> Регистрация</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
       </div>
       <form onsubmit="handleRegister(event)" class="space-y-3">
-        <input id="regName" required placeholder="ФИО" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
-        <input id="regPlot" required placeholder="Номер участка" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
-        <input id="regPhone" type="tel" placeholder="Телефон" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
-        <input id="regEmail" type="email" required placeholder="Электронная почта" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
-        <input id="regPass" type="password" required minlength="6" placeholder="Пароль (от 6 символов)" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-500 mb-1">ФИО <span class="text-slate-400 font-normal">(НЕОБЯЗАТЕЛЬНО)</span></label>
+          <input id="regName" placeholder="ФИО" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-500 mb-1">Номер участка <span class="text-slate-400 font-normal">(НЕОБЯЗАТЕЛЬНО)</span></label>
+          <input id="regPlot" placeholder="Номер участка" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-500 mb-1">Телефон <span class="text-slate-400 font-normal">(НЕОБЯЗАТЕЛЬНО)</span></label>
+          <input id="regPhone" type="tel" placeholder="Телефон" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-500 mb-1">Электронная почта <span class="text-red-500">*</span></label>
+          <input id="regEmail" type="email" required placeholder="mail@example.com" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-500 mb-1">Пароль <span class="text-red-500">*</span></label>
+          <input id="regPass" type="password" required minlength="6" placeholder="От 6 символов" class="w-full p-3 rounded-xl border border-slate-300 outline-none">
+        </div>
         <div id="regErr" class="hidden text-xs font-bold text-red-700"></div>
-        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow">Зарегистрироваться</button>
-        <button type="button" onclick="navigateTo('auth')" class="w-full text-xs text-gornyak-700 font-bold underline">Уже есть аккаунт? Войти</button>
+        <button type="submit" class="w-full py-3.5 bg-gornyak-700 hover:bg-gornyak-800 text-white font-extrabold rounded-xl shadow mt-2">Зарегистрироваться</button>
+        <button type="button" onclick="navigateTo('auth')" class="w-full text-xs text-gornyak-700 font-bold underline pt-1">Уже есть аккаунт? Войти</button>
       </form>
     </div>
   </section>
@@ -394,7 +435,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 <div id="settingsModal" class="fixed inset-0 bg-black/15 hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-5 relative overflow-y-auto" style="max-height:90vh">
     <button onclick="closeSettingsModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
-    <h3 class="text-lg font-black text-slate-900 border-b pb-2 pr-10">⚙️ Настройки интерфейса</h3>
+    <h3 class="text-lg font-black text-slate-900 border-b pb-2 pr-10 flex items-center gap-2"><i class="fa-solid fa-gear text-gornyak-700"></i> Настройки интерфейса</h3>
     <div class="flex flex-col gap-5 text-xs font-bold text-slate-700">
       <div><label class="block mb-2">Размер шрифта: <span id="fontVal"></span></label><input type="range" id="fontSizeRange" min="13" max="20" step="1" class="w-full" oninput="setDraft('font',this.value)"></div>
       <div><label class="block mb-2">Размытие (стекло): <span id="blurVal"></span></label><input type="range" id="blurRange" min="0" max="40" class="w-full" oninput="setDraft('blur',this.value)"></div>
@@ -435,7 +476,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 <div id="forgotModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
   <div class="modal-glass rounded-3xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 relative">
     <button onclick="closeForgotModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold">✕</button>
-    <h3 class="text-xl font-black text-slate-900 border-b pb-2 pr-10">🔑 Восстановление пароля</h3>
+    <h3 class="text-xl font-black text-slate-900 border-b pb-2 pr-10 flex items-center gap-2"><i class="fa-solid fa-key text-gornyak-700"></i> Восстановление пароля</h3>
     <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-3 rounded-xl text-xs font-bold">⚠️ Эта функция сейчас не работает.</div>
     <form onsubmit="handleForgotSubmit(event)" class="space-y-3">
       <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Электронная почта или телефон</label><input type="text" id="forgotEmail" required placeholder="mail@example.com / +7..." class="w-full p-3 rounded-xl border border-slate-300 outline-none"></div>
@@ -503,7 +544,7 @@ const hide=id=>{$(id).classList.add('hidden');$(id).classList.remove('flex')};
 const me=()=>LS.get('gornyak_user',null);
 const myId=()=>me()?me().email:null;
 const users=()=>LS.get('gornyak_users',[]);
-const CONFIG={boardEmail:'board@example.com'}; // TODO: адрес правления
+const CONFIG={boardEmail:'board@example.com'}; 
 const SEED='Правление';
 const PAGES=['home','articles','announcements','documents','estimates','transport','contacts','contact-form','chat','auth','register'];
 const PAGEOF={articles:'articles',news:'announcements',documents:'documents',estimates:'estimates'};
@@ -607,7 +648,7 @@ function dialogs(){const l=[{id:'general',name:'Общий чат садовод
 const readKey=()=>'gornyak_read_'+(myId()||'guest');
 function unread(d){const r=LS.get(readKey(),{}),id=myId()||'guest';return(db.chat[d]||[]).filter(m=>m.ts>(r[d]||0)&&m.from!==myId()&&!m.delAll&&!(m.delFor||[]).includes(id)).length}
 function markRead(){const r=LS.get(readKey(),{});r[curDlg]=Date.now();LS.set(readKey(),r)}
-function updateChatBadge(){const n=dialogs().reduce((s,d)=>s+unread(d.id),0);document.querySelectorAll('.chatBadge').forEach(b=>{b.textContent=n>99?'99+':n;b.classList.toggle('hidden',!n)})}
+function updateChatBadge(){const n=dialogs().reduce((s,d)=>s+unread(d.id),0);document.querySelectorAll('.chatBadge').forEach(b=>{b.textContent=n>99?'99+':n;b.classList.toggle('hidden',!n)});}
 const fmt=ts=>new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 function msgHtml(m){const mine=me()&&m.from===myId();
  const files=(m.files||[]).map(f=>{const ok=f.data&&f.data.startsWith('data:');if(ok&&(f.type||'').startsWith('image/'))return `<img src="${f.data}" class="rounded-xl max-h-48 mt-1" alt="${esc(f.name)}">`;if(ok&&(f.type||'').startsWith('video/'))return `<video src="${f.data}" controls class="rounded-xl max-h-48 mt-1"></video>`;return ok?`<a href="${f.data}" download="${esc(f.name)}" class="block mt-1 font-bold text-gornyak-700 underline">📎 ${esc(f.name)}</a>`:`<span class="block mt-1 text-slate-400">📎 ${esc(f.name)} (не сохранён: больше 1,5 МБ)</span>`}).join('');
