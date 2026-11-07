@@ -366,12 +366,12 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
             <tr>
               <td class="py-2.5 px-3 font-bold text-cyan-900">№ 26</td>
               <td class="py-2.5 px-3">До Силиката и обратно через Карьер</td>
-              <td class="py-2.5 px-3">Каждые … мин</td>
+              <td class="py-2.5 px-3">Будни: 06:22–20:52, днём рейсы реже<br>Выходные: по расписанию остановки</td>
             </tr>
             <tr>
               <td class="py-2.5 px-3 font-bold text-cyan-900">№ 474к</td>
               <td class="py-2.5 px-3">М. Котельники — Силикат — Карьер — М. Котельники</td>
-              <td class="py-2.5 px-3">Будни: 6:18–9:56 и 14:14–19:17<br>Выходные: каждые … мин</td>
+              <td class="py-2.5 px-3">Будни: 6:18–9:56 и 14:14–19:17<br>Выходные: по расписанию остановки</td>
             </tr>
             <tr>
               <td class="py-2.5 px-3 font-bold text-cyan-900">№ 1к</td>
@@ -381,7 +381,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
           </tbody>
         </table>
       </div>
-      <a href="https://yandex.ru/maps/?text=%D0%9A%D0%B0%D1%80%D1%8C%D0%B5%D1%80%20%D0%BE%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%9A%D0%BE%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B8%D0%BA%D0%B8" target="_blank" rel="noopener" class="block text-center py-3 bg-cyan-700 hover:bg-cyan-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — остановка «Карьер» <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+      <a href="https://rasp.yandex.ru/station/9739165/" target="_blank" rel="noopener" class="block text-center py-3 bg-cyan-700 hover:bg-cyan-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — остановка «Карьер» <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
     </div>
   </section>
 
@@ -564,8 +564,8 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const LS={get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast('Не хватает места в памяти браузера');return false}}};
 const show=id=>{$(id).classList.add('flex');$(id).classList.remove('hidden')};
 const hide=id=>{$(id).classList.add('hidden');$(id).classList.remove('flex')};
-const SB_URL='https://ВАШ-ПРОЕКТ.supabase.co',SB_KEY='ВАШ_ANON_PUBLIC_KEY';
-const sb=(window.supabase&&SB_URL.startsWith('https://')&&!SB_URL.includes('ВАШ'))?window.supabase.createClient(SB_URL,SB_KEY):null;
+const SB_URL='https://jlwykppketifzjpplmga.supabase.co',SB_KEY='sb_publishable_grh-4YZ2iQ1WC80Smk3Msg_aR5hlyGX';
+const sb=(window.supabase&&SB_URL.startsWith('https://'))?window.supabase.createClient(SB_URL,SB_KEY):null;
 let PROFILE=null;
 const me=()=>PROFILE;
 const myId=()=>PROFILE?PROFILE.id:null;
@@ -691,7 +691,7 @@ function renderLists(){$('articlesList').innerHTML=db.articles.map(a=>card('arti
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const{a,t,i}=b.dataset;if(a==='share')shareIt(b.dataset.title,PAGEOF[t]);if(a==='edit')openAddModal(t,+i);if(a==='del')delItem(t,+i);if(a==='dl')downloadItem(t,+i)});
 function downloadItem(t,i){const it=db[t].find(x=>x.id===i);if(!it||!it.filePath){toast('К записи файл не прикреплён');return}openStorage(it.vis==='public'?'public-files':'member-files',it.filePath)}
 async function delItem(t,i){const it=db[t].find(x=>x.id===i);if(!it||!own(it)){toast('Нет прав на удаление');return}if(!confirm('Удалить «'+it.title+'»?'))return;const{error}=await sb.from('posts').delete().eq('id',i);if(error){toast('Не удалось удалить');return}if(it.filePath)sb.storage.from(it.vis==='public'?'public-files':'member-files').remove([it.filePath]);await loadPosts();renderAll()}
-function openAddModal(type,id){activeAddType=type;editId=id||null;$('addForm').reset();const ok=isMember();$('authWarning').classList.toggle('hidden',ok);$('addSubmit').disabled=!ok;
+function openAddModal(type,id){if((type==='news'||type==='articles')&&!isAdmin()){toast('Новости и статьи публикует правление');return}activeAddType=type;editId=id||null;$('addForm').reset();const ok=isMember();$('authWarning').classList.toggle('hidden',ok);$('addSubmit').disabled=!ok;
  const sel=$('itemVis');sel.innerHTML='<option value="members">Только члены НСТ</option>'+(isAdmin()?'<option value="public">Все посетители</option>':'');sel.value=(isAdmin()&&(type==='news'||type==='articles'))?'public':'members';sel.disabled=!!id;
  if(id){const it=db[type].find(x=>x.id===id);if(!it||!own(it)){toast('Можно менять только свои записи');return}$('itemTitle').value=it.title;$('itemDesc').value=it.text||it.desc||'';sel.value=it.vis}
  const T={news:'новость',documents:'документ',estimates:'смету',articles:'статью'};$('modalTitle').innerText=(id?'Изменить: ':'Добавить: ')+T[type];show('addModal')}
@@ -783,7 +783,7 @@ function renderContacts(){const el=$('contactsList');if(!el)return;
  if(isMember()){el.innerHTML=CONTACTS.length?CONTACTS.map(card).join(''):'<div class="modal-glass p-5 rounded-2xl border border-slate-200 text-sm text-slate-500">Контакты пока не добавлены</div>';return}
  const t=me()?'Ваш профиль ожидает подтверждения правлением. После проверки телефоны станут доступны.':'Телефоны доступны только членам НСТ, подтверждённым правлением.';
  el.innerHTML=`<div class="modal-glass p-5 rounded-2xl border border-slate-200 shadow-sm text-sm text-slate-700 space-y-3"><div class="font-bold text-slate-900"><i class="fa-solid fa-lock text-indigo-700 mr-1"></i> ${t}</div><div class="flex flex-wrap gap-2">${me()?'':`<button onclick="navigateTo('register')" class="px-4 py-2.5 bg-gornyak-700 text-white rounded-xl text-xs font-bold">Регистрация</button><button onclick="navigateTo('auth')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Войти</button>`}<button onclick="navigateTo('contact-form')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Написать правлению</button></div></div>`}
-function renderAll(){renderTiles();renderLists();renderChat();renderAuthArea();renderContacts();updateNotifBadge()}
+function renderAll(){document.querySelectorAll("button[onclick*=\"openAddModal('news')\"],button[onclick*=\"openAddModal('articles')\"]").forEach(b=>b.style.display=isAdmin()?'':'none');renderTiles();renderLists();renderChat();renderAuthArea();renderContacts();updateNotifBadge()}
 async function loadProfile(){PROFILE=null;if(!sb)return;const{data:{session}}=await sb.auth.getSession();if(!session)return;const{data}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();PROFILE={...(data||{}),id:session.user.id,email:session.user.email}}
 async function refreshAll(){await loadProfile();await Promise.all([loadPosts(),loadChat(),loadContacts()]);renderAll();renderNav()}
 function subscribe(){if(!sb)return;sb.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'messages'},async()=>{await loadChat();renderChat()}).on('postgres_changes',{event:'*',schema:'public',table:'posts'},async()=>{await loadPosts();renderLists()}).subscribe()}
