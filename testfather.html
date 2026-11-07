@@ -83,7 +83,7 @@ h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
   border-bottom: 1px solid rgba(186, 230, 253, 0.6);
 }
 
-/* Темы оглавлений разделов */
+/* Цветовые темы оглавлений */
 .theme-articles { color: #176334 !important; }
 .bg-theme-articles { background: linear-gradient(135deg, #f2f9f4 0%, #e1f3e6 100%) !important; border-color: #c5e7cd !important; }
 
@@ -95,6 +95,9 @@ h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
 
 .theme-docs { color: #0284c7 !important; }
 .bg-theme-docs { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important; border-color: #bae6fd !important; }
+
+.theme-transport { color: #0e7490 !important; }
+.theme-contacts { color: #312e81 !important; }
 
 .weather-icon-box {
   position: relative;
@@ -144,7 +147,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 </head>
 <body id="mainBody" class="min-h-screen flex flex-col justify-between antialiased">
 
-<!-- Шапка сайта с голубым стеклом и прокручиваемым меню -->
+<!-- Шапка сайта -->
 <header class="header-sky-glass sticky top-0 z-50 shadow-sm w-full">
   <div class="container mx-auto px-3 py-2 flex items-center justify-between gap-2">
     <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2 shrink-0">
@@ -156,18 +159,18 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
       </div>
     </a>
 
-    <!-- Прокручиваемое десктопное/планшетное меню сверху -->
-    <nav id="desktopNav" class="flex items-center gap-3 overflow-x-auto text-[11px] font-semibold text-slate-700 py-1 shrink max-w-[45vw] sm:max-w-none" style="scrollbar-width:none"></nav>
+    <!-- Прокручиваемое верхнее меню -->
+    <nav id="desktopNav" class="flex items-center gap-3 overflow-x-auto text-[11px] font-semibold text-slate-700 py-1 shrink max-w-[40vw] sm:max-w-none" style="scrollbar-width:none"></nav>
 
     <!-- Поиск, Круглая кнопка профиля, Колокольчик и Настройки -->
     <div class="flex items-center gap-1.5 shrink-0">
       <div class="relative flex items-center">
-        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-2.5 py-1.5 pl-7 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-16 sm:w-32 transition">
+        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-2.5 py-1.5 pl-7 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-16 sm:w-28 transition">
         <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-xs"></i>
         <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 modal-glass rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
       </div>
 
-      <!-- Компактная круглая зеленая кнопка профиля с белым человеком -->
+      <!-- Компактная круглая зеленая кнопка профиля с иконкой человека -->
       <button id="regBtn" onclick="regClick()" class="w-9 h-9 bg-gornyak-700 hover:bg-gornyak-800 text-white rounded-full flex items-center justify-center shadow transition shrink-0" title="Личный кабинет / Регистрация" aria-label="Профиль">
         <i class="fa-solid fa-user text-sm"></i>
       </button>
@@ -279,7 +282,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <section id="page-contacts" class="page-section container mx-auto px-4 py-8 max-w-2xl">
     <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
       <div class="flex justify-between items-center border-b pb-3 modal-glass -mx-8 -mt-8 p-6 rounded-t-3xl border-slate-200">
-        <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2.5"><i class="fa-solid fa-phone-volume text-gornyak-700"></i> Контакты служб и правления</h2>
+        <h2 class="text-2xl font-black theme-contacts flex items-center gap-2.5"><i class="fa-solid fa-phone-volume"></i> Контакты служб и правления</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
       </div>
       <div class="space-y-4 text-sm text-slate-700 pt-2">
@@ -331,14 +334,14 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- ТРАНСПОРТ -->
   <section id="page-transport" class="page-section container mx-auto px-4 py-8 max-w-3xl">
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4 modal-glass border p-4 rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2.5"><i class="fa-solid fa-bus text-gornyak-700"></i> Транспорт и расписание</h2>
-      <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
+      <h2 class="text-2xl font-black theme-transport flex items-center gap-2.5"><i class="fa-solid fa-bus"></i> Транспорт и расписание</h2>
+      <button onclick="navigateTo('home')" class="text-xs theme-transport font-bold underline">← На главную</button>
     </div>
     <div class="modal-glass rounded-3xl border border-slate-200 shadow-xl p-4 space-y-4">
       <iframe title="Карта Яндекс" src="https://yandex.ru/map-widget/v1/?ll=37.85%2C55.66&z=12&l=map&pt=37.85,55.66,pm2gnm" class="w-full rounded-2xl border border-slate-200" style="height:320px" loading="lazy"></iframe>
-      <a href="https://yandex.ru/maps/?ll=37.85%2C55.66&z=12" target="_blank" rel="noopener" class="inline-block text-xs font-bold text-gornyak-700 underline">Открыть в Яндекс Картах ↗</a>
+      <a href="https://yandex.ru/maps/?ll=37.85%2C55.66&z=12" target="_blank" rel="noopener" class="inline-block text-xs font-bold text-cyan-700 underline">Открыть в Яндекс Картах ↗</a>
       
-      <div class="bg-emerald-50 border border-emerald-200 text-emerald-900 p-3 rounded-xl text-xs font-medium leading-relaxed">
+      <div class="bg-cyan-50 border border-cyan-200 text-cyan-900 p-3 rounded-xl text-xs font-medium leading-relaxed">
         ℹ️ Актуальное расписание автобусных маршрутов и маршруток (№ 26 до ст. Люберцы, № 474к, № 1к):
       </div>
 
@@ -354,19 +357,19 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
           </thead>
           <tbody class="text-slate-800 divide-y divide-slate-200">
             <tr>
-              <td class="py-2.5 px-3 font-bold text-gornyak-900">№ 26</td>
+              <td class="py-2.5 px-3 font-bold text-cyan-900">№ 26</td>
               <td class="py-2.5 px-3">Ст. Люберцы — СНТ / Остановка</td>
               <td class="py-2.5 px-3">Ежедневно</td>
               <td class="py-2.5 px-3">Каждые 20-30 мин (06:00 — 22:00)</td>
             </tr>
             <tr>
-              <td class="py-2.5 px-3 font-bold text-gornyak-900">№ 474к</td>
+              <td class="py-2.5 px-3 font-bold text-cyan-900">№ 474к</td>
               <td class="py-2.5 px-3">м. «Котельники» — Остановка Горняк</td>
               <td class="py-2.5 px-3">Ежедневно</td>
               <td class="py-2.5 px-3">По расписанию / каждые 15 мин</td>
             </tr>
             <tr>
-              <td class="py-2.5 px-3 font-bold text-gornyak-900">№ 1к</td>
+              <td class="py-2.5 px-3 font-bold text-cyan-900">№ 1к</td>
               <td class="py-2.5 px-3">Местные рейсы / СНТ маршрут</td>
               <td class="py-2.5 px-3">Будни / Выходные</td>
               <td class="py-2.5 px-3">Утром и вечером (часы пик)</td>
@@ -374,7 +377,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
           </tbody>
         </table>
       </div>
-      <a href="https://rasp.yandex.ru/" target="_blank" rel="noopener" class="block text-center py-3 bg-gornyak-700 hover:bg-gornyak-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — Яндекс Расписания ↗</a>
+      <a href="https://rasp.yandex.ru/" target="_blank" rel="noopener" class="block text-center py-3 bg-cyan-700 hover:bg-cyan-800 text-white font-bold rounded-xl text-sm transition">Проверить точное расписание — Яндекс Расписания ↗</a>
     </div>
   </section>
 
@@ -569,8 +572,8 @@ const NAV=[
   ['announcements','fa-bullhorn','Новости','theme-news'],
   ['documents','fa-folder','Документы','theme-docs'],
   ['estimates','fa-coins','Сметы','theme-estimates'],
-  ['transport','fa-bus','Транспорт',''],
-  ['contacts','fa-phone','Контакты',''],
+  ['transport','fa-bus','Транспорт','theme-transport'],
+  ['contacts','fa-phone','Контакты','theme-contacts'],
   ['contact-form','fa-envelope','Написать',''],
   ['chat','fa-comments','Чат',''],
   ['auth','fa-user','Профиль','']
