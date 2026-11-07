@@ -75,15 +75,26 @@ h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
   border: 1px solid rgba(220, 235, 225, 0.8);
 }
 
-/* Динамические цвета меню и оглавлений под карточки */
+/* Верхняя строка с голубоватым стеклом */
+.header-sky-glass {
+  background: rgba(240, 249, 255, calc(var(--gp, 94)/100));
+  backdrop-filter: blur(var(--blur-val, 25px));
+  -webkit-backdrop-filter: blur(var(--blur-val, 25px));
+  border-bottom: 1px solid rgba(186, 230, 253, 0.6);
+}
+
+/* Темы оглавлений разделов */
 .theme-articles { color: #176334 !important; }
-.bg-theme-articles { background-color: #f2f9f4 !important; border-color: #c5e7cd !important; }
+.bg-theme-articles { background: linear-gradient(135deg, #f2f9f4 0%, #e1f3e6 100%) !important; border-color: #c5e7cd !important; }
 
 .theme-news { color: #7e22ce !important; }
-.bg-theme-news { background-color: #faf5ff !important; border-color: #e9d5ff !important; }
+.bg-theme-news { background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%) !important; border-color: #e9d5ff !important; }
 
 .theme-estimates { color: #d97706 !important; }
-.bg-theme-estimates { background-color: #fffbeb !important; border-color: #fde68a !important; }
+.bg-theme-estimates { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important; border-color: #fde68a !important; }
+
+.theme-docs { color: #0284c7 !important; }
+.bg-theme-docs { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important; border-color: #bae6fd !important; }
 
 .weather-icon-box {
   position: relative;
@@ -116,7 +127,7 @@ body{min-height:100vh;min-height:100dvh;padding-left:env(safe-area-inset-left);p
 img,iframe,video{max-width:100%}
 input,select,textarea{font-size:16px!important}
 header{padding-top:env(safe-area-inset-top)}
-#mobNav::-webkit-scrollbar{display:none}
+#desktopNav::-webkit-scrollbar, #mobNav::-webkit-scrollbar{display:none}
 .tile{background:var(--tb);background:color-mix(in srgb,var(--tb) calc(var(--gp)*1%),transparent);backdrop-filter:blur(var(--blur-val));-webkit-backdrop-filter:blur(var(--blur-val));position:relative;transition:transform .2s;-webkit-touch-callout:none}
 .tile:active{transform:scale(.98)}
 .tile .tctl{display:none}
@@ -133,43 +144,45 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 </head>
 <body id="mainBody" class="min-h-screen flex flex-col justify-between antialiased">
 
-<!-- Шапка сайта -->
-<header class="modal-glass border-b border-slate-200 sticky top-0 z-50 shadow-sm w-full">
-  <div class="container mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
-    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2.5 shrink-0">
-      <div class="text-gornyak-700 text-2xl">
+<!-- Шапка сайта с голубым стеклом и прокручиваемым меню -->
+<header class="header-sky-glass sticky top-0 z-50 shadow-sm w-full">
+  <div class="container mx-auto px-3 py-2 flex items-center justify-between gap-2">
+    <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-2 shrink-0">
+      <div class="text-gornyak-700 text-xl sm:text-2xl">
         <i class="fa-solid fa-tree"></i><i class="fa-solid fa-house -ml-1 text-gornyak-800"></i>
       </div>
       <div>
-        <span class="block text-base font-extrabold text-gornyak-900 leading-none">НСТ «Горняк»</span>
-        <span class="hidden sm:block text-[9px] text-slate-500 font-medium">Садовое некоммерческое товарищество</span>
+        <span class="block text-sm sm:text-base font-extrabold text-gornyak-900 leading-none">НСТ «Горняк»</span>
       </div>
     </a>
 
-    <nav id="desktopNav" class="hidden lg:flex items-center gap-4 text-[11px] font-semibold text-slate-700"></nav>
+    <!-- Прокручиваемое десктопное/планшетное меню сверху -->
+    <nav id="desktopNav" class="flex items-center gap-3 overflow-x-auto text-[11px] font-semibold text-slate-700 py-1 shrink max-w-[45vw] sm:max-w-none" style="scrollbar-width:none"></nav>
 
-    <!-- Поиск, Регистрация, Колокольчик и Настройки -->
-    <div class="flex items-center gap-2">
+    <!-- Поиск, Круглая кнопка профиля, Колокольчик и Настройки -->
+    <div class="flex items-center gap-1.5 shrink-0">
       <div class="relative flex items-center">
-        <input type="text" id="globalSearch" placeholder="Поиск по сайту..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-3 py-2 pl-8 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-20 sm:w-36 transition">
-        <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-xs"></i>
+        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-2.5 py-1.5 pl-7 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-16 sm:w-32 transition">
+        <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-xs"></i>
         <div id="searchResults" class="hidden absolute top-full right-0 mt-2 w-72 modal-glass rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
       </div>
-      <button id="regBtn" onclick="regClick()" class="bg-gornyak-700 hover:bg-gornyak-800 text-white text-xs px-3 py-2 rounded-xl font-extrabold shadow transition shrink-0">Регистрация</button>
 
-      <!-- Колокольчик уведомлений -->
-      <button onclick="openNotifModal()" class="relative p-2 text-slate-600 hover:text-gornyak-700 text-lg transition">
+      <!-- Компактная круглая зеленая кнопка профиля с белым человеком -->
+      <button id="regBtn" onclick="regClick()" class="w-9 h-9 bg-gornyak-700 hover:bg-gornyak-800 text-white rounded-full flex items-center justify-center shadow transition shrink-0" title="Личный кабинет / Регистрация" aria-label="Профиль">
+        <i class="fa-solid fa-user text-sm"></i>
+      </button>
+
+      <!-- Колокольчик -->
+      <button onclick="openNotifModal()" class="relative p-1.5 text-slate-600 hover:text-gornyak-700 text-base transition" aria-label="Уведомления">
         <i class="fa-solid fa-bell"></i>
-        <span id="headerNotifBadge" class="hidden absolute top-1 right-1 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+        <span id="headerNotifBadge" class="hidden absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow">0</span>
       </button>
 
-      <button onclick="shareCurrent()" class="p-2 text-slate-600 hover:text-gornyak-700 text-lg transition" title="Поделиться" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
-      <button onclick="openSettingsModal()" class="p-2 text-slate-600 hover:text-gornyak-700 text-lg transition" title="Настройки интерфейса">
-        <i class="fa-solid fa-gear"></i>
-      </button>
+      <button onclick="shareCurrent()" class="p-1.5 text-slate-600 hover:text-gornyak-700 text-base transition" title="Поделиться" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>
+      <button onclick="openSettingsModal()" class="p-1.5 text-slate-600 hover:text-gornyak-700 text-base transition" title="Настройки интерфейса" aria-label="Настройки"><i class="fa-solid fa-gear"></i></button>
     </div>
   </div>
-  <nav id="mobNav" class="lg:hidden flex overflow-x-auto border-t border-slate-100 text-[10px] font-semibold px-1"></nav>
+  <nav id="mobNav" class="lg:hidden flex overflow-x-auto border-t border-sky-200 text-[10px] font-semibold px-1 py-1" style="scrollbar-width:none"></nav>
 </header>
 
 <main class="flex-grow w-full">
@@ -220,7 +233,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- СТАТЬИ -->
   <section id="page-articles" class="page-section container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6 bg-theme-articles border p-4 rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-black theme-articles flex items-center gap-2"><i class="fa-solid fa-book-open"></i> Статьи НСТ «Горняк» (с 2020 года)</h2>
+      <h2 class="text-2xl font-black theme-articles flex items-center gap-2.5"><i class="fa-solid fa-book-open"></i> Статьи НСТ «Горняк»</h2>
       <button onclick="navigateTo('home')" class="text-xs theme-articles font-bold underline">← На главную</button>
     </div>
     <div id="articlesList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
@@ -229,7 +242,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- НОВОСТИ -->
   <section id="page-announcements" class="page-section container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6 bg-theme-news border p-4 rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-black theme-news flex items-center gap-2"><i class="fa-solid fa-bullhorn"></i> Новости и объявления</h2>
+      <h2 class="text-2xl font-black theme-news flex items-center gap-2.5"><i class="fa-solid fa-bullhorn"></i> Новости и объявления</h2>
       <div class="flex gap-2">
         <button onclick="openAddModal('news')" class="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить новость</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
@@ -240,10 +253,10 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 
   <!-- ДОКУМЕНТЫ -->
   <section id="page-documents" class="page-section container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6 modal-glass border p-4 rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-black text-sky-900 flex items-center gap-2"><i class="fa-solid fa-folder-open text-sky-600"></i> Официальные документы</h2>
+    <div class="flex justify-between items-center mb-6 bg-theme-docs border p-4 rounded-2xl shadow-sm">
+      <h2 class="text-2xl font-black theme-docs flex items-center gap-2.5"><i class="fa-solid fa-folder-open"></i> Официальные документы</h2>
       <div class="flex gap-2">
-        <button onclick="openAddModal('documents')" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Загрузить документ</button>
+        <button onclick="openAddModal('documents')" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Загрузить</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
       </div>
     </div>
@@ -253,7 +266,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- СМЕТЫ -->
   <section id="page-estimates" class="page-section container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6 bg-theme-estimates border p-4 rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-black theme-estimates flex items-center gap-2"><i class="fa-solid fa-coins"></i> Сметы и финансовые отчеты</h2>
+      <h2 class="text-2xl font-black theme-estimates flex items-center gap-2.5"><i class="fa-solid fa-coins"></i> Сметы и финансы</h2>
       <div class="flex gap-2">
         <button onclick="openAddModal('estimates')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">+ Добавить смету</button>
         <button onclick="navigateTo('home')" class="bg-slate-200 text-slate-800 px-3 py-2 rounded-xl text-xs font-bold">На главную</button>
@@ -266,7 +279,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <section id="page-contacts" class="page-section container mx-auto px-4 py-8 max-w-2xl">
     <div class="modal-glass p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
       <div class="flex justify-between items-center border-b pb-3 modal-glass -mx-8 -mt-8 p-6 rounded-t-3xl border-slate-200">
-        <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2"><i class="fa-solid fa-phone-volume text-gornyak-700"></i> Контакты служб и правления</h2>
+        <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2.5"><i class="fa-solid fa-phone-volume text-gornyak-700"></i> Контакты служб и правления</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
       </div>
       <div class="space-y-4 text-sm text-slate-700 pt-2">
@@ -285,7 +298,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- ЧАТ -->
   <section id="page-chat" class="page-section container mx-auto px-4 py-6 max-w-5xl">
     <div class="modal-glass rounded-3xl shadow-xl border border-slate-200 flex flex-col md:flex-row overflow-hidden" style="height:78vh;height:78dvh">
-      <aside id="chatSidebar" class="md:w-60 shrink-0 border-b md:border-b-0 md:border-r border-slate-200 p-2 flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto"></aside>
+      <aside id="chatSidebar" class="md:w-60 shrink-0 border-b md:border-b-0 md:border-r border-slate-200 p-2 flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto" style="scrollbar-width:none"></aside>
       <div class="flex-grow flex flex-col min-w-0 p-4">
         <div class="border-b pb-2 mb-3 flex flex-wrap justify-between items-center gap-2 modal-glass -mx-4 -mt-4 p-4 border-slate-200">
           <h2 id="chatTitle" class="text-lg font-black text-slate-900 truncate"></h2>
@@ -296,9 +309,9 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
         <div id="chatEditBar" class="hidden mb-2 text-xs bg-amber-100 text-amber-900 rounded-lg px-3 py-1.5 justify-between items-center">Редактирование сообщения <button type="button" onclick="cancelEdit()" class="font-bold underline">Отмена</button></div>
         <form onsubmit="sendChatMessage(event)" class="flex gap-2 items-center">
           <input type="file" id="chatFile" multiple hidden accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="pickFiles(this)">
-          <button type="button" onclick="document.getElementById('chatFile').click()" class="w-11 h-11 shrink-0 rounded-xl modal-glass border border-slate-300 text-slate-600" aria-label="Прикрепить файл"><i class="fa-solid fa-paperclip"></i></button>
+          <button type="button" onclick="document.getElementById('chatFile').click()" class="w-11 h-11 shrink-0 rounded-xl modal-glass border border-slate-300 text-slate-600 flex items-center justify-center" aria-label="Прикрепить файл"><i class="fa-solid fa-paperclip"></i></button>
           <input type="text" id="chatInput" placeholder="Сообщение..." class="flex-grow min-w-0 p-3 rounded-xl modal-glass border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-gornyak-700">
-          <button type="submit" class="w-11 h-11 shrink-0 bg-gornyak-700 hover:bg-gornyak-800 text-white rounded-xl shadow" aria-label="Отправить"><i class="fa-solid fa-paper-plane"></i></button>
+          <button type="submit" class="w-11 h-11 shrink-0 bg-gornyak-700 hover:bg-gornyak-800 text-white rounded-xl shadow flex items-center justify-center" aria-label="Отправить"><i class="fa-solid fa-paper-plane"></i></button>
         </form>
       </div>
     </div>
@@ -318,7 +331,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <!-- ТРАНСПОРТ -->
   <section id="page-transport" class="page-section container mx-auto px-4 py-8 max-w-3xl">
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4 modal-glass border p-4 rounded-2xl shadow-sm">
-      <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2"><i class="fa-solid fa-bus text-gornyak-700"></i> Транспорт и расписание</h2>
+      <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2.5"><i class="fa-solid fa-bus text-gornyak-700"></i> Транспорт и расписание</h2>
       <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
     </div>
     <div class="modal-glass rounded-3xl border border-slate-200 shadow-xl p-4 space-y-4">
@@ -369,7 +382,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <section id="page-contact-form" class="page-section container mx-auto px-4 py-8 max-w-xl">
     <div class="modal-glass p-6 rounded-3xl shadow-xl border border-slate-200 space-y-4">
       <div class="flex flex-wrap justify-between items-center gap-2 border-b pb-3 modal-glass -mx-6 -mt-6 p-6 rounded-t-3xl border-slate-200">
-        <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2"><i class="fa-solid fa-envelope-open-text text-gornyak-700"></i> Написать нам</h2>
+        <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2.5"><i class="fa-solid fa-envelope-open-text text-gornyak-700"></i> Написать нам</h2>
         <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
       </div>
       <form onsubmit="submitContact(event)" class="space-y-3 pt-2">
@@ -387,8 +400,8 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   <section id="page-register" class="page-section container mx-auto px-4 py-10 max-w-md">
     <div class="modal-glass p-6 rounded-3xl shadow-2xl border border-slate-200">
       <div class="flex flex-wrap justify-between items-center gap-2 mb-4 modal-glass -mx-6 -mt-6 p-6 rounded-t-3xl border-b border-slate-200">
-        <h2 class="text-xl font-black text-slate-900 flex items-center gap-2"><i class="fa-solid fa-user-plus text-gornyak-700"></i> Регистрация</h2>
-        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">На главную</button>
+        <h2 class="text-xl font-black text-slate-900 flex items-center gap-2.5"><i class="fa-solid fa-user-plus text-gornyak-700"></i> Регистрация</h2>
+        <button onclick="navigateTo('home')" class="text-xs text-gornyak-700 font-bold underline">← На главную</button>
       </div>
       <form onsubmit="handleRegister(event)" class="space-y-3">
         <div>
@@ -554,7 +567,7 @@ const NAV=[
   ['home','fa-house','Главная',''],
   ['articles','fa-book-open','Статьи','theme-articles'],
   ['announcements','fa-bullhorn','Новости','theme-news'],
-  ['documents','fa-folder','Документы',''],
+  ['documents','fa-folder','Документы','theme-docs'],
   ['estimates','fa-coins','Сметы','theme-estimates'],
   ['transport','fa-bus','Транспорт',''],
   ['contacts','fa-phone','Контакты',''],
@@ -592,7 +605,7 @@ function openNotifModal(){const n=LS.get('gornyak_notifications',[]);$('notifCon
 function closeNotifModal(){hide('notifModal')}
 function clearNotifications(){localStorage.removeItem('gornyak_notifications');updateNotifBadge();openNotifModal()}
 
-// ---------- Настройки (живой предпросмотр блюра и прозрачности) ----------
+// ---------- Настройки ----------
 const DEF={font:16,blur:25,op:94,ic:'m'};
 function applyUI(o){
   const r=document.documentElement;
@@ -622,7 +635,7 @@ function resetSettings(){draft={...DEF};applyUI(draft);syncSettings()}
 
 // ---------- Навигация ----------
 function renderNav(){
-  const mk=(m,mob)=>`<button onclick="navigateTo('${m[0]}')" class="relative shrink-0 flex flex-col items-center gap-0.5 ${mob?'min-w-[64px] px-2 py-2':''} ${curPage===m[0]?(m[3]||'text-gornyak-800 font-bold'):'text-slate-600'} hover:text-gornyak-700 transition"><i class="fa-solid ${m[1]} ${mob?'text-base':'text-sm'}"></i>${m[2]}${m[0]==='chat'?'<span class="chatBadge hidden absolute -top-0.5 right-2 bg-red-600 text-white text-[9px] font-black min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center"></span>':''}</button>`;
+  const mk=(m,mob)=>`<button onclick="navigateTo('${m[0]}')" class="relative shrink-0 flex flex-col items-center gap-0.5 ${mob?'min-w-[60px] px-2 py-1.5':'px-2 py-1'} ${curPage===m[0]?(m[3]||'text-gornyak-800 font-bold'):'text-slate-600'} hover:text-gornyak-700 transition whitespace-nowrap"><i class="fa-solid ${m[1]} ${mob?'text-sm':'text-xs'}"></i>${m[2]}${m[0]==='chat'?'<span class="chatBadge hidden absolute -top-0.5 right-1 bg-red-600 text-white text-[8px] font-black min-w-[14px] h-3.5 px-0.5 rounded-full flex items-center justify-center"></span>':''}</button>`;
   $('desktopNav').innerHTML=NAV.map(m=>mk(m,0)).join('');
   $('mobNav').innerHTML=NAV.map(m=>mk(m,1)).join('');
   updateChatBadge();
@@ -663,7 +676,7 @@ $('tileGrid').addEventListener('drop',e=>{const t=e.target.closest('.tile');if(!
 // ---------- Списки ----------
 const own=it=>me()&&it.author===myId();
 function itemBtns(type,it){const b='w-8 h-8 rounded-lg modal-glass text-slate-600 text-xs flex items-center justify-center';return `<div class="flex gap-1 shrink-0"><button class="${b}" data-a="share" data-t="${type}" data-title="${esc(it.title)}" aria-label="Поделиться"><i class="fa-solid fa-share-nodes"></i></button>${own(it)?`<button class="${b}" data-a="edit" data-t="${type}" data-i="${it.id}" aria-label="Изменить"><i class="fa-solid fa-pen"></i></button><button class="w-8 h-8 rounded-lg bg-red-100 text-red-700 text-xs flex items-center justify-center" data-a="del" data-t="${type}" data-i="${it.id}" aria-label="Удалить"><i class="fa-solid fa-trash"></i></button>`:''}</div>`}
-const card=(type,it,badge)=>`<div class="modal-glass p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between gap-3"><div><span class="text-[10px] ${badge} font-bold px-2.5 py-1 rounded-md">${esc(it.date)}</span><h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${esc(it.title)}</h3><p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${esc(it.text)}</p>${it.fileData&&it.fileData.startsWith('data:image')?`<img src="${it.fileData}" class="rounded-xl mt-2 max-h-48" alt="">`:it.file?`<button data-a="dl" data-t="${type}" data-i="${it.id}" class="mt-2 text-xs font-bold text-gornyak-700 underline">📎 ${esc(it.file)}</button>`:''}</div><div class="flex items-center justify-between gap-2"><span class="text-[10px] text-slate-400 truncate">${esc(it.authorName||'')}</span>${itemBtns(type,it)}</div></div>`;
+const card=(type,it,badge)=>`<div class="modal-glass p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between gap-3"><div><span class="text-[10px] ${badge} font-bold px-2.5 py-1 rounded-md">${esc(it.date)}</span><h3 class="font-bold text-slate-900 text-base mt-2 mb-1">${esc(it.title)}</h3><p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">${esc(it.text)}</p>${it.fileData&&it.fileData.startsWith('data:image')?`<img src="${it.fileData}" class="rounded-xl mt-2 max-h-48" alt="">`:it.file?`<button data-a="dl" data-t="${type}" data-i="${it.id}" class="mt-2 text-xs font-bold text-gornyak-700 underline"><i class="fa-solid fa-paperclip"></i> ${esc(it.file)}</button>`:''}</div><div class="flex items-center justify-between gap-2"><span class="text-[10px] text-slate-400 truncate">${esc(it.authorName||'')}</span>${itemBtns(type,it)}</div></div>`;
 const row=(type,it,btn)=>`<div class="modal-glass p-4 rounded-2xl border border-slate-200 flex flex-wrap justify-between items-center gap-2 shadow-sm"><div class="min-w-0"><h4 class="font-bold text-slate-900 text-sm">${esc(it.title)}</h4><p class="text-xs text-slate-500">${esc(it.desc||'')}</p><p class="text-[10px] text-slate-400">${esc(it.authorName||'')}</p></div><div class="flex items-center gap-2"><button data-a="dl" data-t="${type}" data-i="${it.id}" class="px-3 py-2 ${btn} rounded-xl font-bold text-xs">Скачать</button>${itemBtns(type,it)}</div></div>`;
 function renderLists(){$('articlesList').innerHTML=db.articles.map(a=>card('articles',a,'text-gornyak-700 bg-gornyak-50')).join('');$('newsList').innerHTML=db.news.map(n=>card('news',n,'text-purple-700 bg-purple-50')).join('');$('documentsList').innerHTML=db.documents.map(d=>row('documents',d,'bg-sky-100 text-sky-900')).join('');$('estimatesList').innerHTML=db.estimates.map(d=>row('estimates',d,'bg-amber-100 text-amber-900')).join('')}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const{a,t,i}=b.dataset;if(a==='share')shareIt(b.dataset.title,PAGEOF[t]);if(a==='edit')openAddModal(t,+i);if(a==='del')delItem(t,+i);if(a==='dl')downloadItem(t,+i)});
@@ -688,7 +701,7 @@ function markRead(){const r=LS.get(readKey(),{});r[curDlg]=Date.now();LS.set(rea
 function updateChatBadge(){const n=dialogs().reduce((s,d)=>s+unread(d.id),0);document.querySelectorAll('.chatBadge').forEach(b=>{b.textContent=n>99?'99+':n;b.classList.toggle('hidden',!n)});}
 const fmt=ts=>new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 function msgHtml(m){const mine=me()&&m.from===myId();
- const files=(m.files||[]).map(f=>{const ok=f.data&&f.data.startsWith('data:');if(ok&&(f.type||'').startsWith('image/'))return `<img src="${f.data}" class="rounded-xl max-h-48 mt-1" alt="${esc(f.name)}">`;if(ok&&(f.type||'').startsWith('video/'))return `<video src="${f.data}" controls class="rounded-xl max-h-48 mt-1"></video>`;return ok?`<a href="${f.data}" download="${esc(f.name)}" class="block mt-1 font-bold text-gornyak-700 underline">📎 ${esc(f.name)}</a>`:`<span class="block mt-1 text-slate-400">📎 ${esc(f.name)} (не сохранён: больше 1,5 МБ)</span>`}).join('');
+ const files=(m.files||[]).map(f=>{const ok=f.data&&f.data.startsWith('data:');if(ok&&(f.type||'').startsWith('image/'))return `<img src="${f.data}" class="rounded-xl max-h-48 mt-1" alt="${esc(f.name)}">`;if(ok&&(f.type||'').startsWith('video/'))return `<video src="${f.data}" controls class="rounded-xl max-h-48 mt-1"></video>`;return ok?`<a href="${f.data}" download="${esc(f.name)}" class="block mt-1 font-bold text-gornyak-700 underline"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)}</a>`:`<span class="block mt-1 text-slate-400"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)} (не сохранён)</span>`}).join('');
  const acts=!me()||m.delAll?'':`<div class="flex gap-3 mt-1 text-[10px] text-slate-500">${mine?`<button data-act="edit" data-id="${m.id}">Изменить</button>`:''}<button data-act="me" data-id="${m.id}">Удалить у меня</button>${mine?`<button data-act="all" data-id="${m.id}">Удалить у всех</button>`:''}</div>`;
  return `<div class="p-3 rounded-xl border text-xs ${mine?'bg-green-50 border-green-200 ml-6':'modal-glass border-slate-200 mr-6'}"><div class="flex justify-between gap-2 font-bold text-gornyak-800 mb-0.5"><span>${esc(m.fromName)}</span><span class="text-[9px] text-slate-400">${fmt(m.ts)}${m.edited?' · изм.':''}</span></div>${m.delAll?'<i class="text-slate-400">Сообщение удалено</i>':`<div class="text-slate-700 whitespace-pre-wrap break-words">${esc(m.text)}</div>${files}`}${acts}</div>`}
 function renderChat(){const ds=dialogs();if(!ds.find(d=>d.id===curDlg))curDlg='general';if(curPage==='chat')markRead();
@@ -705,7 +718,7 @@ $('chatMessages').addEventListener('click',e=>{const b=e.target.closest('[data-a
 function cancelEdit(){editingMsg=null;$('chatInput').value='';$('chatEditBar').classList.add('hidden');$('chatEditBar').classList.remove('flex')}
 function pickFiles(inp){[...inp.files].forEach(f=>{if(f.size>1.5*1048576){pending.push({name:f.name,type:f.type,data:null});renderPending();return}const r=new FileReader();r.onload=()=>{pending.push({name:f.name,type:f.type,data:r.result});renderPending()};r.readAsDataURL(f)});inp.value=''}
 function rmPending(i){pending.splice(i,1);renderPending()}
-function renderPending(){const p=$('chatPending');p.classList.toggle('hidden',!pending.length);p.classList.toggle('flex',!!pending.length);p.innerHTML=pending.map((f,i)=>`<span class="modal-glass border border-slate-300 rounded-lg px-2 py-1">📎 ${esc(f.name)} <button type="button" onclick="rmPending(${i})" class="font-bold ml-1">✕</button></span>`).join('')}
+function renderPending(){const p=$('chatPending');p.classList.toggle('hidden',!pending.length);p.classList.toggle('flex',!!pending.length);p.innerHTML=pending.map((f,i)=>`<span class="modal-glass border border-slate-300 rounded-lg px-2 py-1"><i class="fa-solid fa-paperclip"></i> ${esc(f.name)} <button type="button" onclick="rmPending(${i})" class="font-bold ml-1">✕</button></span>`).join('')}
 function sendChatMessage(e){e.preventDefault();if(!me()){toast('Войдите в профиль, чтобы писать в чат');navigateTo('auth');return}const t=$('chatInput').value.trim();
  if(editingMsg){const m=(db.chat[curDlg]||[]).find(x=>x.id===editingMsg);if(m&&m.from===myId()&&t){m.text=t;m.edited=true}cancelEdit();saveChat();return}
  if(!t&&!pending.length)return;const u=me();(db.chat[curDlg]=db.chat[curDlg]||[]).push({id:Date.now(),from:u.email,fromName:u.name||u.email,text:t,ts:Date.now(),files:pending,delFor:[]});pending=[];$('chatInput').value='';renderPending();markRead();saveChat()}
@@ -713,7 +726,7 @@ function sendChatMessage(e){e.preventDefault();if(!me()){toast('Войдите �
 // ---------- Профиль, регистрация ----------
 async function sha(x){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(x));return[...new Uint8Array(b)].map(v=>v.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(x)))}}
 function loginAs(u){LS.set('gornyak_user',{email:u.email,name:u.name,plot:u.plot,phone:u.phone});addNotification('Вход: '+u.email);refreshUserUI()}
-function refreshUserUI(){const u=me();$('regBtn').textContent=u?((u.name||u.email).split(' ')[0]).slice(0,10):'Регистрация';renderAll();renderNav()}
+function refreshUserUI(){const u=me();renderAll();renderNav()}
 function regErr(m){const e=$('regErr');e.textContent=m;e.classList.remove('hidden')}
 async function handleRegister(e){e.preventDefault();const g=id=>$(id).value.trim(),email=g('regEmail').toLowerCase(),pw=$('regPass').value;if(pw.length<6)return regErr('Пароль — не менее 6 символов');if(users().some(u=>u.email===email))return regErr('Этот email уже зарегистрирован');
  const u={email,name:g('regName'),plot:g('regPlot'),phone:g('regPhone'),hash:await sha(pw)};LS.set('gornyak_users',[...users(),u]);loginAs(u);toast('Регистрация завершена');navigateTo('home')}
