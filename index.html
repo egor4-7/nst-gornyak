@@ -1075,6 +1075,7 @@
 
         // --- НОВОСТИ ---
         function openCreateNewsModal() { if (!currentUser()) { closeModal(); showToast('Войдите в профиль, чтобы публиковать'); openProfileAuthModal(); return; }
+            if (!isAdminUser()) { closeModal(); showToast('Новости публикует правление'); return; }
             document.getElementById('newsWarning').classList.toggle('hidden', !!currentUser());
             show('createNewsModal');
         }
@@ -1104,15 +1105,15 @@
         }
         function downloadNewsFile(id) {
             const n = lsGet('gornyak_news_db', []).find(x => x.id === id); if (!n || !n.data) return;
-            dlFile(n.data, n.fileName || 'file');
+            openItemFile(n, n.fileName || 'file');
         }
         function openNewsModal() {
             const list = lsGet('gornyak_news_db', []);
             const items = list.length ? list.map(n => {
                 const meta = [n.date, n.author].filter(Boolean).join(' · ');
-                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${n.data ? `<div class="mt-2 text-[0.6875rem] font-bold text-gray-600"><i class="fa-solid fa-paperclip"></i> ${esc(n.fileName || 'Файл')} · ${Math.max(1, Math.round((n.size || 0) / 1024))} КБ</div>` : ''}<div class="flex flex-wrap gap-2 mt-2">${n.data ? miniBtn('news-dl', n.id, 'fa-download', 'Скачать', BTN_ADD) : ''}${miniBtn('news-share', n.id, 'fa-share-nodes', 'Поделиться', BTN_EDIT)}${isOwner(n) ? miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT) + miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL) : ''}</div></div>`;
+                return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2">${meta ? `<div class="text-[0.625rem] font-bold text-gray-500">${esc(meta)}</div>` : ''}<div class="font-extrabold text-sm text-gray-900">${esc(n.title)}</div>${n.desc ? `<div class="text-sm font-medium text-gray-700 whitespace-pre-line mt-0.5">${esc(n.desc)}</div>` : ''}${n.data ? `<div class="mt-2 text-[0.6875rem] font-bold text-gray-600"><i class="fa-solid fa-paperclip"></i> ${esc(n.fileName || 'Файл')} ${n.size ? ' · ' + Math.max(1, Math.round(n.size / 1024)) + ' КБ' : ''}</div>` : ''}<div class="flex flex-wrap gap-2 mt-2">${n.data ? miniBtn('news-dl', n.id, 'fa-download', 'Скачать', BTN_ADD) : ''}${miniBtn('news-share', n.id, 'fa-share-nodes', 'Поделиться', BTN_EDIT)}${isOwner(n) ? miniBtn('news-edit', n.id, 'fa-pen', 'Редактировать', BTN_EDIT) + miniBtn('news-del', n.id, 'fa-trash', 'Удалить', BTN_DEL) : ''}</div></div>`;
             }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Новостей пока нет.</div>`;
-            openRichSection('Новости СНТ', toolbar(bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD)) + items);
+            openRichSection('Новости СНТ', (isAdminUser() ? toolbar(bigBtn('news-add', 'fa-plus', 'Добавить новость', BTN_ADD)) : '') + items);
         }
         async function delNews(id) {
             if (!(await askConfirm('Удалить новость?', 'Удалить'))) return;
@@ -1122,6 +1123,7 @@
 
         // --- ДОКУМЕНТЫ ---
         function openCreateDocModal() { if (!currentUser()) { closeModal(); showToast('Войдите в профиль, чтобы публиковать'); openProfileAuthModal(); return; }
+            if (!isMemberUser()) { closeModal(); showToast('Загружать документы могут члены НСТ, подтверждённые правлением'); return; }
             document.getElementById('docWarning').classList.toggle('hidden', !!currentUser());
             show('createDocModal');
         }
@@ -1147,15 +1149,15 @@
         function openDocsModal() {
             const list = lsGet('gornyak_docs_db', []);
             const items = list.length ? list.map(d => {
-                const meta = d.data ? [d.date, Math.max(1, Math.round(d.size / 1024)) + ' КБ'].filter(Boolean).join(' · ') : 'Файл не прикреплён';
+                const meta = d.data ? [d.date, d.size ? Math.max(1, Math.round(d.size / 1024)) + ' КБ' : ''].filter(Boolean).join(' · ') : 'Файл не прикреплён';
                 const dl = d.data ? miniBtn('doc-dl', d.id, 'fa-download', 'Скачать', BTN_ADD) : '';
                 return `<div class="bg-white/90 border border-gray-200 rounded-2xl p-3 mb-2"><div class="font-extrabold text-sm text-gray-900 break-words">${esc(d.name)}</div><div class="text-[0.625rem] text-gray-500 font-bold">${esc(meta)}</div><div class="flex flex-wrap gap-2 mt-2">${dl}${miniBtn('doc-share', d.id, 'fa-share-nodes', 'Поделиться', BTN_EDIT)}${isOwner(d) ? miniBtn('doc-edit', d.id, 'fa-pen', 'Редактировать', BTN_EDIT) + miniBtn('doc-del', d.id, 'fa-trash', 'Удалить', BTN_DEL) : ''}</div></div>`;
-            }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">Документов пока нет.</div>`;
-            openRichSection('Документы', toolbar(bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD)) + items);
+            }).join('') : `<div class="text-center text-sm text-gray-500 font-bold py-4">${currentUser() ? 'Документов пока нет.' : 'Документы доступны членам НСТ. Войдите в профиль.'}</div>`;
+            openRichSection('Документы', (isMemberUser() ? toolbar(bigBtn('doc-add', 'fa-paperclip', 'Добавить файл', BTN_ADD)) : '') + items);
         }
         function downloadDoc(id) {
             const d = lsGet('gornyak_docs_db', []).find(x => x.id === id); if (!d || !d.data) return;
-            dlFile(d.data, d.fileName || d.name);
+            openItemFile(d, d.fileName || d.name);
         }
         async function delDoc(id) {
             if (!(await askConfirm('Удалить документ?', 'Удалить'))) return;
@@ -1360,6 +1362,7 @@
             updateChatBar(); renderChatNicks(); renderChatMessages(true);
         }
         function openChatModal() { if (!currentUser()) { showToast('Войдите в профиль, чтобы общаться в чате'); openProfileAuthModal(); return; }
+            if (!isMemberUser()) { showToast(CLOUD.me ? 'Чат откроется после подтверждения профиля правлением' : 'Проверяем профиль… повторите через пару секунд'); loadCloud(); return; }
             show('chatModal');
             chatState.menuId = null; updateChatBar();
             renderChatNicks(); renderChatMessages(true);
@@ -1415,20 +1418,20 @@
         function closeProfileModal() { hide('profileModal'); }
         async function logout() {
             try { sb && await sb.auth.signOut(); } catch (e) {}
-            localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache();
-            closeProfileModal(); renderCards(); showToast('Вы вышли из аккаунта');
+            localStorage.removeItem('gornyak_user'); CLOUD.chat = []; CLOUD.me = null; saveCache();
+            closeProfileModal(); renderCards(); showToast('Вы вышли из аккаунта'); loadCloud();
         }
         async function deleteAccount() {
             if (!(await askConfirm('Вы точно хотите удалить профиль? База данных будет удалена безвозвратно', 'Удалить', 'Отменить'))) return;
             const { error } = sb ? await sb.rpc('delete_my_account') : { error: { message: 'нет связи' } };
             if (error) { showToast('Не удалось удалить: ' + error.message); return; }
             try { await sb.auth.signOut(); } catch (e) {}
-            localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache();
+            localStorage.removeItem('gornyak_user'); CLOUD.chat = []; CLOUD.me = null; saveCache();
             closeProfileModal(); showToast('Профиль удалён'); renderCards(); loadCloud();
         }
     
         // ===== ВЛАДЕЛЕЦ ЗАПИСИ =====
-        const isOwner = it => { const u = currentUser(); return !!(u && it && it.uid && it.uid === (u.id || u.email)); };
+        const isOwner = it => { const u = currentUser(); return !!(u && it && ((it.uid && it.uid === (u.id || u.email)) || isAdminUser())); };
         const ownerOk = (k, id) => { if (isOwner(lsGet(k, []).find(x => x.id === id))) return true; showToast('Изменять запись может только её автор'); return false; };
 
         // ===== УДАЛИТЬ ФАЙЛ =====
@@ -1648,32 +1651,53 @@
             if (!ok) showToast('Сервер пока недоступен');
         }
         const CK = { gornyak_news_db: 'news', gornyak_docs_db: 'docs', gornyak_real_chat: 'chat' };
-        const CLOUD = { news: [], docs: [], chat: [], profiles: {}, ready: false, pending: 0 };
-        const TBL = { news: 'news', docs: 'docs', chat: 'messages' };
-        function saveCache() { try { localStorage.setItem('gornyak_cloud_cache', JSON.stringify({ news: CLOUD.news, docs: CLOUD.docs, chat: CLOUD.chat, profiles: CLOUD.profiles })); } catch (e) {} }
-        try { const c = JSON.parse(localStorage.getItem('gornyak_cloud_cache')); if (c) { CLOUD.news = c.news || []; CLOUD.docs = c.docs || []; CLOUD.chat = c.chat || []; CLOUD.profiles = c.profiles || {}; } } catch (e) {}
+        const CLOUD = { news: [], docs: [], chat: [], profiles: {}, me: null, ready: false, pending: 0 };
+        const TBL = { news: 'posts', docs: 'posts', chat: 'messages' };
+        const KIND = { news: 'news', docs: 'documents' };
+        const bucketOf = vis => vis === 'public' ? 'public-files' : 'member-files';
+        const isAdminUser = () => !!(CLOUD.me && CLOUD.me.is_admin);
+        const isMemberUser = () => !!(CLOUD.me && (CLOUD.me.approved || CLOUD.me.is_admin));
+        const hhmm = ts => new Date(ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        function saveCache() { try { localStorage.setItem('gornyak_cloud_cache2', JSON.stringify({ news: CLOUD.news, docs: CLOUD.docs, chat: CLOUD.chat, profiles: CLOUD.profiles, me: CLOUD.me })); } catch (e) {} }
+        try { const c = JSON.parse(localStorage.getItem('gornyak_cloud_cache2')); if (c) { CLOUD.news = c.news || []; CLOUD.docs = c.docs || []; CLOUD.chat = c.chat || []; CLOUD.profiles = c.profiles || {}; CLOUD.me = c.me || null; } } catch (e) {}
 
         function applySession(session) {
             if (!session) { localStorage.removeItem('gornyak_user'); return; }
             const u = session.user, md = u.user_metadata || {};
             lsSet('gornyak_user', { id: u.id, email: u.email, name: md.name || '', plot: md.plot || '' });
         }
-        const fromRow = (k, r) => k === 'chat'
-            ? { id: r.id, uid: r.uid, author: r.author, text: r.body, room: r.room, replyTo: r.reply_to, ts: r.ts, time: r.sent_time || '', edited: !!r.edited }
-            : { id: r.id, uid: r.uid, date: r.pub_date || '', author: r.author || '', fileName: r.file_name || '', size: r.size || 0, data: r.file_url || '', ...(k === 'news' ? { title: r.title, desc: r.descr || '' } : { name: r.name }) };
-        async function toRow(k, n) {
-            if (k === 'chat') return { id: n.id, uid: n.uid, author: n.author, body: n.text, room: n.room || 'general', reply_to: n.replyTo || null, ts: n.ts || Date.now(), sent_time: n.time || '', edited: !!n.edited };
-            let url = n.data || '';
-            if (url.startsWith('data:')) {
-                const ext = ((n.fileName || 'f').split('.').pop() || 'bin').replace(/[^a-z0-9]/gi, '').slice(0, 8) || 'bin';
-                const path = n.uid + '/' + Date.now() + '.' + ext;
-                const blob = await (await fetch(url)).blob();
-                const up = await sb.storage.from('files').upload(path, blob, { contentType: blob.type || 'application/octet-stream' });
-                if (up.error) throw up.error;
-                url = sb.storage.from('files').getPublicUrl(path).data.publicUrl;
+        const fromRow = (k, r) => {
+            if (k === 'chat') {
+                const ts = r.ts || Date.parse(r.created_at);
+                return { id: r.cid || ('s' + r.id), uid: r.author_id, author: r.author_name || 'Садовод', text: r.body || '', room: r.dialog || 'general', replyTo: r.reply_to || null, ts, time: r.sent_time || hhmm(ts), edited: !!r.edited };
             }
-            const base = { id: n.id, uid: n.uid, pub_date: n.date || '', author: n.author || '', file_name: n.fileName || '', size: n.size || 0, file_url: url };
-            return k === 'news' ? { ...base, title: n.title, descr: n.desc || '' } : { ...base, name: n.name };
+            const base = { id: String(r.id), uid: r.author_id, vis: r.visibility, date: new Date(r.created_at).toLocaleDateString('ru-RU'), author: r.author_name || '', fileName: r.file_name || '', size: 0, data: r.file_path || '' };
+            return k === 'news' ? { ...base, title: r.title, desc: r.body || '' } : { ...base, name: r.title };
+        };
+        async function toRow(k, n) {
+            if (k === 'chat') return { cid: n.id, dialog: n.room || 'general', body: n.text, reply_to: n.replyTo || null, ts: n.ts || Date.now(), sent_time: n.time || '', edited: !!n.edited, author_name: n.author };
+            const vis = n.vis || (k === 'news' ? 'public' : 'members');
+            let path = n.data || '';
+            if (path.startsWith('data:')) {
+                const safe = (n.fileName || 'file').replace(/[^\w.\-]+/g, '_');
+                const blob = await (await fetch(path)).blob();
+                path = n.uid + '/' + Date.now() + '_' + safe;
+                const up = await sb.storage.from(bucketOf(vis)).upload(path, blob, { contentType: blob.type || 'application/octet-stream' });
+                if (up.error) throw up.error;
+            }
+            return { kind: KIND[k], title: k === 'news' ? n.title : n.name, body: k === 'news' ? (n.desc || '') : '', visibility: vis, file_name: n.fileName || null, file_path: path || null, author_name: n.author || '' };
+        }
+        async function itemUrl(it) {
+            if (!it || !it.data) return null;
+            if (it.data.startsWith('data:')) return it.data;
+            const b = bucketOf(it.vis);
+            if (b === 'public-files') return sb.storage.from(b).getPublicUrl(it.data).data.publicUrl;
+            const { data, error } = await sb.storage.from(b).createSignedUrl(it.data, 300);
+            if (error) throw error;
+            return data.signedUrl;
+        }
+        async function openItemFile(it, name) {
+            try { const u = await itemUrl(it); if (u) dlFile(u, name); } catch (e) { showToast('Нет доступа к файлу'); }
         }
         function cloudSet(k, list) {
             const old = CLOUD[k]; CLOUD[k] = list; saveCache();
@@ -1684,8 +1708,24 @@
             CLOUD.pending++;
             try {
                 const ids = new Set(newL.map(x => x.id)), om = new Map(oldL.map(x => [x.id, x]));
-                for (const o of oldL) if (!ids.has(o.id)) { const r = await sb.from(TBL[k]).delete().eq('id', o.id); if (r.error) throw r.error; }
-                for (const n of newL) { const o = om.get(n.id); if (!o || JSON.stringify(o) !== JSON.stringify(n)) { const r = await sb.from(TBL[k]).upsert(await toRow(k, n)); if (r.error) throw r.error; } }
+                for (const o of oldL) if (!ids.has(o.id)) {
+                    let r;
+                    if (k === 'chat') r = await sb.from('messages').update({ deleted: true, body: '' }).eq('cid', o.id);
+                    else {
+                        r = await sb.from('posts').delete().eq('id', Number(o.id));
+                        if (!r.error && o.data && !o.data.startsWith('data:')) sb.storage.from(bucketOf(o.vis)).remove([o.data]);
+                    }
+                    if (r.error) throw r.error;
+                }
+                for (const n of newL) {
+                    const o = om.get(n.id);
+                    if (o && JSON.stringify(o) === JSON.stringify(n)) continue;
+                    const row = await toRow(k, n); let r;
+                    if (!o) r = await sb.from(TBL[k]).insert(row);
+                    else if (k === 'chat') { const { cid, dialog, ...upd } = row; r = await sb.from('messages').update(upd).eq('cid', n.id); }
+                    else { const { kind, visibility, author_name, ...upd } = row; r = await sb.from('posts').update(upd).eq('id', Number(n.id)); }
+                    if (r.error) throw r.error;
+                }
             } catch (e) { showToast('Не удалось сохранить на сервере: ' + (e.message || e)); }
             CLOUD.pending--; loadCloud();
         }
@@ -1693,18 +1733,23 @@
             if (!sb) return false;
             if (CLOUD.pending > 0) return CLOUD.ready;
             try {
-                const [n, d, p] = await Promise.all([
-                    sb.from('news').select('*').order('created_at', { ascending: false }),
-                    sb.from('docs').select('*').order('created_at', { ascending: false }),
-                    sb.from('profiles').select('*')]);
-                if (n.error || d.error) throw (n.error || d.error);
-                CLOUD.news = n.data.map(r => fromRow('news', r));
-                CLOUD.docs = d.data.map(r => fromRow('docs', r));
-                if (p.data) CLOUD.profiles = Object.fromEntries(p.data.map(r => [r.id, { name: r.name, plot: r.plot }]));
-                if (currentUser()) {
-                    const m = await sb.from('messages').select('*').order('ts', { ascending: false }).limit(500);
-                    if (m.data) CLOUD.chat = m.data.reverse().map(r => fromRow('chat', r));
-                } else CLOUD.chat = [];
+                const user = currentUser();
+                const [po, pr] = await Promise.all([
+                    sb.from('posts').select('*').order('created_at', { ascending: false }),
+                    user ? sb.rpc('nst_members') : Promise.resolve({ data: null })]);
+                if (po.error) throw po.error;
+                CLOUD.news = po.data.filter(r => r.kind === 'news').map(r => fromRow('news', r));
+                CLOUD.docs = po.data.filter(r => r.kind === 'documents').map(r => fromRow('docs', r));
+                if (!user) CLOUD.profiles = {};
+                else if (pr.data) CLOUD.profiles = Object.fromEntries(pr.data.map(r => [r.id, { name: r.name }]));
+                if (user) {
+                    const me = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+                    CLOUD.me = { approved: !!(me.data && me.data.approved), is_admin: !!(me.data && me.data.is_admin) };
+                    if (isMemberUser()) {
+                        const m = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(500);
+                        if (m.data) CLOUD.chat = m.data.filter(r => !r.deleted).reverse().map(r => fromRow('chat', r));
+                    } else CLOUD.chat = [];
+                } else { CLOUD.me = null; CLOUD.chat = []; }
                 CLOUD.ready = true; saveCache(); refreshViews(); setNet(true);
                 return true;
             } catch (e) {
@@ -1732,7 +1777,7 @@
                 started = true;
                 try { const { data } = await sb.auth.getSession(); if (data.session) applySession(data.session); else if (navigator.onLine) applySession(null); } catch (e) {}
                 sb.auth.onAuthStateChange((ev, session) => {
-                    if (ev === 'SIGNED_OUT') { localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache(); }
+                    if (ev === 'SIGNED_OUT') { localStorage.removeItem('gornyak_user'); CLOUD.chat = []; CLOUD.me = null; saveCache(); }
                     else if (session && ev !== 'INITIAL_SESSION') applySession(session);
                 });
                 renderCards();
