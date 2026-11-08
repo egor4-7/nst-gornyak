@@ -114,7 +114,10 @@
         .ic[data-istyle="round"]::before { content: ""; position: absolute; left: 20%; top: 20%; width: 56%; height: 56%; border-radius: 38%; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: .35; z-index: 1; }
 
         .cards-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; grid-auto-rows: minmax(var(--u, 52px), auto); grid-auto-flow: row dense; }
-        .cards-grid > .portal-card { min-height: 0; }
+        .cards-grid > .portal-card { min-height: 0; align-items: center; }
+        .portal-card .card-body { margin: auto 0; }
+        .ic-fit { width: min(var(--icon-w, 44px), calc(var(--u, 52px) * .62)) !important; height: min(var(--icon-h, 44px), calc(var(--u, 52px) * .62)) !important; font-size: calc(min(var(--icon-w, 44px), calc(var(--u, 52px) * .62)) * .36) !important; }
+        .card-title-xs { font-size: .625rem !important; line-height: 1.1; word-break: break-word; hyphens: auto; }
         .resize-handle { position: absolute; right: 8px; bottom: 8px; width: 26px; height: 26px; border-right: 5px solid #1c5c38; border-bottom: 5px solid #1c5c38; border-radius: 0 0 12px 0; touch-action: none; cursor: nwse-resize; z-index: 30; }
         .is-editing.resizing { animation: none; }
         .tb { min-width: 36px; height: 36px; border-radius: 9999px; background: rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 800; color: #fff; padding: 0 10px; }
@@ -239,9 +242,9 @@
         <div id="editModeBar" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 bg-black/85 backdrop-blur-md px-2.5 py-2 rounded-full shadow-2xl z-50 items-center gap-1.5 max-w-[96vw]">
             <button class="tb" onclick="moveSelected(-1)" title="Выше"><i class="fa-solid fa-arrow-up"></i></button>
             <button class="tb" onclick="moveSelected(1)" title="Ниже"><i class="fa-solid fa-arrow-down"></i></button>
-            <button class="tb" onclick="presetSelected('S')" title="Малый квадрат">S</button>
-            <button class="tb" onclick="presetSelected('M')" title="Средний квадрат">M</button>
-            <button class="tb" onclick="presetSelected('L')" title="Большой квадрат">L</button>
+            <button class="tb" onclick="presetSelected('S')" title="Малый квадрат 1×1">S</button>
+            <button class="tb" onclick="presetSelected('M')" title="Средний 4×2">M</button>
+            <button class="tb" onclick="presetSelected('L')" title="Большой квадрат 3×3">L</button>
             <button class="tb" onclick="presetSelected('A')" title="Сбросить размер">Авто</button>
             <button class="tb tb-ok" onclick="exitEditMode()">Готово</button>
         </div>
@@ -674,6 +677,7 @@
             box.innerHTML = cards.map(c => {
                 const narrow = c.cw <= 3;
                 const tiny = c.cw <= 2 && c.ch <= 2;
+                const micro = c.cw === 1;
                 const sel = isEditingMode && selectedCardId === c.id;
                 const style = `grid-column:span ${c.cw};grid-row:span ${c.ch};` + (sel ? 'outline:3px solid #2563eb;outline-offset:2px;' : '');
                 const mk = (fn, icon, label, cls) => `<button onclick="${fn}()" class="${narrow ? '' : 'flex-1 sm:flex-none '}py-1.5 px-3 bg-white/60 hover:bg-white/90 rounded-xl ${cls} text-[0.6875rem] font-extrabold shadow-sm border flex items-center justify-center gap-1.5 backdrop-blur-md transition"><i class="fa-solid ${icon} text-[0.625rem]"></i>${narrow ? '' : ' ' + label}</button>`;
@@ -684,11 +688,11 @@
                 else if (c.hasEditButtons && currentUser()) btns = mk('openAboutEdit', 'fa-pen', 'Редактировать', 'text-blue-900 border-blue-300');
                 const extra = (btns && !tiny)
                     ? `<div class="flex gap-2 ${narrow ? 'w-full justify-center' : 'w-full sm:w-auto shrink-0'}${isEditingMode ? ' pointer-events-none' : ''}" onclick="event.stopPropagation()">${btns}</div>` : '';
-                const icon = `<div class="ic icon-box ${c.color}" data-istyle="classic"><i class="fa-solid ${c.icon}"></i>${c.id === 'chat' ? '<span class="chat-badge hidden absolute -top-1.5 -right-1.5 min-w-[1.25rem] h-5 px-1 bg-red-600 text-white text-[0.625rem] font-black rounded-full flex items-center justify-center shadow" style="z-index:5">0</span>' : ''}</div>`;
+                const icon = `<div class="ic icon-box ${micro ? 'ic-fit ' : ''}${c.color}" data-istyle="classic"><i class="fa-solid ${c.icon}"></i>${c.id === 'chat' ? '<span class="chat-badge hidden absolute -top-1.5 -right-1.5 min-w-[1.25rem] h-5 px-1 bg-red-600 text-white text-[0.625rem] font-black rounded-full flex items-center justify-center shadow" style="z-index:5">0</span>' : ''}</div>`;
                 const body = narrow
-                    ? `<div class="flex flex-col items-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 text-xs leading-tight">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
-                    : `<div class="flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
-                return `<div class="portal-card glass-panel rounded-2xl p-3 ${narrow ? 'flex-col' : 'flex-col sm:flex-row'} items-center justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
+                    ? `<div class="card-body flex flex-col items-center justify-center gap-1.5 w-full text-center overflow-hidden">${icon}<h3 class="font-extrabold text-gray-900 ${micro ? 'card-title-xs' : 'text-xs leading-tight'}">${c.title}</h3>${c.ch >= 3 ? `<p class="text-[0.625rem] text-gray-600 font-bold">${c.desc}</p>` : ''}</div>`
+                    : `<div class="card-body flex items-center gap-3 w-full">${icon}<div class="flex flex-col w-full overflow-hidden"><h3 class="font-extrabold text-gray-900 text-sm truncate">${c.title}</h3><p class="text-[0.625rem] text-gray-600 font-bold truncate">${c.desc}</p></div></div>`;
+                return `<div class="portal-card glass-panel rounded-2xl p-3 ${narrow ? 'flex-col justify-center' : 'flex-col sm:flex-row'} items-center justify-center sm:justify-between gap-2 border border-green-200 ${isEditingMode ? 'is-editing' : 'cursor-pointer'}"
                      style="${style}" data-card-id="${c.id}"
                      onmousedown="startLongPress(event)" ontouchstart="startLongPress(event)" ontouchmove="cancelLongPress()"
                      onmouseup="cancelLongPress()" ontouchend="cancelLongPress()" onclick="cardClick('${c.id}')">
@@ -740,7 +744,7 @@
         }
         function presetSelected(kind) {
             const cards = getStoredCards(); const i = selectedOrWarn(cards); if (i < 0) return;
-            const p = { S: [2, 2], M: [4, 4], L: [6, 6], A: [DEF_W, DEF_H] }[kind];
+            const p = { S: [1, 1], M: [4, 2], L: [3, 3], A: [DEF_W, DEF_H] }[kind];
             cards[i].cw = p[0]; cards[i].ch = p[1];
             saveStoredCards(cards); renderCards();
         }
