@@ -175,8 +175,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     <!-- Поиск, Круглая кнопка профиля, Колокольчик и Настройки -->
     <div class="flex items-center gap-1.5 flex-1 lg:flex-none min-w-0">
       <div class="sm:relative flex items-center flex-1 min-w-0 lg:flex-none lg:w-56">
-        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-2.5 py-1.5 pl-7 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-full transition">
-        <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-xs"></i>
+        <input type="text" id="globalSearch" placeholder="Поиск..." oninput="handleSearch(this.value)" class="modal-glass text-xs px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-gornyak-700 w-full transition">
         <div id="searchResults" class="hidden absolute left-3 right-3 top-full mt-2 sm:left-auto sm:right-0 sm:w-72 modal-glass rounded-2xl shadow-xl border border-slate-200 z-50 p-2 max-h-60 overflow-y-auto"></div>
       </div>
 
@@ -195,6 +194,11 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
   </div>
   <nav id="mobNav" class="lg:hidden flex overflow-x-auto border-t border-slate-200 text-[10px] font-semibold px-1 py-1" style="scrollbar-width:none"></nav>
 </header>
+
+<div id="netBanner" style="display:none" class="w-full bg-amber-100 border-b border-amber-300 text-amber-900 text-xs font-bold px-3 py-2 items-center justify-center gap-3 flex-wrap text-center">
+  <span><i class="fa-solid fa-triangle-exclamation mr-1"></i><span id="netMsg"></span></span>
+  <button id="netRetry" type="button" onclick="retryServer()" class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white disabled:opacity-50">Повторить</button>
+</div>
 
 <main class="flex-grow w-full">
   <section id="page-home" class="page-section active">
@@ -565,7 +569,14 @@ const LS={get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v)
 const show=id=>{$(id).classList.add('flex');$(id).classList.remove('hidden')};
 const hide=id=>{$(id).classList.add('hidden');$(id).classList.remove('flex')};
 const SB_URL='https://jlwykppketifzjpplmga.supabase.co',SB_KEY='sb_publishable_grh-4YZ2iQ1WC80Smk3Msg_aR5hlyGX';
-const sb=(window.supabase&&SB_URL.startsWith('https://'))?window.supabase.createClient(SB_URL,SB_KEY):null;
+const SB_LIBS=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js','https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js','https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.45.4/supabase.min.js'];
+let sb=null,subscribed=false,authBound=false;
+const fetchT=(u,o={})=>{const m=(o.method||'GET').toUpperCase();if(m!=='GET'||!String(u).includes('/rest/v1/'))return fetch(u,o);const c=new AbortController(),t=setTimeout(()=>c.abort(),10000);return fetch(u,{...o,signal:c.signal}).finally(()=>clearTimeout(t))};
+const loadScript=src=>new Promise(r=>{const e=document.createElement('script');e.src=src;e.onload=()=>r(true);e.onerror=()=>{e.remove();r(false)};document.head.appendChild(e)});
+async function initSb(){if(!window.supabase){for(const u of SB_LIBS){if(await loadScript(u)&&window.supabase)break}}
+ if(window.supabase&&!sb)sb=window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:fetchT}});return !!sb}
+function setNet(ok,msg){const b=$('netBanner');if(!b)return;b.style.display=ok?'none':'flex';if(!ok&&msg)$('netMsg').textContent=msg}
+async function retryServer(){const b=$('netRetry');b.disabled=true;await refreshAll();b.disabled=false;if($('netBanner').style.display!=='none')toast('Сервер пока недоступен')}
 let PROFILE=null;
 const me=()=>PROFILE;
 const myId=()=>PROFILE?PROFILE.id:null;
@@ -601,7 +612,11 @@ let curPage='home',curDlg='general',editingMsg=null,pending=[],activeAddType='',
 // ---------- Данные (Supabase) ----------
 function loadDb(){db={articles:[],news:[],documents:[],estimates:[],chat:{general:[]}}}
 const mapPost=r=>({id:r.id,date:new Date(r.created_at).toLocaleDateString('ru-RU'),title:r.title,text:r.body||'',desc:r.body||'',author:r.author_id,authorName:r.author_name||'',file:r.file_name,filePath:r.file_path,vis:r.visibility});
-async function loadPosts(){if(!sb)return;const{data,error}=await sb.from('posts').select('*').order('created_at',{ascending:false});if(error){toast('Не удалось загрузить записи');return}['articles','news','documents','estimates'].forEach(k=>db[k]=data.filter(r=>r.kind===k).map(mapPost))}
+const CK=()=>'gornyak_cache_'+(myId()||'guest'),KINDS=['articles','news','documents','estimates'];
+const fillPosts=rows=>KINDS.forEach(k=>db[k]=rows.filter(r=>r.kind===k).map(mapPost));
+async function loadPosts(){if(!sb)return false;
+ try{const{data,error}=await sb.from('posts').select('*').order('created_at',{ascending:false});if(error)throw error;fillPosts(data);try{localStorage.setItem(CK(),JSON.stringify({posts:data}))}catch(e){}return true}
+ catch(e){console.warn('loadPosts',e);const c=LS.get(CK(),null);if(c&&c.posts)fillPosts(c.posts);return false}}
 const mapMsg=r=>({id:r.id,from:r.author_id,fromName:r.author_name||'Садовод',text:r.body||'',ts:Date.parse(r.created_at),files:r.files||[],delAll:r.deleted,edited:r.edited});
 async function loadChat(){if(!sb||!isMember()){db.chat.general=[];return}const{data}=await sb.from('messages').select('*').eq('dialog','general').order('created_at',{ascending:false}).limit(300);db.chat.general=(data||[]).map(mapMsg).reverse()}
 async function openStorage(bucket,path){const w=window.open('','_blank');try{let url;if(bucket==='public-files')url=sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;else{const{data,error}=await sb.storage.from(bucket).createSignedUrl(path,300);if(error)throw error;url=data.signedUrl}if(w)w.location.href=url;else location.href=url}catch(e){if(w)w.close();toast('Нет доступа к файлу')}}
@@ -658,10 +673,25 @@ async function shareIt(title,page){const url=location.href.split('#')[0]+'#'+pag
  try{await navigator.clipboard.writeText(url);toast('Ссылка скопирована')}catch(e){prompt('Скопируйте ссылку:',url)}}
 function shareCurrent(){shareIt('НСТ «Горняк»',curPage)}
 function injectHeaders(){
-  const mkBtn=()=>{const b=document.createElement('button');b.className='shareBtn text-xs font-bold modal-glass border border-slate-200 text-slate-700 px-3 py-2 rounded-xl';b.innerHTML='<i class="fa-solid fa-share-nodes"></i> <span class="hidden sm:inline">Поделиться</span>';return b};
-  const ab=document.querySelector('#page-articles h2').parentElement;const add=document.createElement('button');add.className='bg-gornyak-700 hover:bg-gornyak-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow';add.textContent='+ Добавить статью';add.onclick=()=>openAddModal('articles');ab.insertBefore(add,ab.lastElementChild);
-  document.querySelectorAll('.page-section h2').forEach(h=>{const sec=h.closest('.page-section'),bar=h.parentElement,last=bar.lastElementChild,b=mkBtn();b.onclick=()=>shareIt(h.textContent.trim(),sec.id.slice(5));bar.classList.add('flex-wrap','gap-2');if(last===h)bar.appendChild(b);else if(last.tagName==='DIV')last.prepend(b);else bar.insertBefore(b,last)});
-  const hb=mkBtn();hb.className='shareBtn hero-glass text-xs font-bold text-white px-3 py-2.5 rounded-2xl';hb.onclick=()=>shareIt('НСТ «Горняк»','home');document.querySelector('.father-hero .flex.items-center.gap-3').prepend(hb);
+ const base='inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-bold modal-glass border border-slate-200 text-slate-700 hover:brightness-95 transition shrink-0';
+ const mk=(html,cls)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.innerHTML=html;return b};
+ const add=mk('+ Добавить статью','inline-flex items-center h-9 px-4 rounded-xl text-xs font-bold bg-gornyak-700 hover:bg-gornyak-800 text-white shadow shrink-0');
+ add.setAttribute('onclick',"openAddModal('articles')");document.querySelector('#page-articles h2').parentElement.appendChild(add);
+ document.querySelectorAll('.page-section h2').forEach(h=>{
+  const sec=h.closest('.page-section'),bar=h.parentElement;
+  const isHome=b=>/navigateTo\('home'\)/.test(b.getAttribute('onclick')||'');
+  const keep=[...bar.querySelectorAll('button')].filter(b=>!isHome(b));
+  [...bar.querySelectorAll('button')].filter(isHome).forEach(b=>b.remove());
+  const act=document.createElement('div');act.className='ml-auto flex items-center justify-end gap-2 flex-wrap';
+  keep.forEach(b=>act.appendChild(b));
+  [...bar.children].forEach(c=>{if(c!==h&&c.tagName==='DIV'&&!c.children.length)c.remove()});
+  const sh=mk('<i class="fa-solid fa-share-nodes"></i><span class="hidden sm:inline">Поделиться</span>',base);sh.setAttribute('aria-label','Поделиться');sh.onclick=()=>shareIt(h.textContent.trim(),sec.id.slice(5));
+  const hm=mk('<i class="fa-solid fa-house"></i><span>На главную</span>',base);hm.setAttribute('onclick',"navigateTo('home')");
+  act.append(sh,hm);bar.appendChild(act);
+  bar.classList.remove('justify-between');bar.classList.add('flex-wrap','items-center','gap-2');
+  h.classList.add('grow','min-w-0');
+ });
+ const hb=mk('<i class="fa-solid fa-share-nodes"></i> <span class="hidden sm:inline">Поделиться</span>','hero-glass text-xs font-bold text-white px-3 py-2.5 rounded-2xl');hb.onclick=()=>shareIt('НСТ «Горняк»','home');document.querySelector('.father-hero .flex.items-center.gap-3').prepend(hb);
 }
 
 // ---------- Плитки ----------
@@ -785,12 +815,20 @@ function renderContacts(){const el=$('contactsList');if(!el)return;
  el.innerHTML=`<div class="modal-glass p-5 rounded-2xl border border-slate-200 shadow-sm text-sm text-slate-700 space-y-3"><div class="font-bold text-slate-900"><i class="fa-solid fa-lock text-indigo-700 mr-1"></i> ${t}</div><div class="flex flex-wrap gap-2">${me()?'':`<button onclick="navigateTo('register')" class="px-4 py-2.5 bg-gornyak-700 text-white rounded-xl text-xs font-bold">Регистрация</button><button onclick="navigateTo('auth')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Войти</button>`}<button onclick="navigateTo('contact-form')" class="px-4 py-2.5 modal-glass border border-slate-300 rounded-xl text-xs font-bold">Написать правлению</button></div></div>`}
 function renderAll(){document.querySelectorAll("button[onclick*=\"openAddModal('news')\"],button[onclick*=\"openAddModal('articles')\"]").forEach(b=>b.style.display=isAdmin()?'':'none');renderTiles();renderLists();renderChat();renderAuthArea();renderContacts();updateNotifBadge()}
 async function loadProfile(){PROFILE=null;if(!sb)return;const{data:{session}}=await sb.auth.getSession();if(!session)return;const{data}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();PROFILE={...(data||{}),id:session.user.id,email:session.user.email}}
-async function refreshAll(){await loadProfile();await Promise.all([loadPosts(),loadChat(),loadContacts()]);renderAll();renderNav()}
-function subscribe(){if(!sb)return;sb.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'messages'},async()=>{await loadChat();renderChat()}).on('postgres_changes',{event:'*',schema:'public',table:'posts'},async()=>{await loadPosts();renderLists()}).subscribe()}
+async function refreshAll(){
+ if(!sb&&!(await initSb())){setNet(false,'Нет связи с сервером — не загрузился модуль подключения');renderAll();renderNav();return}
+ try{await loadProfile()}catch(e){PROFILE=null}
+ const ok=await loadPosts();await Promise.all([loadChat().catch(()=>{}),loadContacts().catch(()=>{})]);
+ setNet(ok,'Нет связи с сервером — показаны сохранённые данные');renderAll();renderNav();
+ if(sb){bindAuth();if(ok)subscribe()}}
+function subscribe(){if(!sb||subscribed)return;subscribed=true;sb.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'messages'},async()=>{await loadChat();renderChat()}).on('postgres_changes',{event:'*',schema:'public',table:'posts'},async()=>{await loadPosts();renderLists()}).subscribe()}
 ['gornyak_users','gornyak_user','gornyak_chat2','gornyak_articles','gornyak_news','gornyak_docs','gornyak_estimates','gornyak_outbox'].forEach(k=>localStorage.removeItem(k));
 settings={...DEF,...LS.get('gornyak_settings2',{})};applyUI(settings);loadDb();injectHeaders();renderAll();fetchLiveWeather();
 {const h=location.hash.slice(1);navigateTo(PAGES.includes(h)?h:'home')}
-if(sb){refreshAll().then(subscribe);sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_IN'||ev==='SIGNED_OUT')setTimeout(refreshAll,0);if(ev==='PASSWORD_RECOVERY')setTimeout(()=>{const p=prompt('Введите новый пароль (от 6 символов)');if(p&&p.length>=6)sb.auth.updateUser({password:p}).then(r=>toast(r.error?'Не удалось сменить пароль':'Пароль изменён'))},0)})}else toast('Сервер Supabase не подключён')
+function bindAuth(){if(!sb||authBound)return;authBound=true;sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_IN'||ev==='SIGNED_OUT')setTimeout(refreshAll,0);if(ev==='PASSWORD_RECOVERY')setTimeout(()=>{const p=prompt('Введите новый пароль (от 6 символов)');if(p&&p.length>=6)sb.auth.updateUser({password:p}).then(r=>toast(r.error?'Не удалось сменить пароль':'Пароль изменён'))},0)})}
+refreshAll();
+window.addEventListener('online',()=>refreshAll());
+setInterval(()=>{if($('netBanner').style.display!=='none'&&!document.hidden)refreshAll()},45000);
 </script>
 </body>
 </html>
