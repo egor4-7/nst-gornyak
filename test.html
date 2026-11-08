@@ -129,12 +129,34 @@
         @keyframes modalFadeOut { to { opacity: 0; transform: scale(.94) translateY(8px); } }
         .fade-out { animation: bgOut .18s ease-in forwards; }
         @keyframes bgOut { to { opacity: 0; } }
-    #chatMessagesContainer, #chatMessagesContainer * { -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none; }
+        .loupe { position: fixed; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; pointer-events: none; z-index: 9998; background: rgba(255,255,255,.6); border: 2px solid rgba(255,255,255,.95); box-shadow: 0 10px 28px rgba(0,0,0,.28), inset 0 0 14px rgba(255,255,255,.7); }
+        .sel-bar { position: fixed; z-index: 9998; display: flex; gap: 2px; padding: 4px; border-radius: 9999px; background: rgba(255,255,255,.78); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+        .sel-bar button { font-size: .6875rem; font-weight: 800; padding: .4rem .8rem; border-radius: 9999px; color: #0f2417; }
+        .sel-bar button:active { background: rgba(28,92,56,.15); }
+        .selectable ::selection, .selectable::selection { background: rgba(245,180,40,.38); }
+        .sel-bar { gap: 0; padding: 3px; animation: menuIn .2s cubic-bezier(.16,1,.3,1); }
+        .sel-bar button { font-size: .75rem; font-weight: 600; padding: .4rem .7rem; }
+        .sel-h { position: fixed; width: 2px; background: #e8a800; z-index: 9997; touch-action: none; }
+        .sel-h i { position: absolute; left: -5px; width: 12px; height: 12px; border-radius: 50%; background: #e8a800; box-shadow: 0 0 0 1px rgba(255,255,255,.7); }
+        .sel-h.start i { top: -9px; } .sel-h.end i { bottom: -9px; }
+        .sel-h::after { content: ""; position: absolute; left: -18px; width: 38px; height: 38px; }
+        .sel-h.start::after { top: -28px; } .sel-h.end::after { bottom: -28px; }
+        .sel-menu { position: fixed; z-index: 9998; width: 210px; padding: 6px; border-radius: 24px; background: rgba(255,255,255,.8); backdrop-filter: blur(24px) saturate(190%); -webkit-backdrop-filter: blur(24px) saturate(190%); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 16px 40px rgba(0,0,0,.25); transform-origin: top center; animation: menuIn .24s cubic-bezier(.16,1,.3,1); }
+        .sel-menu button { width: 100%; display: flex; align-items: center; gap: 12px; padding: .65rem .8rem; border-radius: 16px; font-size: .8125rem; font-weight: 600; color: #0f2417; text-align: left; }
+        .sel-menu button + button { border-top: 1px solid rgba(0,0,0,.06); }
+        .sel-menu button i { width: 18px; text-align: center; color: #1c5c38; }
+        .sel-menu button:active { background: rgba(28,92,56,.12); }
+        @keyframes menuIn { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body id="mainBody" class="min-h-screen py-4 px-3 sm:px-6 flex flex-col items-center">
 
     <div class="w-full max-w-5xl mx-auto flex flex-col gap-4 min-w-0">
+
+        <div id="netBanner" style="display:none" class="w-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold px-3 py-2 rounded-2xl items-center justify-center gap-3 flex-wrap text-center">
+            <span><i class="fa-solid fa-triangle-exclamation mr-1"></i><span id="netMsg"></span></span>
+            <button id="netRetry" type="button" onclick="retryServer()" class="px-3 py-1.5 rounded-lg bg-amber-600 text-white disabled:opacity-50">Повторить</button>
+        </div>
 
         <!-- Шапка -->
         <div class="glass-panel relative z-40 rounded-2xl p-2.5 sm:p-3 flex flex-wrap items-center gap-2 shadow-sm border border-green-200">
@@ -322,7 +344,7 @@
                 Зажмите любую плитку на главной на 1 секунду (нужен вход в профиль). Тяните за правый нижний угол — меняется размер. Стрелки ↑ ↓ внизу экрана — перемещение. Кнопки S, M, L задают готовые размеры, «Авто» возвращает исходный.
                 <button onclick="resetUiHint()" class="block mt-2 text-blue-700 font-extrabold underline">Показывать подсказку на главной</button>
             </div>
-            <div class="text-center text-[0.625rem] font-bold text-gray-500">Сборка: 06.11.2026 · раскладка по профилю · чат v2 · с сервером Supabase</div>
+            <div class="text-center text-[0.625rem] font-bold text-gray-500">Сборка: 06.11.2026 · с сервером Supabase</div>
             <a href="https://t.me/egor23u" target="_blank" rel="noopener" class="w-full py-3 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow">
                 <i class="fa-brands fa-telegram text-base"></i>
                 <span>Связь с разработчиком: @egor23u</span>
@@ -582,7 +604,6 @@
             </div>
         </div>
     </div>
-    <div id="sheetModal" class="fixed inset-0 bg-black/50 hidden items-end justify-center p-3 z-[75]"><div class="glass-panel rounded-3xl w-full max-w-sm p-3 flex flex-col gap-1 max-h-[75vh] overflow-y-auto"><div id="sheetTitle" class="px-3 py-2 text-xs font-black text-gray-500 truncate"></div><div id="sheetBtns" class="flex flex-col"></div><button onclick="hide('sheetModal')" class="mt-1 py-3 rounded-2xl bg-gray-200 font-extrabold text-xs">Отмена</button></div></div>
     <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[80] bg-[#10331e] text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl max-w-[92vw] text-center"></div>
 
     <script>
@@ -608,10 +629,16 @@
         const GRID_GAP = 8, GRID_COLS = 6, GRID_MAX_ROWS = 8, DEF_W = 2, DEF_H = 2;
 
         // Сброс старой раскладки плиток (версия 3 = размер по умолчанию 100%)
-        try { localStorage.removeItem('gornyak_cards'); } catch (e) {}
+        try {
+            if (localStorage.getItem('gornyak_cards_v') !== '3') {
+                localStorage.removeItem('gornyak_cards');
+                localStorage.setItem('gornyak_cards_v', '3');
+            }
+        } catch (e) {}
 
         function getStoredCards() {
-            const saved = myLayout();
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem('gornyak_cards')); } catch (e) {}
             const out = [];
             if (Array.isArray(saved)) saved.forEach(c => {
                 const d = defaultCards.find(x => x.id === c.id);
@@ -620,30 +647,8 @@
             defaultCards.forEach(d => { if (!out.find(c => c.id === d.id)) out.push({ ...d, cw: DEF_W, ch: DEF_H }); });
             return out;
         }
-        // Персональная раскладка: хранится в profiles.layout, копия — на устройстве для офлайна.
-        // Без входа всегда стандартная сетка.
-        let layoutDirty = false, layoutTimer = null;
-        function myLayout() {
-            const u = currentUser(); if (!u) return null;
-            const p = CLOUD.profiles[u.id];
-            if (p && Array.isArray(p.layout)) return p.layout;
-            try { const l = JSON.parse(localStorage.getItem('gornyak_cards_u_' + u.id)); return Array.isArray(l) ? l : null; } catch (e) { return null; }
-        }
         function saveStoredCards(cards) {
-            const u = currentUser(); if (!u) return;
-            const layout = cards.map(c => ({ id: c.id, cw: c.cw, ch: c.ch }));
-            try { localStorage.setItem('gornyak_cards_u_' + u.id, JSON.stringify(layout)); } catch (e) {}
-            if (!CLOUD.profiles[u.id]) CLOUD.profiles[u.id] = {};
-            CLOUD.profiles[u.id].layout = layout; saveCache();
-            layoutDirty = true; clearTimeout(layoutTimer); layoutTimer = setTimeout(pushLayout, 700);
-        }
-        async function pushLayout() {
-            const u = currentUser(); const layout = u && CLOUD.profiles[u.id] && CLOUD.profiles[u.id].layout;
-            if (!u || !sb || !layout) { layoutDirty = false; return; }
-            const r = await sb.from('profiles').update({ layout }).eq('id', u.id).select('id');
-            layoutDirty = false;
-            if (r.error) showToast('Раскладка сохранена только на устройстве: ' + r.error.message);
-            else if (!r.data || !r.data.length) showToast('Профиль не найден на сервере — раскладка сохранена только на устройстве');
+            localStorage.setItem('gornyak_cards', JSON.stringify(cards.map(c => ({ id: c.id, cw: c.cw, ch: c.ch }))));
         }
 
         function executeCardAction(a) {
@@ -1267,7 +1272,7 @@
 
         // --- ЧАТ ---
         const chatState = { peer: 'general', replyTo: null, editId: null, menuId: null };
-        const roomKey = peer => peer;
+        const roomKey = peer => peer === 'general' ? 'general' : [myUid(), peer].sort().join('|');
         const loadChat = () => lsGet('gornyak_real_chat', []);
         const saveChat = m => lsSet('gornyak_real_chat', m);
 
@@ -1281,19 +1286,12 @@
             Object.keys(map).forEach(k => { if (/гость/i.test(map[k])) delete map[k]; });
             return Object.keys(map).map(u => ({ uid: u, nick: map[u] })).sort((a, b) => a.nick.localeCompare(b.nick, 'ru'));
         }
-        function nickOf(id) { const d = myDialogs().find(x => x.id === id); return d ? d.nick : 'Диалог'; }
-        function myDialogs() {
-            const me = myUid();
-            return CLOUD.members.filter(x => x.uid === me && !x.hidden).map(x => {
-                const ch = CLOUD.chats.find(c => c.id === x.chat_id); if (!ch || ch.type !== 'dm') return null;
-                const o = CLOUD.members.find(y => y.chat_id === x.chat_id && y.uid !== me), pr = o && CLOUD.profiles[o.uid];
-                return { id: ch.id, nick: pr ? (pr.name || (pr.plot ? 'Участок ' + pr.plot : 'Садовод')) : 'Садовод', cleared: x.cleared_ts || 0 };
-            }).filter(Boolean);
-        }
+        function nickOf(uid) { const p = chatPeers().find(x => x.uid === uid); return p ? p.nick : uid; }
         function renderChatNicks() {
-            const item = (id, nick, icon) => `<button data-peer="${esc(id)}" class="w-full text-left px-3 py-3 text-xs font-extrabold border-b border-gray-100 flex items-center gap-2 ${chatState.peer === id ? 'bg-green-100 text-[#1c5c38]' : 'text-gray-800'}"><i class="fa-solid ${icon} text-[0.6875rem]"></i><span class="truncate">${esc(nick)}</span></button>`;
-            document.getElementById('chatNicks').innerHTML = '<button data-new="1" class="w-full px-3 py-3 text-xs font-extrabold text-white bg-[#1c5c38] flex items-center gap-2"><i class="fa-solid fa-plus text-[0.6875rem]"></i>Новый диалог</button>'
-                + item('general', 'Общий чат', 'fa-users') + myDialogs().map(d => item(d.id, d.nick, 'fa-user')).join('');
+            const item = (uid, nick, icon) => `<button data-peer="${esc(uid)}" class="w-full text-left px-3 py-3 text-xs font-extrabold border-b border-gray-100 flex items-center gap-2 ${chatState.peer === uid ? 'bg-green-100 text-[#1c5c38]' : 'text-gray-800'}"><i class="fa-solid ${icon} text-[0.6875rem]"></i><span class="truncate">${esc(nick)}</span></button>`;
+            const peers = chatPeers();
+            document.getElementById('chatNicks').innerHTML = item('general', 'Общий чат', 'fa-users') + peers.map(p => item(p.uid, p.nick, 'fa-user')).join('')
+                + (peers.length ? '' : '<div class="p-3 text-[0.625rem] text-gray-500 font-bold leading-snug">Здесь появятся садоводы, когда зарегистрируются или напишут в чат.</div>');
         }
         function updateChatBar() {
             const bar = document.getElementById('chatBar');
@@ -1317,20 +1315,34 @@
             const keep = box.scrollTop;
             const all = loadChat();
             const room = roomKey(chatState.peer);
-            const msgs = visibleMsgs(all, room);
+            const msgs = all.filter(m => (m.room || 'general') === room);
             document.getElementById('chatTitle').textContent = chatState.peer === 'general' ? 'Общий чат садоводов' : 'Диалог: ' + nickOf(chatState.peer);
             if (!msgs.length) { box.innerHTML = '<div class="text-center py-10 text-gray-500 font-semibold text-xs">Сообщений пока нет. Напишите первое!</div>'; return; }
             box.innerHTML = msgs.map(m => {
                 const mine = (m.uid || m.author) === myUid();
                 const rep = m.replyTo ? all.find(x => x.id === m.replyTo) : null;
                 const quote = m.replyTo ? `<div class="border-l-4 border-[#1c5c38] bg-black/5 rounded-lg px-2 py-1 mb-1 text-[0.6875rem] text-gray-600 font-semibold truncate">${rep ? esc(rep.author) + ': ' + esc(rep.text) : 'Сообщение удалено'}</div>` : '';
-                const menu = '';
+                const menu = chatState.menuId === m.id ? `<div class="flex gap-1.5 mt-1.5 flex-wrap"><button data-act="reply" class="chat-act">Ответить</button>${mine ? '<button data-act="edit" class="chat-act">Изменить</button><button data-act="del" class="chat-act text-red-700">Удалить</button>' : ''}</div>` : '';
                 return `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div data-mid="${m.id}" class="max-w-[88%] rounded-2xl px-3 py-2 shadow-sm border ${mine ? 'bg-emerald-100 border-emerald-200' : 'bg-white/95 border-gray-200'}"><div class="text-[0.625rem] font-black text-[#1c5c38]">${esc(m.author)}</div>${quote}<div class="text-sm font-medium text-gray-800 break-words whitespace-pre-wrap">${esc(m.text)}</div><div class="text-[0.625rem] text-gray-400 font-semibold mt-0.5">${esc(m.time)}${m.edited ? ' · изменено' : ''}</div>${menu}</div></div>`;
             }).join('');
             box.scrollTop = stick ? box.scrollHeight : keep;
         }
         document.getElementById('chatNicks').addEventListener('click', e => {
-            if (e.target.closest('[data-new]')) { openNewDialog(); return; } const b = e.target.closest('[data-peer]'); if (b) selectChatPeer(b.dataset.peer);
+            const b = e.target.closest('[data-peer]'); if (b) selectChatPeer(b.dataset.peer);
+        });
+        document.getElementById('chatMessagesContainer').addEventListener('click', async e => {
+            const bubble = e.target.closest('[data-mid]'); if (!bubble) return;
+            const id = bubble.dataset.mid, act = e.target.closest('[data-act]');
+            if (!act) { chatState.menuId = chatState.menuId === id ? null : id; renderChatMessages(); return; }
+            const all = loadChat(), m = all.find(x => x.id === id); if (!m) return;
+            const inp = document.getElementById('chatInputText');
+            chatState.menuId = null;
+            if (act.dataset.act === 'reply') { chatState.replyTo = id; chatState.editId = null; inp.value = ''; updateChatBar(); inp.focus(); }
+            else if (act.dataset.act === 'edit') { chatState.editId = id; chatState.replyTo = null; inp.value = m.text; updateChatBar(); inp.focus(); }
+            else if (act.dataset.act === 'del') {
+                if (await askConfirm('Удалить сообщение?', 'Удалить')) { saveChat(all.filter(x => x.id !== id)); if (chatState.replyTo === id) cancelChatMode(); }
+            }
+            renderChatMessages();
         });
         function sendChatMessage(e) {
             e.preventDefault();
@@ -1341,7 +1353,7 @@
                 const m = all.find(x => x.id === chatState.editId);
                 if (m && (m.uid || m.author) === myUid()) { m.text = text; m.edited = true; }
             } else {
-                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), chatId: chatState.peer === 'general' ? null : chatState.peer, replyTo: chatState.replyTo || null, ts: Date.now(), time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
+                all.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), uid: myUid(), author: myNick(), text, room: roomKey(chatState.peer), replyTo: chatState.replyTo || null, ts: Date.now(), time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) });
             }
             saveChat(all);
             chatState.replyTo = null; chatState.editId = null; inp.value = '';
@@ -1367,7 +1379,7 @@
         function closeAuthModal() { hide('authModal'); }
         async function handleLoginSubmit(e) {
             e.preventDefault();
-            if (!sb) { showToast('Нет связи с сервером'); return; }
+            if (!sb && !(await initSb())) { showToast('Нет связи с сервером'); return; }
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const { data, error } = await sb.auth.signInWithPassword({ email, password });
@@ -1387,7 +1399,7 @@
         function closeRegisterModal() { hide('registerModal'); }
         async function handleRegisterSubmit(e) {
             e.preventDefault();
-            if (!sb) { showToast('Нет связи с сервером'); return; }
+            if (!sb && !(await initSb())) { showToast('Нет связи с сервером'); return; }
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
             const name = document.getElementById('regName').value.trim();
@@ -1403,7 +1415,6 @@
         function closeProfileModal() { hide('profileModal'); }
         async function logout() {
             try { sb && await sb.auth.signOut(); } catch (e) {}
-            if (isEditingMode) exitEditMode();
             localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache();
             closeProfileModal(); renderCards(); showToast('Вы вышли из аккаунта');
         }
@@ -1450,7 +1461,7 @@
         const SEEN_KEY = 'gornyak_chat_seen';
         function unreadCount() {
             const me = myUid(), seen = lsGet(SEEN_KEY, 0);
-            return loadChat().filter(m => (m.ts || 0) > seen && (m.uid || m.author) !== me && ((m.room || 'general') === 'general' || myDialogs().some(d => d.id === m.chatId)) && !CLOUD.hidden.has(m.id)).length;
+            return loadChat().filter(m => (m.ts || 0) > seen && (m.uid || m.author) !== me && ((m.room || 'general') === 'general' || String(m.room).split('|').includes(me))).length;
         }
         function updateChatBadge() {
             const n = unreadCount();
@@ -1489,15 +1500,158 @@
             document.body.appendChild(d); setTimeout(() => d.remove(), 600);
         }, true);
 
+        // ===== ВЫДЕЛЕНИЕ КАК В iOS: янтарная подсветка, ручки, стеклянная лупа, меню =====
+        (function () {
+            let timer = null, drag = null, loupe = null, bar = null, menu = null, hs = [], tgt = null, sx = 0, sy = 0, blockUntil = 0, busy = false;
+            const S = () => window.getSelection();
+            const rm = n => { if (n) n.remove(); return null; };
+            const hasSel = () => { const s = S(); return s.rangeCount && !s.isCollapsed; };
+            function rangeAt(x, y) {
+                if (document.caretRangeFromPoint) return document.caretRangeFromPoint(x, y);
+                const q = document.caretPositionFromPoint && document.caretPositionFromPoint(x, y);
+                if (!q) return null; const r = document.createRange(); r.setStart(q.offsetNode, q.offset); return r;
+            }
+            function selectWord(x, y) {
+                const r = rangeAt(x, y); if (!r) return false;
+                const s = S(); s.removeAllRanges(); s.addRange(r);
+                if (s.modify) { s.modify('move', 'backward', 'word'); s.modify('extend', 'forward', 'word'); }
+                return !s.isCollapsed;
+            }
+            function clearAll() { bar = rm(bar); menu = rm(menu); hs.forEach(h => h.remove()); hs = []; loupe = rm(loupe); }
+            function drawHandles() {
+                hs.forEach(h => h.remove()); hs = [];
+                if (!hasSel()) return;
+                const rs = S().getRangeAt(0).getClientRects(); if (!rs.length) return;
+                const f = rs[0], l = rs[rs.length - 1];
+                [['start', f.left, f.top, f.height], ['end', l.right, l.top, l.height]].forEach(([w, x, y, h]) => {
+                    const e = document.createElement('div'); e.className = 'sel-h ' + w; e.dataset.w = w;
+                    e.style.cssText = 'left:' + (x - 1) + 'px;top:' + y + 'px;height:' + h + 'px';
+                    e.innerHTML = '<i></i>'; document.body.appendChild(e); hs.push(e);
+                });
+            }
+            function lens(x, y) {
+                const el = document.elementsFromPoint(x, y).find(e => !e.closest('.sel-h,.loupe,.sel-bar,.sel-menu'));
+                if (!el) return;
+                if (!loupe) { loupe = document.createElement('div'); loupe.className = 'loupe'; document.body.appendChild(loupe); }
+                loupe.style.left = Math.max(4, Math.min(innerWidth - 100, x - 48)) + 'px';
+                loupe.style.top = Math.max(4, y - 140) + 'px';
+                const r = el.getBoundingClientRect(), k = 1.6;
+                loupe.innerHTML = '';
+                const c = el.cloneNode(true);
+                c.style.cssText = 'position:absolute;margin:0;transform-origin:0 0;pointer-events:none;width:' + r.width + 'px;transform:scale(' + k + ');left:' + (48 - (x - r.left) * k) + 'px;top:' + (48 - (y - r.top) * k) + 'px;';
+                loupe.appendChild(c);
+            }
+            const selText = isIn => isIn ? tgt.value.slice(tgt.selectionStart, tgt.selectionEnd) : S().toString();
+            async function doCopy(t) { try { await navigator.clipboard.writeText(t); } catch (e) { document.execCommand('copy'); } showToast('Скопировано'); }
+            async function doPaste() { try { const t = await navigator.clipboard.readText(); tgt.setRangeText(t, tgt.selectionStart, tgt.selectionEnd, 'end'); tgt.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) { showToast('Нет доступа к буферу обмена'); } }
+            function anchor(isIn) {
+                if (isIn) { const b = tgt.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top, bot: b.bottom }; }
+                const b = S().getRangeAt(0).getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top, bot: b.bottom };
+            }
+            function place(el, a, below) {
+                document.body.appendChild(el);
+                el.style.left = Math.max(8, Math.min(innerWidth - el.offsetWidth - 8, a.x - el.offsetWidth / 2)) + 'px';
+                el.style.top = Math.max(8, below ? a.bot + 12 : a.y - el.offsetHeight - 14) + 'px';
+            }
+            function showBar(isIn) {
+                bar = rm(bar); menu = rm(menu);
+                const txt = selText(isIn); if (!isIn && !txt) return;
+                const a = anchor(isIn);
+                bar = document.createElement('div'); bar.className = 'sel-bar';
+                const main = isIn && !txt ? 'Вставить' : 'Копировать';
+                bar.innerHTML = '<button data-k="main">' + main + '</button><button data-k="more" aria-label="Ещё"><i class="fa-solid fa-chevron-right"></i></button>';
+                bar.onclick = ev => {
+                    const k = ev.target.closest('button'); if (!k) return; ev.stopPropagation();
+                    if (k.dataset.k === 'main') { main === 'Вставить' ? doPaste() : doCopy(txt); clearAll(); }
+                    else openMenu(isIn, txt, a);
+                };
+                place(bar, a, false);
+            }
+            function openMenu(isIn, txt, a) {
+                bar = rm(bar); menu = document.createElement('div'); menu.className = 'sel-menu';
+                const it = (k, ic, t) => '<button data-k="' + k + '"><i class="fa-solid ' + ic + '"></i><span>' + t + '</span></button>';
+                menu.innerHTML = (txt ? it('copy', 'fa-copy', 'Копировать') : '') + (isIn ? it('paste', 'fa-paste', 'Вставить') : '')
+                    + (txt ? it('web', 'fa-magnifying-glass', 'Искать в интернете') + it('share', 'fa-share-nodes', 'Поделиться…') : '');
+                menu.onclick = ev => {
+                    const k = ev.target.closest('button'); if (!k) return; ev.stopPropagation();
+                    const c = k.dataset.k;
+                    if (c === 'copy') doCopy(txt); else if (c === 'paste') doPaste();
+                    else if (c === 'web') window.open('https://yandex.ru/search/?text=' + encodeURIComponent(txt), '_blank');
+                    else if (c === 'share') shareText('НСТ «Горняк»', txt);
+                    clearAll();
+                };
+                place(menu, a, true);
+            }
+            document.addEventListener('pointerdown', e => {
+                const h = e.target.closest('.sel-h');
+                if (h) {
+                    e.preventDefault(); busy = true; bar = rm(bar); menu = rm(menu);
+                    const s = S(), rg = s.getRangeAt(0);
+                    if (h.dataset.w === 'start') s.collapse(rg.endContainer, rg.endOffset); else s.collapse(rg.startContainer, rg.startOffset);
+                    drag = h.dataset.w; try { h.setPointerCapture(e.pointerId); } catch (er) {}
+                    sx = e.clientX; sy = e.clientY; lens(sx, sy); return;
+                }
+                if (e.target.closest('.sel-bar,.sel-menu')) return;
+                const inp = e.target.closest('input[type=text],input[type=email],input[type=password],textarea');
+                const sel = e.target.closest('.selectable');
+                if (bar || menu || hs.length) { clearAll(); if (!inp && !sel) S().removeAllRanges(); }
+                if (!inp && !sel) return;
+                sx = e.clientX; sy = e.clientY; tgt = inp; clearTimeout(timer);
+                timer = setTimeout(() => {
+                    if (inp) { inp.focus(); showBar(true); return; }
+                    if (selectWord(sx, sy)) { busy = true; drawHandles(); blockUntil = Date.now() + 600; }
+                }, 450);
+            });
+            document.addEventListener('pointermove', e => {
+                if (!drag) { if (Math.hypot(e.clientX - sx, e.clientY - sy) > 8) clearTimeout(timer); return; }
+                const r = rangeAt(e.clientX, e.clientY - 18), s = S();
+                if (r && s.extend) { try { s.extend(r.startContainer, r.startOffset); } catch (er) {} }
+                lens(e.clientX, e.clientY - 18);
+            });
+            const end = () => {
+                clearTimeout(timer);
+                if (drag) { drag = null; loupe = rm(loupe); drawHandles(); blockUntil = Date.now() + 350; showBar(false); }
+                else if (busy && hasSel()) { showBar(false); }
+                busy = false;
+            };
+            document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+            document.addEventListener('touchmove', e => { if (drag) e.preventDefault(); }, { passive: false });
+            document.addEventListener('scroll', () => { if (hs.length) { bar = rm(bar); menu = rm(menu); drawHandles(); } }, true);
+            document.addEventListener('click', e => { if (Date.now() < blockUntil) { e.stopPropagation(); e.preventDefault(); } }, true);
+        })();
+
         // ===== SUPABASE: общая база, вход, чат в реальном времени =====
         const SB_URL = 'https://jlwykppketifzjpplmga.supabase.co';
         const SB_KEY = 'sb_publishable_grh-4YZ2iQ1WC80Smk3Msg_aR5hlyGX';
-        const sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+        const SB_LIBS = ['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js', 'https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js', 'https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.45.4/supabase.min.js'];
+        let sb = null;
+        const fetchT = (u, o = {}) => {
+            const m = (o.method || 'GET').toUpperCase();
+            if (m !== 'GET' || !String(u).includes('/rest/v1/')) return fetch(u, o);
+            const c = new AbortController(), t = setTimeout(() => c.abort(), 10000);
+            return fetch(u, { ...o, signal: c.signal }).finally(() => clearTimeout(t));
+        };
+        const loadScript = src => new Promise(r => { const e = document.createElement('script'); e.src = src; e.onload = () => r(true); e.onerror = () => { e.remove(); r(false); }; document.head.appendChild(e); });
+        async function initSb() {
+            if (!window.supabase) { for (const u of SB_LIBS) { if (await loadScript(u) && window.supabase) break; } }
+            if (window.supabase && !sb) sb = window.supabase.createClient(SB_URL, SB_KEY, { global: { fetch: fetchT } });
+            return !!sb;
+        }
+        function setNet(ok, msg) {
+            const b = document.getElementById('netBanner'); if (!b) return;
+            b.style.display = ok ? 'none' : 'flex';
+            if (!ok && msg) document.getElementById('netMsg').textContent = msg;
+        }
+        async function retryServer() {
+            const b = document.getElementById('netRetry'); b.disabled = true;
+            const ok = await startCloud(); b.disabled = false;
+            if (!ok) showToast('Сервер пока недоступен');
+        }
         const CK = { gornyak_news_db: 'news', gornyak_docs_db: 'docs', gornyak_real_chat: 'chat' };
-        const CLOUD = { news: [], docs: [], chat: [], profiles: {}, chats: [], members: [], hidden: new Set(), ready: false, pending: 0 };
+        const CLOUD = { news: [], docs: [], chat: [], profiles: {}, ready: false, pending: 0 };
         const TBL = { news: 'news', docs: 'docs', chat: 'messages' };
-        function saveCache() { try { localStorage.setItem('gornyak_cloud_cache', JSON.stringify({ news: CLOUD.news, docs: CLOUD.docs, chat: CLOUD.chat, profiles: CLOUD.profiles, chats: CLOUD.chats, members: CLOUD.members })); } catch (e) {} }
-        try { const c = JSON.parse(localStorage.getItem('gornyak_cloud_cache')); if (c) { CLOUD.news = c.news || []; CLOUD.docs = c.docs || []; CLOUD.chat = c.chat || []; CLOUD.profiles = c.profiles || {}; CLOUD.chats = c.chats || []; CLOUD.members = c.members || []; } } catch (e) {}
+        function saveCache() { try { localStorage.setItem('gornyak_cloud_cache', JSON.stringify({ news: CLOUD.news, docs: CLOUD.docs, chat: CLOUD.chat, profiles: CLOUD.profiles })); } catch (e) {} }
+        try { const c = JSON.parse(localStorage.getItem('gornyak_cloud_cache')); if (c) { CLOUD.news = c.news || []; CLOUD.docs = c.docs || []; CLOUD.chat = c.chat || []; CLOUD.profiles = c.profiles || {}; } } catch (e) {}
 
         function applySession(session) {
             if (!session) { localStorage.removeItem('gornyak_user'); return; }
@@ -1505,10 +1659,10 @@
             lsSet('gornyak_user', { id: u.id, email: u.email, name: md.name || '', plot: md.plot || '' });
         }
         const fromRow = (k, r) => k === 'chat'
-            ? { id: r.id, uid: r.uid, author: r.author, text: r.body, room: r.room, chatId: r.chat_id || null, replyTo: r.reply_to, ts: r.ts, time: r.sent_time || '', edited: !!r.edited }
+            ? { id: r.id, uid: r.uid, author: r.author, text: r.body, room: r.room, replyTo: r.reply_to, ts: r.ts, time: r.sent_time || '', edited: !!r.edited }
             : { id: r.id, uid: r.uid, date: r.pub_date || '', author: r.author || '', fileName: r.file_name || '', size: r.size || 0, data: r.file_url || '', ...(k === 'news' ? { title: r.title, desc: r.descr || '' } : { name: r.name }) };
         async function toRow(k, n) {
-            if (k === 'chat') return { id: n.id, uid: n.uid, author: n.author, body: n.text, room: n.room || 'general', chat_id: n.chatId || null, reply_to: n.replyTo || null, ts: n.ts || Date.now(), sent_time: n.time || '', edited: !!n.edited };
+            if (k === 'chat') return { id: n.id, uid: n.uid, author: n.author, body: n.text, room: n.room || 'general', reply_to: n.replyTo || null, ts: n.ts || Date.now(), sent_time: n.time || '', edited: !!n.edited };
             let url = n.data || '';
             if (url.startsWith('data:')) {
                 const ext = ((n.fileName || 'f').split('.').pop() || 'bin').replace(/[^a-z0-9]/gi, '').slice(0, 8) || 'bin';
@@ -1536,7 +1690,8 @@
             CLOUD.pending--; loadCloud();
         }
         async function loadCloud() {
-            if (!sb || CLOUD.pending > 0) return;
+            if (!sb) return false;
+            if (CLOUD.pending > 0) return CLOUD.ready;
             try {
                 const [n, d, p] = await Promise.all([
                     sb.from('news').select('*').order('created_at', { ascending: false }),
@@ -1545,21 +1700,18 @@
                 if (n.error || d.error) throw (n.error || d.error);
                 CLOUD.news = n.data.map(r => fromRow('news', r));
                 CLOUD.docs = d.data.map(r => fromRow('docs', r));
-                if (p.data) {
-                    const me = currentUser(), keep = (layoutDirty && me && CLOUD.profiles[me.id]) ? CLOUD.profiles[me.id].layout : null;
-                    CLOUD.profiles = Object.fromEntries(p.data.map(r => [r.id, { name: r.name, plot: r.plot, layout: r.layout }]));
-                    if (keep) { if (!CLOUD.profiles[me.id]) CLOUD.profiles[me.id] = {}; CLOUD.profiles[me.id].layout = keep; }
-                }
+                if (p.data) CLOUD.profiles = Object.fromEntries(p.data.map(r => [r.id, { name: r.name, plot: r.plot }]));
                 if (currentUser()) {
                     const m = await sb.from('messages').select('*').order('ts', { ascending: false }).limit(500);
                     if (m.data) CLOUD.chat = m.data.reverse().map(r => fromRow('chat', r));
-                    const [ch, mb, hd] = await Promise.all([sb.from('chats').select('*'), sb.from('chat_members').select('*'), sb.from('message_hidden').select('message_id')]);
-                    if (!ch.error && !mb.error) { CLOUD.chats = ch.data; CLOUD.members = mb.data; }
-                    if (hd.data) CLOUD.hidden = new Set(hd.data.map(r => r.message_id));
-                } else { CLOUD.chat = []; CLOUD.chats = []; CLOUD.members = []; CLOUD.hidden = new Set(); }
-                CLOUD.ready = true; saveCache(); refreshViews();
-                if (!isEditingMode && !resizing) renderCards();
-            } catch (e) { showToast('Нет связи с сервером — показаны сохранённые данные'); }
+                } else CLOUD.chat = [];
+                CLOUD.ready = true; saveCache(); refreshViews(); setNet(true);
+                return true;
+            } catch (e) {
+                console.warn('loadCloud', e);
+                setNet(false, 'Нет связи с сервером — показаны сохранённые данные');
+                return false;
+            }
         }
         function refreshViews() {
             const box = document.getElementById('chatMessagesContainer');
@@ -1573,90 +1725,29 @@
             try { const b = await (await fetch(u)).blob(); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
             catch (e) { window.open(u, '_blank'); }
         }
-        let loadT = null;
+        let loadT = null, started = false, chanOn = false;
+        async function startCloud() {
+            if (!sb && !(await initSb())) { setNet(false, 'Нет связи с сервером — работает сохранённая копия'); return false; }
+            if (!started) {
+                started = true;
+                try { const { data } = await sb.auth.getSession(); if (data.session) applySession(data.session); else if (navigator.onLine) applySession(null); } catch (e) {}
+                sb.auth.onAuthStateChange((ev, session) => {
+                    if (ev === 'SIGNED_OUT') { localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache(); }
+                    else if (session && ev !== 'INITIAL_SESSION') applySession(session);
+                });
+                renderCards();
+            }
+            const ok = await loadCloud();
+            if (ok && !chanOn) {
+                chanOn = true;
+                sb.channel('gornyak').on('postgres_changes', { event: '*', schema: 'public' }, () => { clearTimeout(loadT); loadT = setTimeout(loadCloud, 400); }).subscribe();
+            }
+            return ok;
+        }
         window.addEventListener('DOMContentLoaded', async () => {
-            if (!sb) { showToast('Сервер недоступен: работает сохранённая копия'); return; }
-            try { const { data } = await sb.auth.getSession(); if (data.session) applySession(data.session); else if (navigator.onLine) applySession(null); } catch (e) {}
-            sb.auth.onAuthStateChange((ev, session) => {
-                if (ev === 'SIGNED_OUT') { localStorage.removeItem('gornyak_user'); CLOUD.chat = []; saveCache(); }
-                else if (session && ev !== 'INITIAL_SESSION') applySession(session);
-            });
-            renderCards(); await loadCloud();
-            sb.channel('gornyak').on('postgres_changes', { event: '*', schema: 'public' }, () => { clearTimeout(loadT); loadT = setTimeout(loadCloud, 400); }).subscribe();
-            window.addEventListener('online', loadCloud);
-        });
-    
-        // ===== ЧАТ v2: диалоги 1 на 1, меню по долгому нажатию =====
-        function visibleMsgs(all, room) {
-            const d = myDialogs().find(x => x.id === room), cl = d ? d.cleared : 0;
-            return all.filter(m => (m.room || 'general') === room && (!d || (m.ts || 0) > cl) && !CLOUD.hidden.has(m.id));
-        }
-        function openSheet(title, items) {
-            document.getElementById('sheetTitle').textContent = title;
-            const box = document.getElementById('sheetBtns'); box.innerHTML = '';
-            items.forEach(it => {
-                const b = document.createElement('button');
-                b.className = 'w-full text-left px-3 py-3.5 text-sm font-bold border-t border-gray-100 ' + (it.danger ? 'text-red-700' : 'text-gray-900');
-                b.textContent = it.label; b.onclick = () => { hide('sheetModal'); it.fn(); }; box.appendChild(b);
-            });
-            show('sheetModal');
-        }
-        function onLong(el, sel, fn) {
-            let t = null, fired = false, sx = 0, sy = 0;
-            el.addEventListener('pointerdown', e => { const b = e.target.closest(sel); if (!b) return; fired = false; sx = e.clientX; sy = e.clientY; clearTimeout(t); t = setTimeout(() => { fired = true; fn(b); }, 500); });
-            el.addEventListener('pointermove', e => { if (Math.hypot(e.clientX - sx, e.clientY - sy) > 10) clearTimeout(t); });
-            ['pointerup', 'pointercancel', 'pointerleave'].forEach(n => el.addEventListener(n, () => clearTimeout(t)));
-            el.addEventListener('click', e => { if (fired) { fired = false; e.stopPropagation(); e.preventDefault(); } }, true);
-            el.addEventListener('contextmenu', e => e.preventDefault());
-        }
-        function openNewDialog() {
-            const me = myUid();
-            const list = Object.keys(CLOUD.profiles).filter(id => id !== me).map(id => ({ id, n: CLOUD.profiles[id].name || (CLOUD.profiles[id].plot ? 'Участок ' + CLOUD.profiles[id].plot : 'Без имени') })).sort((a, b) => a.n.localeCompare(b.n, 'ru'));
-            if (!list.length) { showToast('Других садоводов пока нет'); return; }
-            openSheet('Новый диалог — выберите садовода', list.map(p => ({ label: p.n, fn: () => startDialog(p.id) })));
-        }
-        async function startDialog(uid) {
-            if (!sb) return;
-            const { data, error } = await sb.rpc('create_dm', { other: uid });
-            if (error) { showToast('Не удалось создать диалог: ' + error.message); return; }
-            await loadCloud(); selectChatPeer(data);
-        }
-        async function hideMsg(id) {
-            CLOUD.hidden.add(id); renderChatMessages(); updateChatBadge();
-            const r = await sb.from('message_hidden').upsert({ message_id: id, uid: myUid() }, { ignoreDuplicates: true });
-            if (r.error) showToast('Не удалось сохранить: ' + r.error.message);
-        }
-        async function delMsgAll(id) {
-            if (!(await askConfirm('Удалить сообщение у всех?', 'Удалить'))) return;
-            saveChat(loadChat().filter(x => x.id !== id)); if (chatState.replyTo === id) cancelChatMode(); renderChatMessages();
-        }
-        async function delDialogSelf(id) {
-            const r = await sb.from('chat_members').update({ hidden: true, cleared_ts: Date.now() }).eq('chat_id', id).eq('uid', myUid());
-            if (r.error) { showToast('Ошибка: ' + r.error.message); return; }
-            const m = CLOUD.members.find(x => x.chat_id === id && x.uid === myUid()); if (m) { m.hidden = true; m.cleared_ts = Date.now(); }
-            if (chatState.peer === id) selectChatPeer('general'); else renderChatNicks();
-        }
-        async function delDialogAll(id) {
-            if (!(await askConfirm('Удалить диалог и всю переписку у обоих участников?', 'Удалить'))) return;
-            const r = await sb.rpc('delete_chat_for_all', { cid: id });
-            if (r.error) { showToast('Ошибка: ' + r.error.message); return; }
-            CLOUD.chat = CLOUD.chat.filter(m => m.chatId !== id); CLOUD.members = CLOUD.members.filter(x => x.chat_id !== id); CLOUD.chats = CLOUD.chats.filter(x => x.id !== id);
-            if (chatState.peer === id) selectChatPeer('general'); else renderChatNicks();
-        }
-        onLong(document.getElementById('chatNicks'), '[data-peer]', b => {
-            const id = b.dataset.peer; if (id === 'general') return;
-            openSheet(nickOf(id), [{ label: 'Удалить у себя', fn: () => delDialogSelf(id) }, { label: 'Удалить у всех', danger: true, fn: () => delDialogAll(id) }]);
-        });
-        onLong(document.getElementById('chatMessagesContainer'), '[data-mid]', b => {
-            const id = b.dataset.mid, m = loadChat().find(x => x.id === id); if (!m) return;
-            const mine = (m.uid || m.author) === myUid(), inp = document.getElementById('chatInputText');
-            const items = [
-                { label: 'Ответить', fn: () => { chatState.replyTo = id; chatState.editId = null; inp.value = ''; updateChatBar(); inp.focus(); } },
-                { label: 'Копировать', fn: () => { try { navigator.clipboard.writeText(m.text); showToast('Скопировано'); } catch (e) {} } }];
-            if (mine) items.push({ label: 'Изменить', fn: () => { chatState.editId = id; chatState.replyTo = null; inp.value = m.text; updateChatBar(); inp.focus(); } });
-            items.push({ label: 'Удалить у себя', fn: () => hideMsg(id) });
-            if (mine) items.push({ label: 'Удалить у всех', danger: true, fn: () => delMsgAll(id) });
-            openSheet('Сообщение', items);
+            await startCloud();
+            window.addEventListener('online', startCloud);
+            setInterval(() => { if (document.getElementById('netBanner').style.display !== 'none' && !document.hidden) startCloud(); }, 45000);
         });
     </script>
 </body>
